@@ -396,12 +396,16 @@ function setupEventListeners() {
   if (agentEnabledToggle) {
     agentEnabledToggle.addEventListener('change', () => {
       console.log('agentEnabled toggled:', agentEnabledToggle.checked);
+      // Auto-save
+      saveSettingsQuietly();
     });
   }
 
   if (agentBetTodayToggle) {
     agentBetTodayToggle.addEventListener('change', () => {
       console.log('agentBetToday toggled:', agentBetTodayToggle.checked);
+      // Auto-save
+      saveSettingsQuietly();
     });
   }
 
@@ -484,7 +488,7 @@ async function runAgent() {
   }
 }
 
-async function saveSettings() {
+async function saveSettingsQuietly() {
   const data = {
     enabled: document.getElementById('agentEnabled')?.checked || false,
     bet_today: document.getElementById('agentBetToday')?.checked || false,
@@ -504,18 +508,20 @@ async function saveSettings() {
     });
 
     if (res.ok) {
-      console.log('Nastavení uloženo!');
-      alert('Nastavení uloženo!');
+      console.log('✅ Nastavení automaticky uloženo!');
       await loadSettings();
       initializeSettings();
-      await loadStats();
-      renderDashboard();
     } else {
-      alert('Chyba při ukládání: ' + res.status);
+      console.error('Chyba při ukládání:', res.status);
     }
   } catch (e) {
-    alert('Chyba: ' + e.message);
+    console.error('Chyba:', e.message);
   }
+}
+
+async function saveSettings() {
+  await saveSettingsQuietly();
+  alert('Nastavení uloženo!');
 }
 
 async function resetSettings() {

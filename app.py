@@ -750,6 +750,64 @@ def _settle_in_background():
             time.sleep(10)  # více čekat při chybě
 
 
+# ============================================================================
+# ML LEARNING API ENDPOINTS
+# ============================================================================
+
+@app.route("/api/learning/stats", methods=["GET"])
+def api_learning_stats():
+    """Get agent learning statistics and model metrics."""
+    try:
+        from engine import ml_learner
+        stats = ml_learner.get_learning_stats()
+        return jsonify(stats)
+    except Exception as e:
+        return jsonify({"error": str(e), "status": "error"}), 500
+
+@app.route("/api/learning/train", methods=["POST"])
+def api_learning_train():
+    """Trigger model training on recent feedback."""
+    try:
+        from engine import ml_learner
+        success = ml_learner.train_model(days=30)
+        stats = ml_learner.get_learning_stats()
+        return jsonify({
+            "success": success,
+            "stats": stats,
+            "message": "Model trained successfully" if success else "Not enough data to train"
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+@app.route("/api/feedback/record", methods=["POST"])
+def api_record_feedback():
+    """Record a bet outcome for learning."""
+    try:
+        data = request.get_json()
+        from engine import ml_learner
+
+        record = ml_learner.record_bet_outcome(
+            bet_id=data.get("bet_id"),
+            match_id=data.get("match_id"),
+            prediction=data.get("prediction"),
+            odds=float(data.get("odds", 1.5)),
+            stake=float(data.get("stake", 10)),
+            outcome=data.get("outcome"),  # "won" / "lost" / "void"
+            home_team=data.get("home_team"),
+            away_team=data.get("away_team"),
+            league=data.get("league"),
+            match_date=data.get("match_date"),
+            features=data.get("features")
+        )
+
+        return jsonify({
+            "success": True,
+            "record": record
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
 if __name__ == "__main__":
     print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
     if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
