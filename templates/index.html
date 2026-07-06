@@ -241,10 +241,11 @@
       <!-- BANKROLL PAGE -->
       <section id="bankroll" class="page">
         <div class="page-header">
-          <h1>Správa Banku</h1>
-          <p class="page-desc">Historie a statistiky všech sázek</p>
+          <h1>💰 Vývoj Banku</h1>
+          <p class="page-desc">Detailní analýza banku, grafů a statistik</p>
         </div>
 
+        <!-- TOP METRICS -->
         <div class="bankroll-stats">
           <div class="stat-box">
             <span class="label">Počáteční bank:</span>
@@ -260,15 +261,149 @@
           </div>
         </div>
 
+        <!-- SUMMARY STATS -->
         <div class="card">
-          <h3>Equity Curve</h3>
+          <h3>📊 Klíčové Statistiky</h3>
+          <div class="summary-grid">
+            <div class="summary-stat">
+              <span class="label">Celkem sázek</span>
+              <span class="value" id="summaryTotalBets">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Celkový P&L</span>
+              <span class="value" id="summaryPnL">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">ROI</span>
+              <span class="value" id="summaryROI">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Win Rate</span>
+              <span class="value" id="summaryWinRate">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Vyhrané dny</span>
+              <span class="value" id="summaryWinDays">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Prohry dny</span>
+              <span class="value" id="summaryLoseDays">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Peak Balance</span>
+              <span class="value" id="summaryPeak">—</span>
+            </div>
+            <div class="summary-stat">
+              <span class="label">Trough Balance</span>
+              <span class="value" id="summaryTrough">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EQUITY CURVE -->
+        <div class="card">
+          <h3>📈 Vývoj Banku (Equity Curve)</h3>
           <div id="equityChart" class="chart-container">
             <svg id="equitySVG" viewBox="0 0 800 300" class="chart"></svg>
           </div>
         </div>
 
+        <!-- DAILY/MONTHLY CHARTS -->
+        <div class="chart-tabs">
+          <button class="chart-tab-btn active" data-chart="daily">Denně</button>
+          <button class="chart-tab-btn" data-chart="monthly">Měsíčně</button>
+          <button class="chart-tab-btn" data-chart="hourly">Po hodinách</button>
+        </div>
+
+        <!-- DAILY CHART -->
+        <div id="daily-chart" class="chart-tab-content active">
+          <div class="card">
+            <h3>Denní P&L (posledních 30 dní)</h3>
+            <div class="chart-container">
+              <svg id="dailyChartSVG" viewBox="0 0 1000 300" class="chart"></svg>
+            </div>
+            <table id="dailyTable" class="data-table small">
+              <thead>
+                <tr><th>Den</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- MONTHLY CHART -->
+        <div id="monthly-chart" class="chart-tab-content">
+          <div class="card">
+            <h3>Měsíční P&L</h3>
+            <table id="monthlyTable" class="data-table">
+              <thead>
+                <tr><th>Měsíc</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th><th>ROI</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- HOURLY CHART -->
+        <div id="hourly-chart" class="chart-tab-content">
+          <div class="card">
+            <h3>Nejlepší Hodiny pro Sázení</h3>
+            <table id="hourlyTable" class="data-table">
+              <thead>
+                <tr><th>Hodina</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BEST/WORST DAYS -->
         <div class="card">
-          <h3>Historie sázek</h3>
+          <h3>🏆 Nejlepší vs Nejhorší Dny</h3>
+          <div class="best-worst-grid">
+            <div class="best-worst-box">
+              <h4>🟢 Nejlepší dny</h4>
+              <table id="bestDaysTable" class="data-table small">
+                <thead>
+                  <tr><th>Den</th><th>P&L</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="best-worst-box">
+              <h4>🔴 Nejhorší dny</h4>
+              <table id="worstDaysTable" class="data-table small">
+                <thead>
+                  <tr><th>Den</th><th>P&L</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- STREAKS -->
+        <div class="card">
+          <h3>📊 Analýza Sérií</h3>
+          <div class="streaks-grid">
+            <div class="streak-stat">
+              <span class="label">Nejdelší výherní série</span>
+              <span class="value" id="longestWinStreak">—</span>
+            </div>
+            <div class="streak-stat">
+              <span class="label">Nejdelší prohraná série</span>
+              <span class="value" id="longestLossStreak">—</span>
+            </div>
+            <div class="streak-stat">
+              <span class="label">Aktuální série</span>
+              <span class="value" id="currentStreak">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BET HISTORY -->
+        <div class="card">
+          <h3>📋 Historia Sázek</h3>
           <table id="betsTable" class="data-table">
             <thead>
               <tr>

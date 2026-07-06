@@ -991,3 +991,142 @@ html, body {
 .monitor-stat .value.healthy {
   color: #66bb6a;
 }
+
+/* BANKROLL ANALYTICS */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.summary-stat {
+  background: var(--line2);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-stat .label {
+  font-size: 11px;
+  color: var(--txt2);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.summary-stat .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.chart-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--txt2);
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -13px;
+}
+
+.chart-tab-btn:hover {
+  color: var(--txt);
+}
+
+.chart-tab-btn.active {
+  color: var(--acc);
+  border-bottom-color: var(--acc);
+}
+
+.chart-tab-content {
+  display: none;
+  margin-bottom: 24px;
+}
+
+.chart-tab-content.active {
+  display: block;
+}
+
+.best-worst-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.best-worst-box {
+  background: var(--line2);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.best-worst-box h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--txt);
+}
+
+.streaks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.streak-stat {
+  background: var(--line2);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.streak-stat .label {
+  font-size: 11px;
+  color: var(--txt2);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.streak-stat .value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.data-table.small {
+  font-size: 12px;
+}
+
+.data-table.small th,
+.data-table.small td {
+  padding: 6px 8px;
+}
+
+@media (max-width: 768px) {
+  .best-worst-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .streaks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

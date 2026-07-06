@@ -59,6 +59,8 @@ try:
 except ImportError:
     MONITORING_AVAILABLE = False
 
+from engine import bankroll_stats
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
 
@@ -997,6 +999,129 @@ def api_monitoring_alerts():
             "success": True,
             "alerts": alerts,
             "count": len(alerts),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+# ============ BANKROLL STATISTICS API ============
+
+@app.route("/api/bankroll/summary", methods=["GET"])
+@login_required
+def api_bankroll_summary():
+    """Get comprehensive bankroll summary."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        summary = ba.get_summary()
+
+        return jsonify({
+            "success": True,
+            "summary": summary,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/daily", methods=["GET"])
+@login_required
+def api_bankroll_daily():
+    """Get daily breakdown."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        daily = ba.get_daily_breakdown()
+
+        return jsonify({
+            "success": True,
+            "daily": daily,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/monthly", methods=["GET"])
+@login_required
+def api_bankroll_monthly():
+    """Get monthly breakdown."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        monthly = ba.get_monthly_breakdown()
+
+        return jsonify({
+            "success": True,
+            "monthly": monthly,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/best-worst", methods=["GET"])
+@login_required
+def api_bankroll_best_worst():
+    """Get best and worst days."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        n = int(request.args.get("n", 5))
+        data = ba.get_best_worst_days(n)
+
+        return jsonify({
+            "success": True,
+            "best_days": data["best"],
+            "worst_days": data["worst"],
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/streaks", methods=["GET"])
+@login_required
+def api_bankroll_streaks():
+    """Get streak analysis."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        streaks = ba.get_streak_analysis()
+
+        return jsonify({
+            "success": True,
+            "streaks": streaks,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/hourly", methods=["GET"])
+@login_required
+def api_bankroll_hourly():
+    """Get hourly distribution."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        hourly = ba.get_hourly_distribution()
+
+        return jsonify({
+            "success": True,
+            "hourly": hourly,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/bankroll/roi-by-odds", methods=["GET"])
+@login_required
+def api_bankroll_roi_odds():
+    """Get ROI by odds ranges."""
+    try:
+        bets = bankroll.state()["bets"]
+        ba = bankroll_stats.BankrollAnalytics(bets)
+        roi = ba.get_roi_by_odds()
+
+        return jsonify({
+            "success": True,
+            "roi_by_odds": roi,
         })
     except Exception as e:
         return jsonify({"error": str(e), "success": False}), 500
