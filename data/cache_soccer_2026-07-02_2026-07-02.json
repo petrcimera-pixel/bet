@@ -1,0 +1,36 @@
+[
+  {
+    "id": "401871881",
+    "sport": "soccer",
+    "slug": "chi.copa_chi",
+    "league": "Copa Chile",
+    "country": "Chile",
+    "home": "Huachipato",
+    "away": "Deportes Concepcion",
+    "home_id": "4134",
+    "away_id": "8110",
+    "date": "2026-07-02",
+    "time": "22:00",
+    "home_score": 1,
+    "away_score": 2,
+    "status": "FT",
+    "live": false
+  },
+  {
+    "id": "401873977",
+    "sport": "soccer",
+    "slug": "bra.2",
+    "league": "Brazilian Serie B",
+    "country": "Brazil",
+    "home": "Cuiabá",
+    "away": "América Mineiro",
+    "home_id": "17313",
+    "away_id": "6154",
+    "date": "2026-07-02",
+    "time": "23:00",
+    "home_score": 1,
+    "away_score": 0,
+    "status": "FT",
+    "live": false
+  }
+]
