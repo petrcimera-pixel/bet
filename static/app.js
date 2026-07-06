@@ -13,13 +13,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('App loading...');
 
   setupNavigation();
-  setupEventListeners();
 
   // Načti všechna data
   await Promise.all([
     loadStats(),
     loadSettings(),
   ]);
+
+  // Inicializuj nastavení UI
+  initializeSettings();
+
+  // Setup event listeners po inicializaci dat
+  setupEventListeners();
 
   // Vykresl dashboard
   renderDashboard();
@@ -52,17 +57,23 @@ function showPage(pageName) {
   STATE.currentPage = pageName;
 
   // Load page-specific data
-  switch(pageName) {
-    case 'agent-tips':
-      loadAgentTips();
-      break;
-    case 'analytics':
-      renderAnalytics();
-      break;
-    case 'bankroll':
-      renderBankroll();
-      break;
-  }
+  setTimeout(() => {
+    switch(pageName) {
+      case 'agent-tips':
+        if (STATE.agentTips.length === 0) {
+          loadAgentTips();
+        } else {
+          renderAgentTips();
+        }
+        break;
+      case 'analytics':
+        renderAnalytics();
+        break;
+      case 'bankroll':
+        renderBankroll();
+        break;
+    }
+  }, 100);
 }
 
 // ============================================================================
@@ -333,6 +344,33 @@ function renderBankroll() {
 // SETTINGS
 // ============================================================================
 
+function initializeSettings() {
+  if (!STATE.settings?.agent) return;
+
+  const agent = STATE.settings.agent;
+
+  // Initialize toggle states from data
+  const agentEnabled = document.getElementById('agentEnabled');
+  if (agentEnabled) agentEnabled.checked = agent.enabled || false;
+
+  const agentBetToday = document.getElementById('agentBetToday');
+  if (agentBetToday) agentBetToday.checked = agent.bet_today || false;
+
+  const stakeMode = document.getElementById('stakeMode');
+  if (stakeMode) stakeMode.value = agent.stake_mode || 'kelly';
+
+  const flatStake = document.getElementById('flatStake');
+  if (flatStake) flatStake.value = agent.stake || 10;
+
+  const homeAdv = document.getElementById('homeAdv');
+  if (homeAdv) homeAdv.value = STATE.settings.model?.home_adv || 60;
+
+  const ratingToGoals = document.getElementById('ratingToGoals');
+  if (ratingToGoals) ratingToGoals.value = STATE.settings.model?.rating_to_goals || 0.40;
+
+  console.log('Settings initialized');
+}
+
 function setupEventListeners() {
   const runBtn = document.getElementById('runAgentBtn');
   if (runBtn) {
@@ -438,8 +476,14 @@ async function saveSettings() {
     });
 
     if (res.ok) {
+      console.log('Nastavení uloženo!');
       alert('Nastavení uloženo!');
       await loadSettings();
+      initializeSettings();
+      await loadStats();
+      renderDashboard();
+    } else {
+      alert('Chyba při ukládání: ' + res.status);
     }
   } catch (e) {
     alert('Chyba: ' + e.message);
