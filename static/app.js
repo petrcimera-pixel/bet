@@ -71,7 +71,7 @@ function showPage(pageName) {
 
 async function loadStats() {
   try {
-    const res = await fetch('/api/bankroll');
+    const res = await fetch('/api/bankroll', { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     STATE.stats = await res.json();
     console.log('Stats:', STATE.stats);
@@ -82,7 +82,7 @@ async function loadStats() {
 
 async function loadSettings() {
   try {
-    const res = await fetch('/api/settings');
+    const res = await fetch('/api/settings', { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     STATE.settings = await res.json();
     console.log('Settings:', STATE.settings);
@@ -93,7 +93,7 @@ async function loadSettings() {
 
 async function loadAgentTips() {
   try {
-    const res = await fetch('/api/agent');
+    const res = await fetch('/api/agent', { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     STATE.agentTips = data.bets || [];
@@ -394,6 +394,7 @@ async function runAgent() {
   try {
     const res = await fetch('/api/agent/run', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ force: true })
     });
@@ -425,6 +426,7 @@ async function saveSettings() {
   try {
     const res = await fetch('/api/agent/settings', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
@@ -442,7 +444,7 @@ async function resetSettings() {
   if (!confirm('Opravdu resetovat všechna nastavení?')) return;
 
   try {
-    await fetch('/api/settings/reset', { method: 'POST' });
+    await fetch('/api/settings/reset', { method: 'POST', credentials: 'include' });
     alert('Nastavení resetováno.');
     location.reload();
   } catch (e) {

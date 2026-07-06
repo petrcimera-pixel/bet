@@ -64,10 +64,20 @@ def login_required(f):
 
 @app.before_request
 def check_login():
-    if request.path.startswith("/api/") and "user" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-    if request.path.startswith("/") and not request.path.startswith("/login") and request.path != "/logout" and "user" not in session:
-        return redirect(url_for("login_page"))
+    # Allow login and logout without auth
+    if request.path in ["/login", "/logout"]:
+        return
+    if request.method == "POST" and request.path == "/login":
+        return
+
+    # Check if user is authenticated
+    if "user" not in session:
+        # API call - return 401
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "Unauthorized"}), 401
+        # HTML page - redirect to login
+        else:
+            return redirect(url_for("login_page"))
 
 
 def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refresh=False):
