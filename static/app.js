@@ -387,6 +387,34 @@ function setupEventListeners() {
     resetBtn.addEventListener('click', resetSettings);
   }
 
+  // Toggle listeners for immediate save
+  const agentEnabledToggle = document.getElementById('agentEnabled');
+  const agentBetTodayToggle = document.getElementById('agentBetToday');
+  const stakeModeSelect = document.getElementById('stakeMode');
+  const flatStakeInput = document.getElementById('flatStake');
+
+  if (agentEnabledToggle) {
+    agentEnabledToggle.addEventListener('change', () => {
+      console.log('agentEnabled toggled:', agentEnabledToggle.checked);
+    });
+  }
+
+  if (agentBetTodayToggle) {
+    agentBetTodayToggle.addEventListener('change', () => {
+      console.log('agentBetToday toggled:', agentBetTodayToggle.checked);
+    });
+  }
+
+  if (stakeModeSelect) {
+    stakeModeSelect.addEventListener('change', () => {
+      console.log('stakeMode changed:', stakeModeSelect.value);
+      const flatStakeGroup = document.getElementById('flatStakeGroup');
+      if (flatStakeGroup) {
+        flatStakeGroup.style.display = stakeModeSelect.value === 'flat' ? 'block' : 'none';
+      }
+    });
+  }
+
   // Tabs
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
