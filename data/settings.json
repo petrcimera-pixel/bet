@@ -14,12 +14,12 @@
     "accent": "violet"
   },
   "agent": {
-    "enabled": true,
+    "enabled": false,
     "stake": 10,
     "only_sharp": true,
-    "stake_mode": "flat",
+    "stake_mode": "kelly",
     "kelly_fraction": 0.25,
-    "max_daily_stake_pct": 0.5,
-    "bet_today": true
+    "max_daily_stake_pct": 0.25,
+    "bet_today": false
   }
 }
