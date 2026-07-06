@@ -43,6 +43,15 @@ from engine import odds_api
 from engine import tips_db
 from engine import settings as app_settings
 from engine import agent
+from engine import backtester
+from engine import explainer
+
+# ML Learning (optional)
+try:
+    from engine import ml_learner
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
@@ -803,6 +812,143 @@ def api_record_feedback():
         return jsonify({
             "success": True,
             "record": record
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+# ============ BACKTESTING API ============
+
+@app.route("/api/backtest/league", methods=["GET"])
+@login_required
+def api_backtest_league():
+    """Backtest performance by league."""
+    try:
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+        results = bt.backtest_by_league(bets)
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/backtest/agent-vs-manual", methods=["GET"])
+@login_required
+def api_backtest_agent_vs_manual():
+    """Compare agent vs manual bets."""
+    try:
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+        results = bt.backtest_agent_vs_manual(bets)
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/backtest/best-leagues", methods=["GET"])
+@login_required
+def api_best_leagues():
+    """Get best performing leagues."""
+    try:
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+        top_n = int(request.args.get("top", 5))
+        results = bt.get_best_leagues(bets, top_n)
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/backtest/odds-ranges", methods=["GET"])
+@login_required
+def api_backtest_odds():
+    """Backtest performance by odds ranges."""
+    try:
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+        results = bt.backtest_by_odds_range(bets)
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+# ============ EXPLAINABILITY API ============
+
+@app.route("/api/explain/<bet_id>", methods=["GET"])
+@login_required
+def api_explain_bet(bet_id):
+    """Get SHAP-style explanation for a bet."""
+    try:
+        exp = explainer.ModelExplainer(ml_learner if ML_AVAILABLE else None)
+
+        # Find bet in bankroll
+        bets = bankroll.state()["bets"]
+        bet = next((b for b in bets if b["id"] == bet_id), None)
+
+        if not bet:
+            return jsonify({"error": "Bet not found", "success": False}), 404
+
+        # Generate explanation
+        explanation = exp.explain_prediction(
+            bet_id=bet_id,
+            features={
+                "odds": bet["odds"],
+                "prob": bet["prob"],
+                "stake": bet["stake"],
+                "league": bet.get("league"),
+                "prediction": bet["outcome"]
+            },
+            prediction_prob=bet["prob"],
+            odds=bet["odds"],
+            stake=bet["stake"]
+        )
+
+        return jsonify({"success": True, "explanation": explanation})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/feature-importance", methods=["GET"])
+@login_required
+def api_feature_importance():
+    """Get global feature importance."""
+    try:
+        if not ML_AVAILABLE:
+            return jsonify({"success": False, "error": "ML not available"}), 500
+
+        stats = ml_learner.get_learning_stats()
+        importance = stats.get("feature_importance", {})
+
+        return jsonify({
+            "success": True,
+            "feature_importance": importance,
+            "top_features": sorted(importance.items(), key=lambda x: x[1], reverse=True)[:8]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+# ============ ADVANCED ANALYTICS API ============
+
+@app.route("/api/analytics/summary", methods=["GET"])
+@login_required
+def api_analytics_summary():
+    """Get comprehensive analytics summary."""
+    try:
+        stats = bankroll.stats()
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+
+        league_perf = bt.backtest_by_league(bets)
+        agent_vs_manual = bt.backtest_agent_vs_manual(bets)
+        best_leagues = bt.get_best_leagues(bets, 5)
+
+        return jsonify({
+            "success": True,
+            "bankroll_stats": stats,
+            "league_performance": league_perf,
+            "agent_vs_manual": agent_vs_manual,
+            "best_leagues": best_leagues,
         })
     except Exception as e:
         return jsonify({"error": str(e), "success": False}), 500
