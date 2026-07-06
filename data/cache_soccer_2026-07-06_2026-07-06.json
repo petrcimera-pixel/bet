@@ -11,10 +11,10 @@
     "away_id": "2339",
     "date": "2026-07-06",
     "time": "17:00",
-    "home_score": 1,
-    "away_score": 2,
-    "status": "46'",
-    "live": true
+    "home_score": 2,
+    "away_score": 4,
+    "status": "FT",
+    "live": false
   },
   {
     "id": "401842744",
@@ -30,8 +30,8 @@
     "time": "17:00",
     "home_score": 1,
     "away_score": 1,
-    "status": "49'",
-    "live": true
+    "status": "FT",
+    "live": false
   },
   {
     "id": "760506",
@@ -45,9 +45,9 @@
     "away_id": "164",
     "date": "2026-07-06",
     "time": "19:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 0,
+    "away_score": 1,
+    "status": "FT",
     "live": false
   },
   {
@@ -62,10 +62,10 @@
     "away_id": "17176",
     "date": "2026-07-06",
     "time": "21:30",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 0,
+    "away_score": 0,
+    "status": "1'",
+    "live": true
   },
   {
     "id": "401873996",

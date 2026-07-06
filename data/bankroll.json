@@ -287,10 +287,11 @@
       "odds": 1.46,
       "prob": 0.6833,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": -0.0164,
-      "tag": "bet-agent"
+      "tag": "bet-agent",
+      "settled_ts": 1783373131
     },
     {
       "id": "75ac063833",
@@ -431,10 +432,11 @@
       "odds": 1.46,
       "prob": 0.6833,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": -0.0164,
-      "tag": "agent-sazeni"
+      "tag": "agent-sazeni",
+      "settled_ts": 1783373131
     },
     {
       "id": "393dc249d3",
