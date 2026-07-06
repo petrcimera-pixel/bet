@@ -75,6 +75,11 @@ class MLLearner:
         self.feedback_log.append(record)
         return record
 
+    # Alias for compatibility with bankroll.py
+    def record_bet_outcome(self, *args, **kwargs):
+        """Alias for record_feedback() - called from bankroll.py"""
+        return self.record_feedback(*args, **kwargs)
+
     def load_feedback_log(self, days=30):
         """Load recent feedback for training."""
         if not os.path.exists(FEEDBACK_FILE):
