@@ -10,6 +10,13 @@ import uuid
 from . import storage
 from . import prediction
 
+# ML feedback logging (optional – jen pokud je ML dostupné)
+try:
+    from . import ml_learner
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+
 _DEFAULT = {
     "start_balance": 1000.0,
     "balance": 1000.0,
@@ -96,6 +103,30 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)
     _save(st)
+
+    # Record for ML learning (feedback loop)
+    if ML_AVAILABLE and tag == "bet-agent":
+        try:
+            ml_learner.record_bet_outcome(
+                bet_id=bet["id"],
+                match_id=match_id,
+                prediction=outcome,
+                odds=odds,
+                stake=stake,
+                outcome="open",  # will be updated when settled
+                home_team=home,
+                away_team=away,
+                league=league or "Unknown",
+                match_date=match_date or "",
+                features={
+                    "odds": odds,
+                    "prob": prob,
+                    "stake": stake,
+                }
+            )
+        except Exception:
+            pass  # ML logging nie by měl bránit sázce
+
     return bet
 
 
@@ -195,6 +226,26 @@ def settle_bet(bet_id, result):
             bet["status"] = result
             bet["settled_ts"] = int(time.time())
             _save(st)
+
+            # Update ML feedback with actual outcome
+            if ML_AVAILABLE and bet.get("tag") == "bet-agent":
+                try:
+                    ml_learner.record_bet_outcome(
+                        bet_id=bet["id"],
+                        match_id=bet["match_id"],
+                        prediction=bet["outcome"],
+                        odds=bet["odds"],
+                        stake=bet["stake"],
+                        outcome=result,  # won / lost / void
+                        home_team=bet["match"].split(" – ")[0] if " – " in bet["match"] else "",
+                        away_team=bet["match"].split(" – ")[1] if " – " in bet["match"] else "",
+                        league=bet.get("league", "Unknown"),
+                        match_date=bet.get("match_date", ""),
+                        features={"odds": bet["odds"], "prob": bet["prob"]}
+                    )
+                except Exception:
+                    pass  # ML update nie by měl bránit vyhodnocení
+
             return bet
     raise ValueError("Tip nenalezen nebo již vyhodnocen.")
 
