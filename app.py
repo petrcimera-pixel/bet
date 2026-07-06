@@ -32,7 +32,8 @@ def _ensure():
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-q"] + miss)
 _ensure()
 
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session, redirect, url_for
+from functools import wraps
 
 from engine import data_sources as ds
 from engine import prediction as pred
@@ -44,9 +45,29 @@ from engine import settings as app_settings
 from engine import agent
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
+
+# Login credentials
+_USERNAME = "admin"
+_PASSWORD = "8312172165"
 
 # jednoduchá keš predikcí v paměti (klíč = datum)
 _PRED_CACHE = {}
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user" not in session:
+            return redirect(url_for("login_page"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.before_request
+def check_login():
+    if request.path.startswith("/api/") and "user" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    if request.path.startswith("/") and not request.path.startswith("/login") and request.path != "/logout" and "user" not in session:
+        return redirect(url_for("login_page"))
 
 
 def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refresh=False):
@@ -75,9 +96,30 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
 
 
 # ---------------------------------------------------------------------------
+# Login
+# ---------------------------------------------------------------------------
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        if username == _USERNAME and password == _PASSWORD:
+            session["user"] = username
+            return redirect(url_for("index"))
+        else:
+            return render_template("login.html", error="Nesprávné jméno nebo heslo")
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login_page"))
+
+# ---------------------------------------------------------------------------
 # Stránka
 # ---------------------------------------------------------------------------
 @app.route("/")
+@login_required
 def index():
     return render_template("index.html")
 
