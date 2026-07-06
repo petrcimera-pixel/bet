@@ -1,33 +1,30 @@
 // ============================================================================
-// KurzAnalytik Pro — Nový Frontend (2026)
+// KurzAnalytik Pro — Frontend v2 (Opraveno)
 // ============================================================================
 
 const STATE = {
   currentPage: 'dashboard',
   stats: null,
-  tips: [],
   agentTips: [],
   settings: null,
 };
 
-// ============================================================================
-// INITIALIZATION
-// ============================================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('App loading...');
 
-document.addEventListener('DOMContentLoaded', init);
-
-async function init() {
   setupNavigation();
-  setupTabs();
-  setupSettings();
+  setupEventListeners();
 
-  // Načti data
-  await loadStats();
-  await loadSettings();
+  // Načti všechna data
+  await Promise.all([
+    loadStats(),
+    loadSettings(),
+  ]);
 
   // Vykresl dashboard
   renderDashboard();
-}
+  console.log('App ready');
+});
 
 // ============================================================================
 // NAVIGATION
@@ -35,7 +32,7 @@ async function init() {
 
 function setupNavigation() {
   document.querySelectorAll('.nav-item').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       const page = btn.dataset.page;
       showPage(page);
     });
@@ -43,33 +40,27 @@ function setupNavigation() {
 }
 
 function showPage(pageName) {
-  // Hide all pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-  // Show selected page
   const page = document.getElementById(pageName);
   const navBtn = document.querySelector(`[data-page="${pageName}"]`);
 
-  if (page) {
-    page.classList.add('active');
-  }
-  if (navBtn) {
-    navBtn.classList.add('active');
-  }
+  if (page) page.classList.add('active');
+  if (navBtn) navBtn.classList.add('active');
 
   STATE.currentPage = pageName;
 
-  // Load data specific to page
+  // Load page-specific data
   switch(pageName) {
     case 'agent-tips':
       loadAgentTips();
       break;
     case 'analytics':
-      loadAnalytics();
+      renderAnalytics();
       break;
     case 'bankroll':
-      loadBankroll();
+      renderBankroll();
       break;
   }
 }
@@ -81,158 +72,124 @@ function showPage(pageName) {
 async function loadStats() {
   try {
     const res = await fetch('/api/bankroll');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     STATE.stats = await res.json();
+    console.log('Stats:', STATE.stats);
   } catch (e) {
-    console.error('Error loading stats:', e);
+    console.error('Stats error:', e);
   }
 }
 
 async function loadSettings() {
   try {
     const res = await fetch('/api/settings');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     STATE.settings = await res.json();
+    console.log('Settings:', STATE.settings);
   } catch (e) {
-    console.error('Error loading settings:', e);
+    console.error('Settings error:', e);
   }
 }
 
 async function loadAgentTips() {
   try {
     const res = await fetch('/api/agent');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     STATE.agentTips = data.bets || [];
     renderAgentTips();
   } catch (e) {
-    console.error('Error loading agent tips:', e);
-  }
-}
-
-async function loadAnalytics() {
-  try {
-    const res = await fetch('/api/bankroll');
-    STATE.stats = await res.json();
-    renderAnalytics();
-  } catch (e) {
-    console.error('Error loading analytics:', e);
-  }
-}
-
-async function loadBankroll() {
-  try {
-    const res = await fetch('/api/bankroll');
-    STATE.stats = await res.json();
-    renderBankroll();
-  } catch (e) {
-    console.error('Error loading bankroll:', e);
+    console.error('Agent tips error:', e);
   }
 }
 
 // ============================================================================
-// DASHBOARD RENDERING
+// DASHBOARD
 // ============================================================================
 
 function renderDashboard() {
-  if (!STATE.stats) return;
+  if (!STATE.stats) {
+    console.warn('No stats available');
+    return;
+  }
 
-  // Stats cards
-  const stats = STATE.stats;
+  const s = STATE.stats;
+  const cur = s.currency || 'Kč';
 
-  document.getElementById('dashBalance').textContent = fmt(stats.balance) + ' ' + stats.currency;
-  document.getElementById('dashProfit').textContent = fmt(stats.profit) + ' ' + stats.currency;
-  document.getElementById('dashROI').textContent = stats.roi + '% ROI';
-  document.getElementById('dashWinRate').textContent = stats.win_rate + '%';
-  document.getElementById('dashWinCount').textContent = `${stats.won_count}/${stats.settled_count} výher`;
-  document.getElementById('dashSharpe').textContent = (stats.sharpe_ratio || 0).toFixed(2);
+  // Stat cards
+  setElText('dashBalance', `${fmt(s.balance)} ${cur}`);
+  setElText('dashProfit', `${fmt(s.profit)} ${cur}`);
+  setElText('dashROI', `${s.roi || 0}% ROI`);
+  setElText('dashWinRate', `${s.win_rate || 0}%`);
+  setElText('dashWinCount', `${s.won_count || 0}/${s.settled_count || 0} výher`);
+  setElText('dashSharpe', `${((s.sharpe_ratio || 0).toFixed(2))}`);
 
   // Balance change
-  const change = stats.balance - stats.start_balance;
+  const change = s.balance - s.start_balance;
   const changeEl = document.getElementById('dashBalanceChange');
-  if (change > 0) {
-    changeEl.textContent = `+${fmt(change)} od startu`;
-    changeEl.className = 'stat-subtext positive';
-  } else if (change < 0) {
-    changeEl.textContent = `${fmt(change)} od startu`;
-    changeEl.className = 'stat-subtext negative';
-  } else {
-    changeEl.textContent = 'Beze změny';
+  if (changeEl) {
+    if (change > 0) {
+      changeEl.textContent = `+${fmt(change)} od startu`;
+      changeEl.style.color = 'var(--pos)';
+    } else if (change < 0) {
+      changeEl.textContent = `${fmt(change)} od startu`;
+      changeEl.style.color = 'var(--bad)';
+    } else {
+      changeEl.textContent = 'Beze změny';
+    }
   }
-
-  // Tips for today/tomorrow
-  loadDashboardTips();
 
   // Agent status
-  loadAgentStatus();
-}
-
-async function loadDashboardTips() {
-  try {
-    // Načti zítřejší tipy
-    const today = new Date().toISOString().split('T')[0];
-    const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-
-    // Můžeš vytvořit nový endpoint nebo použít existující
-    const html = `<div class="loading">Tipy se načítají...</div>`;
-    document.getElementById('dashTipsContainer').innerHTML = html;
-  } catch (e) {
-    console.error('Error loading tips:', e);
+  const statusEl = document.getElementById('agentStatus');
+  if (statusEl) {
+    statusEl.textContent = `${s.open_count || 0} otevřených sázek`;
   }
-}
 
-async function loadAgentStatus() {
-  try {
-    const res = await fetch('/api/agent');
-    const data = await res.json();
-
-    const stats = data.stats || {};
-    const lastRun = data.bets?.[0];
-
-    document.getElementById('agentStatus').textContent =
-      `${stats.placed || 0} sázek umístěno dnes`;
-
-    if (lastRun) {
-      document.getElementById('agentLastRun').innerHTML = `
-        <div class="agent-info">
-          <strong>Poslední běh:</strong> Právě teď<br>
-          <strong>Umístěno:</strong> ${stats.placed || 0} sázek<br>
-          <strong>Přeskočeno:</strong> ${stats.skipped_not_sharp || 0} (soft) + ${stats.skipped_duplicate || 0} (duplikáty)
-        </div>
-      `;
-    }
-  } catch (e) {
-    console.error('Error loading agent status:', e);
+  // Last run info
+  const lastRunEl = document.getElementById('agentLastRun');
+  if (lastRunEl && s.total_bets > 0) {
+    lastRunEl.innerHTML = `
+      <div class="agent-info">
+        <strong>Celkem sázek:</strong> ${s.total_bets}<br>
+        <strong>Vyřešeno:</strong> ${s.settled_count} (${s.win_rate || 0}% úspěšnost)<br>
+        <strong>Zisk:</strong> ${fmt(s.profit)} ${cur}
+      </div>
+    `;
   }
 }
 
 // ============================================================================
-// AGENT TIPS RENDERING
+// AGENT TIPS
 // ============================================================================
 
 function renderAgentTips() {
   const container = document.getElementById('agentTipsContainer');
+  if (!container) return;
 
-  if (!STATE.agentTips.length) {
+  const bets = STATE.agentTips.filter(b => b.tag === 'bet-agent');
+
+  if (!bets.length) {
     container.innerHTML = '<div class="loading">Žádné sázky agenta</div>';
     return;
   }
 
-  container.innerHTML = STATE.agentTips
-    .filter(b => b.tag === 'bet-agent')
+  container.innerHTML = bets
     .map(b => `
       <div class="tip-item" onclick="showTipDetail('${b.id}')">
         <div class="tip-match">
-          <div class="tip-teams">🤖 ${b.match}</div>
+          <div class="tip-teams">🤖 ${b.match || 'Neznámý zápas'}</div>
           <div class="tip-meta">
-            <span>${b.match_date} ${b.match_time}</span>
-            <span>${b.league}</span>
+            <span>${b.match_date || '—'} ${b.match_time || '—'}</span>
+            <span>${b.league || 'Liga'}</span>
           </div>
           <div class="tip-meta">
-            <span>${b.label}</span>
-            <span>${b.odds}× @ ${b.prob * 100 | 0}%</span>
+            <span>${b.label || '?'}</span>
+            <span>${b.odds || 0}× @ ${((b.prob || 0) * 100).toFixed(0)}%</span>
           </div>
         </div>
         <div class="tip-prediction">
-          <span class="tip-badge">${b.status.toUpperCase()}</span>
-          <strong>${b.pnl > 0 ? '+' : ''}${fmt(b.pnl)}</strong>
+          <span class="tip-badge">${(b.status || 'open').toUpperCase()}</span>
+          <strong>${b.pnl > 0 ? '+' : ''}${fmt(b.pnl || 0)}</strong>
         </div>
       </div>
     `)
@@ -246,54 +203,53 @@ function showTipDetail(betId) {
   const modal = document.getElementById('tipDetailModal');
   const content = document.getElementById('tipDetailContent');
 
+  if (!content) return;
+
   content.innerHTML = `
-    <h2>${bet.match}</h2>
-    <div style="margin: 20px 0;">
-      <p><strong>Tip:</strong> ${bet.label} @ ${bet.odds}</p>
-      <p><strong>Jistota:</strong> ${(bet.prob * 100).toFixed(1)}%</p>
-      <p><strong>Vklad:</strong> ${fmt(bet.stake)} Kč</p>
-      <p><strong>Status:</strong> ${bet.status.toUpperCase()}</p>
-      <p><strong>P&L:</strong> ${bet.pnl > 0 ? '+' : ''}${fmt(bet.pnl)} Kč</p>
-      <p><strong>Liga:</strong> ${bet.league}</p>
-      <p><strong>Čas:</strong> ${bet.match_date} ${bet.match_time}</p>
+    <h2>${bet.match || 'Zápas'}</h2>
+    <div style="margin: 20px 0; line-height: 1.8;">
+      <p><strong>Tip:</strong> ${bet.label || '?'} @ ${bet.odds || 0}</p>
+      <p><strong>Jistota:</strong> ${((bet.prob || 0) * 100).toFixed(1)}%</p>
+      <p><strong>Vklad:</strong> ${fmt(bet.stake || 0)} Kč</p>
+      <p><strong>Status:</strong> ${(bet.status || 'open').toUpperCase()}</p>
+      <p><strong>P&L:</strong> ${bet.pnl > 0 ? '+' : ''}${fmt(bet.pnl || 0)} Kč</p>
+      <p><strong>Liga:</strong> ${bet.league || '—'}</p>
+      <p><strong>Čas:</strong> ${bet.match_date || '—'} ${bet.match_time || '—'}</p>
     </div>
 
     <h3 style="margin-top: 20px;">Vysvětlení tipu</h3>
     <p>Agent vybral tento tip protože:</p>
     <ul style="margin: 10px 0 10px 20px;">
-      <li><strong>Jistota ≥ 55%:</strong> Model udává ${(bet.prob * 100).toFixed(1)}% šanci na výhru</li>
+      <li><strong>Jistota ≥ 55%:</strong> Model udává ${((bet.prob || 0) * 100).toFixed(1)}% šanci na výhru</li>
       <li><strong>Value příležitost:</strong> Kurz je lepší než model doporučuje</li>
-      <li><strong>Kelly kritérium:</strong> Vklad ${fmt(bet.stake)} Kč odpovídá frakčnímu Kelly</li>
+      <li><strong>Kelly kritérium:</strong> Vklad ${fmt(bet.stake || 0)} Kč odpovídá frakčnímu Kelly</li>
     </ul>
-
-    <h3 style="margin-top: 20px;">Historie</h3>
-    <p>Tuto sázku agent umístil: ${new Date(bet.ts * 1000).toLocaleString('cs-CZ')}</p>
   `;
 
-  modal.classList.add('active');
-  modal.classList.remove('hidden');
+  if (modal) {
+    modal.classList.add('active');
+    modal.classList.remove('hidden');
+  }
 }
 
 // ============================================================================
-// ANALYTICS RENDERING
+// ANALYTICS
 // ============================================================================
 
 function renderAnalytics() {
   if (!STATE.stats) return;
 
-  // Monthly tab
   renderMonthlyAnalytics();
-
-  // Leagues tab
   renderLeaguesAnalytics();
 }
 
 function renderMonthlyAnalytics() {
-  const stats = STATE.stats;
-  const monthly = stats.monthly_pnl || {};
+  const monthly = STATE.stats?.monthly_pnl || {};
+  const tbody = document.querySelector('#monthlyTable tbody');
 
-  const table = document.querySelector('#monthlyTable tbody');
-  table.innerHTML = Object.entries(monthly)
+  if (!tbody) return;
+
+  tbody.innerHTML = Object.entries(monthly)
     .reverse()
     .map(([month, pnl]) => `
       <tr>
@@ -301,7 +257,9 @@ function renderMonthlyAnalytics() {
         <td>—</td>
         <td>—</td>
         <td>—</td>
-        <td class="${pnl > 0 ? 'positive' : 'negative'}">${pnl > 0 ? '+' : ''}${fmt(pnl)} Kč</td>
+        <td style="color: ${pnl > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
+          ${pnl > 0 ? '+' : ''}${fmt(pnl)} Kč
+        </td>
         <td>—</td>
       </tr>
     `)
@@ -309,92 +267,127 @@ function renderMonthlyAnalytics() {
 }
 
 function renderLeaguesAnalytics() {
-  const stats = STATE.stats;
-  const byLeague = stats.by_league || {};
+  const byLeague = STATE.stats?.by_league || {};
+  const tbody = document.querySelector('#leaguesTable tbody');
 
-  const table = document.querySelector('#leaguesTable tbody');
-  table.innerHTML = Object.entries(byLeague)
-    .sort((a, b) => b[1].pnl - a[1].pnl)
+  if (!tbody) return;
+
+  tbody.innerHTML = Object.entries(byLeague)
+    .sort((a, b) => (b[1].pnl || 0) - (a[1].pnl || 0))
     .map(([league, data]) => `
       <tr>
         <td>${league}</td>
-        <td>${data.settled}</td>
-        <td>${data.wins}</td>
-        <td>${data.win_rate}%</td>
-        <td class="${data.pnl > 0 ? 'positive' : 'negative'}">${data.pnl > 0 ? '+' : ''}${fmt(data.pnl)} Kč</td>
-        <td>${data.roi > 0 ? '+' : ''}${data.roi}%</td>
+        <td>${data.settled || 0}</td>
+        <td>${data.wins || 0}</td>
+        <td>${data.win_rate || 0}%</td>
+        <td style="color: ${(data.pnl || 0) > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
+          ${(data.pnl || 0) > 0 ? '+' : ''}${fmt(data.pnl || 0)} Kč
+        </td>
+        <td>${(data.roi || 0) > 0 ? '+' : ''}${data.roi || 0}%</td>
       </tr>
     `)
     .join('');
 }
 
 // ============================================================================
-// BANKROLL RENDERING
+// BANKROLL
 // ============================================================================
 
 function renderBankroll() {
-  const stats = STATE.stats;
+  if (!STATE.stats) return;
 
-  document.getElementById('startBalance').textContent = fmt(stats.start_balance) + ' Kč';
-  document.getElementById('currentBalance').textContent = fmt(stats.balance) + ' Kč';
-  document.getElementById('openBets').textContent = stats.open_count;
+  const s = STATE.stats;
+  const cur = s.currency || 'Kč';
 
-  // Bets table
-  const table = document.querySelector('#betsTable tbody');
-  const bets = STATE.stats?.bets || [];
+  setElText('startBalance', `${fmt(s.start_balance)} ${cur}`);
+  setElText('currentBalance', `${fmt(s.balance)} ${cur}`);
+  setElText('openBets', s.open_count || 0);
 
-  table.innerHTML = bets
-    .slice(0, 50)
-    .map(b => `
-      <tr>
-        <td>${b.match}</td>
-        <td>${b.label}</td>
-        <td>${fmt(b.stake)} Kč</td>
-        <td>${b.odds}×</td>
-        <td><span class="tip-badge">${b.status.toUpperCase()}</span></td>
-        <td class="${b.pnl > 0 ? 'positive' : 'negative'}">${b.pnl > 0 ? '+' : ''}${fmt(b.pnl)} Kč</td>
-      </tr>
-    `)
-    .join('');
-}
-
-// ============================================================================
-// SETTINGS & CONTROLS
-// ============================================================================
-
-function setupSettings() {
-  document.getElementById('runAgentBtn')?.addEventListener('click', runAgent);
-  document.getElementById('saveSettings')?.addEventListener('click', saveSettings);
-  document.getElementById('resetSettings')?.addEventListener('click', resetSettings);
-
-  // Load current settings
-  if (STATE.settings?.agent) {
-    const agent = STATE.settings.agent;
-    document.getElementById('agentEnabled').checked = agent.enabled;
-    document.getElementById('agentBetToday').checked = agent.bet_today;
-    document.getElementById('stakeMode').value = agent.stake_mode;
-    document.getElementById('flatStake').value = agent.stake;
+  const tbody = document.querySelector('#betsTable tbody');
+  if (tbody && s.bets) {
+    tbody.innerHTML = s.bets
+      .slice(0, 50)
+      .map(b => `
+        <tr>
+          <td>${b.match || '—'}</td>
+          <td>${b.label || '?'}</td>
+          <td>${fmt(b.stake || 0)} ${cur}</td>
+          <td>${b.odds || 0}×</td>
+          <td><span class="tip-badge">${(b.status || 'open').toUpperCase()}</span></td>
+          <td style="color: ${(b.pnl || 0) > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
+            ${(b.pnl || 0) > 0 ? '+' : ''}${fmt(b.pnl || 0)} ${cur}
+          </td>
+        </tr>
+      `)
+      .join('');
   }
 }
 
-function setupTabs() {
+// ============================================================================
+// SETTINGS
+// ============================================================================
+
+function setupEventListeners() {
+  const runBtn = document.getElementById('runAgentBtn');
+  if (runBtn) {
+    runBtn.addEventListener('click', runAgent);
+  }
+
+  const saveBtn = document.getElementById('saveSettings');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', saveSettings);
+  }
+
+  const resetBtn = document.getElementById('resetSettings');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetSettings);
+  }
+
+  // Tabs
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tabName = btn.dataset.tab;
-
-      // Hide all tabs
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 
-      // Show selected tab
-      document.getElementById(`${tabName}-tab`)?.classList.add('active');
+      const tab = document.getElementById(`${tabName}-tab`);
+      if (tab) tab.classList.add('active');
       btn.classList.add('active');
     });
+  });
+
+  // Filter
+  const filterInput = document.getElementById('tipFilter');
+  if (filterInput) {
+    filterInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.tip-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+
+  // Modal close
+  document.addEventListener('click', (e) => {
+    if (e.target.id === 'tipDetailModal') {
+      e.target.classList.remove('active');
+      e.target.classList.add('hidden');
+    }
+    if (e.target.classList.contains('modal-close')) {
+      const modal = e.target.closest('.modal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.classList.add('hidden');
+      }
+    }
   });
 }
 
 async function runAgent() {
   const btn = document.getElementById('runAgentBtn');
+  if (!btn) return;
+
   btn.disabled = true;
   btn.textContent = 'Běží...';
 
@@ -406,9 +399,8 @@ async function runAgent() {
     });
 
     const result = await res.json();
-    alert(`Agent umístil ${result.placed} sázek.`);
+    alert(`Agent umístil ${result.placed || 0} sázek.`);
 
-    // Reload stats
     await loadStats();
     renderDashboard();
   } catch (e) {
@@ -421,10 +413,10 @@ async function runAgent() {
 
 async function saveSettings() {
   const data = {
-    enabled: document.getElementById('agentEnabled').checked,
-    bet_today: document.getElementById('agentBetToday').checked,
-    stake_mode: document.getElementById('stakeMode').value,
-    stake: parseFloat(document.getElementById('flatStake').value),
+    enabled: document.getElementById('agentEnabled')?.checked || false,
+    bet_today: document.getElementById('agentBetToday')?.checked || false,
+    stake_mode: document.getElementById('stakeMode')?.value || 'kelly',
+    stake: parseFloat(document.getElementById('flatStake')?.value || 10),
     kelly_fraction: 0.25,
     max_daily_stake_pct: 0.25,
     only_sharp: true
@@ -437,55 +429,37 @@ async function saveSettings() {
       body: JSON.stringify(data)
     });
 
-    await res.json();
-    alert('Nastavení uloženo!');
+    if (res.ok) {
+      alert('Nastavení uloženo!');
+      await loadSettings();
+    }
   } catch (e) {
     alert('Chyba: ' + e.message);
   }
 }
 
 async function resetSettings() {
-  if (confirm('Opravdu resetovat všechna nastavení?')) {
-    try {
-      await fetch('/api/settings/reset', { method: 'POST' });
-      await loadSettings();
-      alert('Nastavení resetováno na výchozí hodnoty.');
-      location.reload();
-    } catch (e) {
-      alert('Chyba: ' + e.message);
-    }
+  if (!confirm('Opravdu resetovat všechna nastavení?')) return;
+
+  try {
+    await fetch('/api/settings/reset', { method: 'POST' });
+    alert('Nastavení resetováno.');
+    location.reload();
+  } catch (e) {
+    alert('Chyba: ' + e.message);
   }
 }
 
 // ============================================================================
-// UTILITIES
+// UTILS
 // ============================================================================
 
 function fmt(num) {
-  if (num === null || num === undefined) return '—';
-  return new Intl.NumberFormat('cs-CZ', {
-    maximumFractionDigits: 2
-  }).format(num);
+  if (num === null || num === undefined || isNaN(num)) return '—';
+  return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(num);
 }
 
-// Modal close
-document.addEventListener('click', (e) => {
-  if (e.target.id === 'tipDetailModal') {
-    e.target.classList.remove('active');
-    e.target.classList.add('hidden');
-  }
-
-  if (e.target.classList.contains('modal-close')) {
-    e.target.closest('.modal').classList.remove('active');
-    e.target.closest('.modal').classList.add('hidden');
-  }
-});
-
-// Filter tips
-document.getElementById('tipFilter')?.addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase();
-  document.querySelectorAll('.tip-item').forEach(item => {
-    const text = item.textContent.toLowerCase();
-    item.style.display = text.includes(query) ? '' : 'none';
-  });
-});
+function setElText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
