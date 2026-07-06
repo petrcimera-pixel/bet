@@ -71,6 +71,7 @@ function showPage(pageName) {
         break;
       case 'bankroll':
         renderBankroll();
+        renderBankrollPage();
         break;
       case 'learning':
         loadLearningStats();
@@ -879,3 +880,178 @@ setInterval(() => {
     loadMonitoringStatus();
   }
 }, 30000);
+
+// ============================================================================
+// BANKROLL ANALYTICS
+// ============================================================================
+
+function setupBankrollChartTabs() {
+  document.querySelectorAll('.chart-tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const chart = btn.dataset.chart;
+      
+      document.querySelectorAll('.chart-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.chart-tab-content').forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(chart + '-chart').classList.add('active');
+    });
+  });
+}
+
+async function renderBankrollPage() {
+  try {
+    setupBankrollChartTabs();
+    
+    const [summary, daily, monthly, best, streaks, hourly] = await Promise.all([
+      fetch('/api/bankroll/summary', { credentials: 'include' }).then(r => r.json()),
+      fetch('/api/bankroll/daily', { credentials: 'include' }).then(r => r.json()),
+      fetch('/api/bankroll/monthly', { credentials: 'include' }).then(r => r.json()),
+      fetch('/api/bankroll/best-worst?n=5', { credentials: 'include' }).then(r => r.json()),
+      fetch('/api/bankroll/streaks', { credentials: 'include' }).then(r => r.json()),
+      fetch('/api/bankroll/hourly', { credentials: 'include' }).then(r => r.json()),
+    ]);
+
+    if (summary.success) loadBankrollSummary(summary.summary);
+    if (daily.success) renderDailyChart(daily.daily);
+    if (monthly.success) renderMonthlyTable(monthly.monthly);
+    if (best.success) renderBestWorstDays(best);
+    if (streaks.success) renderStreaks(streaks.streaks);
+    if (hourly.success) renderHourlyTable(hourly.hourly);
+  } catch (e) {
+    console.error('Bankroll error:', e);
+  }
+}
+
+function loadBankrollSummary(summary) {
+  setElText('summaryTotalBets', summary.total_bets || '—');
+  setElText('summaryPnL', fmt(summary.total_pnl) + ' Kč');
+  setElText('summaryROI', (summary.roi || 0).toFixed(2) + '%');
+  setElText('summaryWinRate', (summary.win_rate || 0).toFixed(1) + '%');
+  setElText('summaryWinDays', summary.winning_days || '—');
+  setElText('summaryLoseDays', summary.losing_days || '—');
+  setElText('summaryPeak', fmt(summary.peak_balance) + ' Kč');
+  setElText('summaryTrough', fmt(summary.trough_balance) + ' Kč');
+}
+
+function renderDailyChart(dailyData) {
+  const days = Object.keys(dailyData).slice(-30);
+  const pnls = days.map(d => dailyData[d].pnl);
+  
+  const svg = document.getElementById('dailyChartSVG');
+  if (!svg) return;
+  
+  const width = 1000, height = 300;
+  const padding = 40;
+  const plotWidth = width - 2 * padding;
+  const plotHeight = height - 2 * padding;
+  
+  const minVal = Math.min(...pnls, 0);
+  const maxVal = Math.max(...pnls, 0);
+  const range = maxVal - minVal || 1;
+  const zeroY = height - padding - ((0 - minVal) / range) * plotHeight;
+  
+  let bars = '';
+  days.forEach((day, i) => {
+    const x = padding + (i / (days.length - 1 || 1)) * plotWidth;
+    const pnl = dailyData[day].pnl;
+    const y = height - padding - ((pnl - minVal) / range) * plotHeight;
+    const barHeight = Math.abs(zeroY - y);
+    const barColor = pnl > 0 ? 'var(--pos)' : 'var(--bad)';
+    const barY = Math.min(zeroY, y);
+    
+    bars += `<rect x="${x-3}" y="${barY}" width="6" height="${barHeight}" fill="${barColor}" opacity="0.7"/>`;
+  });
+  
+  svg.innerHTML = `
+    <line x1="${padding}" y1="${zeroY}" x2="${width-padding}" y2="${zeroY}" stroke="var(--line)" stroke-width="1"/>
+    <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height-padding}" stroke="var(--line)" stroke-width="1"/>
+    ${bars}
+  `;
+  
+  // Render table
+  const tbody = document.querySelector('#dailyTable tbody');
+  if (tbody) {
+    tbody.innerHTML = days.slice(-10).reverse().map(day => {
+      const d = dailyData[day];
+      return `
+        <tr>
+          <td>${day}</td>
+          <td>${d.bets}</td>
+          <td>${d.wins}</td>
+          <td>${d.win_rate}%</td>
+          <td style="color: ${d.pnl > 0 ? 'var(--pos)' : 'var(--bad)'}">${fmt(d.pnl)} Kč</td>
+        </tr>
+      `;
+    }).join('');
+  }
+}
+
+function renderMonthlyTable(monthlyData) {
+  const tbody = document.querySelector('#monthlyTable tbody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = Object.entries(monthlyData).map(([month, d]) => `
+    <tr>
+      <td>${month}</td>
+      <td>${d.bets}</td>
+      <td>${d.wins}</td>
+      <td>${d.win_rate}%</td>
+      <td style="color: ${d.pnl > 0 ? 'var(--pos)' : 'var(--bad)'}">${fmt(d.pnl)} Kč</td>
+      <td>${d.roi}%</td>
+    </tr>
+  `).join('');
+}
+
+function renderBestWorstDays(data) {
+  const bestTbody = document.querySelector('#bestDaysTable tbody');
+  const worstTbody = document.querySelector('#worstDaysTable tbody');
+  
+  if (bestTbody) {
+    bestTbody.innerHTML = Object.entries(data.best_days).map(([day, d]) => `
+      <tr>
+        <td>${day}</td>
+        <td style="color: var(--pos)">+${fmt(d.pnl)} Kč</td>
+      </tr>
+    `).join('');
+  }
+  
+  if (worstTbody) {
+    worstTbody.innerHTML = Object.entries(data.worst_days).map(([day, d]) => `
+      <tr>
+        <td>${day}</td>
+        <td style="color: var(--bad)">${fmt(d.pnl)} Kč</td>
+      </tr>
+    `).join('');
+  }
+}
+
+function renderStreaks(streaksData) {
+  if (!streaksData) return;
+  
+  setElText('longestWinStreak', streaksData.longest_win_streak + ' 🏆' || '—');
+  setElText('longestLossStreak', streaksData.longest_loss_streak + ' 📉' || '—');
+  
+  const current = streaksData.current_streak;
+  const currentText = current ? `${current.length} ${current.type === 'win' ? '✅' : '❌'}` : '—';
+  setElText('currentStreak', currentText);
+}
+
+function renderHourlyTable(hourlyData) {
+  const tbody = document.querySelector('#hourlyTable tbody');
+  if (!tbody) return;
+  
+  const sorted = Object.entries(hourlyData)
+    .sort((a, b) => b[1].pnl - a[1].pnl)
+    .slice(0, 10);
+  
+  tbody.innerHTML = sorted.map(([hour, d]) => `
+    <tr>
+      <td>${hour}</td>
+      <td>${d.bets}</td>
+      <td>${d.wins}</td>
+      <td>${d.win_rate}%</td>
+      <td style="color: ${d.pnl > 0 ? 'var(--pos)' : 'var(--bad)'}">${fmt(d.pnl)} Kč</td>
+    </tr>
+  `).join('');
+}
