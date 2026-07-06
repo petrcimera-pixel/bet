@@ -1,0 +1,38 @@
+[
+  {
+    "id": "2391770",
+    "league": "FIFA World Cup",
+    "country": "United States",
+    "home": "Paraguay",
+    "away": "Australia",
+    "date": "2026-06-26",
+    "time": "02:00",
+    "home_score": 0,
+    "away_score": 0,
+    "status": "FT"
+  },
+  {
+    "id": "2391775",
+    "league": "FIFA World Cup",
+    "country": "United States",
+    "home": "Norway",
+    "away": "France",
+    "date": "2026-06-26",
+    "time": "19:00",
+    "home_score": 1,
+    "away_score": 4,
+    "status": "FT"
+  },
+  {
+    "id": "2398680",
+    "league": "Irish Premier Division",
+    "country": "Ireland",
+    "home": "Bohemians",
+    "away": "St Patrick's Athletic",
+    "date": "2026-06-26",
+    "time": "19:00",
+    "home_score": 2,
+    "away_score": 0,
+    "status": "FT"
+  }
+]

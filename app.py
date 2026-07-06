@@ -1,0 +1,707 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+⚽ KurzAnalytik – lokální web aplikace na kurzové sázení.
+
+Načítá fotbalové zápasy z celého světa rozdělené podle lig (TheSportsDB,
+bez registrace), analyzuje je predikčním enginem (Elo + Poisson),
+simuluje kurzy sázkových kanceláří a hledá value sázky. Obsahuje správu
+banku s Kelly kritériem, generátor akumulátorů a kurzové alerty.
+
+Spuštění:  python app.py   →   http://127.0.0.1:5000
+"""
+
+import os
+import sys
+import webbrowser
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+# Spustitelné z libovolného adresáře (kvůli importům a šablonám)
+_HERE = os.path.dirname(os.path.abspath(__file__))
+os.chdir(_HERE)
+sys.path.insert(0, _HERE)
+
+# --- samoinstalace závislostí (stejný styl jako ostatní appky) -------------
+def _ensure():
+    import importlib.util, subprocess
+    miss = [p for m, p in {"flask": "Flask", "requests": "requests"}.items()
+            if importlib.util.find_spec(m) is None]
+    if miss:
+        print("Instaluji závislosti:", ", ".join(miss))
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q"] + miss)
+_ensure()
+
+from flask import Flask, jsonify, request, render_template
+
+from engine import data_sources as ds
+from engine import prediction as pred
+from engine import bankroll
+from engine import accumulator as acc
+from engine import odds_api
+from engine import tips_db
+from engine import settings as app_settings
+from engine import agent
+
+app = Flask(__name__)
+
+# jednoduchá keš predikcí v paměti (klíč = datum)
+_PRED_CACHE = {}
+
+
+def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refresh=False):
+    days = max(1, min(14, int(days)))
+    end = ds.add_days(date_str, days - 1)
+    key = f"{sport}~{date_str}~{end}"
+    if not refresh and key in _PRED_CACHE:
+        return _PRED_CACHE[key]
+    matches = ds.fetch_range(date_str, end, use_cache=not refresh, sport=sport)
+    predictions = pred.predict_all(matches)
+    # Volitelné: nahradit modelované kurzy SKUTEČNÝMI (když je nastaven API klíč)
+    if odds_api.has_key():
+        index = odds_api.fetch_index(sport)
+        if index:
+            for p in predictions:
+                rb = odds_api.lookup(index, p["home"], p["away"])
+                if rb:
+                    pred.apply_real_odds(p, rb)
+    _PRED_CACHE[key] = predictions
+    # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
+    try:
+        tips_db.save_tips([p for p in predictions if p.get("result") is None])
+    except Exception:
+        pass
+    return predictions
+
+
+# ---------------------------------------------------------------------------
+# Stránka
+# ---------------------------------------------------------------------------
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+# ---------------------------------------------------------------------------
+# API – zápasy a predikce na den, seskupené podle lig
+# ---------------------------------------------------------------------------
+@app.route("/api/sports")
+def api_sports():
+    return jsonify({"sports": [{"id": k, "label": v["label"]} for k, v in ds.SPORTS.items()]})
+
+
+@app.route("/api/matches")
+def api_matches():
+    date_str = request.args.get("date") or ds.today_str()
+    days = request.args.get("days", 1)
+    sport = request.args.get("sport", "soccer")
+    refresh = request.args.get("refresh") == "1"
+    predictions = _predictions_for(date_str, days=days, sport=sport, refresh=refresh)
+
+    # Minimalizuj data pro UI – odstraň zbytečné odds detaily
+    def slim_prediction(p):
+        return {
+            "id": p.get("id"),
+            "home": p["home"],
+            "away": p["away"],
+            "league": p["league"],
+            "country": p["country"],
+            "date": p.get("date"),
+            "time": p.get("time"),
+            "probs": p.get("probs", {}),
+            "pick": p.get("pick"),
+            "result": p.get("result"),
+            "live": p.get("live", False),
+            "best_value": p.get("best_value", {}),
+        }
+
+    slim_preds = [slim_prediction(p) for p in predictions]
+
+    leagues = {}
+    for p in slim_preds:
+        lg = leagues.setdefault(p["league"], {
+            "league": p["league"],
+            "country": p["country"],
+            "flag": ds.flag(p["country"]),
+            "matches": [],
+        })
+        lg["matches"].append(p)
+
+    league_list = sorted(
+        leagues.values(),
+        key=lambda l: (ds.league_rank(l["league"]), -len(l["matches"]), l["league"]))
+
+    value_count = sum(1 for p in slim_preds if p["best_value"].get("is_value"))
+    # Tip dne = nejvyšší EV value napříč nadcházejícími zápasy
+    upcoming = [p for p in slim_preds if p["result"] is None and p["best_value"].get("is_value")]
+    tip = max(upcoming, key=lambda p: p["best_value"].get("ev", 0), default=None)
+    return jsonify({
+        "date": date_str,
+        "days": max(1, min(14, int(days))),
+        "total_matches": len(slim_preds),
+        "total_leagues": len(league_list),
+        "value_count": value_count,
+        "tip": tip,
+        "leagues": league_list,
+    })
+
+
+@app.route("/api/tickets")
+def api_tickets():
+    date_str = request.args.get("date") or ds.today_str()
+    days = request.args.get("days", 1)
+    sport = request.args.get("sport", "soccer")
+    predictions = _predictions_for(date_str, days=days, sport=sport)
+    return jsonify({"tickets": acc.build_tickets(predictions)})
+
+
+@app.route("/api/form")
+def api_form():
+    """Skutečná forma + vzájemné zápasy (H2H) z ESPN – on-demand pro detail zápasu."""
+    sport = request.args.get("sport", "soccer")
+    slug = request.args.get("slug", "")
+    home_id = request.args.get("home_id", "")
+    away_id = request.args.get("away_id", "")
+    home = request.args.get("home", "")
+    away = request.args.get("away", "")
+    fh = ds.team_form(sport, slug, home_id)
+    fa = ds.team_form(sport, slug, away_id)
+    # H2H = zápasy domácích, kde soupeř byl tým hostů
+    h2h = [g for g in fh if away and (away.lower() in g["opp"].lower() or g["opp"].lower() in away.lower())]
+    return jsonify({"home": fh, "away": fa, "h2h": h2h})
+
+
+@app.route("/api/backtest")
+def api_backtest():
+    """Zpětný test modelu na historickém okně: přesnost, Brier score, kalibrace, ROI value sázek."""
+    sport = request.args.get("sport", "soccer")
+    days = max(3, min(21, int(request.args.get("days", 14))))
+    end = request.args.get("end") or ds.add_days(ds.today_str(), -3)
+    start = ds.add_days(end, -(days - 1))
+    preds = _predictions_for(start, days=days, sport=sport)
+
+    evald = [p for p in preds if p.get("result")]
+    n = len(evald)
+    if not n:
+        return jsonify({"n": 0, "start": start, "end": end})
+
+    hits = brier = brier_uni = 0.0
+    bins = [{"lo": i / 10, "hi": (i + 1) / 10, "count": 0, "pred": 0.0, "obs": 0} for i in range(10)]
+    val_bets = val_profit = 0.0
+
+    for p in evald:
+        keys = ("home", "away") if p["two_way"] else ("home", "draw", "away")
+        hs, as_ = p["result"]["home"], p["result"]["away"]
+        actual = "home" if hs > as_ else ("away" if as_ > hs else "draw")
+        if actual not in keys:
+            actual = "home" if hs >= as_ else "away"   # dvoucestné bez remízy
+        # Brier (vícetřídní) + uniformní baseline
+        u = 1.0 / len(keys)
+        for k in keys:
+            y = 1.0 if k == actual else 0.0
+            brier += (p["probs"][k] - y) ** 2
+            brier_uni += (u - y) ** 2
+        # přesnost predikce + kalibrace podle jistoty favorita
+        correct = p["pick"] == actual
+        hits += 1 if correct else 0
+        pp = p["probs"][p["pick"]]
+        b = bins[min(9, int(pp * 10))]
+        b["count"] += 1
+        b["pred"] += pp
+        b["obs"] += 1 if correct else 0
+        # ROI value sázek (vsadíme nejlepší value výběr za nejlepší kurz)
+        bv = p["best_value"]
+        if bv["is_value"]:
+            r = bankroll.eval_outcome(bv["outcome"], hs, as_)
+            if r:
+                val_bets += 1
+                val_profit += (bv["best_odds"] - 1) if r == "won" else -1
+
+    for b in bins:
+        if b["count"]:
+            b["pred"] = round(b["pred"] / b["count"], 3)
+            b["obs_rate"] = round(b["obs"] / b["count"], 3)
+        else:
+            b["obs_rate"] = None
+
+    return jsonify({
+        "n": n, "start": start, "end": end, "sport": sport,
+        "accuracy": round(hits / n * 100, 1),
+        "brier": round(brier / n, 4),
+        "brier_uniform": round(brier_uni / n, 4),
+        "skill": round((1 - (brier / n) / (brier_uni / n)) * 100, 1) if brier_uni else 0,
+        "value_bets": int(val_bets),
+        "value_roi": round(val_profit / val_bets * 100, 1) if val_bets else None,
+        "value_profit": round(val_profit, 2),
+        "bins": [b for b in bins if b["count"]],
+    })
+
+
+@app.route("/api/team")
+def api_team():
+    """Detail týmu: Elo rating, forma, příští zápasy, útok/obrana."""
+    sport = request.args.get("sport", "soccer")
+    slug = request.args.get("slug", "")
+    team_id = request.args.get("team_id", "")
+    name = request.args.get("name", "")
+    league = request.args.get("league", "")
+    evs = ds.team_events(sport, slug, team_id)
+    past = [e for e in evs if e["res"]]
+    last = list(reversed(past))[:10]
+    upcoming = [e for e in evs if not e["completed"]][:6]
+    gf = [e["gf"] for e in past if e["gf"] is not None]
+    ga = [e["ga"] for e in past if e["ga"] is not None]
+    wins = sum(1 for e in past if e["res"] == "W")
+    return jsonify({
+        "name": name,
+        "rating": pred.rating_of(name, league),
+        "form": last,
+        "upcoming": upcoming,
+        "played": len(past),
+        "win_rate": round(wins / len(past) * 100) if past else 0,
+        "avg_for": round(sum(gf) / len(gf), 2) if gf else None,
+        "avg_against": round(sum(ga) / len(ga), 2) if ga else None,
+    })
+
+
+@app.route("/api/alerts")
+def api_alerts():
+    date_str = request.args.get("date") or ds.today_str()
+    days = request.args.get("days", 1)
+    sport = request.args.get("sport", "soccer")
+    predictions = _predictions_for(date_str, days=days, sport=sport)
+    return jsonify({"alerts": acc.build_alerts(predictions)})
+
+
+# ---------------------------------------------------------------------------
+# API – bankroll
+# ---------------------------------------------------------------------------
+@app.route("/api/bankroll")
+def api_bankroll():
+    return jsonify({"stats": bankroll.stats(), "bets": bankroll.state()["bets"][:50]})
+
+
+@app.route("/api/bankroll/settings", methods=["POST"])
+def api_bankroll_settings():
+    d = request.get_json(force=True)
+    bankroll.settings(
+        start_balance=d.get("start_balance"),
+        kelly_fraction=d.get("kelly_fraction"),
+        currency=d.get("currency"),
+    )
+    return jsonify({"stats": bankroll.stats()})
+
+
+@app.route("/api/odds/status")
+def api_odds_status():
+    return jsonify({"enabled": odds_api.has_key()})
+
+
+@app.route("/api/odds/key", methods=["POST"])
+def api_odds_key():
+    d = request.get_json(force=True)
+    odds_api.set_key(d.get("key", ""))
+    _PRED_CACHE.clear()
+    return jsonify({"enabled": odds_api.has_key()})
+
+
+@app.route("/api/kelly")
+def api_kelly():
+    prob = float(request.args.get("prob"))
+    odds = float(request.args.get("odds"))
+    st = bankroll.state()
+    stake = bankroll.kelly_stake(prob, odds, st["balance"], st["kelly_fraction"])
+    return jsonify({"stake": stake, "balance": st["balance"],
+                    "fraction": st["kelly_fraction"]})
+
+
+@app.route("/api/bet", methods=["POST"])
+def api_bet():
+    d = request.get_json(force=True)
+    try:
+        bet = bankroll.place_bet(
+            d["match_id"], d["label"], d["outcome"], d["odds"],
+            d["prob"], d["stake"], d["home"], d["away"],
+            consensus_odds=d.get("consensus_odds"),
+            match_date=d.get("match_date"), match_time=d.get("match_time"))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify({"bet": bet, "stats": bankroll.stats()})
+
+
+@app.route("/api/bet/acca", methods=["POST"])
+def api_acca():
+    d = request.get_json(force=True)
+    try:
+        bet = bankroll.place_acca(d["legs"], d["stake"])
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify({"bet": bet, "stats": bankroll.stats()})
+
+
+@app.route("/api/bet/settle", methods=["POST"])
+def api_settle():
+    d = request.get_json(force=True)
+    try:
+        bet = bankroll.settle_bet(d["bet_id"], d["result"])
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify({"bet": bet, "stats": bankroll.stats()})
+
+
+_SETTLE_BATCH_DAYS = 2   # max dny na batch
+_SETTLE_BATCH_MATCHES = 500   # max zápasů na batch (244 lig × 2 dny = ~488 zápasů)
+
+# Globální stav kontroly výsledků na pozadí
+_settle_status = {
+    "in_progress": False,
+    "current_batch": [],
+    "settled_so_far": 0,
+    "total_pending": 0,
+    "more_pending": False,
+}
+_settle_lock = threading.Lock()
+
+
+def _settle_recent():
+    """Sdílená logika vyhodnocení: pro dny <= dnešek (jediné, kde už zápas může mít
+    výsledek) natáhne ČERSTVÁ data z ESPN (mimo kešku) – jinak by zůstal výsledek
+    zápasu odehraného po posledním zobrazení toho dne v appce navždy chybějící.
+    Bere v potaz dny jak z otevřených TIPŮ, tak z otevřených SÁZEK (bank), aby
+    fungovalo vyhodnocení z libovolného místa appky (Bankroll, Tipy, Agent).
+    Dotaz na 244 lig je pomalý, takže se zpracuje jen pár nejnovějších dnů
+    najednou; starší zbytek se dovyhodnotí při dalším kliknutí.
+    Vrací (results, corner_results, more_pending)."""
+    today = ds.today_str()
+    open_tips = tips_db.get_tips(status="open", limit=1000)  # max 1000 tipů – dost na vyřešení
+    open_bets = [b for b in bankroll.state()["bets"] if b["status"] == "open" and b.get("match_id")]
+
+    # Priorita dnů v dávce: NEJSTARŠÍ DNY DŘÍV (aby se nedostaly "uvězněné" na konci).
+    # Sekundárně váha – SÁZKY (reálný bank) váží 3× víc než tipy.
+    # Řazení: (1) čím starší, tím dřív; (2) čím více otevřených položek, tím dřív.
+    weight = {}
+    for t in open_tips:
+        if t.get("date") and t["date"] <= today:
+            weight[(t.get("sport", "soccer"), t["date"])] = \
+                weight.get((t.get("sport", "soccer"), t["date"]), 0) + 1
+    for b in open_bets:
+        if b.get("match_date") and b["match_date"] <= today:
+            key = (b.get("sport", "soccer"), b["match_date"])
+            weight[key] = weight.get(key, 0) + 3
+    # Seřaď: nejstarší dny dřív (sd[1] ascending), pak více položek dřív (-weight desc)
+    past_dates = sorted(weight, key=lambda sd: (sd[1], -weight[sd]))
+
+    # Vyber dny dokud počet zápasů <= _SETTLE_BATCH_MATCHES a počet dní <= _SETTLE_BATCH_DAYS
+    batch = []
+    match_count = 0
+    for sd in past_dates:
+        if len(batch) >= _SETTLE_BATCH_DAYS:
+            break
+        batch.append(sd)
+        match_count += weight[sd]
+        if match_count >= _SETTLE_BATCH_MATCHES:
+            break
+
+    remaining = past_dates[len(batch):]
+
+    def _grab(sd):
+        sport, date_str = sd
+        try:
+            return ds.fetch_range(date_str, date_str, use_cache=False, sport=sport)
+        except Exception:
+            return []
+
+    results = {}
+    if batch:
+        # Max 3 workers – míň paralelizmu = míň zatížení ESPN
+        with ThreadPoolExecutor(max_workers=min(3, len(batch))) as ex:
+            for matches in ex.map(_grab, batch):
+                for m in matches:
+                    # raw zápasy z data_sources mají home_score/away_score, ne "result"
+                    if m.get("home_score") is None or m.get("away_score") is None:
+                        continue
+                    if m.get("live"):
+                        continue   # neukončené, score se ještě může změnit
+                    results[m["id"]] = {"home": m["home_score"], "away": m["away_score"]}
+
+    # Rohy se ověřují zvlášť přes ESPN boxscore (summary endpoint, statistika
+    # "wonCorners") – jen pro zápasy, které právě skončily a mají otevřený
+    # rohový tip. Ne každá liga má detailní boxscore, proto best-effort.
+    corner_results = {}
+    corner_targets = [
+        (t.get("sport", "soccer"), t.get("slug", ""), t["id"])
+        for t in open_tips
+        if t.get("corner_outcome") and t["id"] in results and t.get("slug")
+    ]
+    if corner_targets:
+        def _grab_corners(target):
+            sport, slug, mid = target
+            try:
+                return mid, ds.fetch_corners(sport, slug, mid)
+            except Exception:
+                return mid, None
+        with ThreadPoolExecutor(max_workers=min(20, len(corner_targets))) as ex:
+            for mid, c in ex.map(_grab_corners, corner_targets):
+                if c:
+                    corner_results[mid] = c
+
+    return results, corner_results, len(remaining) > 0
+
+
+@app.route("/api/bet/autosettle", methods=["POST"])
+def api_autosettle():
+    """Vyhodnotí otevřené SÁZKY (bank) – natáhne čerstvé výsledky z ESPN (stejná
+    robustní logika jako /api/tips/settle), takže funguje i po restartu appky
+    nebo když zápas mezitím doběhl a nebyl v paměťové keši predikcí."""
+    results, corner_results, more_pending = _settle_recent()
+    tips_db.settle_tips(results, corner_results)   # ať zůstane synchronní s tipy
+    n = bankroll.auto_settle(results)
+    return jsonify({"settled": n, "stats": bankroll.stats(),
+                    "bets": bankroll.state()["bets"][:50], "more_pending": more_pending})
+
+
+# ---------------------------------------------------------------------------
+# API – databáze tipů modelu
+# ---------------------------------------------------------------------------
+@app.route("/api/tips")
+def api_tips():
+    sport  = request.args.get("sport")
+    status = request.args.get("status")   # open / settled / won / lost
+    limit  = int(request.args.get("limit", 200))
+    offset = int(request.args.get("offset", 0))
+    tips   = tips_db.get_tips(sport=sport, status=status, limit=limit, offset=offset)
+    return jsonify({"tips": tips, "total": len(tips)})
+
+
+@app.route("/api/tips/stats")
+def api_tips_stats():
+    sport = request.args.get("sport")
+    return jsonify(tips_db.stats(sport=sport))
+
+
+@app.route("/api/tips/settle", methods=["POST"])
+def api_tips_settle():
+    """Vyhodnotí otevřené tipy i sázky (bank) – čerstvá data z ESPN, viz _settle_recent()."""
+    results, corner_results, more_pending = _settle_recent()
+    n = tips_db.settle_tips(results, corner_results)
+    n_bets = bankroll.auto_settle(results)   # stejné výsledky vyhodnotí i sázky (vč. agenta)
+    _PRED_CACHE.clear()   # ať se i v UI hned zobrazí čerstvě stažené výsledky
+    return jsonify({"settled": n, "settled_bets": n_bets, "stats": tips_db.stats(),
+                    "more_pending": more_pending})
+
+
+@app.route("/api/settle/status")
+def api_settle_status():
+    """Live stav automatické kontroly výsledků na pozadí."""
+    with _settle_lock:
+        return jsonify(_settle_status)
+
+
+# ---------------------------------------------------------------------------
+# API – Automatický sázecí agent (zítřejší tipy, plochý vklad z banku)
+# ---------------------------------------------------------------------------
+@app.route("/api/agent")
+def api_agent():
+    """Stav agenta: nastavení, statistiky výkonu a jeho sázky."""
+    return jsonify({
+        "settings": app_settings.get_settings()["agent"],
+        "stats": agent.agent_stats(),
+        "league_stats": agent.league_stats(),
+        "bets": agent.agent_bets()[:60],
+        "balance": bankroll.state()["balance"],
+    })
+
+
+@app.route("/api/agent/settings", methods=["POST"])
+def api_agent_settings():
+    d = request.get_json(force=True)
+    app_settings.update_settings("agent", {
+        k: v for k, v in d.items()
+        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp")
+    })
+    return jsonify(app_settings.get_settings()["agent"])
+
+
+@app.route("/api/agent/run", methods=["POST"])
+def api_agent_run():
+    """Vsadí zítřejší ostré tipy. `auto=True` = tichý běh při startu appky
+    (nic nedělá, když je agent vypnutý); tlačítko posílá force=True."""
+    d = request.get_json(silent=True) or {}
+    cfg = app_settings.get_settings()["agent"]
+    if not cfg.get("enabled") and not d.get("force"):
+        return jsonify({"skipped": "disabled"})
+    start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
+    days = 2 if cfg.get("bet_today") else 1
+    predictions = _predictions_for(start_date, days=days)
+    result = agent.run(predictions)
+    result["stats"] = agent.agent_stats()
+    return jsonify(result)
+
+
+# ---------------------------------------------------------------------------
+# API – Pokročilé nastavení a správa dat
+# ---------------------------------------------------------------------------
+@app.route("/api/settings")
+def api_settings():
+    return jsonify(app_settings.get_settings())
+
+
+@app.route("/api/settings", methods=["POST"])
+def api_settings_save():
+    d = request.get_json(force=True)
+    section = d.get("section")
+    values = d.get("values", {})
+    try:
+        st = app_settings.update_settings(section, values)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    if section == "model":
+        pred.apply_settings()
+        _PRED_CACHE.clear()   # parametry modelu se změnily, staré predikce už neplatí
+    return jsonify(st)
+
+
+@app.route("/api/settings/reset", methods=["POST"])
+def api_settings_reset():
+    st = app_settings.reset_settings()
+    pred.apply_settings()
+    _PRED_CACHE.clear()
+    return jsonify(st)
+
+
+@app.route("/api/data/clear-cache", methods=["POST"])
+def api_data_clear_cache():
+    n = app_settings.clear_prediction_cache()
+    _PRED_CACHE.clear()
+    return jsonify({"cleared": n})
+
+
+@app.route("/api/data/reset-tips", methods=["POST"])
+def api_data_reset_tips():
+    app_settings.reset_tips_db()
+    return jsonify({"ok": True})
+
+
+@app.route("/api/data/export")
+def api_data_export():
+    return jsonify(app_settings.export_all())
+
+
+@app.route("/api/data/import", methods=["POST"])
+def api_data_import():
+    d = request.get_json(force=True)
+    try:
+        app_settings.import_all(d)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    pred.apply_settings()
+    _PRED_CACHE.clear()
+    return jsonify({"ok": True})
+
+
+@app.route("/api/result", methods=["POST"])
+def api_result():
+    """Zadání reálného výsledku – engine aktualizuje Elo ratingy (učí se)."""
+    d = request.get_json(force=True)
+    pred.update_from_result(d["home"], d["away"], d.get("league", ""),
+                            int(d["home_score"]), int(d["away_score"]))
+    _PRED_CACHE.clear()
+    return jsonify({"ok": True})
+
+
+@app.route("/api/analytics")
+def api_analytics():
+    """Vrátí profesionální metriky: unit_count, sharpe_ratio, monthly_pnl, by_league."""
+    s = bankroll.stats()
+    return jsonify({
+        "unit_count": s.get("unit_count"),
+        "sharpe_ratio": s.get("sharpe_ratio"),
+        "monthly_pnl": s.get("monthly_pnl", {}),
+        "by_league": s.get("by_league", {}),
+        "equity": s.get("equity", []),
+        "profit": s.get("profit"),
+        "roi": s.get("roi"),
+        "win_rate": s.get("win_rate"),
+    })
+
+
+# Příprava na nasazení jako web: adresa/port jdou přepsat proměnnými prostředí
+# (HOST=0.0.0.0 PORT=8080 python app.py). Lokální výchozí zůstává 127.0.0.1:5000.
+# Pro veřejný provoz použij produkční WSGI server (waitress/gunicorn), ne app.run().
+_HOST = os.environ.get("HOST", "127.0.0.1")
+_PORT = int(os.environ.get("PORT", "5000"))
+
+
+def _open_browser():
+    webbrowser.open(f"http://{_HOST}:{_PORT}")
+
+
+def _prewarm():
+    """Na pozadí předehřeje predikce na dnešek (7denní okno), ať je první zobrazení svižné."""
+    try:
+        _predictions_for(ds.today_str(), days=7)
+    except Exception:
+        pass
+
+
+def _settle_in_background():
+    """Automatická kontrola výsledků – běží na pozadí neustále, opakovaně zpracovává
+    otevřené sázky/tipy v dávkách. Aktualizuje _settle_status pro live progress v UI.
+    Když není co řešit, čeká 10s a pak zkusí znovu."""
+    import time
+
+    while True:
+        try:
+            with _settle_lock:
+                # Počet otevřených položek na začátku běhu
+                open_bets = [b for b in bankroll.state()["bets"]
+                            if b["status"] == "open" and b.get("match_id")]
+                open_tips = tips_db.get_tips(status="open", limit=1000)  # stejný limit jako v _settle_recent
+                total = len(open_bets) + len(open_tips)
+
+                if total == 0:
+                    # Nic k vyřešení – dále v cyklu
+                    _settle_status["in_progress"] = False
+                    _settle_status["settled_so_far"] = 0
+                else:
+                    _settle_status["in_progress"] = True
+                    _settle_status["current_batch"] = []
+                    _settle_status["total_pending"] = total
+                    _settle_status["settled_so_far"] = 0  # reset na začátku běhu
+
+            if total == 0:
+                # Nic k vyřešení – delší čekání (snížení CPU)
+                time.sleep(30)
+                continue
+
+            # Natáhni a vyřeš jednu dávku
+            results, corner_results, more_pending = _settle_recent()
+            n_tips = tips_db.settle_tips(results, corner_results)
+            n_bets = bankroll.auto_settle(results)
+            _PRED_CACHE.clear()
+
+            with _settle_lock:
+                _settle_status["settled_so_far"] += n_tips + n_bets
+                _settle_status["more_pending"] = more_pending
+                if not more_pending:
+                    _settle_status["in_progress"] = False
+
+            # Pauza mezi batches (snížení zatížení ESPN API)
+            time.sleep(3)
+
+        except Exception as e:
+            print(f"[settle_bg] Chyba: {e}")
+            import traceback
+            traceback.print_exc()
+            with _settle_lock:
+                _settle_status["in_progress"] = False
+            time.sleep(10)  # více čekat při chybě
+
+
+if __name__ == "__main__":
+    print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
+    if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
+        threading.Timer(1.2, _open_browser).start()
+    threading.Thread(target=_prewarm, daemon=True).start()
+    threading.Thread(target=_settle_in_background, daemon=True).start()
+    app.run(host=_HOST, port=_PORT, debug=False, threaded=True)

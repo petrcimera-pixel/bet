@@ -1,0 +1,25 @@
+{
+  "model": {
+    "dc_rho": -0.13,
+    "home_adv": 60,
+    "elo_k": 22,
+    "rating_to_goals": 0.4,
+    "default_sport": "soccer",
+    "default_window": 7,
+    "live_refresh_sec": 60
+  },
+  "appearance": {
+    "theme": "light",
+    "density": "comfortable",
+    "accent": "violet"
+  },
+  "agent": {
+    "enabled": true,
+    "stake": 10,
+    "only_sharp": true,
+    "stake_mode": "flat",
+    "kelly_fraction": 0.25,
+    "max_daily_stake_pct": 0.5,
+    "bet_today": true
+  }
+}

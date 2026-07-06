@@ -1,0 +1,713 @@
+/* ============================================================================
+   KurzAnalytik Pro — design system
+   Střídmá „trading desk" estetika: flat vrstvené povrchy, vlasové linky,
+   tabulární číslice, sémantické barvy jen tam, kde nesou význam.
+   Akcentové tóny se míchají přes color-mix(), takže volba přízvuku
+   v Nastavení se propíše do celého UI.
+   ========================================================================== */
+
+:root{
+  /* povrchy: neutrální grafit, vrstvení světlostí (ne barvou) */
+  --bg0:#0b0d11; --bg1:#0e1116;
+  --surf:#12151b; --surf2:#171b22; --elev:#1c212a;
+  --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.12);
+  /* text */
+  --txt:#e6eaf0; --mut:#8f99a8; --dim:#5c6572;
+  /* akcent (výchozí modrá) — varianty níže */
+  --acc:#4a8cf7; --acc-d:#2f6ad0; --acc2:#7db2ff;
+  /* sémantika: zisk / ztráta / varování / value edge */
+  --pos:#22c58b; --pos-d:#158a60;
+  --bad:#ef5368; --warn:#dfa93f; --gold:#e3b34c;
+  --val:#9d84f0; --val-d:#6d55c4;
+  --radius:12px;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset;
+  --shadow-pop:0 24px 64px -16px rgba(0,0,0,.6);
+  /* ponecháno kvůli kompatibilitě, záměrně decentní */
+  --glow-acc:0 0 0 1px color-mix(in srgb,var(--acc) 45%,transparent);
+  --glow-val:0 0 0 1px color-mix(in srgb,var(--val) 45%,transparent);
+  --glow-pos:0 0 0 1px color-mix(in srgb,var(--pos) 45%,transparent);
+  --num:"Space Grotesk","Inter",system-ui,sans-serif;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* ---------- SVĚTLÉ TÉMA ---------- */
+body.theme-light{
+  --bg0:#f4f5f8; --bg1:#eceef3;
+  --surf:#ffffff; --surf2:#f4f6f9; --elev:#ffffff;
+  --line:rgba(15,23,42,.09); --line2:rgba(15,23,42,.17);
+  --txt:#151a23; --mut:#5d6878; --dim:#8b94a3;
+  --shadow:0 1px 2px rgba(15,23,42,.05);
+  --shadow-pop:0 24px 60px -18px rgba(15,23,42,.25);
+  background:
+    radial-gradient(1100px 420px at 62% -180px, color-mix(in srgb,var(--acc) 8%,transparent), transparent 70%),
+    var(--bg0);
+  background-attachment:fixed;
+}
+
+/* ---------- BAREVNÉ PŘÍZVUKY ---------- */
+body.accent-violet{--acc:#9d84f0;--acc-d:#7a5fd0;--acc2:#bda8ff}
+body.accent-green{--acc:#22c58b;--acc-d:#158a60;--acc2:#5fe0b0}
+body.accent-amber{--acc:#e3a34c;--acc-d:#bd7f28;--acc2:#f0c078}
+
+/* ---------- KOMPAKTNÍ HUSTOTA ---------- */
+body.density-compact header{padding:8px 20px}
+body.density-compact .sportbar{padding:10px 20px 0}
+body.density-compact .statsbar{padding:12px 20px 0;gap:8px}
+body.density-compact .stat{padding:9px 13px;min-width:112px}
+body.density-compact .tabpane{padding:14px 20px 60px}
+body.density-compact .match{padding:9px 14px}
+body.density-compact .bet{padding:8px 12px}
+body.density-compact .card{padding:16px}
+body.density-compact .league-head{padding:8px 12px}
+
+*{box-sizing:border-box}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+::-webkit-scrollbar-track{background:transparent}
+
+body{margin:0;color:var(--txt);min-height:100vh;-webkit-font-smoothing:antialiased;
+  letter-spacing:.1px;font-size:14px;
+  /* ambientní záře nahoře v barvě zvoleného přízvuku – jediný „wow" moment pozadí */
+  background:
+    radial-gradient(1100px 420px at 62% -180px, color-mix(in srgb,var(--acc) 9%,transparent), transparent 70%),
+    var(--bg0);
+  background-attachment:fixed}
+h1,h2,h3{margin:0}
+button{font-family:inherit;cursor:pointer}
+.num,.stat .v,.odd .o,.tip-odds .o,.big,.bankchip,.mbox .v,.ou-o{font-family:var(--num);
+  font-variant-numeric:tabular-nums;letter-spacing:0}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes slideIn{from{transform:translateY(6px)}to{transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:-450px 0}100%{background-position:450px 0}}
+@keyframes glowpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,83,104,.45)}50%{box-shadow:0 0 0 5px rgba(239,83,104,0)}}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.6}}  /* sníženo na 2s interval pro nižší CPU */
+@keyframes sheen{to{transform:none}}
+
+/* ============================================================================
+   APP SHELL + BOČNÍ NAVIGACE
+   ========================================================================== */
+.app-shell{display:flex;min-height:100vh;align-items:stretch}
+.sidebar{width:228px;flex-shrink:0;display:flex;flex-direction:column;gap:10px;padding:16px 12px;
+  background:var(--bg1);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;transition:width .18s ease;z-index:40}
+
+.side-brand{display:flex;align-items:center;gap:10px;padding:2px 6px 12px;position:relative;
+  border-bottom:1px solid var(--line);margin-bottom:4px}
+.logo-mark{flex:none;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--num);font-weight:800;font-size:15px;color:#fff;letter-spacing:-.5px;
+  background:linear-gradient(150deg,var(--acc),var(--acc-d))}
+.side-brand .logo{font-size:24px}
+.side-brand-tx{overflow:hidden;white-space:nowrap}
+.side-brand-tx h1{font-size:15.5px;font-weight:700;letter-spacing:-.2px}
+.side-brand-tx h1 span{color:var(--acc)}
+.side-brand-tx .tag{margin:1px 0 0;font-size:10px;color:var(--dim);white-space:nowrap;
+  text-transform:uppercase;letter-spacing:.8px}
+.side-collapse-btn{margin-left:auto;background:transparent;border:1px solid var(--line);color:var(--dim);
+  border-radius:7px;width:22px;height:22px;font-size:11px;flex-shrink:0;transition:.15s}
+.side-collapse-btn:hover{color:var(--txt);border-color:var(--line2)}
+
+.sidenav{display:flex;flex-direction:column;gap:2px;flex:1}
+.sidenav-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.1px;
+  font-weight:600;padding:12px 12px 5px}
+.sidenav-sep{height:1px;background:var(--line);margin:10px 8px}
+
+.tab{display:flex;align-items:center;gap:11px;background:none;border:none;color:var(--mut);
+  padding:9px 12px;font-size:13.5px;font-weight:500;border-radius:8px;transition:.15s;
+  position:relative;text-align:left;white-space:nowrap}
+.tab .ic{flex:none;width:18px;height:18px;font-size:15px;text-align:center;display:inline-flex;
+  align-items:center;justify-content:center;stroke:currentColor;opacity:.85}
+.tab svg.ic{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tab:hover{color:var(--txt);background:rgba(255,255,255,.04)}
+.tab.active{color:var(--txt);background:color-mix(in srgb,var(--acc) 13%,transparent);font-weight:600}
+.tab.active .ic{color:var(--acc2);opacity:1}
+.tab.active::before{content:"";position:absolute;left:0;top:20%;bottom:20%;width:3px;border-radius:2px;
+  background:var(--acc)}
+
+.dot{display:inline-block;width:7px;height:7px;background:var(--bad);border-radius:50%;
+  animation:glowpulse 2.4s infinite;margin-left:auto}
+
+.side-help{display:flex;align-items:center;gap:11px;background:transparent;border:1px solid var(--line);
+  color:var(--mut);padding:9px 12px;font-size:13px;font-weight:500;border-radius:8px;transition:.15s;white-space:nowrap}
+.side-help:hover{color:var(--txt);border-color:var(--line2)}
+.side-help .ic{width:18px;height:18px;font-size:14px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+.side-help svg.ic{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* sidebar sbalená – jen ikony */
+.sidebar.collapsed{width:60px}
+.sidebar.collapsed .side-brand-tx,.sidebar.collapsed .tx,.sidebar.collapsed .tag,
+.sidebar.collapsed .sidenav-label{display:none}
+.sidebar.collapsed .side-brand{justify-content:center}
+.sidebar.collapsed .side-collapse-btn{position:absolute;right:-11px;top:16px;background:var(--surf2)}
+.sidebar.collapsed .tab,.sidebar.collapsed .side-help{justify-content:center;padding:9px 6px}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.mobile-nav-btn{display:none;background:var(--surf2);border:1px solid var(--line);color:var(--txt);
+  border-radius:8px;width:36px;height:36px;font-size:15px}
+
+/* ============================================================================
+   HEADER — štíhlý nástrojový pruh
+   ========================================================================== */
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 26px;
+  background:color-mix(in srgb,var(--bg1) 88%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.datebar{display:flex;align-items:center;gap:6px;margin-right:auto}
+.datebar button{background:var(--surf);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:7px 11px;font-size:13px;transition:.15s}
+.datebar button:hover{border-color:var(--line2);background:var(--surf2)}
+.datebar input[type=date],.datebar select{background:var(--surf);color:var(--txt);
+  border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;font-family:var(--num)}
+.ghost{font-size:12.5px!important}
+.bankchip{background:transparent;color:var(--pos);border:1px solid color-mix(in srgb,var(--pos) 40%,transparent);
+  padding:7px 15px;border-radius:9px;font-weight:700;font-size:14px;
+  background:color-mix(in srgb,var(--pos) 8%,transparent)}
+
+.day-chip{background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:7px 11px;
+  font-size:12px;font-weight:700;color:var(--acc2);white-space:nowrap;font-family:var(--num);
+  text-transform:uppercase;letter-spacing:.4px}
+
+/* otevřená expozice v hlavičce — profík ji chce vidět pořád */
+.riskchip{background:color-mix(in srgb,var(--warn) 7%,transparent);color:var(--warn);
+  border:1px solid color-mix(in srgb,var(--warn) 32%,transparent);padding:7px 13px;border-radius:9px;
+  font-weight:700;font-size:12.5px;font-family:var(--num);white-space:nowrap}
+
+/* automatická kontrola výsledků — live progress */
+.settleprogress{display:flex;align-items:center;gap:8px;color:var(--acc);
+  font-size:12px;font-weight:600;white-space:nowrap;padding:4px 0}
+.settle-spinner{display:inline-block;width:14px;height:14px;animation:spin 2s linear infinite}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.settle-text{font-family:var(--num)}
+
+/* stavový blok v patičce boční lišty */
+.side-status{font-size:10.5px;color:var(--dim);line-height:1.7;padding:10px 12px;margin-bottom:8px;
+  border:1px dashed var(--line);border-radius:9px;letter-spacing:.2px}
+.side-status .ss-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pos);
+  margin-right:6px;box-shadow:0 0 8px var(--pos)}
+.sidebar.collapsed .side-status{display:none}
+
+/* ============================================================================
+   SPORT BAR — spojený segmentový přepínač uprostřed
+   ========================================================================== */
+.sportbar{display:flex;gap:2px;padding:3px;margin:16px auto 0;width:fit-content;
+  background:var(--bg1);border:1px solid var(--line);border-radius:11px;flex-wrap:wrap;justify-content:center}
+.sportbar button{background:transparent;border:none;color:var(--mut);
+  border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;transition:.15s}
+.sportbar button:hover{color:var(--txt)}
+.sportbar button.active{background:var(--acc);color:#fff}
+
+/* ============================================================================
+   KPI LIŠTA — čísla nahoře, mikro-popisek dole, bez emoji dlaždic
+   ========================================================================== */
+/* jednolitý „terminálový" pruh: buňky spojené vlasovými dělítky */
+.statsbar{display:flex;gap:0;flex-wrap:wrap;padding:18px 26px 0;animation:fadeUp .35s both}
+.stat{display:flex;align-items:center;min-width:128px;flex:1;padding:13px 18px;
+  background:var(--surf);border:1px solid var(--line);border-left-width:0;box-shadow:var(--shadow)}
+.stat:first-child{border-left-width:1px;border-radius:12px 0 0 12px}
+.stat:last-child{border-radius:0 12px 12px 0}
+.stat .ic{display:none}
+.stat .v{font-size:21px;font-weight:700;line-height:1.1;font-family:var(--num);font-variant-numeric:tabular-nums;
+  letter-spacing:-.3px}
+.stat .l{font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:3px;
+  display:flex;align-items:center;font-weight:600;white-space:nowrap}
+.stat.val .v{color:var(--val)} .stat.good .v{color:var(--pos)} .stat.bad .v{color:var(--bad)}
+/* bankstats uvnitř karet zůstávají jako samostatné dlaždice */
+.bankstats .stat{border-left-width:1px;border-radius:10px}
+
+.tabpane{display:none;padding:18px 26px 80px;animation:fadeUp .3s both}
+.tabpane.active{display:block}
+.statsbar,.tabpane{max-width:1280px;margin-left:auto;margin-right:auto;width:100%}
+
+/* ---------- HLAVIČKA STRÁNKY — velký titulek + popis ---------- */
+.page-head{margin:2px 0 20px;animation:fadeUp .3s both}
+.page-head h2{font-family:var(--num);font-size:23px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
+.page-head .lead{margin:6px 0 0;font-size:12.5px;color:var(--dim);line-height:1.65;max-width:780px}
+.page-head .lead b{color:var(--mut);font-weight:600}
+
+/* starší popisek (fallback, už se nepoužívá) */
+.pane-intro{display:flex;align-items:flex-start;gap:10px;padding:0 2px 16px;margin-bottom:4px;
+  color:var(--dim);font-size:12.5px;line-height:1.6;border:none;background:none}
+.pane-intro .ic{display:none}
+.pane-intro b{color:var(--mut);font-weight:600}
+
+/* ---------- VYSVĚTLIVKY (tooltip ?) ---------- */
+.help{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
+  background:transparent;border:1px solid var(--line2);color:var(--dim);font-size:9.5px;font-weight:700;
+  cursor:help;position:relative;margin-left:5px;vertical-align:middle}
+.help:hover{color:var(--txt);border-color:var(--acc)}
+.help::after{content:attr(data-tip);position:absolute;bottom:150%;left:50%;transform:translateX(-50%) translateY(5px);
+  background:var(--elev);border:1px solid var(--line2);color:var(--txt);padding:10px 13px;border-radius:9px;width:252px;
+  font-size:12px;font-weight:400;line-height:1.55;text-align:left;z-index:90;box-shadow:var(--shadow-pop);
+  opacity:0;visibility:hidden;transition:.15s;pointer-events:none;white-space:normal;letter-spacing:.1px}
+.help:hover::after{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.help.r::after{left:auto;right:-4px;transform:translateY(5px)}
+.help.r:hover::after{transform:translateY(0)}
+
+/* ---------- NÁPOVĚDA ---------- */
+.help-btn{background:var(--surf);color:var(--txt);border:1px solid var(--line);border-radius:8px;
+  padding:7px 13px;font-size:13px;font-weight:600;transition:.15s}
+.help-btn:hover{border-color:var(--acc);color:var(--acc2)}
+.help-box{max-width:780px}
+.help-box h2{font-size:22px;margin-bottom:4px}
+.help-sec{margin-bottom:22px}
+.help-sec h3{font-size:11.5px;margin-bottom:10px;color:var(--acc2);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.help-step{display:flex;gap:13px;margin-bottom:12px;align-items:flex-start}
+.help-step .n{flex:none;width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--acc) 16%,transparent);
+  color:var(--acc2);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px;
+  font-family:var(--num);border:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+.help-step .tx{font-size:13px;color:var(--mut);line-height:1.55}
+.help-step .tx b{color:var(--txt)}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.gloss .term{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:12px}
+.gloss .term .t{font-weight:700;font-size:13px;margin-bottom:3px}
+.gloss .term .t .em{color:var(--acc2)}
+.gloss .term .d{font-size:12px;color:var(--mut);line-height:1.5}
+.help-warn{background:color-mix(in srgb,var(--bad) 8%,transparent);border:1px solid color-mix(in srgb,var(--bad) 35%,transparent);
+  border-radius:10px;padding:13px 16px;font-size:13px;color:var(--txt);line-height:1.55}
+@media(max-width:680px){.gloss{grid-template-columns:1fr}}
+
+/* ============================================================================
+   TIP DNE — decentní edge banner
+   ========================================================================== */
+.tipbanner{display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:15px 18px;border-radius:var(--radius);
+  cursor:pointer;position:relative;overflow:hidden;
+  background:linear-gradient(115deg,color-mix(in srgb,var(--val) 8%,var(--surf)),var(--surf) 55%);
+  border:1px solid color-mix(in srgb,var(--val) 22%,var(--line));transition:.15s;animation:fadeUp .35s both}
+.tipbanner:hover{border-color:color-mix(in srgb,var(--val) 50%,transparent);transform:translateY(-1px);
+  box-shadow:0 12px 32px -18px color-mix(in srgb,var(--val) 55%,transparent)}
+.tipbanner::before,.tipbanner::after{display:none}
+.tip-ic{display:flex;align-items:center;justify-content:center;flex:none;width:42px;height:42px;border-radius:11px;
+  font-size:19px;background:color-mix(in srgb,var(--val) 13%,transparent);
+  border:1px solid color-mix(in srgb,var(--val) 32%,transparent);filter:none}
+.tip-main{flex:1}
+.tip-k{font-size:10px;color:var(--val);text-transform:uppercase;letter-spacing:1.3px;font-weight:700}
+.tip-match{font-size:16.5px;font-weight:700;margin:3px 0 2px}
+.tip-sub{font-size:12.5px;color:var(--mut)}
+.tip-odds{text-align:center;background:var(--bg1);border:1px solid var(--line);border-radius:10px;padding:8px 16px}
+.tip-odds .o{font-size:21px;font-weight:700;color:var(--txt)}
+.tip-odds .ev{font-size:11.5px;color:var(--pos);font-weight:700;font-family:var(--num)}
+
+/* ---------- TOOLBAR ---------- */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.toolbar input,.toolbar select{background:var(--surf);color:var(--txt);border:1px solid var(--line);
+  border-radius:9px;padding:9px 13px;font-size:13px;transition:.15s}
+.toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--acc);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 15%,transparent)}
+#search{flex:1;min-width:200px}
+.chk{display:flex;align-items:center;gap:7px;color:var(--mut);font-size:13px;background:var(--surf);
+  border:1px solid var(--line);border-radius:9px;padding:9px 13px;cursor:pointer}
+.chk input{accent-color:var(--val)}
+
+/* ============================================================================
+   LIGA — burzovní tabulka: karta ligy, zápasy jako řádky s dělítky
+   ========================================================================== */
+.league{margin-bottom:14px;animation:fadeUp .3s both;background:var(--surf);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.league-head{display:flex;align-items:center;gap:11px;padding:11px 16px;cursor:pointer;
+  background:color-mix(in srgb,var(--bg1) 55%,var(--surf));border-bottom:1px solid var(--line);
+  transition:.15s;user-select:none}
+.league-head:hover{background:var(--bg1)}
+.league.collapsed .league-head{border-bottom:none}
+.league-head .fl{font-size:17px}
+.league-head h2{font-size:13.5px;font-weight:700;letter-spacing:.2px}
+.league-head .cnt{color:var(--dim);font-size:11.5px;margin-left:auto;display:flex;gap:8px;align-items:center}
+.badge-n{background:var(--surf2);border:1px solid var(--line);border-radius:20px;padding:1px 9px;font-size:11.5px;
+  font-weight:700;color:var(--mut);font-family:var(--num)}
+.league-head .chev{transition:.2s;font-size:10px;color:var(--dim)}
+.league.collapsed .chev{transform:rotate(-90deg)}
+.league.collapsed .league-body{display:none}
+
+/* ============================================================================
+   ZÁPAS — řádek tabulky (žádné plovoucí kartičky)
+   ========================================================================== */
+.match{padding:12px 16px;cursor:pointer;transition:.13s;
+  display:grid;grid-template-columns:56px 1fr auto;gap:15px;align-items:center;
+  background:transparent;border:none;border-bottom:1px solid var(--line);border-radius:0;margin:0}
+.league-body .match:last-child{border-bottom:none}
+.match:hover{background:color-mix(in srgb,var(--acc) 5%,transparent)}
+.match.val{box-shadow:inset 3px 0 0 var(--val)}
+.match.done{opacity:.55}
+.match.live-match{box-shadow:inset 3px 0 0 var(--bad)}
+
+.m-time{color:var(--dim);font-size:11.5px;text-align:center;line-height:1.4;font-family:var(--num)}
+.m-time .dchip{display:block;color:var(--mut);font-weight:600;font-size:10.5px;letter-spacing:.3px}
+.m-time .res{display:block;color:var(--txt);font-weight:700;font-size:16px;margin-top:2px;font-family:var(--num)}
+.live-badge{display:inline-block;background:var(--bad);color:#fff;font-size:8.5px;font-weight:800;
+  padding:2px 5px;border-radius:4px;letter-spacing:.6px;animation:livepulse 2.2s ease-in-out infinite;margin-top:3px}
+
+.m-teams .t{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:2px 0;color:var(--mut)}
+.m-teams .t.win{font-weight:600;color:var(--txt)}
+.m-teams .form{display:flex;gap:3px;margin-left:auto}
+
+.avat{flex:none;width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;letter-spacing:.3px;color:#fff;font-family:var(--num);
+  background:linear-gradient(140deg,hsl(var(--h) 48% 44%),hsl(calc(var(--h) + 40) 52% 30%))}
+.m-teams .t.win .avat{box-shadow:0 0 0 2px color-mix(in srgb,var(--pos) 70%,transparent)}
+
+.form i{width:13px;height:13px;border-radius:3px;font-style:normal;font-size:8px;display:flex;align-items:center;
+  justify-content:center;color:#0a1210;font-weight:700;font-family:var(--num);opacity:.92}
+.form .W{background:var(--pos)} .form .D{background:var(--warn)} .form .L{background:var(--bad)}
+
+.trend{font-size:10px;line-height:1;flex:none}
+.trend.up{color:var(--pos)}
+.trend.dn{color:var(--bad)}
+
+.probbar{display:flex;height:3px;border-radius:2px;overflow:hidden;margin-top:6px;gap:1px}
+.pb-h{height:100%;background:var(--acc);min-width:2px;transition:width .4s}
+.pb-x{height:100%;background:var(--warn);min-width:2px;transition:width .4s}
+.pb-a{height:100%;background:var(--bad);min-width:2px;transition:width .4s}
+
+.conf{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--dim);margin-top:5px;max-width:280px}
+.conf>span{white-space:nowrap}
+.conf .bar{flex:1;height:3px;background:var(--bg0);border-radius:3px;overflow:hidden}
+.conf .bar span{display:block;height:100%;border-radius:3px;background:var(--warn);transition:width .5s}
+.conf .bar span.lo{background:var(--bad)}
+.conf .bar span.md{background:var(--warn)}
+.conf .bar span.hi{background:var(--pos)}
+
+/* kurzové buňky — jednotná šířka, jasná hierarchie pick / value */
+.m-odds{display:flex;gap:5px}
+.odd{border-radius:8px;padding:6px 10px;text-align:center;min-width:62px;transition:.13s;
+  background:var(--bg1);border:1px solid var(--line)}
+.odd:hover{border-color:var(--line2);background:var(--surf2)}
+.odd .k{font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.odd .o{font-size:14.5px;font-weight:700;margin-top:1px}
+.odd.pick{border-color:color-mix(in srgb,var(--acc) 55%,transparent);
+  background:color-mix(in srgb,var(--acc) 10%,var(--bg1))}
+.odd.pick .o{color:var(--acc2)}
+.odd.value{border-color:color-mix(in srgb,var(--val) 55%,transparent);
+  background:color-mix(in srgb,var(--val) 8%,var(--bg1))}
+.odd .ev{font-size:9.5px;color:var(--val);font-weight:700;font-family:var(--num)}
+/* implikovaná pravděpodobnost pod kurzem — pro sázkaře klíčový kontext */
+.odd .imp{font-size:9px;color:var(--dim);font-family:var(--num);margin-top:1px}
+.odd.pick .imp{color:color-mix(in srgb,var(--acc2) 70%,var(--dim))}
+
+/* ============================================================================
+   MODAL — vizualizace pravděpodobností
+   ========================================================================== */
+.prob-viz{display:flex;border-radius:10px;overflow:hidden;margin:12px 0;height:52px;gap:2px}
+.pv-seg{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;transition:flex .4s;min-width:40px;position:relative}
+.pv-h{background:color-mix(in srgb,var(--acc) 16%,var(--bg1))}
+.pv-x{background:color-mix(in srgb,var(--warn) 13%,var(--bg1))}
+.pv-a{background:color-mix(in srgb,var(--bad) 13%,var(--bg1))}
+.pv-lbl{font-size:10px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.pv-pct{font-size:15px;font-weight:700;font-family:var(--num)}
+.pv-h .pv-pct{color:var(--acc2)}
+.pv-x .pv-pct{color:var(--warn)}
+.pv-a .pv-pct{color:var(--bad)}
+
+/* ---------- SCORE HEATMAP ---------- */
+.score-heatmap{border-radius:10px;overflow:hidden;margin-top:8px}
+.hm-table{width:100%;border-collapse:separate;border-spacing:3px;font-size:12px}
+.hm-head{background:var(--bg1);color:var(--dim);padding:5px 8px;text-align:center;
+  border-radius:5px;font-weight:600;font-size:10.5px;letter-spacing:.3px}
+.hm-cell{border-radius:6px;padding:6px 4px;text-align:center;cursor:pointer;transition:.13s;position:relative}
+.hm-cell:hover{filter:brightness(1.18)}
+.hm-cell .hc-score{font-size:12px;font-weight:700;font-family:var(--num)}
+.hm-cell .hc-pct{font-size:9.5px;color:rgba(255,255,255,.6);font-family:var(--num)}
+
+/* ============================================================================
+   TIKETY
+   ========================================================================== */
+.ticket{border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);animation:fadeUp .3s both;
+  background:var(--surf);border:1px solid var(--line)}
+.ticket h3{font-size:16px;margin-bottom:3px;font-weight:700}
+.ticket .desc{color:var(--dim);font-size:12.5px;margin-bottom:14px}
+.leg{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.leg:last-of-type{border-bottom:none}
+.leg .pill{background:var(--bg1);border:1px solid var(--line);border-radius:7px;padding:3px 10px;font-weight:700;
+  min-width:32px;text-align:center;font-family:var(--num);font-size:12.5px}
+.leg .od{margin-left:auto;font-weight:700;font-size:14.5px;font-family:var(--num)}
+.leg .bk{color:var(--dim);font-size:11.5px}
+.ticket-foot{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;align-items:center;padding-top:13px;
+  border-top:1px dashed var(--line2)}
+.ticket-foot .big{font-size:23px;font-weight:700;color:var(--txt);font-family:var(--num)}
+.tag-ev{background:color-mix(in srgb,var(--val) 14%,transparent);color:var(--val);padding:4px 12px;
+  border-radius:7px;font-weight:700;font-size:12.5px;font-family:var(--num)}
+.section-title{font-size:12px;margin:6px 0 12px;display:flex;align-items:center;gap:8px;
+  text-transform:uppercase;letter-spacing:1px;color:var(--mut);font-weight:700}
+.ticket.myticket{border-left:3px solid var(--acc)}
+.ticket.myticket h3{font-size:15px}
+.tk-set{border:1px solid var(--line);background:var(--surf2);color:var(--txt);border-radius:8px;
+  padding:6px 12px;font-size:12.5px;font-weight:600;transition:.15s}
+.tk-set:hover{border-color:var(--line2)}
+.tk-set.won:hover{border-color:var(--pos);color:var(--pos)}
+.tk-set.lost:hover{border-color:var(--bad);color:var(--bad)}
+
+/* ---------- ALERTY ---------- */
+.alert{display:flex;gap:12px;align-items:center;border-radius:10px;padding:13px 16px;margin-bottom:8px;
+  animation:fadeUp .25s both;background:var(--surf);border:1px solid var(--line);font-size:13.5px}
+.alert .ic{font-size:18px;opacity:.9}
+.alert .mt{font-size:11.5px;color:var(--dim);margin-top:1px}
+.alert.high{border-left:3px solid var(--val)}
+.alert.mid{border-left:3px solid var(--warn)}
+.alert.info{border-left:3px solid var(--acc)}
+
+/* ============================================================================
+   BANKROLL / KARTY
+   ========================================================================== */
+.bankstats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.bankstats .stat{flex:1;min-width:132px}
+.bankgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.card{border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);
+  background:var(--surf);border:1px solid var(--line)}
+.card h3{margin-bottom:14px;font-size:14px;font-weight:700}
+.chart svg{width:100%;height:auto;display:block}
+.bankset label,.settings-grid label{display:block;font-size:12.5px;color:var(--mut);margin-bottom:13px}
+.bankset input,.settings-grid input,.settings-grid select{width:100%;margin-top:6px;background:var(--bg1);
+  color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:inherit;font-size:13.5px}
+.bankset input:focus,.settings-grid input:focus,.settings-grid select:focus{outline:none;border-color:var(--acc)}
+.bankset input[type=range],.settings-grid input[type=range]{padding:0;accent-color:var(--acc)}
+
+/* ---------- NASTAVENÍ ---------- */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;align-items:start}
+.settings-actions{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.seg-control{display:flex;gap:4px;background:var(--bg1);border:1px solid var(--line);border-radius:9px;padding:3px}
+.seg-control button{flex:1;background:none;border:none;color:var(--mut);padding:8px 10px;border-radius:7px;
+  font-size:12.5px;font-weight:600;transition:.15s}
+.seg-control button.active{background:var(--acc);color:#fff}
+.accent-swatches{display:flex;gap:10px}
+.accent-swatches button{width:30px;height:30px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;transition:.15s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.accent-swatches button.active{border-color:var(--txt);transform:scale(1.1)}
+.data-row{display:flex;justify-content:space-between;align-items:center;gap:14px;
+  padding:12px 0;border-bottom:1px solid var(--line)}
+.data-row:last-child{border-bottom:none}
+.data-row b{font-size:13px}
+.data-row button,.data-row label.ghost{flex-shrink:0}
+.hint{font-size:12px;color:var(--dim);line-height:1.55}
+
+.primary{background:linear-gradient(180deg,var(--acc),var(--acc-d));color:#fff;border:none;border-radius:9px;
+  padding:10px 20px;font-weight:600;font-size:13.5px;transition:.15s;
+  box-shadow:0 8px 20px -10px color-mix(in srgb,var(--acc) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.16)}
+.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.primary:disabled{opacity:.55;cursor:default;transform:none}
+
+/* ---------- SEZNAM SÁZEK ---------- */
+.bets{display:flex;flex-direction:column;gap:7px;max-height:60vh;overflow:auto}
+.bet{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:9px;font-size:13.5px;
+  background:var(--bg1);border:1px solid var(--line);cursor:pointer;transition:.2s}
+.bet:hover{background:var(--surf);border-color:var(--line2);transform:translateX(4px)}
+.bet .st{margin-left:auto;display:flex;gap:8px;align-items:center}
+.bet .badge{padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:700}
+.badge.open{background:color-mix(in srgb,var(--acc) 13%,transparent);color:var(--acc2)}
+.badge.won{background:color-mix(in srgb,var(--pos) 13%,transparent);color:var(--pos)}
+.badge.lost{background:color-mix(in srgb,var(--bad) 13%,transparent);color:var(--bad)}
+.bet button{background:var(--surf);border:1px solid var(--line);color:var(--txt);border-radius:7px;
+  padding:5px 10px;font-size:11.5px;transition:.13s}
+.bet button:hover{border-color:var(--acc)}
+.pnl-pos{color:var(--pos);font-weight:700;font-family:var(--num)}
+.pnl-neg{color:var(--bad);font-weight:700;font-family:var(--num)}
+
+/* ============================================================================
+   MODAL
+   ========================================================================== */
+.modal{position:fixed;inset:0;background:rgba(5,7,10,.7);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;animation:pop .18s}
+.modal-box{border-radius:16px;padding:26px;max-width:720px;width:100%;max-height:90vh;overflow:auto;
+  background:var(--surf);border:1px solid var(--line2);box-shadow:var(--shadow-pop)}
+.modal h2{margin-bottom:4px;font-size:21px}
+.teamlink{cursor:pointer;border-bottom:1px dotted var(--line2);transition:.13s}
+.teamlink:hover{color:var(--acc2);border-bottom-color:var(--acc2)}
+.modal .sub{color:var(--dim);font-size:12.5px;margin-bottom:16px}
+.mrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.mbox{flex:1;min-width:130px;border-radius:10px;padding:12px 14px;
+  background:var(--bg1);border:1px solid var(--line)}
+.mbox .l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;display:flex;
+  align-items:center;font-weight:600}
+.mbox .v{font-size:17.5px;font-weight:700;margin-top:3px}
+.mbox.valbox{border-color:color-mix(in srgb,var(--val) 45%,transparent)}
+
+.booktable,.goaltable{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+.booktable th,.booktable td{padding:8px;text-align:center;border-bottom:1px solid var(--line);font-family:var(--num)}
+.booktable th{color:var(--dim);font-weight:600;font-family:inherit;font-size:11px;
+  text-transform:uppercase;letter-spacing:.6px}
+.booktable tbody tr:hover td{background:rgba(255,255,255,.025)}
+.booktable td.best{color:var(--val);font-weight:700}
+.booktable .sharp td:first-child{color:var(--acc2)}
+
+.goaltable{border-collapse:separate;border-spacing:6px}
+.goaltable th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+.goaltable .ou-line{background:var(--bg1);border-radius:8px;font-weight:700;font-size:15px;text-align:center;
+  width:68px;color:var(--warn);font-family:var(--num)}
+.ou-cell{background:var(--bg1);border:1px solid var(--line);border-radius:8px;
+  text-align:center;cursor:pointer;padding:8px;transition:.13s}
+.ou-cell:hover{border-color:var(--acc)}
+.ou-cell.value{border-color:color-mix(in srgb,var(--val) 55%,transparent);
+  background:color-mix(in srgb,var(--val) 7%,var(--bg1))}
+.ou-cell .ou-o{font-size:15px;font-weight:700}
+.ou-cell .ou-p{font-size:10.5px;color:var(--dim);font-family:var(--num)}
+.ou-cell .ou-ev{font-size:9.5px;color:var(--val);font-weight:700;font-family:var(--num)}
+
+.scorechips{display:flex;gap:8px;flex-wrap:wrap}
+.scorechip{background:var(--bg1);border:1px solid var(--line);border-radius:9px;padding:8px 13px;text-align:center}
+.scorechip .s{font-weight:700;font-size:15px;font-family:var(--num)}
+.scorechip .p{font-size:10.5px;color:var(--dim);font-family:var(--num)}
+
+.betform{display:flex;gap:9px;align-items:flex-end;flex-wrap:wrap;margin-top:16px;padding-top:15px;
+  border-top:1px solid var(--line)}
+.betform label{font-size:11.5px;color:var(--mut)}
+.betform select,.betform input{display:block;background:var(--bg1);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:10px;margin-top:5px;min-width:92px;font-size:13px}
+.addslip{background:color-mix(in srgb,var(--val) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--val) 45%,transparent);color:var(--val);border-radius:8px;
+  padding:10px 14px;font-weight:600;font-size:13px;transition:.13s}
+.addslip:hover{background:color-mix(in srgb,var(--val) 18%,transparent)}
+.modal-close{float:right;background:none;border:none;color:var(--dim);font-size:24px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--txt)}
+.resform{margin-top:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.resform input{width:60px;background:var(--bg1);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:8px;text-align:center;font-family:var(--num)}
+
+.finished-note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);margin-top:14px;
+  padding:12px 15px;background:var(--bg1);border:1px solid var(--line);border-radius:10px}
+.finished-note b{color:var(--txt);font-family:var(--num)}
+
+/* ---------- TIKET (košík) ---------- */
+.slip-btn{position:fixed;bottom:22px;right:22px;z-index:60;border:none;border-radius:11px;padding:12px 20px;
+  font-size:14px;font-weight:700;color:#fff;background:var(--val);
+  box-shadow:0 12px 32px -10px rgba(0,0,0,.6);animation:pop .25s;transition:.15s}
+.slip-btn:hover{background:var(--val-d)}
+.slip-btn span{background:rgba(0,0,0,.25);border-radius:20px;padding:1px 9px;margin-left:5px;font-family:var(--num)}
+.slip-panel{position:fixed;bottom:76px;right:22px;width:344px;max-width:calc(100vw - 44px);max-height:70vh;overflow:auto;
+  z-index:60;border-radius:14px;padding:18px;background:var(--surf);
+  border:1px solid var(--line2);box-shadow:var(--shadow-pop);animation:fadeUp .2s}
+.slip-panel h3{font-size:15px;margin-bottom:12px;display:flex;align-items:center}
+.slip-panel h3 button{margin-left:auto;background:none;border:none;color:var(--dim);font-size:12.5px;cursor:pointer}
+.slip-leg{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.slip-leg .x{background:none;border:none;color:var(--bad);cursor:pointer;font-size:16px}
+.slip-leg .od{margin-left:auto;font-weight:700;font-family:var(--num)}
+.slip-sum{display:flex;justify-content:space-between;margin:12px 0 6px;font-size:13.5px;align-items:center}
+.slip-sum b{font-size:20px;color:var(--txt);font-family:var(--num)}
+.slip-panel input{width:100%;background:var(--bg1);color:var(--txt);border:1px solid var(--line);
+  border-radius:8px;padding:10px;margin:8px 0;font-size:13.5px}
+
+/* ---------- FORMA / H2H ---------- */
+.formrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.formcol{flex:1;min-width:210px;border-radius:10px;padding:12px;background:var(--bg1);border:1px solid var(--line)}
+.formcol .ttl{font-size:12.5px;font-weight:700;margin-bottom:8px}
+.fgame{display:flex;gap:9px;align-items:center;font-size:11.5px;color:var(--mut);padding:4px 0}
+.fgame .rb{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  color:#0a1210;font-weight:700;font-size:9.5px;font-family:var(--num)}
+.fgame .rb.W{background:var(--pos)} .fgame .rb.D{background:var(--warn)} .fgame .rb.L{background:var(--bad)}
+.fgame .sc{margin-left:auto;font-weight:700;color:var(--txt);font-family:var(--num)}
+.h2hbox{border-radius:10px;padding:12px;margin-bottom:10px;background:var(--bg1);border:1px solid var(--line2)}
+
+/* ---------- TIPSPORT ODKAZ ---------- */
+.tipsport-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 4px}
+.tipsport-row .hint{flex:1;min-width:200px;margin:0}
+.tipsport-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;
+  background:#129950;color:#fff;font-weight:600;font-size:12.5px;
+  padding:8px 14px;border-radius:8px;transition:.15s}
+.tipsport-btn:hover{background:#0e7c40}
+
+/* ---------- MISC ---------- */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--elev);
+  border:1px solid var(--acc);border-radius:10px;padding:12px 20px;font-weight:600;font-size:13.5px;
+  z-index:99;box-shadow:var(--shadow-pop);animation:fadeUp .22s;max-width:calc(100vw - 40px)}
+.toast.bad{border-color:var(--bad)}
+.hidden{display:none!important}
+.empty{text-align:center;color:var(--dim);padding:44px 20px;font-size:13.5px;line-height:1.6}
+.loader{text-align:center;padding:44px 20px;color:var(--dim);font-size:13.5px}
+.skel{height:70px;border-radius:10px;margin-bottom:8px;
+  background:linear-gradient(90deg,var(--surf) 25%,var(--surf2) 37%,var(--surf) 63%);
+  background-size:900px 100%;animation:shimmer 1.4s infinite linear}
+footer{text-align:center;color:var(--dim);font-size:11px;padding:20px;border-top:1px solid var(--line);
+  letter-spacing:.2px;margin-top:auto}
+
+.live-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bad);margin-bottom:10px;
+  padding:8px 13px;background:color-mix(in srgb,var(--bad) 7%,transparent);
+  border:1px solid color-mix(in srgb,var(--bad) 25%,transparent);border-radius:9px;animation:fadeUp .25s}
+.live-bar .dot-live{width:7px;height:7px;border-radius:50%;background:var(--bad);animation:livepulse 1.2s infinite}
+
+/* Tlačítko zpět nahoru */
+.back-top{position:fixed;bottom:22px;left:22px;z-index:60;width:38px;height:38px;border:1px solid var(--line2);
+  border-radius:10px;background:var(--surf2);color:var(--txt);font-size:15px;font-weight:700;
+  box-shadow:0 10px 28px -12px rgba(0,0,0,.6);transition:.15s;backdrop-filter:blur(8px)}
+.back-top:hover{border-color:var(--acc);color:var(--acc2)}
+
+/* Přístupnost + výběr textu */
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:6px}
+::selection{background:color-mix(in srgb,var(--acc) 30%,transparent)}
+
+/* Jemný vstup řádků zápasů */
+.league-body .match{animation:slideIn .25s both}
+.league-body .match:nth-child(2){animation-delay:.02s}
+.league-body .match:nth-child(3){animation-delay:.04s}
+.league-body .match:nth-child(4){animation-delay:.06s}
+.league-body .match:nth-child(n+5){animation-delay:.08s}
+
+/* ============================================================================
+   RESPONSIVITA
+   ========================================================================== */
+@media(max-width:760px){
+  .bankgrid,.settings-grid{grid-template-columns:1fr}
+  .match{grid-template-columns:50px 1fr;gap:11px}
+  .m-odds{grid-column:1/-1;justify-content:flex-start}
+  .tipbanner{flex-wrap:wrap}
+  header,.sportbar,.statsbar,.tabpane{padding-left:14px;padding-right:14px}
+  .prob-viz{height:44px}
+  .pv-pct{font-size:13px}
+  .stat{min-width:104px}
+
+  /* Touch-friendly tlačítka */
+  button, input[type="button"], .tab {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .mobile-nav-btn{display:flex;align-items:center;justify-content:center;width:44px;height:44px}
+
+  /* Mobilní tabulky s horizontálním scrollem */
+  .bookgrid, .league {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+  }
+  .match {
+    min-width: 300px;
+  }
+
+  /* Font size pro mobil */
+  body { font-size: 13px; }
+  h2 { font-size: 18px; }
+  .odd { font-size: 12px; }
+
+  /* Slip-panel pozicování */
+  #slipPanel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .sidebar{position:fixed;left:0;top:0;height:100vh;transform:translateX(-100%);
+    transition:transform .2s ease;box-shadow:0 0 40px rgba(0,0,0,.5);z-index:50}
+  .sidebar.mobile-open{transform:translateX(0)}
+  .side-collapse-btn{display:none}
+
+  body.nav-backdrop::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.5);
+    z-index:45;animation:fadeUp .18s both;backdrop-filter:blur(1px)}
+}
+
+/* Analytics komponenty */
+.analytics-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px;margin-bottom:32px}
+.metric-card{background:var(--elev);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:8px}
+.metric-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);font-weight:600}
+.metric-value{font-size:28px;font-family:var(--num);font-weight:700;color:var(--acc);line-height:1}
+.metric-hint{font-size:11px;color:var(--dim);margin-top:4px}
+.chart{background:var(--surf);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:20px}
+
+@media(max-width:760px){
+  .analytics-grid{grid-template-columns:1fr}
+}
+
+/* Tablet breakpoint (tablet optimalizace) */
+@media(min-width:761px) and (max-width:1024px){
+  .sidebar { width: 80px; }
+  .app-shell { grid-template-columns: 80px 1fr; }
+  .statsbar { grid-template-columns: repeat(2, 1fr); }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "2391747",
+    "league": "FIFA World Cup",
+    "country": "Mexico",
+    "home": "Mexico",
+    "away": "South Korea",
+    "date": "2026-06-19",
+    "time": "01:00",
+    "home_score": 1,
+    "away_score": 0,
+    "status": "FT"
+  },
+  {
+    "id": "2391750",
+    "league": "FIFA World Cup",
+    "country": "United States",
+    "home": "USA",
+    "away": "Australia",
+    "date": "2026-06-19",
+    "time": "19:00",
+    "home_score": 2,
+    "away_score": 0,
+    "status": "FT"
+  },
+  {
+    "id": "2391749",
+    "league": "FIFA World Cup",
+    "country": "United States",
+    "home": "Scotland",
+    "away": "Morocco",
+    "date": "2026-06-19",
+    "time": "22:00",
+    "home_score": 0,
+    "away_score": 1,
+    "status": "FT"
+  }
+]

@@ -1,0 +1,313 @@
+# -*- coding: utf-8 -*-
+"""
+Správa banku (bankroll), Kelly kritérium a historie tipů + statistiky (ROI).
+Stav se ukládá do data/bankroll.json.
+"""
+
+import time
+import uuid
+
+from . import storage
+from . import prediction
+
+_DEFAULT = {
+    "start_balance": 1000.0,
+    "balance": 1000.0,
+    "currency": "Kč",
+    "kelly_fraction": 0.25,   # frakční Kelly (čtvrtinový) – konzervativní
+    "bets": [],               # historie tipů
+}
+
+
+def state() -> dict:
+    st = storage.load("bankroll.json", None)
+    if st is None:
+        st = dict(_DEFAULT)
+        storage.save("bankroll.json", st)
+    return st
+
+
+def _save(st):
+    storage.save("bankroll.json", st)
+
+
+def settings(start_balance=None, kelly_fraction=None, currency=None):
+    st = state()
+    if start_balance is not None:
+        diff = float(start_balance) - st["start_balance"]
+        st["start_balance"] = float(start_balance)
+        st["balance"] = round(st["balance"] + diff, 2)
+    if kelly_fraction is not None:
+        st["kelly_fraction"] = max(0.05, min(1.0, float(kelly_fraction)))
+    if currency:
+        st["currency"] = currency
+    _save(st)
+    return st
+
+
+def kelly_stake(prob: float, odds: float, balance: float, fraction: float) -> float:
+    """Doporučená sázka dle (frakčního) Kelly kritéria."""
+    b = odds - 1.0
+    if b <= 0:
+        return 0.0
+    edge = prob * odds - 1.0
+    if edge <= 0:
+        return 0.0
+    f = (prob * b - (1 - prob)) / b   # plný Kelly podíl banku
+    f = max(0.0, f) * fraction
+    return round(balance * f, 2)
+
+
+def _clv(odds, consensus_odds):
+    """Náskok kurzu nad tržním konsenzem (CLV-style): >0 = vzal jsi lepší cenu než trh."""
+    try:
+        co = float(consensus_odds)
+        if co > 0:
+            return round(float(odds) / co - 1.0, 4)
+    except (TypeError, ValueError):
+        pass
+    return None
+
+
+def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
+              consensus_odds=None, tag=None, match_date=None, match_time=None, league=None):
+    st = state()
+    stake = round(float(stake), 2)
+    if stake <= 0 or stake > st["balance"]:
+        raise ValueError("Neplatná výše sázky vzhledem k zůstatku.")
+    bet = {
+        "id": uuid.uuid4().hex[:10],
+        "ts": int(time.time()),
+        "match_id": match_id,
+        "match": f"{home} – {away}",
+        "match_date": match_date or "",   # kdy se hraje (YYYY-MM-DD)
+        "match_time": match_time or "",   # v kolik (HH:MM)
+        "league": league or "Unknown",    # která liga
+        "outcome": outcome,            # home / draw / away / over25 ...
+        "label": label,                # 1 / X / 2 ...
+        "odds": round(float(odds), 2),
+        "prob": round(float(prob), 4),
+        "stake": stake,
+        "status": "open",              # open / won / lost / void
+        "pnl": 0.0,
+        "clv": _clv(odds, consensus_odds),
+        "tag": tag,                    # "bet-agent" = sázka bet agenta
+    }
+    st["balance"] = round(st["balance"] - stake, 2)
+    st["bets"].insert(0, bet)
+    _save(st)
+    return bet
+
+
+def place_acca(legs, stake):
+    """Akumulátor – jeden tiket z více výběrů (kombinovaný kurz)."""
+    st = state()
+    stake = round(float(stake), 2)
+    if not legs:
+        raise ValueError("Prázdný tiket.")
+    if stake <= 0 or stake > st["balance"]:
+        raise ValueError("Neplatná výše sázky vzhledem k zůstatku.")
+    odds = 1.0
+    prob = 1.0
+    for l in legs:
+        odds *= float(l["odds"])
+        prob *= float(l.get("prob") or 0)
+    # nejbližší výkop napříč výběry – kdy se tiket začne rozhodovat
+    dated = sorted((l.get("date", ""), l.get("time", "")) for l in legs if l.get("date"))
+    earliest_date, earliest_time = dated[0] if dated else ("", "")
+    bet = {
+        "id": uuid.uuid4().hex[:10],
+        "ts": int(time.time()),
+        "match_id": "",
+        "match": f"Akumulátor ({len(legs)} tipy)",
+        "match_date": earliest_date,
+        "match_time": earliest_time,
+        "outcome": "acca",
+        "label": f"AKO {len(legs)}",
+        "odds": round(odds, 2),
+        "prob": round(prob, 4),
+        "stake": stake,
+        "status": "open",
+        "pnl": 0.0,
+        "clv": None,
+        "legs": [{"match": l.get("match", ""), "name": l.get("name", ""),
+                  "odds": float(l["odds"]), "date": l.get("date", ""), "time": l.get("time", "")}
+                 for l in legs],
+    }
+    st["balance"] = round(st["balance"] - stake, 2)
+    st["bets"].insert(0, bet)
+    _save(st)
+    return bet
+
+
+def eval_outcome(outcome, hs, as_):
+    """Vyhodnotí výsledek sázky podle skóre. Vrací 'won' / 'lost' / None (acca)."""
+    if outcome == "acca":
+        return None
+    total = hs + as_
+    if outcome == "home":
+        return "won" if hs > as_ else "lost"
+    if outcome == "away":
+        return "won" if as_ > hs else "lost"
+    if outcome == "draw":
+        return "won" if hs == as_ else "lost"
+    if outcome == "btts_yes":
+        return "won" if (hs > 0 and as_ > 0) else "lost"
+    if outcome == "btts_no":
+        return "won" if not (hs > 0 and as_ > 0) else "lost"
+    if outcome.startswith("over"):
+        return "won" if total > float(outcome[4:]) else "lost"
+    if outcome.startswith("under"):
+        return "won" if total < float(outcome[5:]) else "lost"
+    return None
+
+
+def auto_settle(results: dict) -> int:
+    """results: {match_id: {'home':hs,'away':as_}}. Vyhodnotí otevřené single tipy."""
+    n = 0
+    for bet in list(state()["bets"]):
+        if bet["status"] != "open" or bet.get("outcome") == "acca":
+            continue
+        res = results.get(bet["match_id"])
+        if not res:
+            continue
+        r = eval_outcome(bet["outcome"], res["home"], res["away"])
+        if r:
+            settle_bet(bet["id"], r)
+            n += 1
+    return n
+
+
+def settle_bet(bet_id, result):
+    """result: 'won' / 'lost' / 'void'."""
+    st = state()
+    for bet in st["bets"]:
+        if bet["id"] == bet_id and bet["status"] == "open":
+            if result == "won":
+                payout = round(bet["stake"] * bet["odds"], 2)
+                bet["pnl"] = round(payout - bet["stake"], 2)
+                st["balance"] = round(st["balance"] + payout, 2)
+            elif result == "void":
+                bet["pnl"] = 0.0
+                st["balance"] = round(st["balance"] + bet["stake"], 2)
+            else:  # lost
+                bet["pnl"] = round(-bet["stake"], 2)
+            bet["status"] = result
+            bet["settled_ts"] = int(time.time())
+            _save(st)
+            return bet
+    raise ValueError("Tip nenalezen nebo již vyhodnocen.")
+
+
+def equity_curve() -> list:
+    """Vývoj banku v čase: počáteční stav + kumulativní zisk vyhodnocených tipů,
+    seřazeno podle času VYHODNOCENÍ (ne vsazení) – hromadné dohnání starších
+    výsledků (settle přes více dní najednou) by jinak zamíchalo tvar křivky."""
+    st = state()
+    settled = sorted([b for b in st["bets"] if b["status"] in ("won", "lost", "void")],
+                     key=lambda b: b.get("settled_ts") or b["ts"])
+    bal = st["start_balance"]
+    pts = [round(bal, 2)]
+    for b in settled:
+        bal += b["pnl"]
+        pts.append(round(bal, 2))
+    return pts
+
+
+def stats() -> dict:
+    st = state()
+    settled = [b for b in st["bets"] if b["status"] in ("won", "lost")]
+    staked = sum(b["stake"] for b in settled)
+    pnl = sum(b["pnl"] for b in settled)
+    won = sum(1 for b in settled if b["status"] == "won")
+    open_bets = [b for b in st["bets"] if b["status"] == "open"]
+    best = max((b["pnl"] for b in settled), default=0.0)
+    worst = min((b["pnl"] for b in settled), default=0.0)
+    clvs = [b["clv"] for b in st["bets"] if b.get("clv") is not None]
+    avg_clv = round(sum(clvs) / len(clvs) * 100, 2) if clvs else None
+
+    # Nové metriky
+    unit_count = round(staked / len(settled), 2) if settled else 0
+    sharpe = _compute_sharpe(settled)
+    monthly_pnl = _compute_monthly_pnl(settled)
+    by_league = _compute_by_league(settled)
+
+    return {
+        "balance": st["balance"],
+        "start_balance": st["start_balance"],
+        "currency": st["currency"],
+        "kelly_fraction": st["kelly_fraction"],
+        # Realizovaný zisk jen z VYHODNOCENÝCH sázek (ne balance-start_balance, což by
+        # počítalo i peníze aktuálně vázané v otevřených sázkách jako by byly prohrané).
+        "profit": round(pnl, 2),
+        "roi": round(pnl / staked * 100, 1) if staked else 0.0,
+        "settled_count": len(settled),
+        "won_count": won,
+        "win_rate": round(won / len(settled) * 100, 1) if settled else 0.0,
+        "open_count": len(open_bets),
+        "open_stake": round(sum(b["stake"] for b in open_bets), 2),
+        "total_bets": len(st["bets"]),
+        "best_win": round(best, 2),
+        "worst_loss": round(worst, 2),
+        "avg_clv": avg_clv,
+        "equity": equity_curve(),
+        # Nové metriky
+        "unit_count": unit_count,
+        "sharpe_ratio": round(sharpe, 2),
+        "monthly_pnl": monthly_pnl,
+        "by_league": by_league,
+    }
+
+
+def _compute_sharpe(bets: list) -> float:
+    """Sharpe ratio = (avg_return - risk_free) / std_dev. Risk-free rate = 0."""
+    if len(bets) < 2:
+        return 0
+    pnls = [b["pnl"] for b in bets]
+    mean = sum(pnls) / len(pnls)
+    variance = sum((x - mean) ** 2 for x in pnls) / len(pnls)
+    std_dev = variance ** 0.5
+    return mean / std_dev if std_dev > 0 else 0
+
+
+def _compute_monthly_pnl(bets: list) -> dict:
+    """Groupuj P&L po měsících (YYYY-MM)."""
+    import datetime
+    monthly = {}
+    for b in bets:
+        ts = b.get("ts")
+        if ts:
+            try:
+                dt = datetime.datetime.fromtimestamp(ts)
+                month_key = dt.strftime("%Y-%m")
+            except (ValueError, TypeError):
+                month_key = "unknown"
+        else:
+            month_key = "unknown"
+        monthly[month_key] = monthly.get(month_key, 0) + b["pnl"]
+    return {k: round(v, 2) for k, v in sorted(monthly.items())}
+
+
+def _compute_by_league(bets: list) -> dict:
+    """Groupuj výkon po ligách - wins, settled, pnl, win_rate, roi."""
+    by_league = {}
+    for b in bets:
+        league = b.get("league", "Unknown")
+        if league not in by_league:
+            by_league[league] = {"wins": 0, "settled": 0, "pnl": 0.0}
+        by_league[league]["settled"] += 1
+        if b["status"] == "won":
+            by_league[league]["wins"] += 1
+        by_league[league]["pnl"] += b["pnl"]
+
+    for league in by_league:
+        settled = by_league[league]["settled"]
+        by_league[league]["win_rate"] = round(
+            by_league[league]["wins"] / settled * 100, 1
+        ) if settled else 0
+        by_league[league]["roi"] = round(
+            by_league[league]["pnl"] / settled * 100, 1
+        ) if settled else 0
+        by_league[league]["pnl"] = round(by_league[league]["pnl"], 2)
+
+    return by_league

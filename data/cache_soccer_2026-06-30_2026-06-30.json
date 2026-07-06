@@ -1,0 +1,36 @@
+[
+  {
+    "id": "760490",
+    "sport": "soccer",
+    "slug": "fifa.world",
+    "league": "FIFA World Cup",
+    "country": "World",
+    "home": "Ivory Coast",
+    "away": "Norway",
+    "home_id": "4789",
+    "away_id": "464",
+    "date": "2026-06-30",
+    "time": "17:00",
+    "home_score": 1,
+    "away_score": 2,
+    "status": "FT",
+    "live": false
+  },
+  {
+    "id": "760492",
+    "sport": "soccer",
+    "slug": "fifa.world",
+    "league": "FIFA World Cup",
+    "country": "World",
+    "home": "France",
+    "away": "Sweden",
+    "home_id": "478",
+    "away_id": "466",
+    "date": "2026-06-30",
+    "time": "21:00",
+    "home_score": 3,
+    "away_score": 0,
+    "status": "FT",
+    "live": false
+  }
+]
