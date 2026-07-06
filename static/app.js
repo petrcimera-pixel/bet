@@ -72,6 +72,9 @@ function showPage(pageName) {
       case 'bankroll':
         renderBankroll();
         break;
+      case 'learning':
+        loadLearningStats();
+        break;
     }
   }, 100);
 }
@@ -387,6 +390,11 @@ function setupEventListeners() {
     resetBtn.addEventListener('click', resetSettings);
   }
 
+  const trainBtn = document.getElementById('trainModelBtn');
+  if (trainBtn) {
+    trainBtn.addEventListener('click', trainModel);
+  }
+
   // Toggle listeners for immediate save
   const agentEnabledToggle = document.getElementById('agentEnabled');
   const agentBetTodayToggle = document.getElementById('agentBetToday');
@@ -522,6 +530,125 @@ async function saveSettingsQuietly() {
 async function saveSettings() {
   await saveSettingsQuietly();
   alert('Nastavení uloženo!');
+}
+
+async function loadLearningStats() {
+  try {
+    const res = await fetch('/api/learning/stats', { credentials: 'include' });
+    const data = await res.json();
+
+    document.getElementById('modelStatus').textContent = data.model_status || '—';
+    document.getElementById('totalBets').textContent = data.total_bets || 0;
+    document.getElementById('winRate').textContent = data.win_rate ?
+      `${(data.win_rate * 100).toFixed(1)}%` : '—';
+    document.getElementById('accuracy').textContent = data.model_accuracy ?
+      `${(data.model_accuracy * 100).toFixed(1)}%` : '—';
+    document.getElementById('aucScore').textContent = data.model_auc ?
+      `${data.model_auc.toFixed(3)}` : '—';
+    document.getElementById('lastTrained').textContent = data.last_trained ?
+      new Date(data.last_trained).toLocaleString('cs-CZ') : '—';
+
+    // Render learning curve
+    if (data.learning_curve && data.learning_curve.length > 0) {
+      renderLearningCurve(data.learning_curve);
+    }
+
+    // Render feature importance
+    if (data.feature_importance && Object.keys(data.feature_importance).length > 0) {
+      renderFeatureImportance(data.feature_importance);
+    }
+  } catch (e) {
+    console.error('Error loading learning stats:', e);
+  }
+}
+
+function renderLearningCurve(curve) {
+  const svg = document.getElementById('learningCurve');
+  if (!svg || curve.length === 0) return;
+
+  const width = 800, height = 300;
+  const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+  const plotWidth = width - padding.left - padding.right;
+  const plotHeight = height - padding.top - padding.bottom;
+
+  // Clear SVG
+  svg.innerHTML = '';
+
+  // Axes
+  const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  axisGroup.innerHTML = `
+    <line x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}" stroke="var(--line)" stroke-width="2"/>
+    <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}" stroke="var(--line)" stroke-width="2"/>
+  `;
+  svg.appendChild(axisGroup);
+
+  // Plot points
+  const points = curve.map((p, i) => ({
+    x: padding.left + (i / (curve.length - 1)) * plotWidth,
+    y: height - padding.bottom - (p.win_rate || 0) * plotHeight
+  }));
+
+  // Draw line
+  const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  pathEl.setAttribute('d', pathData);
+  pathEl.setAttribute('stroke', 'var(--acc)');
+  pathEl.setAttribute('stroke-width', '3');
+  pathEl.setAttribute('fill', 'none');
+  svg.appendChild(pathEl);
+
+  // Draw points
+  points.forEach(p => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', p.x);
+    circle.setAttribute('cy', p.y);
+    circle.setAttribute('r', '5');
+    circle.setAttribute('fill', 'var(--acc)');
+    svg.appendChild(circle);
+  });
+}
+
+function renderFeatureImportance(importance) {
+  const container = document.getElementById('featureImportance');
+  const maxVal = Math.max(...Object.values(importance));
+
+  container.innerHTML = Object.entries(importance)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 8)
+    .map(([name, value]) => `
+      <div class="feature-item">
+        <span class="feature-name">${name}</span>
+        <div class="feature-bar">
+          <div class="feature-fill" style="width: ${(value / maxVal * 100).toFixed(0)}%"></div>
+        </div>
+        <span style="font-weight: 700; color: var(--acc);">${value.toFixed(3)}</span>
+      </div>
+    `).join('');
+}
+
+async function trainModel() {
+  const btn = document.getElementById('trainModelBtn');
+  if (!btn) return;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Tréning běží...';
+
+  try {
+    const res = await fetch('/api/learning/train', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    const result = await res.json();
+    alert(result.message || 'Model trained!');
+    await loadLearningStats();
+  } catch (e) {
+    alert('Error: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🧠 Přetrénovat Model';
+  }
 }
 
 async function resetSettings() {
