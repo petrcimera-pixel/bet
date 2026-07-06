@@ -63,6 +63,13 @@
           <span>ML Learning</span>
         </button>
 
+        <button class="nav-item" data-page="advanced-analytics">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 9.5c0 .83-.67 1.5-1.5 1.5S11 13.33 11 12.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5zM6 6h12v2H6zm6 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+          </svg>
+          <span>Advanced</span>
+        </button>
+
         <button class="nav-item" data-page="settings">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3"/>
@@ -341,6 +348,186 @@
           <h3>🔍 Feature Importance</h3>
           <div id="featureImportance" class="feature-list">
             <p class="loading">Načítání...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADVANCED ANALYTICS PAGE -->
+      <section id="advanced-analytics" class="page">
+        <div class="page-header">
+          <h1>📊 Advanced Analytics</h1>
+          <p class="page-desc">Backtesting, metriky a detailní analýza výkonu</p>
+        </div>
+
+        <div class="analytics-tabs">
+          <button class="tab-btn active" data-tab="backtest">Backtesting</button>
+          <button class="tab-btn" data-tab="league-perf">Liga Performance</button>
+          <button class="tab-btn" data-tab="agent-manual">Agent vs Manual</button>
+          <button class="tab-btn" data-tab="odds-analysis">Odds Analysis</button>
+        </div>
+
+        <!-- BACKTESTING TAB -->
+        <div id="backtest-tab" class="tab-content active">
+          <div class="card">
+            <h3>🧪 Backtesting Summary</h3>
+            <div id="backtestSummary" class="backtesting-grid">
+              <div class="metric-card">
+                <div class="metric-label">Total Bets</div>
+                <div class="metric-value" id="backtestTotal">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Win Rate</div>
+                <div class="metric-value" id="backtestWinRate">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">ROI</div>
+                <div class="metric-value" id="backtestROI">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Sharpe Ratio</div>
+                <div class="metric-value" id="backtestSharpe">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Max Drawdown</div>
+                <div class="metric-value" id="backtestDrawdown">—</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Final Balance</div>
+                <div class="metric-value" id="backtestBalance">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>📈 Equity Curve</h3>
+            <div id="backtestChart" class="chart-container">
+              <svg id="backtestChartSVG" viewBox="0 0 800 300" class="chart"></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEAGUE PERFORMANCE TAB -->
+        <div id="league-perf-tab" class="tab-content">
+          <div class="card">
+            <h3>🏆 Best Performing Leagues</h3>
+            <table id="bestLeaguesTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Liga</th>
+                  <th>Sázky</th>
+                  <th>Výhry</th>
+                  <th>Win%</th>
+                  <th>P&L</th>
+                  <th>ROI</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>📉 Worst Performing Leagues</h3>
+            <table id="worstLeaguesTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Liga</th>
+                  <th>Sázky</th>
+                  <th>Výhry</th>
+                  <th>Win%</th>
+                  <th>P&L</th>
+                  <th>ROI</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- AGENT VS MANUAL TAB -->
+        <div id="agent-manual-tab" class="tab-content">
+          <div class="card">
+            <h3>🤖 Agent vs Manual Comparison</h3>
+            <div id="agentManualComparison" class="comparison-grid">
+              <div class="comparison-box">
+                <h4>🤖 Agent Bets</h4>
+                <div class="comparison-stat">
+                  <span>Total:</span>
+                  <span id="agentTotal">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>Win Rate:</span>
+                  <span id="agentWinRate">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>ROI:</span>
+                  <span id="agentROI">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>P&L:</span>
+                  <span id="agentPnL">—</span>
+                </div>
+              </div>
+
+              <div class="comparison-box">
+                <h4>👤 Manual Bets</h4>
+                <div class="comparison-stat">
+                  <span>Total:</span>
+                  <span id="manualTotal">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>Win Rate:</span>
+                  <span id="manualWinRate">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>ROI:</span>
+                  <span id="manualROI">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>P&L:</span>
+                  <span id="manualPnL">—</span>
+                </div>
+              </div>
+
+              <div class="comparison-box">
+                <h4>📊 Combined</h4>
+                <div class="comparison-stat">
+                  <span>Total:</span>
+                  <span id="combinedTotal">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>Win Rate:</span>
+                  <span id="combinedWinRate">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>ROI:</span>
+                  <span id="combinedROI">—</span>
+                </div>
+                <div class="comparison-stat">
+                  <span>P&L:</span>
+                  <span id="combinedPnL">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ODDS ANALYSIS TAB -->
+        <div id="odds-analysis-tab" class="tab-content">
+          <div class="card">
+            <h3>🎯 Performance by Odds Range</h3>
+            <table id="oddsTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Odds Range</th>
+                  <th>Sázky</th>
+                  <th>Výhry</th>
+                  <th>Win%</th>
+                  <th>P&L</th>
+                  <th>ROI</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </section>

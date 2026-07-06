@@ -75,6 +75,9 @@ function showPage(pageName) {
       case 'learning':
         loadLearningStats();
         break;
+      case 'advanced-analytics':
+        loadAdvancedAnalytics();
+        break;
     }
   }, 100);
 }
@@ -675,4 +678,175 @@ function fmt(num) {
 function setElText(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
+}
+
+// ============================================================================
+// ADVANCED ANALYTICS
+// ============================================================================
+
+function loadAdvancedAnalytics() {
+  const tabBtns = document.querySelectorAll('.analytics-tabs .tab-btn');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      const tabId = btn.dataset.tab + '-tab';
+      const tab = document.getElementById(tabId);
+      if (tab) tab.classList.add('active');
+    });
+  });
+
+  // Load backtest data
+  loadBacktestSummary();
+  loadLeaguePerformance();
+  loadAgentVsManual();
+  loadOddsAnalysis();
+}
+
+async function loadBacktestSummary() {
+  try {
+    const res = await fetch('/api/analytics/summary', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const stats = data.bankroll_stats;
+
+    setElText('backtestTotal', stats.total_bets || 0);
+    setElText('backtestWinRate', (stats.win_rate || 0) + '%');
+    setElText('backtestROI', (stats.roi || 0) + '%');
+    setElText('backtestSharpe', (stats.sharpe_ratio || 0).toFixed(2));
+    setElText('backtestDrawdown', '0%');
+    setElText('backtestBalance', fmt(stats.balance || 0) + ' Kč');
+
+    // Draw equity curve
+    if (stats.equity && stats.equity.length > 0) {
+      drawEquityCurve(stats.equity);
+    }
+  } catch (e) {
+    console.error('Backtest error:', e);
+  }
+}
+
+function drawEquityCurve(equity) {
+  const svg = document.getElementById('backtestChartSVG');
+  if (!svg) return;
+
+  const width = 800, height = 300;
+  const padding = 40;
+  const plotWidth = width - 2 * padding;
+  const plotHeight = height - 2 * padding;
+
+  const minVal = Math.min(...equity);
+  const maxVal = Math.max(...equity);
+  const range = maxVal - minVal || 1;
+
+  let path = '';
+  equity.forEach((val, i) => {
+    const x = padding + (i / (equity.length - 1 || 1)) * plotWidth;
+    const y = height - padding - ((val - minVal) / range) * plotHeight;
+    path += (i === 0 ? 'M' : 'L') + x + ',' + y;
+  });
+
+  svg.innerHTML = `
+    <line x1="${padding}" y1="${height-padding}" x2="${width-padding}" y2="${height-padding}" stroke="var(--line)" stroke-width="1"/>
+    <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height-padding}" stroke="var(--line)" stroke-width="1"/>
+    <path d="${path}" stroke="var(--acc)" stroke-width="2" fill="none"/>
+  `;
+}
+
+async function loadLeaguePerformance() {
+  try {
+    const res = await fetch('/api/backtest/best-leagues?top=5', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const tbody = document.querySelector('#bestLeaguesTable tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    Object.entries(data.results || {}).forEach(([league, stats]) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${league}</td>
+        <td>${stats.total_bets || 0}</td>
+        <td>${stats.wins || 0}</td>
+        <td>${(stats.win_rate || 0).toFixed(1)}%</td>
+        <td>${fmt(stats.pnl || 0)} Kč</td>
+        <td>${(stats.roi || 0).toFixed(1)}%</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (e) {
+    console.error('League perf error:', e);
+  }
+}
+
+async function loadAgentVsManual() {
+  try {
+    const res = await fetch('/api/backtest/agent-vs-manual', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (!data.success || !data.results) return;
+
+    const agent = data.results.agent || {};
+    const manual = data.results.manual || {};
+    const combined = data.results.combined || {};
+
+    // Agent
+    setElText('agentTotal', agent.total_bets || 0);
+    setElText('agentWinRate', (agent.win_rate || 0).toFixed(1) + '%');
+    setElText('agentROI', (agent.roi || 0).toFixed(1) + '%');
+    setElText('agentPnL', fmt(agent.pnl || 0) + ' Kč');
+
+    // Manual
+    setElText('manualTotal', manual.total_bets || 0);
+    setElText('manualWinRate', (manual.win_rate || 0).toFixed(1) + '%');
+    setElText('manualROI', (manual.roi || 0).toFixed(1) + '%');
+    setElText('manualPnL', fmt(manual.pnl || 0) + ' Kč');
+
+    // Combined
+    setElText('combinedTotal', combined.total_bets || 0);
+    setElText('combinedWinRate', (combined.win_rate || 0).toFixed(1) + '%');
+    setElText('combinedROI', (combined.roi || 0).toFixed(1) + '%');
+    setElText('combinedPnL', fmt(combined.pnl || 0) + ' Kč');
+  } catch (e) {
+    console.error('Agent vs manual error:', e);
+  }
+}
+
+async function loadOddsAnalysis() {
+  try {
+    const res = await fetch('/api/backtest/odds-ranges', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const tbody = document.querySelector('#oddsTable tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    Object.entries(data.results || {}).forEach(([range, stats]) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${range}</td>
+        <td>${stats.total_bets || 0}</td>
+        <td>${stats.wins || 0}</td>
+        <td>${(stats.win_rate || 0).toFixed(1)}%</td>
+        <td>${fmt(stats.pnl || 0)} Kč</td>
+        <td>${(stats.roi || 0).toFixed(1)}%</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (e) {
+    console.error('Odds analysis error:', e);
+  }
 }
