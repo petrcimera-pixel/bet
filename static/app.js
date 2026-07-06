@@ -73,8 +73,10 @@ async function loadStats() {
   try {
     const res = await fetch('/api/bankroll', { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    STATE.stats = await res.json();
-    console.log('Stats:', STATE.stats);
+    const data = await res.json();
+    STATE.stats = data.stats;  // API returns {stats: {...}, bets: [...]}
+    STATE.agentTips = data.bets || [];
+    console.log('Stats loaded:', STATE.stats);
   } catch (e) {
     console.error('Stats error:', e);
   }
@@ -114,9 +116,13 @@ function renderDashboard() {
   }
 
   const s = STATE.stats;
+  console.log('FULL STATS OBJECT:', JSON.stringify(s).substring(0, 500));
+  console.log('balance =', s.balance, 'type:', typeof s.balance);
+  console.log('Keys:', Object.keys(s).slice(0, 10));
   const cur = s.currency || 'Kč';
 
   // Stat cards
+  console.log('Setting dashBalance to:', fmt(s.balance), cur);
   setElText('dashBalance', `${fmt(s.balance)} ${cur}`);
   setElText('dashProfit', `${fmt(s.profit)} ${cur}`);
   setElText('dashROI', `${s.roi || 0}% ROI`);
