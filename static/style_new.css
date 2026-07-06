@@ -948,3 +948,46 @@ html, body {
 .tab-content.active {
   display: block;
 }
+
+/* MONITORING */
+.monitoring-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.monitor-stat {
+  background: var(--line2);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.monitor-stat .label {
+  font-size: 12px;
+  color: var(--txt2);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.monitor-stat .value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--acc);
+}
+
+.monitor-stat .value.critical {
+  color: #ff6b6b;
+}
+
+.monitor-stat .value.warning {
+  color: #ffa726;
+}
+
+.monitor-stat .value.healthy {
+  color: #66bb6a;
+}

@@ -53,6 +53,12 @@ try:
 except ImportError:
     ML_AVAILABLE = False
 
+try:
+    from engine import monitoring
+    MONITORING_AVAILABLE = True
+except ImportError:
+    MONITORING_AVAILABLE = False
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
 
@@ -949,6 +955,48 @@ def api_analytics_summary():
             "league_performance": league_perf,
             "agent_vs_manual": agent_vs_manual,
             "best_leagues": best_leagues,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+# ============ MONITORING API ============
+
+@app.route("/api/monitoring/summary", methods=["GET"])
+@login_required
+def api_monitoring_summary():
+    """Get monitoring and health summary."""
+    try:
+        if not MONITORING_AVAILABLE:
+            return jsonify({"success": False, "error": "Monitoring not available"}), 500
+
+        monitor = monitoring.PerformanceMonitor()
+        summary = monitor.get_summary()
+
+        return jsonify({
+            "success": True,
+            "monitoring": summary,
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/monitoring/alerts", methods=["GET"])
+@login_required
+def api_monitoring_alerts():
+    """Get recent alerts."""
+    try:
+        if not MONITORING_AVAILABLE:
+            return jsonify({"success": False, "error": "Monitoring not available"}), 500
+
+        monitor = monitoring.PerformanceMonitor()
+        hours = int(request.args.get("hours", 24))
+        alerts = monitor.get_active_alerts(hours=hours)
+
+        return jsonify({
+            "success": True,
+            "alerts": alerts,
+            "count": len(alerts),
         })
     except Exception as e:
         return jsonify({"error": str(e), "success": False}), 500

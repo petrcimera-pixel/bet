@@ -850,3 +850,32 @@ async function loadOddsAnalysis() {
     console.error('Odds analysis error:', e);
   }
 }
+
+// ============================================================================
+// MONITORING & REAL-TIME METRICS
+// ============================================================================
+
+async function loadMonitoringStatus() {
+  try {
+    const res = await fetch('/api/monitoring/summary', { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const monitoring = data.monitoring || {};
+    setElText('activeAlerts', monitoring.recent_alerts || '—');
+    setElText('highPriorityAlerts', monitoring.high_priority_alerts || '—');
+    setElText('lastAlert', monitoring.latest_alert?.type || 'None');
+    setElText('modelHealth', 'Healthy');
+  } catch (e) {
+    console.error('Monitoring error:', e);
+  }
+}
+
+// Automatically update monitoring every 30 seconds
+setInterval(() => {
+  if (STATE.currentPage === 'learning') {
+    loadMonitoringStatus();
+  }
+}, 30000);
