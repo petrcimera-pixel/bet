@@ -11,9 +11,9 @@
     "away_id": "2620",
     "date": "2026-07-07",
     "time": "16:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 3,
+    "away_score": 2,
+    "status": "FT",
     "live": false
   },
   {
@@ -28,9 +28,9 @@
     "away_id": "19246",
     "date": "2026-07-07",
     "time": "16:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 2,
+    "away_score": 0,
+    "status": "FT",
     "live": false
   },
   {
@@ -45,9 +45,9 @@
     "away_id": "19243",
     "date": "2026-07-07",
     "time": "16:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 1,
+    "away_score": 1,
+    "status": "FT",
     "live": false
   },
   {
@@ -62,9 +62,9 @@
     "away_id": "20703",
     "date": "2026-07-07",
     "time": "16:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 3,
+    "away_score": 1,
+    "status": "FT",
     "live": false
   },
   {
@@ -79,9 +79,9 @@
     "away_id": "576",
     "date": "2026-07-07",
     "time": "16:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 2,
+    "away_score": 0,
+    "status": "FT",
     "live": false
   },
   {
@@ -96,9 +96,9 @@
     "away_id": "8169",
     "date": "2026-07-07",
     "time": "17:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 0,
+    "away_score": 2,
+    "status": "FT",
     "live": false
   },
   {
@@ -113,9 +113,9 @@
     "away_id": "8594",
     "date": "2026-07-07",
     "time": "17:15",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 1,
+    "away_score": 0,
+    "status": "FT",
     "live": false
   },
   {
@@ -130,9 +130,9 @@
     "away_id": "2564",
     "date": "2026-07-07",
     "time": "17:30",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 2,
+    "away_score": 0,
+    "status": "FT",
     "live": false
   },
   {
@@ -147,9 +147,9 @@
     "away_id": "497",
     "date": "2026-07-07",
     "time": "18:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 1,
+    "away_score": 1,
+    "status": "FT",
     "live": false
   },
   {
@@ -164,10 +164,10 @@
     "away_id": "490",
     "date": "2026-07-07",
     "time": "18:30",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 1,
+    "away_score": 1,
+    "status": "79'",
+    "live": true
   },
   {
     "id": "401877834",
@@ -181,10 +181,10 @@
     "away_id": "20039",
     "date": "2026-07-07",
     "time": "18:30",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 0,
+    "away_score": 1,
+    "status": "80'",
+    "live": true
   },
   {
     "id": "401877978",
@@ -198,10 +198,10 @@
     "away_id": "131796",
     "date": "2026-07-07",
     "time": "18:45",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 2,
+    "away_score": 1,
+    "status": "65'",
+    "live": true
   },
   {
     "id": "401877827",
@@ -215,10 +215,10 @@
     "away_id": "12367",
     "date": "2026-07-07",
     "time": "19:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 0,
+    "away_score": 0,
+    "status": "46'",
+    "live": true
   },
   {
     "id": "760508",
@@ -232,10 +232,10 @@
     "away_id": "208",
     "date": "2026-07-07",
     "time": "20:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
-    "live": false
+    "home_score": 0,
+    "away_score": 0,
+    "status": "8'",
+    "live": true
   },
   {
     "id": "401873987",
