@@ -21848,13 +21848,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "result": {
+        "home": 3,
+        "away": 2
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "lost",
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877833",
@@ -21904,13 +21907,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 2,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877831",
@@ -21960,13 +21966,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 1
+      },
+      "actual": "draw",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877823",
@@ -22016,13 +22025,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 3,
+        "away": 1
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877829",
@@ -22072,13 +22084,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 2,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877832",
@@ -22128,13 +22143,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "result": {
+        "home": 0,
+        "away": 2
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "won",
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877789",
@@ -22184,13 +22202,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877826",
@@ -22240,13 +22261,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 2,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877984",
@@ -22296,13 +22320,16 @@
       "corner_is_value": false,
       "corner_ev": null,
       "saved_at": "2026-07-01T22:35:51",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "settled_at": null
+      "result": {
+        "home": 1,
+        "away": 1
+      },
+      "actual": "draw",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
+      "corner_result": "unverifiable",
+      "settled_at": "2026-07-07T22:00:00"
     },
     {
       "id": "401877828",
