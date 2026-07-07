@@ -180,6 +180,43 @@ function renderDashboard() {
       </div>
     `;
   }
+
+  // Load and render agent tips for dashboard
+  renderDashboardTips();
+}
+
+function renderDashboardTips() {
+  const container = document.getElementById('dashTipsContainer');
+  if (!container) return;
+
+  const bets = STATE.agentTips.filter(b => b.tag === 'bet-agent' && b.status === 'open').slice(0, 10);
+
+  if (!bets.length) {
+    container.innerHTML = '<div class="loading">Žádné otevřené sázky agenta</div>';
+    return;
+  }
+
+  container.innerHTML = bets
+    .map(b => `
+      <div class="tip-item">
+        <div class="tip-match">
+          <div class="tip-teams">🤖 ${b.match || 'Neznámý zápas'}</div>
+          <div class="tip-meta">
+            <span>${b.match_date || '—'} ${b.match_time || '—'}</span>
+            <span>${b.league || 'Liga'}</span>
+          </div>
+          <div class="tip-meta">
+            <span>${b.label || '?'}</span>
+            <span>${b.odds || 0}× @ ${((b.prob || 0) * 100).toFixed(0)}%</span>
+          </div>
+        </div>
+        <div class="tip-prediction">
+          <span class="tip-badge">${(b.status || 'open').toUpperCase()}</span>
+          <strong>${b.pnl > 0 ? '+' : ''}${fmt(b.pnl || 0)}</strong>
+        </div>
+      </div>
+    `)
+    .join('');
 }
 
 // ============================================================================
