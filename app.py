@@ -25,7 +25,9 @@ sys.path.insert(0, _HERE)
 # --- samoinstalace závislostí (stejný styl jako ostatní appky) -------------
 def _ensure():
     import importlib.util, subprocess
-    miss = [p for m, p in {"flask": "Flask", "requests": "requests"}.items()
+    # numpy je potřeba nepodmíněně (backtester/explainer ho importují při startu)
+    miss = [p for m, p in {"flask": "Flask", "requests": "requests",
+                           "numpy": "numpy"}.items()
             if importlib.util.find_spec(m) is None]
     if miss:
         print("Instaluji závislosti:", ", ".join(miss))
@@ -62,11 +64,13 @@ except ImportError:
 from engine import bankroll_stats
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "dev-key-change-in-production")
+# SECRET_KEY z env; jinak náhodný per-start (session po restartu spadne,
+# ale nikdo nemůže podvrhnout cookie se známým klíčem z veřejného repa)
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 
-# Login credentials
-_USERNAME = "admin"
-_PASSWORD = "8312172165"
+# Login credentials – přepsatelné přes env (APP_USERNAME / APP_PASSWORD)
+_USERNAME = os.environ.get("APP_USERNAME", "admin")
+_PASSWORD = os.environ.get("APP_PASSWORD", "8312172165")
 
 # jednoduchá keš predikcí v paměti (klíč = datum)
 _PRED_CACHE = {}
@@ -887,7 +891,8 @@ def api_backtest_odds():
 def api_explain_bet(bet_id):
     """Get SHAP-style explanation for a bet."""
     try:
-        exp = explainer.ModelExplainer(ml_learner if ML_AVAILABLE else None)
+        # ModelExplainer čeká instanci MLLearner, ne modul
+        exp = explainer.ModelExplainer(ml_learner.get_learner() if ML_AVAILABLE else None)
 
         # Find bet in bankroll
         bets = bankroll.state()["bets"]
@@ -1011,8 +1016,8 @@ def api_monitoring_alerts():
 def api_bankroll_summary():
     """Get comprehensive bankroll summary."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         summary = ba.get_summary()
 
         return jsonify({
@@ -1028,8 +1033,8 @@ def api_bankroll_summary():
 def api_bankroll_daily():
     """Get daily breakdown."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         daily = ba.get_daily_breakdown()
 
         return jsonify({
@@ -1045,8 +1050,8 @@ def api_bankroll_daily():
 def api_bankroll_monthly():
     """Get monthly breakdown."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         monthly = ba.get_monthly_breakdown()
 
         return jsonify({
@@ -1062,8 +1067,8 @@ def api_bankroll_monthly():
 def api_bankroll_best_worst():
     """Get best and worst days."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         n = int(request.args.get("n", 5))
         data = ba.get_best_worst_days(n)
 
@@ -1081,8 +1086,8 @@ def api_bankroll_best_worst():
 def api_bankroll_streaks():
     """Get streak analysis."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         streaks = ba.get_streak_analysis()
 
         return jsonify({
@@ -1098,8 +1103,8 @@ def api_bankroll_streaks():
 def api_bankroll_hourly():
     """Get hourly distribution."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         hourly = ba.get_hourly_distribution()
 
         return jsonify({
@@ -1115,8 +1120,8 @@ def api_bankroll_hourly():
 def api_bankroll_roi_odds():
     """Get ROI by odds ranges."""
     try:
-        bets = bankroll.state()["bets"]
-        ba = bankroll_stats.BankrollAnalytics(bets)
+        st = bankroll.state()
+        ba = bankroll_stats.BankrollAnalytics(st["bets"], start_balance=st["start_balance"])
         roi = ba.get_roi_by_odds()
 
         return jsonify({

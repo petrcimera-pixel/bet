@@ -21,8 +21,32 @@ from . import bankroll
 from . import settings as app_settings
 from .tips_db import SHARP_PROB
 
+# ML gate (volitelné) – naučený model může vetovat tipy, na kterých historicky prodělává
+try:
+    from . import ml_learner
+    _ML = True
+except ImportError:
+    _ML = False
+
 TAG = "bet-agent"
 MIN_STAKE = 1.0   # podlaha pro Kelly sázku, ať nejsou směšně malé/nulové
+ML_VETO_PROB = 0.35   # model musí dávat aspoň tuto šanci na výhru, jinak tip přeskočíme
+
+
+def _ml_veto(outcome, odds, prob, league) -> bool:
+    """True = naučený model tip zamítá. Bez natrénovaného modelu nikdy nevetuje."""
+    if not _ML:
+        return False
+    try:
+        learner = ml_learner.get_learner()
+        if learner.model is None:
+            return False
+        pred = learner.predict_with_confidence({
+            "odds": odds, "prob": prob, "prediction": outcome, "league": league,
+        })
+        return pred.get("model_status") == "ready" and pred.get("win_prob", 0.5) < ML_VETO_PROB
+    except Exception:
+        return False    # ML nesmí nikdy shodit sázení
 
 
 def _cfg() -> dict:
@@ -90,7 +114,7 @@ def run(predictions: list) -> dict:
     daily_cap = reference_balance * max_daily_pct
     remaining_budget = max(0.0, daily_cap - staked_today)
 
-    placed = skipped_dup = skipped_soft = skipped_cap = 0
+    placed = skipped_dup = skipped_soft = skipped_cap = skipped_ml = 0
     no_funds = 0
 
     for p in predictions:
@@ -119,6 +143,11 @@ def run(predictions: list) -> dict:
         odds = bet.get("best_odds")
         prob = bet.get("prob", pick_prob)
         if not outcome or not odds:
+            continue
+
+        # ML gate: naučený model může tip vetovat (učí se z vlastních chyb)
+        if _ml_veto(outcome, odds, prob, p.get("league")):
+            skipped_ml += 1
             continue
 
         if stake_mode == "kelly":
@@ -153,6 +182,7 @@ def run(predictions: list) -> dict:
         "skipped_duplicate": skipped_dup,
         "skipped_not_sharp": skipped_soft,
         "skipped_daily_cap": skipped_cap,
+        "skipped_ml_veto": skipped_ml,
         "out_of_funds": no_funds > 0,
         "balance": bankroll.state()["balance"],
     }

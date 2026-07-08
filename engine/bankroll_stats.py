@@ -11,16 +11,20 @@ import json
 class BankrollAnalytics:
     """Comprehensive bankroll statistics."""
 
-    def __init__(self, bets_list=None):
+    def __init__(self, bets_list=None, start_balance=1000.0):
         self.bets = bets_list or []
+        self.start_balance = float(start_balance)
 
     def get_daily_breakdown(self, days=90):
-        """Get daily P&L breakdown."""
+        """Get daily P&L breakdown (jen posledních `days` dní)."""
         daily = defaultdict(lambda: {"bets": 0, "wins": 0, "pnl": 0, "balance": 0})
+        cutoff = datetime.now().timestamp() - days * 86400
 
         for bet in self.bets:
             if bet["status"] in ("won", "lost"):
                 ts = bet.get("ts", 0)
+                if ts < cutoff:
+                    continue
                 dt = datetime.fromtimestamp(ts).strftime("%Y-%m-%d")
                 daily[dt]["bets"] += 1
                 if bet["status"] == "won":
@@ -46,13 +50,14 @@ class BankrollAnalytics:
 
     def get_monthly_breakdown(self):
         """Get monthly P&L breakdown."""
-        monthly = defaultdict(lambda: {"bets": 0, "wins": 0, "pnl": 0})
+        monthly = defaultdict(lambda: {"bets": 0, "wins": 0, "pnl": 0, "staked": 0})
 
         for bet in self.bets:
             if bet["status"] in ("won", "lost"):
                 ts = bet.get("ts", 0)
                 month = datetime.fromtimestamp(ts).strftime("%Y-%m")
                 monthly[month]["bets"] += 1
+                monthly[month]["staked"] += bet.get("stake", 0)
                 if bet["status"] == "won":
                     monthly[month]["wins"] += 1
                 monthly[month]["pnl"] += bet.get("pnl", 0)
@@ -64,7 +69,8 @@ class BankrollAnalytics:
                 "bets": stats["bets"],
                 "wins": stats["wins"],
                 "pnl": round(stats["pnl"], 2),
-                "roi": round(stats["pnl"] / stats["bets"] * 100, 2) if stats["bets"] > 0 else 0,
+                # ROI = zisk / prosázeno (dřív se dělilo počtem sázek → -7400 %)
+                "roi": round(stats["pnl"] / stats["staked"] * 100, 2) if stats["staked"] > 0 else 0,
                 "win_rate": round(stats["wins"] / stats["bets"] * 100, 1) if stats["bets"] > 0 else 0,
             }
 
@@ -72,7 +78,7 @@ class BankrollAnalytics:
 
     def get_weekly_breakdown(self):
         """Get weekly P&L breakdown."""
-        weekly = defaultdict(lambda: {"bets": 0, "wins": 0, "pnl": 0})
+        weekly = defaultdict(lambda: {"bets": 0, "wins": 0, "pnl": 0, "staked": 0})
 
         for bet in self.bets:
             if bet["status"] in ("won", "lost"):
@@ -80,6 +86,7 @@ class BankrollAnalytics:
                 dt = datetime.fromtimestamp(ts)
                 week_start = (dt - timedelta(days=dt.weekday())).strftime("%Y-W%U")
                 weekly[week_start]["bets"] += 1
+                weekly[week_start]["staked"] += bet.get("stake", 0)
                 if bet["status"] == "won":
                     weekly[week_start]["wins"] += 1
                 weekly[week_start]["pnl"] += bet.get("pnl", 0)
@@ -91,7 +98,7 @@ class BankrollAnalytics:
                 "bets": stats["bets"],
                 "wins": stats["wins"],
                 "pnl": round(stats["pnl"], 2),
-                "roi": round(stats["pnl"] / stats["bets"] * 100, 2) if stats["bets"] > 0 else 0,
+                "roi": round(stats["pnl"] / stats["staked"] * 100, 2) if stats["staked"] > 0 else 0,
                 "win_rate": round(stats["wins"] / stats["bets"] * 100, 1) if stats["bets"] > 0 else 0,
             }
 
@@ -115,16 +122,16 @@ class BankrollAnalytics:
         if not settled:
             return None, None
 
-        cumulative = 1000  # Start balance
-        peak = 1000
-        trough = 1000
+        cumulative = self.start_balance
+        peak = cumulative
+        trough = cumulative
 
-        for bet in sorted(settled, key=lambda b: b.get("ts", 0)):
+        for bet in sorted(settled, key=lambda b: b.get("settled_ts") or b.get("ts", 0)):
             cumulative += bet.get("pnl", 0)
             peak = max(peak, cumulative)
             trough = min(trough, cumulative)
 
-        return peak, trough
+        return round(peak, 2), round(trough, 2)
 
     def get_streak_analysis(self):
         """Analyze winning/losing streaks."""

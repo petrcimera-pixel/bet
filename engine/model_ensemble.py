@@ -136,13 +136,22 @@ class ModelEnsemble:
             "weights": self.weights,
         }
 
-    def get_model_agreement(self):
-        """Check if all models agree on the prediction."""
-        preds = [p for p in self.models.values()]
-        if len(preds) < 2:
+    def get_model_agreement(self, features):
+        """Shoda modelů na predikci pro dané featury (0 = plná shoda)."""
+        if len(self.models) < 2 or not features:
             return 0.0
 
-        # Compare predictions - how similar are they?
+        preds = []
+        for model in self.models.values():
+            try:
+                arr = np.array(features).reshape(1, -1)
+                preds.append(model.predict_proba(arr)[0][1] if hasattr(model, 'predict_proba')
+                             else float(model.predict(arr)[0]))
+            except Exception:
+                pass
+
+        if len(preds) < 2:
+            return 0.0
         return sum(abs(p1 - p2) for p1 in preds for p2 in preds) / (len(preds) ** 2)
 
     def save_ensemble(self, path="data/ml_models/ensemble"):

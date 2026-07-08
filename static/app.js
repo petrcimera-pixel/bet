@@ -75,6 +75,7 @@ function showPage(pageName) {
         break;
       case 'learning':
         loadLearningStats();
+        loadMonitoringStatus();
         break;
       case 'advanced-analytics':
         loadAdvancedAnalytics();
@@ -236,7 +237,7 @@ function renderAgentTips() {
 
   container.innerHTML = bets
     .map(b => `
-      <div class="tip-item" onclick="showTipDetail('${b.id}')">
+      <div class="tip-item" data-status="${b.status || 'open'}" onclick="showTipDetail('${b.id}')">
         <div class="tip-match">
           <div class="tip-teams">🤖 ${b.match || 'Neznámý zápas'}</div>
           <div class="tip-meta">
@@ -255,6 +256,19 @@ function renderAgentTips() {
       </div>
     `)
     .join('');
+
+  applyTipFilters();
+}
+
+function applyTipFilters() {
+  const query = (document.getElementById('tipFilter')?.value || '').toLowerCase();
+  const status = document.getElementById('tipStatus')?.value || '';
+
+  document.querySelectorAll('#agentTipsContainer .tip-item').forEach(item => {
+    const textOk = !query || item.textContent.toLowerCase().includes(query);
+    const statusOk = !status || item.dataset.status === status;
+    item.style.display = (textOk && statusOk) ? '' : 'none';
+  });
 }
 
 function showTipDetail(betId) {
@@ -364,9 +378,17 @@ function renderBankroll() {
   setElText('currentBalance', `${fmt(s.balance)} ${cur}`);
   setElText('openBets', s.open_count || 0);
 
+  // Equity curve grafu banku (s.equity = pole zůstatků od startu)
+  if (s.equity && s.equity.length > 1) {
+    renderEquitySVG(s.equity);
+  }
+
+  // Historie sázek – stats objekt sázky neobsahuje, jsou v STATE.agentTips
+  // (loadStats tam ukládá data.bets z /api/bankroll = VŠECHNY sázky)
+  const allBets = STATE.agentTips || [];
   const tbody = document.querySelector('#betsTable tbody');
-  if (tbody && s.bets) {
-    tbody.innerHTML = s.bets
+  if (tbody && allBets.length) {
+    tbody.innerHTML = allBets
       .slice(0, 50)
       .map(b => `
         <tr>
@@ -382,6 +404,38 @@ function renderBankroll() {
       `)
       .join('');
   }
+}
+
+function renderEquitySVG(equity) {
+  const svg = document.getElementById('equitySVG');
+  if (!svg) return;
+
+  const width = 800, height = 300, padding = 40;
+  const plotWidth = width - 2 * padding;
+  const plotHeight = height - 2 * padding;
+
+  const minVal = Math.min(...equity);
+  const maxVal = Math.max(...equity);
+  const range = maxVal - minVal || 1;
+
+  let path = '';
+  equity.forEach((val, i) => {
+    const x = padding + (i / (equity.length - 1)) * plotWidth;
+    const y = height - padding - ((val - minVal) / range) * plotHeight;
+    path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  });
+
+  const last = equity[equity.length - 1];
+  const first = equity[0];
+  const color = last >= first ? 'var(--pos)' : 'var(--bad)';
+
+  svg.innerHTML = `
+    <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="var(--line)" stroke-width="1"/>
+    <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="var(--line)" stroke-width="1"/>
+    <text x="${padding - 5}" y="${padding + 4}" text-anchor="end" font-size="11" fill="var(--txt2)">${maxVal.toFixed(0)}</text>
+    <text x="${padding - 5}" y="${height - padding + 4}" text-anchor="end" font-size="11" fill="var(--txt2)">${minVal.toFixed(0)}</text>
+    <path d="${path}" stroke="${color}" stroke-width="2" fill="none"/>
+  `;
 }
 
 // ============================================================================
@@ -468,12 +522,13 @@ function setupEventListeners() {
     });
   }
 
-  // Tabs
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  // Tabs – POUZE v rámci stránky #analytics (globální selektor by rozbíjel
+  // taby na stránce #advanced-analytics, která používá stejné třídy)
+  document.querySelectorAll('#analytics .tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const tabName = btn.dataset.tab;
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#analytics .tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('#analytics .tab-btn').forEach(b => b.classList.remove('active'));
 
       const tab = document.getElementById(`${tabName}-tab`);
       if (tab) tab.classList.add('active');
@@ -481,16 +536,14 @@ function setupEventListeners() {
     });
   });
 
-  // Filter
+  // Filter (text + status)
   const filterInput = document.getElementById('tipFilter');
   if (filterInput) {
-    filterInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      document.querySelectorAll('.tip-item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? '' : 'none';
-      });
-    });
+    filterInput.addEventListener('input', applyTipFilters);
+  }
+  const statusSelect = document.getElementById('tipStatus');
+  if (statusSelect) {
+    statusSelect.addEventListener('change', applyTipFilters);
   }
 
   // Modal close
@@ -538,14 +591,17 @@ async function runAgent() {
 }
 
 async function saveSettingsQuietly() {
+  // Neposílat natvrdo defaulty – zachovej aktuálně uložené hodnoty,
+  // jinak by každé kliknutí na toggle resetovalo kelly_fraction apod.
+  const saved = STATE.settings?.agent || {};
   const data = {
     enabled: document.getElementById('agentEnabled')?.checked || false,
     bet_today: document.getElementById('agentBetToday')?.checked || false,
-    stake_mode: document.getElementById('stakeMode')?.value || 'kelly',
-    stake: parseFloat(document.getElementById('flatStake')?.value || 10),
-    kelly_fraction: 0.25,
-    max_daily_stake_pct: 0.25,
-    only_sharp: true
+    stake_mode: document.getElementById('stakeMode')?.value || saved.stake_mode || 'kelly',
+    stake: parseFloat(document.getElementById('flatStake')?.value) || saved.stake || 10,
+    kelly_fraction: saved.kelly_fraction ?? 0.25,
+    max_daily_stake_pct: saved.max_daily_stake_pct ?? 0.25,
+    only_sharp: saved.only_sharp ?? true
   };
 
   try {
@@ -568,8 +624,31 @@ async function saveSettingsQuietly() {
   }
 }
 
+async function saveModelSettings() {
+  // Parametry modelu (domácí výhoda, rating→góly) – dřív se tvářily uložené,
+  // ale nikam se neposílaly
+  const homeAdv = parseFloat(document.getElementById('homeAdv')?.value);
+  const ratingToGoals = parseFloat(document.getElementById('ratingToGoals')?.value);
+  const values = {};
+  if (!isNaN(homeAdv)) values.home_adv = homeAdv;
+  if (!isNaN(ratingToGoals)) values.rating_to_goals = ratingToGoals;
+  if (!Object.keys(values).length) return;
+
+  try {
+    await fetch('/api/settings', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section: 'model', values })
+    });
+  } catch (e) {
+    console.error('Chyba ukládání model nastavení:', e.message);
+  }
+}
+
 async function saveSettings() {
   await saveSettingsQuietly();
+  await saveModelSettings();
   alert('Nastavení uloženo!');
 }
 
@@ -722,20 +801,25 @@ function setElText(id, text) {
 // ADVANCED ANALYTICS
 // ============================================================================
 
+let _advTabsBound = false;
+
 function loadAdvancedAnalytics() {
-  const tabBtns = document.querySelectorAll('.analytics-tabs .tab-btn');
+  // Taby scopované na #advanced-analytics + bind jen jednou
+  // (globální selektor rozbíjel taby stránky #analytics a listenery se vršily)
+  if (!_advTabsBound) {
+    _advTabsBound = true;
+    const tabBtns = document.querySelectorAll('#advanced-analytics .tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      const tabId = btn.dataset.tab + '-tab';
-      const tab = document.getElementById(tabId);
-      if (tab) tab.classList.add('active');
+        document.querySelectorAll('#advanced-analytics .tab-content').forEach(c => c.classList.remove('active'));
+        const tab = document.getElementById(btn.dataset.tab + '-tab');
+        if (tab) tab.classList.add('active');
+      });
     });
-  });
+  }
 
   // Load backtest data
   loadBacktestSummary();
@@ -1025,7 +1109,8 @@ function renderDailyChart(dailyData) {
 }
 
 function renderMonthlyTable(monthlyData) {
-  const tbody = document.querySelector('#monthlyTable tbody');
+  // Bankroll stránka má vlastní tabulku – #monthlyTable patří stránce Analytics
+  const tbody = document.querySelector('#bankrollMonthlyTable tbody');
   if (!tbody) return;
   
   tbody.innerHTML = Object.entries(monthlyData).map(([month, d]) => `
