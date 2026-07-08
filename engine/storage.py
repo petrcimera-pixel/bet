@@ -24,8 +24,9 @@ def remove_matching(pattern: str) -> int:
 
 
 def load(name: str, default):
+    # utf-8-sig: soubory upravené externě (PowerShell) mohou mít BOM
     try:
-        with open(_path(name), encoding="utf-8") as f:
+        with open(_path(name), encoding="utf-8-sig") as f:
             return json.load(f)
     except Exception:
         return default

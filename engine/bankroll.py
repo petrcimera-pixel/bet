@@ -345,20 +345,24 @@ def _compute_by_league(bets: list) -> dict:
     for b in bets:
         league = b.get("league", "Unknown")
         if league not in by_league:
-            by_league[league] = {"wins": 0, "settled": 0, "pnl": 0.0}
+            by_league[league] = {"wins": 0, "settled": 0, "pnl": 0.0, "staked": 0.0}
         by_league[league]["settled"] += 1
+        by_league[league]["staked"] += b["stake"]
         if b["status"] == "won":
             by_league[league]["wins"] += 1
         by_league[league]["pnl"] += b["pnl"]
 
     for league in by_league:
         settled = by_league[league]["settled"]
+        staked = by_league[league]["staked"]
         by_league[league]["win_rate"] = round(
             by_league[league]["wins"] / settled * 100, 1
         ) if settled else 0
+        # ROI = zisk / prosázená částka (ne / počet sázek)
         by_league[league]["roi"] = round(
-            by_league[league]["pnl"] / settled * 100, 1
-        ) if settled else 0
+            by_league[league]["pnl"] / staked * 100, 1
+        ) if staked else 0
         by_league[league]["pnl"] = round(by_league[league]["pnl"], 2)
+        by_league[league]["staked"] = round(staked, 2)
 
     return by_league

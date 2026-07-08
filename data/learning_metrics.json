@@ -1,13 +1,13 @@
 {
   "status": "trained",
-  "accuracy": 1.0,
-  "last_trained": "2026-07-07T00:37:22.703983",
-  "total_feedback": 40,
-  "training_samples": 32,
-  "test_samples": 8,
-  "auc": 1.0,
-  "precision": 1.0,
+  "accuracy": 0.5,
+  "last_trained": "2026-07-08T06:49:12.252225",
+  "total_feedback": 18,
+  "training_samples": 8,
+  "test_samples": 2,
+  "auc": 0.5,
+  "precision": 0.5,
   "recall": 1.0,
-  "win_rate": 0.34375,
+  "win_rate": 0.75,
   "model_version": 2
 }

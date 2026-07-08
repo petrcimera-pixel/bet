@@ -1,6 +1,50 @@
 # 📦 KurzAnalytik Pro – Version History
 
-## v1.0 - 2026-07-07 [CURRENT - LIVE]
+## v1.1 - 2026-07-08 [CURRENT - LIVE]
+**Status**: 🟢 PRODUCTION — kompletní audit + oprava ~20 chyb
+
+### Opravené chyby (kompletní multi-agent audit):
+**Matematika sázek:**
+- ✅ Backtester: void sázky se počítaly jako čistý zisk (nafukovaly equity curve)
+- ✅ Backtester: max drawdown se počítal proti globálnímu maximu → rostoucí křivka hlásila fantomový propad
+- ✅ Backtester: řazení podle času vyhodnocení (ne vsazení), win rate bez voidů, start z reálného banku
+- ✅ Měsíční/týdenní ROI: dělilo se počtem sázek místo prosázenou částkou (−7400 % → korektní %)
+- ✅ ROI po ligách: stejná chyba, opraveno + přidáno pole staked
+- ✅ Peak/trough: hardcoded 1000 → skutečný počáteční bank
+- ✅ Denní breakdown: parametr days se ignoroval
+
+**ML učení (agent se konečně učí správně):**
+- ✅ Model trénoval na "open" záznamech jako na prohrách + každou sázku počítal 2× (dedupe podle bet_id)
+- ✅ PnL vzorec ve feedbacku: výhra = stake×(kurz−1), ne stake×kurz
+- ✅ Featury: přidán model_prob (nejcennější vstup!), odstraněn stake (cirkulární)
+- ✅ Sjednoceno kódování featur mezi tréninkem a predikcí (dřív se lišilo)
+- ✅ AUC crash na jednotřídním test setu
+- ✅ **ML smyčka UZAVŘENA**: naučený model nyní vetuje tipy s nízkou šancí (dřív se predikce nikdy nepoužila!)
+- ✅ Learning curve jen z rozhodnutých sázek
+
+**API a bezpečnost:**
+- ✅ /api/explain vracel 500 (modul místo instance MLLearner)
+- ✅ Credentials a SECRET_KEY přes env proměnné (APP_USERNAME, APP_PASSWORD, SECRET_KEY)
+- ✅ Self-installer doplněn o numpy (crash na čistém stroji)
+- ✅ storage.load: utf-8-sig (BOM od PowerShellu)
+
+**Frontend:**
+- ✅ Duplicitní id="monthlyTable" → měsíční tabulka v Bankroll byla trvale prázdná
+- ✅ Konflikt tabů mezi Analytics a Advanced (klik na jedné stránce rozbil druhou) + duplicitní listenery
+- ✅ Historie sázek (#betsTable) se nikdy nenaplnila (četla neexistující s.bets)
+- ✅ Equity curve graf v Bankroll se nikdy nevykreslil
+- ✅ Filtr statusu tipů (Otevřené/Vyhrané/Prohry) byl mrtvý
+- ✅ Monitoring se načítal až po 30 s (teď hned při otevření stránky)
+- ✅ Auto-save togglu resetoval kelly_fraction a další uložené hodnoty
+- ✅ Nastavení modelu (domácí výhoda, rating→góly) se tvářilo uložené, ale zahazovalo se
+
+**Data:**
+- ✅ Odstraněna syntetická test data (20 fake sázek Team A/B) z banku i ML feedbacku
+- ✅ Reálný výkon agenta: 7/10 výher, ROI +23,9 %
+
+---
+
+## v1.0 - 2026-07-07
 **Status**: 🟢 PRODUCTION - Live na https://kurzanalytik.onrender.com/
 
 ### Features:

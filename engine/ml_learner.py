@@ -26,6 +26,25 @@ MODEL_DIR = "data/ml_models"
 FEEDBACK_FILE = "data/agent_feedback.jsonl"
 METRICS_FILE = "data/learning_metrics.json"
 
+# Jednotný seznam featur — MUSÍ sedět mezi prepare_features a predict_with_confidence
+FEATURE_NAMES = [
+    "odds", "log_odds", "model_prob", "is_home",
+    "league_weight", "elo_home_norm", "elo_away_norm",
+    "xg_home_norm", "xg_away_norm", "possession_norm",
+    "form_home_norm", "form_away_norm"
+]
+
+_TOP_LEAGUES = {"Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1",
+                "UEFA Champions League", "UEFA Europa League"}
+
+
+def _league_weight(league):
+    return 1.0 if league in _TOP_LEAGUES else 0.5
+
+
+def _is_home_enc(prediction):
+    return 1.0 if prediction == "home" else 0.0 if prediction == "away" else 0.5
+
 
 def ensure_dirs():
     """Create ML directories if they don't exist."""
@@ -40,7 +59,7 @@ class MLLearner:
         ensure_dirs()
         self.model = None
         self.scaler = None
-        self.feature_names = None
+        self.feature_names = list(FEATURE_NAMES)
         self.metrics = self.load_metrics()
         self.feedback_log = []
         self.load_model()
@@ -62,7 +81,9 @@ class MLLearner:
             "league": league,
             "match_date": match_date,
             "features": features or {},
-            "pnl": stake * odds if outcome == "won" else -stake
+            # čistý zisk: výhra = stake*(kurz-1); open/void = 0 (žádný výsledek)
+            "pnl": round(stake * (odds - 1), 2) if outcome == "won"
+                   else (-stake if outcome == "lost" else 0.0)
         }
 
         # Append to JSONL feedback file
@@ -81,23 +102,34 @@ class MLLearner:
         return self.record_feedback(*args, **kwargs)
 
     def load_feedback_log(self, days=30):
-        """Load recent feedback for training."""
+        """Load recent feedback for training.
+
+        Každá sázka může mít v JSONL víc záznamů (open při vsazení, won/lost
+        při vyhodnocení) – dedupujeme podle bet_id a bereme POSLEDNÍ záznam,
+        jinak by se sázky počítaly dvakrát a 'open' by model bral jako prohry.
+        """
         if not os.path.exists(FEEDBACK_FILE):
             return []
 
         cutoff = datetime.now() - timedelta(days=days)
-        feedback = []
+        by_bet = {}
 
         try:
-            with open(FEEDBACK_FILE, "r", encoding="utf-8") as f:
+            with open(FEEDBACK_FILE, "r", encoding="utf-8-sig") as f:
                 for line in f:
-                    record = json.loads(line)
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        record = json.loads(line)
+                    except (ValueError, TypeError):
+                        continue
                     if datetime.fromisoformat(record["ts"]) > cutoff:
-                        feedback.append(record)
-        except:
+                        by_bet[record.get("bet_id") or id(record)] = record
+        except Exception:
             pass
 
-        return feedback
+        return list(by_bet.values())
 
     def prepare_features(self, feedback_records):
         """Extract features from feedback records for training."""
@@ -105,20 +137,22 @@ class MLLearner:
         y = []
 
         for record in feedback_records:
-            if record["outcome"] == "void":
+            # Trénujeme JEN na rozhodnutých sázkách – open/void nemají label
+            if record["outcome"] not in ("won", "lost"):
                 continue
 
             features = record.get("features", {})
             odds = record.get("odds", 1.5)
 
-            # Feature engineering
+            # Feature engineering – model_prob (pravděpodobnost z predikčního
+            # enginu) je nejcennější vstup; stake tam nepatří (cirkulární).
             feature_vector = [
                 odds,
                 np.log(odds),
-                record["stake"] / 100.0,
-                1.0 if record["prediction"] == "home" else 0.0 if record["prediction"] == "away" else 0.5,
-                1.0 if record["league"] == "Premier League" else 0.5,  # league weight
-                features.get("home_rating", 1500) / 1500.0,  # normalized Elo
+                float(features.get("prob", 1.0 / odds if odds > 1 else 0.5)),
+                _is_home_enc(record.get("prediction")),
+                _league_weight(record.get("league")),
+                features.get("home_rating", 1500) / 1500.0,
                 features.get("away_rating", 1500) / 1500.0,
                 features.get("expected_goals_home", 1.5) / 2.0,
                 features.get("expected_goals_away", 1.2) / 2.0,
@@ -130,12 +164,7 @@ class MLLearner:
             X.append(feature_vector)
             y.append(1 if record["outcome"] == "won" else 0)
 
-        self.feature_names = [
-            "odds", "log_odds", "stake_norm", "is_home",
-            "league_weight", "elo_home_norm", "elo_away_norm",
-            "xg_home_norm", "xg_away_norm", "possession_norm",
-            "form_home_norm", "form_away_norm"
-        ]
+        self.feature_names = list(FEATURE_NAMES)
 
         return np.array(X) if X else None, np.array(y) if y else None
 
@@ -194,7 +223,10 @@ class MLLearner:
         y_proba = self.model.predict_proba(X_test_scaled)[:, 1]
 
         accuracy = accuracy_score(y_test, y_pred)
-        auc = roc_auc_score(y_test, y_proba)
+        try:
+            auc = roc_auc_score(y_test, y_proba)   # padá když test set má jen 1 třídu
+        except ValueError:
+            auc = 0.5
         precision = precision_score(y_test, y_pred, zero_division=0)
         recall = recall_score(y_test, y_pred, zero_division=0)
 
@@ -224,12 +256,14 @@ class MLLearner:
 
         try:
             odds = features_dict.get("odds", 1.5)
+            # STEJNÉ kódování jako prepare_features – jinak model dostává
+            # při predikci jiné vstupy, než na jakých se učil
             feature_vector = np.array([[
                 odds,
                 np.log(odds),
-                features_dict.get("stake", 100) / 100.0,
-                1.0 if features_dict.get("prediction") == "home" else 0.0,
-                0.5,  # league default
+                float(features_dict.get("prob", 1.0 / odds if odds > 1 else 0.5)),
+                _is_home_enc(features_dict.get("prediction")),
+                _league_weight(features_dict.get("league")),
                 features_dict.get("home_rating", 1500) / 1500.0,
                 features_dict.get("away_rating", 1500) / 1500.0,
                 features_dict.get("xg_home", 1.5) / 2.0,
@@ -311,9 +345,10 @@ class MLLearner:
 
     def get_learning_stats(self):
         """Get comprehensive learning statistics."""
-        feedback = self.load_feedback_log(days=90)
+        # jen rozhodnuté sázky – open/void do win-rate nepatří
+        feedback = [r for r in self.load_feedback_log(days=90)
+                    if r.get("outcome") in ("won", "lost")]
 
-        # Calculate metrics
         won = sum(1 for r in feedback if r["outcome"] == "won")
         lost = sum(1 for r in feedback if r["outcome"] == "lost")
         total = won + lost

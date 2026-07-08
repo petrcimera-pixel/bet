@@ -18,34 +18,39 @@ class Backtester:
         self.equity_curves = {}
         self.league_performance = {}
 
-    def run_backtest(self, bets, initial_balance=1000, kelly_fraction=0.25):
-        """Run backtest on a list of bets."""
+    def run_backtest(self, bets, initial_balance=None):
+        """Run backtest on a list of bets (net-effect replay v pořadí vyhodnocení)."""
+        if initial_balance is None:
+            try:
+                initial_balance = bankroll.state().get("start_balance", 1000)
+            except Exception:
+                initial_balance = 1000
         balance = initial_balance
         equity = [balance]
         settled_bets = []
 
-        for bet in sorted(bets, key=lambda b: b.get('ts', 0)):
+        # Řadíme podle času VYHODNOCENÍ – bank se mění při settle, ne při vsazení
+        for bet in sorted(bets, key=lambda b: b.get('settled_ts') or b.get('ts', 0)):
             if bet['status'] in ('won', 'lost', 'void'):
                 settled_bets.append(bet)
                 if bet['status'] == 'won':
-                    payout = bet['stake'] * bet['odds']
-                    balance += payout - bet['stake']
-                elif bet['status'] == 'void':
-                    balance += bet['stake']
-                else:  # lost
+                    balance += bet['stake'] * (bet['odds'] - 1)
+                elif bet['status'] == 'lost':
                     balance -= bet['stake']
+                # void: čistý efekt 0 (vklad se vrací) – bank se nemění
 
                 equity.append(round(balance, 2))
 
-        # Calculate metrics
-        pnl = sum(b.get('pnl', 0) for b in settled_bets)
-        staked = sum(b['stake'] for b in settled_bets)
+        # Metriky – win rate a ztráty počítáme jen z rozhodnutých (bez void)
+        decided = [b for b in settled_bets if b['status'] in ('won', 'lost')]
+        pnl = sum(b.get('pnl', 0) for b in decided)
+        staked = sum(b['stake'] for b in decided)
         roi = (pnl / staked * 100) if staked > 0 else 0
-        win_count = sum(1 for b in settled_bets if b['status'] == 'won')
-        win_rate = (win_count / len(settled_bets) * 100) if settled_bets else 0
+        win_count = sum(1 for b in decided if b['status'] == 'won')
+        win_rate = (win_count / len(decided) * 100) if decided else 0
 
         # Sharpe ratio
-        pnls = [b.get('pnl', 0) for b in settled_bets]
+        pnls = [b.get('pnl', 0) for b in decided]
         if len(pnls) > 1:
             mean = sum(pnls) / len(pnls)
             variance = sum((x - mean) ** 2 for x in pnls) / len(pnls)
@@ -54,11 +59,13 @@ class Backtester:
         else:
             sharpe = 0
 
-        # Max drawdown
-        max_bal = max(equity) if equity else balance
+        # Max drawdown proti PRŮBĚŽNÉMU peaku (ne globálnímu maximu –
+        # to by u rostoucí křivky hlásilo fantomový propad)
+        peak = equity[0] if equity else balance
         max_dd = 0
         for eq in equity:
-            dd = (max_bal - eq) / max_bal * 100 if max_bal > 0 else 0
+            peak = max(peak, eq)
+            dd = (peak - eq) / peak * 100 if peak > 0 else 0
             max_dd = max(max_dd, dd)
 
         return {
@@ -67,9 +74,10 @@ class Backtester:
             "pnl": round(pnl, 2),
             "roi": round(roi, 2),
             "win_rate": round(win_rate, 1),
-            "total_bets": len(settled_bets),
+            "total_bets": len(decided),
+            "voids": len(settled_bets) - len(decided),
             "wins": win_count,
-            "losses": len(settled_bets) - win_count,
+            "losses": len(decided) - win_count,
             "sharpe_ratio": round(sharpe, 2),
             "max_drawdown": round(max_dd, 2),
         }
@@ -101,14 +109,6 @@ class Backtester:
         results = {}
         for period, period_bets in sorted(by_period.items()):
             results[period] = self.run_backtest(period_bets)
-
-        return results
-
-    def backtest_with_kelly_variants(self, bets, fractions=[0.1, 0.25, 0.5, 1.0]):
-        """Test different Kelly fractions."""
-        results = {}
-        for frac in fractions:
-            results[f"kelly_{frac}"] = self.run_backtest(bets, kelly_fraction=frac)
 
         return results
 

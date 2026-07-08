@@ -153,6 +153,23 @@
     "live": false
   },
   {
+    "id": "401886523",
+    "sport": "soccer",
+    "slug": "club.friendly",
+    "league": "Club Friendly",
+    "country": "World",
+    "home": "FC Admira Wacker Modling",
+    "away": "Fenerbahce",
+    "home_id": "11485",
+    "away_id": "436",
+    "date": "2026-07-08",
+    "time": "17:30",
+    "home_score": null,
+    "away_score": null,
+    "status": "Scheduled",
+    "live": false
+  },
+  {
     "id": "401869750",
     "sport": "soccer",
     "slug": "uefa.euro.u19",

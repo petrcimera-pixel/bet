@@ -166,8 +166,8 @@
     "time": "18:30",
     "home_score": 1,
     "away_score": 1,
-    "status": "82'",
-    "live": true
+    "status": "FT",
+    "live": false
   },
   {
     "id": "401877834",
@@ -183,8 +183,8 @@
     "time": "18:30",
     "home_score": 0,
     "away_score": 1,
-    "status": "82'",
-    "live": true
+    "status": "FT",
+    "live": false
   },
   {
     "id": "401877978",
@@ -200,8 +200,8 @@
     "time": "18:45",
     "home_score": 2,
     "away_score": 1,
-    "status": "67'",
-    "live": true
+    "status": "FT",
+    "live": false
   },
   {
     "id": "401877827",
@@ -215,10 +215,10 @@
     "away_id": "12367",
     "date": "2026-07-07",
     "time": "19:00",
-    "home_score": 0,
+    "home_score": 1,
     "away_score": 0,
-    "status": "49'",
-    "live": true
+    "status": "FT",
+    "live": false
   },
   {
     "id": "760508",
@@ -234,8 +234,8 @@
     "time": "20:00",
     "home_score": 0,
     "away_score": 0,
-    "status": "10'",
-    "live": true
+    "status": "FT-Pens",
+    "live": false
   },
   {
     "id": "401873987",
@@ -249,9 +249,9 @@
     "away_id": "18187",
     "date": "2026-07-07",
     "time": "23:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "home_score": 0,
+    "away_score": 1,
+    "status": "FT",
     "live": false
   },
   {
@@ -265,10 +265,10 @@
     "home_id": "22174",
     "away_id": "20890",
     "date": "2026-07-07",
-    "time": "23:00",
-    "home_score": null,
-    "away_score": null,
-    "status": "Scheduled",
+    "time": "23:30",
+    "home_score": 3,
+    "away_score": 2,
+    "status": "FT",
     "live": false
   }
 ]
