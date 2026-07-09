@@ -31,6 +31,7 @@ _DEFAULTS = {
         "kelly_fraction": 0.25,   # frakční Kelly pro agenta (nezávislé na Kelly frakci banku)
         "max_daily_stake_pct": 0.25,  # strop: max. podíl banku prosázený za 1 kalendářní den
         "only_sharp": True,       # sázet jen ostré tipy (favorit ≥55 % / value)
+        "only_real_odds": False,  # sázet JEN na zápasy s reálnými kurzy z The Odds API
     },
 }
 

@@ -18,7 +18,7 @@ from . import storage
 
 BASE = "https://api.the-odds-api.com/v4"
 TIMEOUT = 12
-CACHE_TTL = 600          # živé kurzy se kešují 10 minut
+CACHE_TTL = 3600         # živé kurzy se kešují 1 hodinu (free kvóta = 500 dotazů/měsíc)
 _CACHE = {}
 
 # ESPN sport → sport key(y) The Odds API (skupinové „upcoming" pokrývá vše)
@@ -63,6 +63,14 @@ def fetch_index(sport: str) -> dict:
     if cached and now - cached[0] < CACHE_TTL:
         return cached[1]
 
+    # Disková keš přežije restart serveru – bez ní každý restart pálil kvótu znovu
+    disk_name = f"odds_cache_{sport}.json"
+    if not storage.is_cache_stale(disk_name, ttl_hours=1):
+        disk = storage.load(disk_name, None)
+        if disk is not None:
+            _CACHE[sport] = (now, disk)
+            return disk
+
     group = _SPORT_GROUP.get(sport, "soccer")
     url = f"{BASE}/sports/{group}/odds"
     try:
@@ -72,6 +80,11 @@ def fetch_index(sport: str) -> dict:
         r.raise_for_status()
         events = r.json()
     except Exception:
+        # když dotaz selže (vyčerpaná kvóta…), použij i starší diskovou keš
+        disk = storage.load(disk_name, None)
+        if disk is not None:
+            _CACHE[sport] = (now, disk)
+            return disk
         return {}
 
     index = {}
@@ -98,6 +111,7 @@ def fetch_index(sport: str) -> dict:
         if books:
             index[_match_key(home, away)] = books
     _CACHE[sport] = (now, index)
+    storage.save(f"odds_cache_{sport}.json", index)
     return index
 
 

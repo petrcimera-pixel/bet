@@ -19,6 +19,7 @@ import datetime
 
 from . import bankroll
 from . import settings as app_settings
+from . import data_sources as _ds
 from .tips_db import SHARP_PROB
 
 # ML gate (volitelné) – naučený model může vetovat tipy, na kterých historicky prodělává
@@ -114,14 +115,25 @@ def run(predictions: list) -> dict:
     daily_cap = reference_balance * max_daily_pct
     remaining_budget = max(0.0, daily_cap - staked_today)
 
-    placed = skipped_dup = skipped_soft = skipped_cap = skipped_ml = 0
+    placed = skipped_dup = skipped_soft = skipped_cap = skipped_ml = skipped_sim = 0
     no_funds = 0
+    only_real = bool(cfg.get("only_real_odds", False))
 
-    for p in predictions:
+    # Priorita: zápasy s REÁLNÝMI kurzy první, pak velké ligy – denní rozpočet
+    # se utratí nejdřív za tipy proti skutečnému trhu, ne za malé kvalifikace
+    ordered = sorted(predictions, key=lambda p: (
+        0 if p.get("odds_source") == "real" else 1,
+        _ds.league_rank(p.get("league", "")),
+    ))
+
+    for p in ordered:
         if p.get("result") is not None:  # Skip jen skončené zápasy
             continue
         if p["id"] in already:
             skipped_dup += 1
+            continue
+        if only_real and p.get("odds_source") != "real":
+            skipped_sim += 1   # simulované kurzy – uživatel chce jen reálný trh
             continue
 
         bv = p.get("best_value", {})
@@ -168,7 +180,8 @@ def run(predictions: list) -> dict:
         try:
             bankroll.place_bet(p["id"], label, outcome, odds, prob, stake,
                                p["home"], p["away"], consensus_odds=cons, tag=TAG,
-                               match_date=p.get("date"), match_time=p.get("time"), league=p.get("league"))
+                               match_date=p.get("date"), match_time=p.get("time"), league=p.get("league"),
+                               odds_source=p.get("odds_source", "sim"))
             placed += 1
             already.add(p["id"])
             remaining_budget -= stake
@@ -183,6 +196,7 @@ def run(predictions: list) -> dict:
         "skipped_not_sharp": skipped_soft,
         "skipped_daily_cap": skipped_cap,
         "skipped_ml_veto": skipped_ml,
+        "skipped_simulated_odds": skipped_sim,
         "out_of_funds": no_funds > 0,
         "balance": bankroll.state()["balance"],
     }

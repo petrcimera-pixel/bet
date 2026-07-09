@@ -590,7 +590,7 @@ def api_agent_settings():
     d = request.get_json(force=True)
     app_settings.update_settings("agent", {
         k: v for k, v in d.items()
-        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp")
+        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp", "only_real_odds")
     })
     return jsonify(app_settings.get_settings()["agent"])
 

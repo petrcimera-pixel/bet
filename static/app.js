@@ -454,6 +454,9 @@ function initializeSettings() {
   const agentBetToday = document.getElementById('agentBetToday');
   if (agentBetToday) agentBetToday.checked = agent.bet_today || false;
 
+  const agentOnlyRealOdds = document.getElementById('agentOnlyRealOdds');
+  if (agentOnlyRealOdds) agentOnlyRealOdds.checked = agent.only_real_odds || false;
+
   const stakeMode = document.getElementById('stakeMode');
   if (stakeMode) stakeMode.value = agent.stake_mode || 'kelly';
 
@@ -510,6 +513,11 @@ function setupEventListeners() {
       // Auto-save
       saveSettingsQuietly();
     });
+  }
+
+  const agentOnlyRealOddsToggle = document.getElementById('agentOnlyRealOdds');
+  if (agentOnlyRealOddsToggle) {
+    agentOnlyRealOddsToggle.addEventListener('change', () => saveSettingsQuietly());
   }
 
   if (stakeModeSelect) {
@@ -597,6 +605,7 @@ async function saveSettingsQuietly() {
   const data = {
     enabled: document.getElementById('agentEnabled')?.checked || false,
     bet_today: document.getElementById('agentBetToday')?.checked || false,
+    only_real_odds: document.getElementById('agentOnlyRealOdds')?.checked || false,
     stake_mode: document.getElementById('stakeMode')?.value || saved.stake_mode || 'kelly',
     stake: parseFloat(document.getElementById('flatStake')?.value) || saved.stake || 10,
     kelly_fraction: saved.kelly_fraction ?? 0.25,
