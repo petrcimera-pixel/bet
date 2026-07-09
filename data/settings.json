@@ -20,6 +20,7 @@
     "stake_mode": "flat",
     "kelly_fraction": 0.25,
     "max_daily_stake_pct": 0.25,
-    "bet_today": true
+    "bet_today": true,
+    "only_real_odds": false
   }
 }

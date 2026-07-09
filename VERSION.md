@@ -1,6 +1,28 @@
 # 📦 KurzAnalytik Pro – Version History
 
-## v1.1 - 2026-07-08 [CURRENT - LIVE]
+## v1.2 - 2026-07-09 [CURRENT - LIVE]
+**Status**: 🟢 PRODUCTION — reálné kurzy: poctivý režim + šetření kvóty
+
+### Novinky:
+- ✅ **Nastavení „Jen reálné kurzy sázkovek"** – agent vsadí pouze na zápasy,
+  kde jsou k dispozici skutečné kurzy z The Odds API (jediný poctivý test
+  ziskovosti proti reálnému trhu). Výchozí: vypnuto.
+- ✅ **Priorita reálných kurzů a velkých lig** – denní rozpočet agenta se
+  utrácí nejdřív za zápasy s reálnými kurzy a top ligy, až pak za malé
+  kvalifikace se simulovanými kurzy.
+- ✅ **Šetření kvóty The Odds API** – keš kurzů prodloužena z 10 min na 1 h
+  a přidána disková keš, která přežije restart serveru (dřív každý restart
+  pálil kvótu znovu). Při vyčerpané kvótě se použije poslední známá keš.
+- ✅ Každá sázka nově ukládá `odds_source` („real" / „sim") – v analytice
+  půjde rozlišit výkon proti reálnému trhu od simulace.
+
+### Poznámka ke kvótě:
+Free tarif The Odds API = 500 dotazů/měsíc; aktuální klíč je vyčerpaný,
+reset začátkem měsíce. Do té doby jedou kurzy simulované modelem.
+
+---
+
+## v1.1 - 2026-07-08
 **Status**: 🟢 PRODUCTION — kompletní audit + oprava ~20 chyb
 
 ### Opravené chyby (kompletní multi-agent audit):

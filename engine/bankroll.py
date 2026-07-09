@@ -77,7 +77,8 @@ def _clv(odds, consensus_odds):
 
 
 def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
-              consensus_odds=None, tag=None, match_date=None, match_time=None, league=None):
+              consensus_odds=None, tag=None, match_date=None, match_time=None, league=None,
+              odds_source=None):
     st = state()
     stake = round(float(stake), 2)
     if stake <= 0 or stake > st["balance"]:
@@ -99,6 +100,7 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
         "pnl": 0.0,
         "clv": _clv(odds, consensus_odds),
         "tag": tag,                    # "bet-agent" = sázka bet agenta
+        "odds_source": odds_source or "sim",   # "real" = kurzy z The Odds API
     }
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)

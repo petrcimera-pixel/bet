@@ -1,5 +1,5 @@
 {
-  "ts": 1782938081,
+  "ts": 1783572201,
   "slugs": [
     [
       "fifa.world",
@@ -606,6 +606,10 @@
       "Scotland"
     ],
     [
+      "sco.tennents_qual",
+      "Scotland"
+    ],
+    [
       "ned.playoff.relegation",
       "Netherlands"
     ],
@@ -734,10 +738,6 @@
       "Chile"
     ],
     [
-      "chi.2",
-      "Chile"
-    ],
-    [
       "uru.1",
       "Uruguay"
     ],
@@ -820,6 +820,10 @@
     [
       "gua.1",
       "Guatemala"
+    ],
+    [
+      "afc.cup_qual",
+      "Asia"
     ],
     [
       "slv.1",

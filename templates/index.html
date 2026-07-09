@@ -15,7 +15,7 @@
         <span class="logo-icon">⚽</span>
         <div style="display: flex; flex-direction: column; gap: 2px;">
           <span class="logo-text">KurzAnalytik</span>
-          <span style="font-size: 11px; color: var(--acc); font-weight: 500; letter-spacing: 0.5px;">v1.1</span>
+          <span style="font-size: 11px; color: var(--acc); font-weight: 500; letter-spacing: 0.5px;">v1.2</span>
         </div>
       </div>
 
@@ -715,6 +715,14 @@
               <label for="agentBetToday">Sázet i na dnešní zápasy</label>
               <label class="toggle">
                 <input type="checkbox" id="agentBetToday" class="toggle-input">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-group">
+              <label for="agentOnlyRealOdds" title="Agent vsadí jen na zápasy, kde jsou k dispozici skutečné kurzy sázkovek (The Odds API). Jediný poctivý test ziskovosti proti reálnému trhu.">Jen reálné kurzy sázkovek</label>
+              <label class="toggle">
+                <input type="checkbox" id="agentOnlyRealOdds" class="toggle-input">
                 <span class="toggle-slider"></span>
               </label>
             </div>
