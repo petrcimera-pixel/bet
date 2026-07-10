@@ -180,6 +180,7 @@ def api_matches():
             "country": p["country"],
             "date": p.get("date"),
             "time": p.get("time"),
+            "status": p.get("status", ""),
             "probs": p.get("probs", {}),
             "pick": p.get("pick"),
             "result": p.get("result"),

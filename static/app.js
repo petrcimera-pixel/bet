@@ -1257,30 +1257,83 @@ function renderHourlyTable(hourlyData) {
 // MATCHES PAGE
 // ============================================================================
 
-function initMatchesPage() {
-  const dateInput = document.getElementById('matchesDate');
-  if (!dateInput) return;
-  if (!dateInput.value) {
-    dateInput.value = new Date().toISOString().slice(0, 10);
+const MATCHES_STATE = {
+  selectedDate: new Date().toISOString().slice(0, 10),
+  sport: 'soccer',
+  stripOffset: 0,
+};
+
+function _fmtDate(d) { return d.toISOString().slice(0, 10); }
+
+function _dayLabel(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  const today = new Date(); today.setHours(12,0,0,0);
+  const diff = Math.round((d - today) / 86400000);
+  if (diff === 0) return 'Dnes';
+  if (diff === 1) return 'Zítra';
+  if (diff === -1) return 'Včera';
+  const days = ['Ne','Po','Út','St','Čt','Pá','So'];
+  return days[d.getDay()] + ' ' + d.getDate() + '.' + (d.getMonth()+1) + '.';
+}
+
+function buildDayStrip() {
+  const container = document.getElementById('dayStripDays');
+  if (!container) return;
+  const base = new Date(MATCHES_STATE.selectedDate + 'T12:00:00');
+  const offset = MATCHES_STATE.stripOffset;
+  let html = '';
+  for (let i = -3 + offset; i <= 3 + offset; i++) {
+    const d = new Date(base);
+    d.setDate(d.getDate() + i);
+    const ds = _fmtDate(d);
+    const isToday = ds === new Date().toISOString().slice(0, 10);
+    const isSelected = ds === MATCHES_STATE.selectedDate;
+    html += `<button class="day-btn${isSelected ? ' active' : ''}${isToday ? ' today' : ''}" data-date="${ds}">
+      <span class="day-name">${_dayLabel(ds)}</span>
+      <span class="day-num">${d.getDate()}.${d.getMonth()+1}.</span>
+    </button>`;
   }
+  container.innerHTML = html;
+  container.querySelectorAll('.day-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      MATCHES_STATE.selectedDate = btn.dataset.date;
+      MATCHES_STATE.stripOffset = 0;
+      buildDayStrip();
+      loadMatches();
+    });
+  });
+}
+
+function initMatchesPage() {
+  if (!document.getElementById('dayStripDays')) return;
+
+  buildDayStrip();
 
   document.getElementById('matchesPrevDay').addEventListener('click', () => {
-    const d = new Date(dateInput.value);
+    const d = new Date(MATCHES_STATE.selectedDate + 'T12:00:00');
     d.setDate(d.getDate() - 1);
-    dateInput.value = d.toISOString().slice(0, 10);
+    MATCHES_STATE.selectedDate = _fmtDate(d);
+    buildDayStrip();
     loadMatches();
   });
 
   document.getElementById('matchesNextDay').addEventListener('click', () => {
-    const d = new Date(dateInput.value);
+    const d = new Date(MATCHES_STATE.selectedDate + 'T12:00:00');
     d.setDate(d.getDate() + 1);
-    dateInput.value = d.toISOString().slice(0, 10);
+    MATCHES_STATE.selectedDate = _fmtDate(d);
+    buildDayStrip();
     loadMatches();
   });
 
-  dateInput.addEventListener('change', () => loadMatches());
-  document.getElementById('matchesSport').addEventListener('change', () => loadMatches());
-  document.getElementById('matchesDays').addEventListener('change', () => loadMatches());
+  document.querySelectorAll('.sport-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sport-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      MATCHES_STATE.sport = btn.dataset.sport;
+      loadMatches();
+    });
+  });
+
   document.getElementById('matchesRefreshBtn').addEventListener('click', () => loadMatches(true));
 }
 
@@ -1289,15 +1342,11 @@ async function loadMatches(refresh = false) {
   const summary = document.getElementById('matchesSummary');
   if (!container) return;
 
-  const date = document.getElementById('matchesDate').value || new Date().toISOString().slice(0, 10);
-  const sport = document.getElementById('matchesSport').value;
-  const days = document.getElementById('matchesDays').value;
-
   container.innerHTML = '<div class="loading">Načítání zápasů...</div>';
   summary.innerHTML = '';
 
   try {
-    const url = `/api/matches?date=${date}&sport=${sport}&days=${days}${refresh ? '&refresh=1' : ''}`;
+    const url = `/api/matches?date=${MATCHES_STATE.selectedDate}&sport=${MATCHES_STATE.sport}&days=1${refresh ? '&refresh=1' : ''}`;
     const res = await fetch(url, { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
@@ -1312,44 +1361,30 @@ function renderMatchesSummary(data, el) {
   const tip = data.tip;
   el.innerHTML = `
     <div class="matches-summary-bar">
-      <span><strong>${data.total_matches}</strong> zápasů</span>
-      <span><strong>${data.total_leagues}</strong> lig</span>
-      <span><strong>${data.value_count || 0}</strong> value tipů</span>
-      ${tip ? `<span class="tip-highlight">Tip dne: <strong>${tip.home} vs ${tip.away}</strong> — ${tip.pick} @ ${(tip.best_value.odds || 0).toFixed(2)}</span>` : ''}
+      <div class="summary-stat"><span class="summary-num">${data.total_matches}</span> zápasů</div>
+      <div class="summary-stat"><span class="summary-num">${data.total_leagues}</span> lig</div>
+      <div class="summary-stat accent"><span class="summary-num">${data.value_count || 0}</span> value</div>
+      ${tip ? `<div class="summary-tip">💡 <strong>${tip.home}</strong> vs <strong>${tip.away}</strong> — <span class="pick-badge pick-${tip.pick}">${tip.pick === 'home' ? '1' : tip.pick === 'draw' ? 'X' : '2'}</span> @ ${(tip.best_value.odds || 0).toFixed(2)}</div>` : ''}
     </div>
   `;
 }
 
 function renderMatchesLeagues(leagues, container) {
   if (!leagues.length) {
-    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den</div>';
+    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den a sport</div>';
     return;
   }
 
   container.innerHTML = leagues.map(lg => `
     <div class="match-league">
       <div class="match-league-header" onclick="this.parentElement.classList.toggle('collapsed')">
-        <span class="league-flag">${lg.flag || ''}</span>
+        <span class="league-flag">${lg.flag || '🏳️'}</span>
         <span class="league-name">${lg.league}</span>
         <span class="league-count">${lg.matches.length}</span>
+        <span class="league-chevron">▾</span>
       </div>
       <div class="match-league-body">
-        <table class="matches-table">
-          <thead>
-            <tr>
-              <th>Čas</th>
-              <th>Domácí</th>
-              <th>Hosté</th>
-              <th>Skóre</th>
-              <th>Tip</th>
-              <th>Pravděpodobnost</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${lg.matches.map(m => renderMatchRow(m)).join('')}
-          </tbody>
-        </table>
+        ${lg.matches.map(m => renderMatchRow(m)).join('')}
       </div>
     </div>
   `).join('');
@@ -1358,22 +1393,41 @@ function renderMatchesLeagues(leagues, container) {
 function renderMatchRow(m) {
   const probs = m.probs || {};
   const bv = m.best_value || {};
-  const score = m.result ? `${m.result.home} : ${m.result.away}` : (m.live ? 'LIVE' : '—');
-  const scoreClass = m.live ? 'match-live' : '';
-  const pickLabel = m.pick === 'home' ? '1' : m.pick === 'draw' ? 'X' : m.pick === 'away' ? '2' : '—';
-  const probPct = probs[m.pick] ? (probs[m.pick] * 100).toFixed(0) + '%' : '—';
   const isValue = bv.is_value;
-  const valueText = isValue ? `${(bv.odds || 0).toFixed(2)} (EV ${((bv.ev || 0) * 100).toFixed(0)}%)` : '—';
+  const pickLabel = m.pick === 'home' ? '1' : m.pick === 'draw' ? 'X' : m.pick === 'away' ? '2' : '';
+  const probPct = probs[m.pick] ? (probs[m.pick] * 100).toFixed(0) + '%' : '';
+
+  let statusHtml;
+  if (m.live) {
+    statusHtml = `<span class="status-live">${m.status || 'LIVE'}</span>`;
+  } else if (m.result) {
+    statusHtml = `<span class="status-ft">Ukončen</span>`;
+  } else {
+    statusHtml = `<span class="status-time">${m.time || '—'}</span>`;
+  }
+
+  let scoreHtml;
+  if (m.result) {
+    scoreHtml = `<span class="score final">${m.result.home} – ${m.result.away}</span>`;
+  } else if (m.live) {
+    scoreHtml = `<span class="score live">${m.result ? m.result.home + ' – ' + m.result.away : '— –  —'}</span>`;
+  } else {
+    scoreHtml = `<span class="score upcoming">–</span>`;
+  }
 
   return `
-    <tr class="${isValue ? 'match-value' : ''}">
-      <td class="match-time">${m.time || '—'}</td>
-      <td class="match-team">${m.home}</td>
-      <td class="match-team">${m.away}</td>
-      <td class="match-score ${scoreClass}">${score}</td>
-      <td class="match-pick"><span class="pick-badge pick-${m.pick || 'none'}">${pickLabel}</span></td>
-      <td class="match-prob">${probPct}</td>
-      <td class="match-value-cell ${isValue ? 'has-value' : ''}">${valueText}</td>
-    </tr>
+    <div class="match-row${isValue ? ' value' : ''}${m.live ? ' live' : ''}">
+      <div class="mr-status">${statusHtml}</div>
+      <div class="mr-teams">
+        <span class="team home">${m.home}</span>
+        <span class="team away">${m.away}</span>
+      </div>
+      <div class="mr-score">${scoreHtml}</div>
+      <div class="mr-prediction">
+        ${pickLabel ? `<span class="pick-badge pick-${m.pick}">${pickLabel}</span>` : ''}
+        ${probPct ? `<span class="pred-prob">${probPct}</span>` : ''}
+      </div>
+      <div class="mr-value">${isValue ? `<span class="value-tag">${(bv.odds || 0).toFixed(2)} <small>EV ${((bv.ev || 0) * 100).toFixed(0)}%</small></span>` : ''}</div>
+    </div>
   `;
 }

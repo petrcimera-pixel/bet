@@ -173,35 +173,31 @@
         <div class="page-header">
           <div>
             <h1>Zápasy</h1>
-            <p class="page-desc">Denní přehled zápasů z ESPN</p>
+            <p class="page-desc">Přehled zápasů a predikcí</p>
           </div>
+          <button class="btn btn-primary" id="matchesRefreshBtn">⟳ Obnovit</button>
         </div>
 
-        <div class="matches-toolbar">
-          <div class="matches-filters">
-            <button class="btn btn-sm" id="matchesPrevDay">&larr;</button>
-            <input type="date" id="matchesDate" class="input-date">
-            <button class="btn btn-sm" id="matchesNextDay">&rarr;</button>
-            <select id="matchesSport" class="input-select">
-              <option value="soccer">Fotbal</option>
-              <option value="basketball">Basketbal</option>
-              <option value="hockey">Hokej</option>
-              <option value="baseball">Baseball</option>
-              <option value="football">Am. fotbal</option>
-            </select>
-            <select id="matchesDays" class="input-select">
-              <option value="1">1 den</option>
-              <option value="2">2 dny</option>
-              <option value="3">3 dny</option>
-              <option value="7">7 dní</option>
-            </select>
-          </div>
-          <div class="matches-actions">
-            <button class="btn btn-primary" id="matchesRefreshBtn">Obnovit z ESPN</button>
-          </div>
+        <!-- Day strip navigation (Livesport style) -->
+        <div class="day-strip">
+          <button class="day-strip-arrow" id="matchesPrevDay">‹</button>
+          <div class="day-strip-days" id="dayStripDays"></div>
+          <button class="day-strip-arrow" id="matchesNextDay">›</button>
         </div>
 
+        <!-- Sport tabs -->
+        <div class="sport-tabs">
+          <button class="sport-tab active" data-sport="soccer">⚽ Fotbal</button>
+          <button class="sport-tab" data-sport="hockey">🏒 Hokej</button>
+          <button class="sport-tab" data-sport="basketball">🏀 Basketbal</button>
+          <button class="sport-tab" data-sport="baseball">⚾ Baseball</button>
+          <button class="sport-tab" data-sport="football">🏈 Am. fotbal</button>
+        </div>
+
+        <!-- Summary bar -->
         <div class="matches-summary" id="matchesSummary"></div>
+
+        <!-- Matches list -->
         <div id="matchesContainer" class="matches-leagues">
           <div class="loading">Načítání zápasů...</div>
         </div>
