@@ -54,3 +54,18 @@ def is_cache_stale(name: str, ttl_hours: int = 12) -> bool:
     import time
     mtime = get_cache_mtime(name)
     return time.time() - mtime > ttl_hours * 3600
+
+
+def cleanup_old_caches(max_age_days: int = 14) -> int:
+    """Smaže cache soubory starší než max_age_days. Volá se při startu."""
+    import time
+    cutoff = time.time() - max_age_days * 86400
+    n = 0
+    for f in glob.glob(os.path.join(_DIR, "cache_*.json")):
+        try:
+            if os.path.getmtime(f) < cutoff:
+                os.remove(f)
+                n += 1
+        except OSError:
+            pass
+    return n

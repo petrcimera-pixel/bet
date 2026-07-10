@@ -51,7 +51,7 @@ class ModelExplainer:
 
         # Map feature indices to names
         feature_names = [
-            "odds", "log_odds", "stake_norm", "is_home",
+            "odds", "log_odds", "model_prob", "is_home",
             "league_weight", "elo_home_norm", "elo_away_norm",
             "xg_home_norm", "xg_away_norm", "possession_norm",
             "form_home_norm", "form_away_norm"
@@ -62,7 +62,7 @@ class ModelExplainer:
             feature_list = [
                 features.get("odds", 1.5),
                 np.log(features.get("odds", 1.5)),
-                features.get("stake", 100) / 100.0,
+                float(features.get("prob", 0.5)),
                 1.0 if features.get("prediction") == "home" else 0.0,
                 1.0 if features.get("league") == "Premier League" else 0.5,
                 features.get("elo_home", 1500) / 1500.0,

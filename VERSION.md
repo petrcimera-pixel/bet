@@ -1,7 +1,22 @@
 # 📦 KurzAnalytik Pro – Version History
 
-## v1.2 - 2026-07-09 [CURRENT - LIVE]
-**Status**: 🟢 PRODUCTION — reálné kurzy: poctivý režim + šetření kvóty
+## v1.3 - 2026-07-09 [CURRENT - LIVE]
+**Status**: 🟢 PRODUCTION — plná automatizace agenta + ML retrainu
+
+### Novinky:
+- ✅ **Auto-run agenta podle rozvrhu** – agent se automaticky spouští v nastavených
+  hodinách (výchozí 8:00 a 16:00). Vsadí na dostupné zápasy bez nutnosti
+  klikat "Spustit agenta teď". Zapíná se v Nastavení → Automatizace.
+- ✅ **Auto-retrain ML modelu** – po každých X nově vyhodnocených sázkách
+  (výchozí 10) se ML model automaticky přetrénuje. Model se tak učí
+  průběžně bez manuálního klikání "Přetrénovat Model".
+- ✅ Nová sekce "Automatizace" v Nastavení s 4 ovládacími prvky:
+  toggle auto-run + hodiny spuštění, toggle auto-retrain + práh sázek.
+
+---
+
+## v1.2 - 2026-07-09
+**Status**: reálné kurzy: poctivý režim + šetření kvóty
 
 ### Novinky:
 - ✅ **Nastavení „Jen reálné kurzy sázkovek"** – agent vsadí pouze na zápasy,

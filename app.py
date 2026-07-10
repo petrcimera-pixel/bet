@@ -37,6 +37,7 @@ _ensure()
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 from functools import wraps
 
+from engine import storage
 from engine import data_sources as ds
 from engine import prediction as pred
 from engine import bankroll
@@ -87,8 +88,6 @@ def login_required(f):
 def check_login():
     # Allow login and logout without auth
     if request.path in ["/login", "/logout"]:
-        return
-    if request.method == "POST" and request.path == "/login":
         return
 
     # Check if user is authenticated
@@ -380,8 +379,15 @@ def api_odds_key():
 
 @app.route("/api/kelly")
 def api_kelly():
-    prob = float(request.args.get("prob"))
-    odds = float(request.args.get("odds"))
+    prob_s = request.args.get("prob")
+    odds_s = request.args.get("odds")
+    if not prob_s or not odds_s:
+        return jsonify({"error": "Missing prob or odds parameter"}), 400
+    try:
+        prob = float(prob_s)
+        odds = float(odds_s)
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid prob or odds value"}), 400
     st = bankroll.state()
     stake = bankroll.kelly_stake(prob, odds, st["balance"], st["kelly_fraction"])
     return jsonify({"stake": stake, "balance": st["balance"],
@@ -590,7 +596,7 @@ def api_agent_settings():
     d = request.get_json(force=True)
     app_settings.update_settings("agent", {
         k: v for k, v in d.items()
-        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp", "only_real_odds")
+        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp", "only_real_odds", "auto_run", "auto_run_hours", "auto_retrain", "auto_retrain_threshold")
     })
     return jsonify(app_settings.get_settings()["agent"])
 
@@ -752,6 +758,7 @@ def _settle_in_background():
             n_tips = tips_db.settle_tips(results, corner_results)
             n_bets = bankroll.auto_settle(results)
             _PRED_CACHE.clear()
+            _maybe_auto_retrain(n_tips + n_bets)
 
             with _settle_lock:
                 _settle_status["settled_so_far"] += n_tips + n_bets
@@ -759,8 +766,12 @@ def _settle_in_background():
                 if not more_pending:
                     _settle_status["in_progress"] = False
 
-            # Pauza mezi batches (snížení zatížení ESPN API)
-            time.sleep(3)
+            if n_tips + n_bets == 0:
+                time.sleep(300)
+            elif more_pending:
+                time.sleep(3)
+            else:
+                time.sleep(60)
 
         except Exception as e:
             print(f"[settle_bg] Chyba: {e}")
@@ -769,6 +780,80 @@ def _settle_in_background():
             with _settle_lock:
                 _settle_status["in_progress"] = False
             time.sleep(10)  # více čekat při chybě
+
+
+# ============================================================================
+# AUTO-RUN AGENT (pozadí)
+# ============================================================================
+
+_auto_agent_last_run_date = {}  # {hour: "YYYY-MM-DD"} – aby se agent nespouštěl 2× za hodinu
+
+def _auto_agent_loop():
+    """Automaticky spouští agenta v nastavených hodinách (např. 8:00, 16:00).
+    Kontroluje každých 60 s, zda nastal čas pro běh."""
+    import time
+    import datetime as _dt
+
+    while True:
+        try:
+            cfg = app_settings.get_settings()["agent"]
+            if cfg.get("enabled") and cfg.get("auto_run"):
+                now = _dt.datetime.now()
+                today_str = now.strftime("%Y-%m-%d")
+                hours_raw = str(cfg.get("auto_run_hours", "8,16"))
+                try:
+                    run_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
+                except ValueError:
+                    run_hours = [8, 16]
+
+                if now.hour in run_hours and _auto_agent_last_run_date.get(now.hour) != today_str:
+                    print(f"[auto-agent] Automatický běh agenta v {now.hour}:00")
+                    _auto_agent_last_run_date[now.hour] = today_str
+                    try:
+                        start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
+                        days = 2 if cfg.get("bet_today") else 1
+                        predictions = _predictions_for(start_date, days=days)
+                        result = agent.run(predictions)
+                        print(f"[auto-agent] Hotovo: {result.get('placed', 0)} sázek, balance={result.get('balance')}")
+                    except Exception as e:
+                        print(f"[auto-agent] Chyba při běhu agenta: {e}")
+        except Exception as e:
+            print(f"[auto-agent] Chyba: {e}")
+
+        time.sleep(60)
+
+
+# ============================================================================
+# AUTO-RETRAIN ML (pozadí – integrováno do settle smyčky)
+# ============================================================================
+
+_retrain_settled_count = 0  # kolik sázek se settled od posledního retrainu
+
+def _maybe_auto_retrain(newly_settled: int):
+    """Zavolá se po každém settle batchi. Pokud se nasbíralo dost nových
+    settled sázek, automaticky přetrénuje ML model."""
+    global _retrain_settled_count
+    if newly_settled <= 0:
+        return
+    _retrain_settled_count += newly_settled
+
+    cfg = app_settings.get_settings()["agent"]
+    if not cfg.get("auto_retrain", True):
+        return
+
+    threshold = int(cfg.get("auto_retrain_threshold", 10))
+    if _retrain_settled_count >= threshold:
+        print(f"[auto-retrain] {_retrain_settled_count} nových settled sázek → spouštím retrain ML modelu")
+        try:
+            from engine import ml_learner
+            success = ml_learner.train_model(days=30)
+            if success:
+                print("[auto-retrain] Model úspěšně přetrénován")
+            else:
+                print("[auto-retrain] Nedostatek dat pro trénink")
+        except Exception as e:
+            print(f"[auto-retrain] Chyba: {e}")
+        _retrain_settled_count = 0
 
 
 # ============================================================================
@@ -1133,9 +1218,13 @@ def api_bankroll_roi_odds():
 
 
 if __name__ == "__main__":
+    n_cleaned = storage.cleanup_old_caches(max_age_days=14)
+    if n_cleaned:
+        print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
     print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
     if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
         threading.Timer(1.2, _open_browser).start()
     threading.Thread(target=_prewarm, daemon=True).start()
     threading.Thread(target=_settle_in_background, daemon=True).start()
+    threading.Thread(target=_auto_agent_loop, daemon=True).start()
     app.run(host=_HOST, port=_PORT, debug=False, threaded=True)

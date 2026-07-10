@@ -197,8 +197,10 @@ def eval_outcome(outcome, hs, as_):
 
 def auto_settle(results: dict) -> int:
     """results: {match_id: {'home':hs,'away':as_}}. Vyhodnotí otevřené single tipy."""
-    n = 0
-    for bet in list(state()["bets"]):
+    if not results:
+        return 0
+    to_settle = []
+    for bet in state()["bets"]:
         if bet["status"] != "open" or bet.get("outcome") == "acca":
             continue
         res = results.get(bet["match_id"])
@@ -206,9 +208,10 @@ def auto_settle(results: dict) -> int:
             continue
         r = eval_outcome(bet["outcome"], res["home"], res["away"])
         if r:
-            settle_bet(bet["id"], r)
-            n += 1
-    return n
+            to_settle.append((bet["id"], r))
+    for bet_id, result in to_settle:
+        settle_bet(bet_id, result)
+    return len(to_settle)
 
 
 def settle_bet(bet_id, result):
@@ -252,11 +255,12 @@ def settle_bet(bet_id, result):
     raise ValueError("Tip nenalezen nebo již vyhodnocen.")
 
 
-def equity_curve() -> list:
+def equity_curve(st=None) -> list:
     """Vývoj banku v čase: počáteční stav + kumulativní zisk vyhodnocených tipů,
     seřazeno podle času VYHODNOCENÍ (ne vsazení) – hromadné dohnání starších
     výsledků (settle přes více dní najednou) by jinak zamíchalo tvar křivky."""
-    st = state()
+    if st is None:
+        st = state()
     settled = sorted([b for b in st["bets"] if b["status"] in ("won", "lost", "void")],
                      key=lambda b: b.get("settled_ts") or b["ts"])
     bal = st["start_balance"]
@@ -303,7 +307,7 @@ def stats() -> dict:
         "best_win": round(best, 2),
         "worst_loss": round(worst, 2),
         "avg_clv": avg_clv,
-        "equity": equity_curve(),
+        "equity": equity_curve(st),
         # Nové metriky
         "unit_count": unit_count,
         "sharpe_ratio": round(sharpe, 2),

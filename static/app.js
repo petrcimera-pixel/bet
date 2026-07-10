@@ -40,8 +40,32 @@ function setupNavigation() {
     btn.addEventListener('click', () => {
       const page = btn.dataset.page;
       showPage(page);
+      closeMobileMenu();
     });
   });
+
+  const hamburger = document.getElementById('hamburgerBtn');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (hamburger) {
+    hamburger.addEventListener('click', () => {
+      const sidebar = document.querySelector('.sidebar');
+      const isOpen = sidebar.classList.toggle('open');
+      hamburger.classList.toggle('active', isOpen);
+      overlay.classList.toggle('active', isOpen);
+    });
+  }
+  if (overlay) {
+    overlay.addEventListener('click', closeMobileMenu);
+  }
+}
+
+function closeMobileMenu() {
+  const sidebar = document.querySelector('.sidebar');
+  const hamburger = document.getElementById('hamburgerBtn');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebar) sidebar.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
 }
 
 function showPage(pageName) {
@@ -457,6 +481,18 @@ function initializeSettings() {
   const agentOnlyRealOdds = document.getElementById('agentOnlyRealOdds');
   if (agentOnlyRealOdds) agentOnlyRealOdds.checked = agent.only_real_odds || false;
 
+  const agentAutoRun = document.getElementById('agentAutoRun');
+  if (agentAutoRun) agentAutoRun.checked = agent.auto_run || false;
+
+  const agentAutoRunHours = document.getElementById('agentAutoRunHours');
+  if (agentAutoRunHours) agentAutoRunHours.value = agent.auto_run_hours || '8,16';
+
+  const agentAutoRetrain = document.getElementById('agentAutoRetrain');
+  if (agentAutoRetrain) agentAutoRetrain.checked = agent.auto_retrain !== false;
+
+  const agentAutoRetrainThreshold = document.getElementById('agentAutoRetrainThreshold');
+  if (agentAutoRetrainThreshold) agentAutoRetrainThreshold.value = agent.auto_retrain_threshold || 10;
+
   const stakeMode = document.getElementById('stakeMode');
   if (stakeMode) stakeMode.value = agent.stake_mode || 'kelly';
 
@@ -518,6 +554,26 @@ function setupEventListeners() {
   const agentOnlyRealOddsToggle = document.getElementById('agentOnlyRealOdds');
   if (agentOnlyRealOddsToggle) {
     agentOnlyRealOddsToggle.addEventListener('change', () => saveSettingsQuietly());
+  }
+
+  const agentAutoRunToggle = document.getElementById('agentAutoRun');
+  if (agentAutoRunToggle) {
+    agentAutoRunToggle.addEventListener('change', () => saveSettingsQuietly());
+  }
+
+  const agentAutoRunHoursInput = document.getElementById('agentAutoRunHours');
+  if (agentAutoRunHoursInput) {
+    agentAutoRunHoursInput.addEventListener('change', () => saveSettingsQuietly());
+  }
+
+  const agentAutoRetrainToggle = document.getElementById('agentAutoRetrain');
+  if (agentAutoRetrainToggle) {
+    agentAutoRetrainToggle.addEventListener('change', () => saveSettingsQuietly());
+  }
+
+  const agentAutoRetrainThresholdInput = document.getElementById('agentAutoRetrainThreshold');
+  if (agentAutoRetrainThresholdInput) {
+    agentAutoRetrainThresholdInput.addEventListener('change', () => saveSettingsQuietly());
   }
 
   if (stakeModeSelect) {
@@ -606,6 +662,10 @@ async function saveSettingsQuietly() {
     enabled: document.getElementById('agentEnabled')?.checked || false,
     bet_today: document.getElementById('agentBetToday')?.checked || false,
     only_real_odds: document.getElementById('agentOnlyRealOdds')?.checked || false,
+    auto_run: document.getElementById('agentAutoRun')?.checked || false,
+    auto_run_hours: document.getElementById('agentAutoRunHours')?.value || saved.auto_run_hours || '8,16',
+    auto_retrain: document.getElementById('agentAutoRetrain')?.checked !== false,
+    auto_retrain_threshold: parseInt(document.getElementById('agentAutoRetrainThreshold')?.value) || saved.auto_retrain_threshold || 10,
     stake_mode: document.getElementById('stakeMode')?.value || saved.stake_mode || 'kelly',
     stake: parseFloat(document.getElementById('flatStake')?.value) || saved.stake || 10,
     kelly_fraction: saved.kelly_fraction ?? 0.25,

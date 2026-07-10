@@ -21,6 +21,10 @@
     "kelly_fraction": 0.25,
     "max_daily_stake_pct": 0.25,
     "bet_today": true,
-    "only_real_odds": false
+    "only_real_odds": true,
+    "auto_run": true,
+    "auto_run_hours": "8,16",
+    "auto_retrain": true,
+    "auto_retrain_threshold": 10
   }
 }

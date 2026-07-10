@@ -32,6 +32,10 @@ _DEFAULTS = {
         "max_daily_stake_pct": 0.25,  # strop: max. podíl banku prosázený za 1 kalendářní den
         "only_sharp": True,       # sázet jen ostré tipy (favorit ≥55 % / value)
         "only_real_odds": False,  # sázet JEN na zápasy s reálnými kurzy z The Odds API
+        "auto_run": False,        # automaticky spouštět agenta podle rozvrhu
+        "auto_run_hours": "8,16", # hodiny spuštění (čárkou oddělené, 24h formát)
+        "auto_retrain": True,     # automaticky přetrénovat ML po X nových settled sázkách
+        "auto_retrain_threshold": 10,  # kolik nových settled sázek spustí retrain
     },
 }
 

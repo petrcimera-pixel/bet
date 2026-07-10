@@ -90,7 +90,7 @@ class MLLearner:
         try:
             with open(FEEDBACK_FILE, "a", encoding="utf-8") as f:
                 f.write(json.dumps(record, ensure_ascii=False) + "\n")
-        except:
+        except Exception:
             pass
 
         self.feedback_log.append(record)
@@ -207,7 +207,7 @@ class MLLearner:
                 use_label_encoder=False,
                 eval_metric='logloss'
             )
-        except:
+        except Exception:
             # Fallback to Gradient Boosting
             self.model = GradientBoostingClassifier(
                 n_estimators=100,
@@ -281,7 +281,7 @@ class MLLearner:
                 "confidence": float(max(proba)),
                 "model_status": "ready"
             }
-        except:
+        except Exception:
             return {"win_prob": 0.5, "confidence": 0.0, "model_status": "error"}
 
     def get_feature_importance(self):
@@ -292,7 +292,7 @@ class MLLearner:
         try:
             importances = self.model.feature_importances_
             return dict(zip(self.feature_names, [float(i) for i in importances]))
-        except:
+        except Exception:
             return {}
 
     def save_model(self):
@@ -305,7 +305,7 @@ class MLLearner:
                 pickle.dump(self.model, f)
             with open(os.path.join(MODEL_DIR, "scaler.pkl"), "wb") as f:
                 pickle.dump(self.scaler, f)
-        except:
+        except Exception:
             pass
 
     def load_model(self):
@@ -321,7 +321,7 @@ class MLLearner:
             if os.path.exists(scaler_path):
                 with open(scaler_path, "rb") as f:
                     self.scaler = pickle.load(f)
-        except:
+        except Exception:
             pass
 
     def save_metrics(self):
@@ -329,7 +329,7 @@ class MLLearner:
         try:
             with open(METRICS_FILE, "w", encoding="utf-8") as f:
                 json.dump(self.metrics, f, indent=2, ensure_ascii=False)
-        except:
+        except Exception:
             pass
 
     def load_metrics(self):
@@ -340,7 +340,7 @@ class MLLearner:
         try:
             with open(METRICS_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except:
+        except Exception:
             return {"status": "not_trained"}
 
     def get_learning_stats(self):
