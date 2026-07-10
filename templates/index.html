@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KurzAnalytik Pro – Analytika kurzových sázek</title>
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="stylesheet" href="/static/style_new.css">
 </head>
 <body class="theme-dark accent-violet">
   <div class="app-container">
@@ -28,6 +27,15 @@
             <rect x="3" y="14" width="7" height="7"/>
           </svg>
           <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" data-page="matches">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M2 12h20M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10c-2.5-3-4-6.5-4-10s1.5-7 4-10z" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>Zápasy</span>
         </button>
 
         <button class="nav-item" data-page="agent-tips">
@@ -157,6 +165,45 @@
             <div id="agentStatus" class="agent-status">—</div>
           </div>
           <div id="agentLastRun" class="agent-info">—</div>
+        </div>
+      </section>
+
+      <!-- MATCHES PAGE -->
+      <section id="matches" class="page">
+        <div class="page-header">
+          <div>
+            <h1>Zápasy</h1>
+            <p class="page-desc">Denní přehled zápasů z ESPN</p>
+          </div>
+        </div>
+
+        <div class="matches-toolbar">
+          <div class="matches-filters">
+            <button class="btn btn-sm" id="matchesPrevDay">&larr;</button>
+            <input type="date" id="matchesDate" class="input-date">
+            <button class="btn btn-sm" id="matchesNextDay">&rarr;</button>
+            <select id="matchesSport" class="input-select">
+              <option value="soccer">Fotbal</option>
+              <option value="basketball">Basketbal</option>
+              <option value="hockey">Hokej</option>
+              <option value="baseball">Baseball</option>
+              <option value="football">Am. fotbal</option>
+            </select>
+            <select id="matchesDays" class="input-select">
+              <option value="1">1 den</option>
+              <option value="2">2 dny</option>
+              <option value="3">3 dny</option>
+              <option value="7">7 dní</option>
+            </select>
+          </div>
+          <div class="matches-actions">
+            <button class="btn btn-primary" id="matchesRefreshBtn">Obnovit z ESPN</button>
+          </div>
+        </div>
+
+        <div class="matches-summary" id="matchesSummary"></div>
+        <div id="matchesContainer" class="matches-leagues">
+          <div class="loading">Načítání zápasů...</div>
         </div>
       </section>
 

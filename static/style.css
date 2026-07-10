@@ -1193,3 +1193,177 @@ h4 { font-size: 13px; font-weight: 600; color: var(--acc2); }
   .stats-grid { grid-template-columns: 1fr; }
   .summary-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================================
+   MATCHES PAGE
+   ============================================================================ */
+
+.matches-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.matches-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.input-date, .input-select {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.input-date:focus, .input-select:focus {
+  outline: none;
+  border-color: var(--acc);
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-sm:hover { background: var(--hover); }
+
+.matches-summary-bar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.tip-highlight {
+  color: var(--acc);
+  font-size: 13px;
+}
+
+.match-league {
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.match-league.collapsed .match-league-body { display: none; }
+
+.match-league-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+
+.match-league-header:hover { background: var(--hover); }
+
+.league-flag { font-size: 18px; }
+.league-name { font-weight: 600; flex: 1; }
+.league-count {
+  background: var(--bg);
+  color: var(--dim);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.matches-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.matches-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--dim);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,.15);
+}
+
+.matches-table td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.matches-table tr:hover td { background: var(--hover); }
+.matches-table tr.match-value td { background: rgba(108,92,231,.06); }
+
+.match-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.match-team { font-weight: 500; }
+
+.match-score { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.match-live { color: #e74c3c; animation: pulse-live 1.5s infinite; }
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+.pick-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--dim);
+}
+
+.pick-badge.pick-home { background: rgba(46,204,113,.15); color: #2ecc71; }
+.pick-badge.pick-away { background: rgba(231,76,60,.15); color: #e74c3c; }
+.pick-badge.pick-draw { background: rgba(241,196,15,.15); color: #f1c40f; }
+
+.match-prob { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+.match-value-cell.has-value {
+  color: var(--acc);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .matches-toolbar { flex-direction: column; align-items: stretch; }
+  .matches-filters { flex-wrap: wrap; }
+  .matches-table { font-size: 12px; }
+  .matches-table th, .matches-table td { padding: 8px 8px; }
+  .match-league-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .matches-table { min-width: 550px; }
+}

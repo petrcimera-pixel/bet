@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Setup event listeners po inicializaci dat
   setupEventListeners();
 
+  // Init matches page controls
+  initMatchesPage();
+
   // Vykresl dashboard
   renderDashboard();
   console.log('App ready');
@@ -100,6 +103,9 @@ function showPage(pageName) {
       case 'learning':
         loadLearningStats();
         loadMonitoringStatus();
+        break;
+      case 'matches':
+        loadMatches();
         break;
       case 'advanced-analytics':
         loadAdvancedAnalytics();
@@ -1245,4 +1251,129 @@ function renderHourlyTable(hourlyData) {
       <td style="color: ${d.pnl > 0 ? 'var(--pos)' : 'var(--bad)'}">${fmt(d.pnl)} Kč</td>
     </tr>
   `).join('');
+}
+
+// ============================================================================
+// MATCHES PAGE
+// ============================================================================
+
+function initMatchesPage() {
+  const dateInput = document.getElementById('matchesDate');
+  if (!dateInput) return;
+  if (!dateInput.value) {
+    dateInput.value = new Date().toISOString().slice(0, 10);
+  }
+
+  document.getElementById('matchesPrevDay').addEventListener('click', () => {
+    const d = new Date(dateInput.value);
+    d.setDate(d.getDate() - 1);
+    dateInput.value = d.toISOString().slice(0, 10);
+    loadMatches();
+  });
+
+  document.getElementById('matchesNextDay').addEventListener('click', () => {
+    const d = new Date(dateInput.value);
+    d.setDate(d.getDate() + 1);
+    dateInput.value = d.toISOString().slice(0, 10);
+    loadMatches();
+  });
+
+  dateInput.addEventListener('change', () => loadMatches());
+  document.getElementById('matchesSport').addEventListener('change', () => loadMatches());
+  document.getElementById('matchesDays').addEventListener('change', () => loadMatches());
+  document.getElementById('matchesRefreshBtn').addEventListener('click', () => loadMatches(true));
+}
+
+async function loadMatches(refresh = false) {
+  const container = document.getElementById('matchesContainer');
+  const summary = document.getElementById('matchesSummary');
+  if (!container) return;
+
+  const date = document.getElementById('matchesDate').value || new Date().toISOString().slice(0, 10);
+  const sport = document.getElementById('matchesSport').value;
+  const days = document.getElementById('matchesDays').value;
+
+  container.innerHTML = '<div class="loading">Načítání zápasů...</div>';
+  summary.innerHTML = '';
+
+  try {
+    const url = `/api/matches?date=${date}&sport=${sport}&days=${days}${refresh ? '&refresh=1' : ''}`;
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderMatchesSummary(data, summary);
+    renderMatchesLeagues(data.leagues || [], container);
+  } catch (e) {
+    container.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
+  }
+}
+
+function renderMatchesSummary(data, el) {
+  const tip = data.tip;
+  el.innerHTML = `
+    <div class="matches-summary-bar">
+      <span><strong>${data.total_matches}</strong> zápasů</span>
+      <span><strong>${data.total_leagues}</strong> lig</span>
+      <span><strong>${data.value_count || 0}</strong> value tipů</span>
+      ${tip ? `<span class="tip-highlight">Tip dne: <strong>${tip.home} vs ${tip.away}</strong> — ${tip.pick} @ ${(tip.best_value.odds || 0).toFixed(2)}</span>` : ''}
+    </div>
+  `;
+}
+
+function renderMatchesLeagues(leagues, container) {
+  if (!leagues.length) {
+    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den</div>';
+    return;
+  }
+
+  container.innerHTML = leagues.map(lg => `
+    <div class="match-league">
+      <div class="match-league-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="league-flag">${lg.flag || ''}</span>
+        <span class="league-name">${lg.league}</span>
+        <span class="league-count">${lg.matches.length}</span>
+      </div>
+      <div class="match-league-body">
+        <table class="matches-table">
+          <thead>
+            <tr>
+              <th>Čas</th>
+              <th>Domácí</th>
+              <th>Hosté</th>
+              <th>Skóre</th>
+              <th>Tip</th>
+              <th>Pravděpodobnost</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${lg.matches.map(m => renderMatchRow(m)).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMatchRow(m) {
+  const probs = m.probs || {};
+  const bv = m.best_value || {};
+  const score = m.result ? `${m.result.home} : ${m.result.away}` : (m.live ? 'LIVE' : '—');
+  const scoreClass = m.live ? 'match-live' : '';
+  const pickLabel = m.pick === 'home' ? '1' : m.pick === 'draw' ? 'X' : m.pick === 'away' ? '2' : '—';
+  const probPct = probs[m.pick] ? (probs[m.pick] * 100).toFixed(0) + '%' : '—';
+  const isValue = bv.is_value;
+  const valueText = isValue ? `${(bv.odds || 0).toFixed(2)} (EV ${((bv.ev || 0) * 100).toFixed(0)}%)` : '—';
+
+  return `
+    <tr class="${isValue ? 'match-value' : ''}">
+      <td class="match-time">${m.time || '—'}</td>
+      <td class="match-team">${m.home}</td>
+      <td class="match-team">${m.away}</td>
+      <td class="match-score ${scoreClass}">${score}</td>
+      <td class="match-pick"><span class="pick-badge pick-${m.pick || 'none'}">${pickLabel}</span></td>
+      <td class="match-prob">${probPct}</td>
+      <td class="match-value-cell ${isValue ? 'has-value' : ''}">${valueText}</td>
+    </tr>
+  `;
 }
