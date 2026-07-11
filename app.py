@@ -116,6 +116,14 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                 rb = odds_api.lookup(index, p["home"], p["away"])
                 if rb:
                     pred.apply_real_odds(p, rb)
+    # ESPN kurzy (DraftKings) – zdarma, bez kvóty; doplní zápasy bez reálných kurzů
+    for m, p in zip(matches, predictions):
+        if p.get("odds_source") == "real":
+            continue
+        ro = m.get("real_odds")
+        if ro:
+            book = [{"name": ro["provider"], "sharp": True, "odds": ro["odds"]}]
+            pred.apply_real_odds(p, book)
     _PRED_CACHE[key] = predictions
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
     try:

@@ -538,7 +538,8 @@ def predict_all(matches: list) -> list:
 def apply_real_odds(p: dict, real_books: list) -> bool:
     keys = ("home", "away") if p["two_way"] else ("home", "draw", "away")
     books = [b for b in real_books if all(k in b["odds"] and b["odds"][k] for k in keys)]
-    if len(books) < 2:
+    # 1 kniha stačí (ESPN/DraftKings) – konsensus je pak implied prob té knihy
+    if not books:
         return False
     model = {k: p["probs"][k] for k in keys}
     consensus, value = _consensus_and_value(model, books, keys)

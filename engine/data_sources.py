@@ -316,6 +316,8 @@ def _parse_espn(slug, country, data, start, end, sport="soccer"):
         hs = raw_hs if (completed or is_live) else None
         as_ = raw_as if (completed or is_live) else None
 
+        real_odds = _espn_odds(c)
+
         out.append({
             "id": str(ev.get("id") or f"{slug}-{hn}-{an}-{start}"),
             "sport": sport,
@@ -332,8 +334,44 @@ def _parse_espn(slug, country, data, start, end, sport="soccer"):
             "away_score": as_,
             "status": short,
             "live": is_live,
+            "real_odds": real_odds,
         })
     return out
+
+
+def _amer_to_dec(s):
+    """Americké kurzy (+280 / -110) → desetinné (3.80 / 1.909)."""
+    try:
+        v = int(str(s).replace("+", ""))
+    except (ValueError, TypeError):
+        return None
+    if v == 0:
+        return None
+    return round(1 + (v / 100.0 if v > 0 else 100.0 / abs(v)), 3)
+
+
+def _espn_odds(competition):
+    """Reálné kurzy sázkovky (DraftKings/ESPN BET) přímo ze scoreboard API.
+    Zdarma, bez kvóty – narozdíl od The Odds API. Vrací None když nejsou."""
+    odds_list = competition.get("odds") or []
+    if not odds_list:
+        return None
+    o = odds_list[0]
+    ml = o.get("moneyline") or {}
+
+    def pick(side):
+        d = ml.get(side) or {}
+        return (_amer_to_dec((d.get("close") or {}).get("odds"))
+                or _amer_to_dec((d.get("open") or {}).get("odds")))
+
+    ro = {"home": pick("home"), "away": pick("away")}
+    draw = pick("draw")
+    if draw:
+        ro["draw"] = draw
+    if not (ro["home"] and ro["away"]):
+        return None
+    provider = (o.get("provider") or {}).get("displayName") or "ESPN BET"
+    return {"provider": provider, "odds": ro, "over_under": o.get("overUnder")}
 
 
 def fetch_corners(sport: str, slug: str, event_id: str):
