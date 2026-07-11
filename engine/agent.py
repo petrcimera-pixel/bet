@@ -96,19 +96,147 @@ def agent_stats() -> dict:
     }
 
 
+def _candidates(p, cfg):
+    """Všechny sázecí příležitosti zápasu napříč povolenými trhy.
+    Vrací list dictů: outcome, label, name, odds, prob, market, market_prob, real."""
+    markets = cfg.get("markets") or {}
+    real_match = p.get("odds_source") == "real"
+    out = []
+    bets = p.get("bets", {})
+
+    def add(outcome, b, market, real):
+        odds, prob = b.get("best_odds"), b.get("prob")
+        if not odds or not prob:
+            return
+        out.append({
+            "outcome": outcome, "label": b.get("label", "?"),
+            "name": b.get("name", b.get("label", "?")),
+            "odds": float(odds), "prob": float(prob),
+            "market_prob": b.get("market_prob"), "market": market, "real": real,
+        })
+
+    if markets.get("winner", True):
+        keys = ("home", "away") if p.get("two_way") else ("home", "draw", "away")
+        for k in keys:
+            if k in bets:
+                add(k, bets[k], "winner", real_match)
+    if markets.get("goals", True):
+        for k, b in bets.items():
+            if k.startswith(("over", "under")):
+                add(k, b, "goals", bool(b.get("real")))
+    if markets.get("btts", True) and not p.get("two_way"):
+        for k in ("btts_yes", "btts_no"):
+            if k in bets:
+                add(k, bets[k], "btts", False)
+    if markets.get("corners", True) and p.get("sport", "soccer") == "soccer":
+        for cl in p.get("corner_lines") or []:
+            line = cl["line"]
+            for side in ("over", "under"):
+                b = dict(cl[side])
+                b["label"] = f'Rohy {"Over" if side == "over" else "Under"} {line}'
+                b["name"] = f'{"Více" if side == "over" else "Méně"} než {line} rohů'
+                add(f"{side}{line}", dict(b, best_odds=b.get("best_odds"),
+                                          prob=b.get("prob")), "corners", False)
+    return out
+
+
+def _best_tutovka(cands, min_prob, min_odds, only_real):
+    """Nejjistější tip zápasu: nejvyšší pravděpodobnost splňující prahy."""
+    ok = [c for c in cands
+          if c["prob"] >= min_prob and c["odds"] >= min_odds
+          and not (only_real and not c["real"])]
+    return max(ok, key=lambda c: c["prob"]) if ok else None
+
+
+def _has_ticket_today(kind: str) -> bool:
+    """Už dnes existuje agentův tiket daného druhu? (dedupe tiketů)"""
+    today = datetime.date.today()
+    for b in bankroll.state()["bets"]:
+        if (b.get("tag") == TAG and b.get("outcome") == "acca"
+                and b.get("ticket_kind") == kind):
+            try:
+                if datetime.date.fromtimestamp(b["ts"]) == today:
+                    return True
+            except Exception:
+                pass
+    return False
+
+
+def _build_ticket(pool, max_legs, min_total_odds, min_prob):
+    """Greedy tiket: nejjistější tipy z různých zápasů, dokud kurz nedosáhne cíle."""
+    legs = []
+    used = set()
+    total = 1.0
+    for c in sorted(pool, key=lambda c: c["prob"], reverse=True):
+        if c["prob"] < min_prob or c["match_id"] in used or c["market"] == "corners":
+            continue   # rohy do tiketů ne – nejdou vyhodnotit ze skóre
+        legs.append(c)
+        used.add(c["match_id"])
+        total *= c["odds"]
+        if len(legs) >= max_legs:
+            break
+    if len(legs) >= 2 and total >= min_total_odds:
+        return legs
+    return None
+
+
+def _place_tickets(ticket_pool, cfg, balance):
+    """Denní AKO (2–3 tutovky) + páteční víkendový tiket (4–6 tipů)."""
+    placed = []
+    stake = float(cfg.get("ticket_stake", 20.0))
+
+    def _legs_payload(legs):
+        return [{"match": c["match"], "name": c["name"], "match_id": c["match_id"],
+                 "outcome": c["outcome"], "odds": c["odds"], "prob": c["prob"],
+                 "date": c.get("date", ""), "time": c.get("time", "")} for c in legs]
+
+    if cfg.get("daily_ticket", True) and not _has_ticket_today("daily"):
+        legs = _build_ticket(ticket_pool, int(cfg.get("daily_ticket_legs", 3)),
+                             min_total_odds=2.0, min_prob=float(cfg.get("min_prob", 0.75)))
+        if legs and stake <= balance:
+            bet = bankroll.place_acca(_legs_payload(legs), stake, tag=TAG,
+                                      name=f"Jistota dne ({len(legs)} tipy)")
+            _mark_ticket_kind(bet["id"], "daily")
+            placed.append("daily")
+            balance -= stake
+
+    # Víkendový tiket: pátek/sobota, delší kombinace s mírně volnějším prahem
+    if (cfg.get("weekend_ticket", True) and datetime.date.today().weekday() in (4, 5)
+            and not _has_ticket_today("weekend")):
+        legs = _build_ticket(ticket_pool, int(cfg.get("weekend_ticket_legs", 5)),
+                             min_total_odds=4.0, min_prob=0.65)
+        if legs and len(legs) >= 4 and stake <= balance:
+            bet = bankroll.place_acca(_legs_payload(legs), stake, tag=TAG,
+                                      name=f"Víkendový tiket ({len(legs)} tipů)")
+            _mark_ticket_kind(bet["id"], "weekend")
+            placed.append("weekend")
+    return placed
+
+
+def _mark_ticket_kind(bet_id, kind):
+    """Uloží druh tiketu do bet záznamu (pro denní dedupe)."""
+    st = bankroll.state()
+    for b in st["bets"]:
+        if b["id"] == bet_id:
+            b["ticket_kind"] = kind
+            break
+    bankroll._save(st)
+
+
 def run(predictions: list) -> dict:
-    """Vsadí ostré tipy – zítřejší i live zápasy. Vrací souhrn běhu."""
+    """Tutovka strategie: pro každý zápas najde nejjistější tip napříč trhy
+    (1X2, góly O/U, BTTS, rohy), vsadí singly a postaví AKO tikety."""
     cfg = _cfg()
     stake_mode = cfg.get("stake_mode", "kelly")
     flat_stake = float(cfg.get("stake", 10.0))
     kelly_fraction = float(cfg.get("kelly_fraction", 0.25))
     max_daily_pct = float(cfg.get("max_daily_stake_pct", 0.25))
+    min_prob = float(cfg.get("min_prob", 0.75))
+    min_odds = float(cfg.get("min_odds", 1.20))
+    only_real = bool(cfg.get("only_real_odds", False))
 
     already = {b["match_id"] for b in agent_bets()}
 
-    # Denní strop: referenční bank = aktuální balance + co už bylo dnes prosázeno
-    # (peníze prosázené dnes by jinak "chyběly" v referenční hodnotě). Konzervativní
-    # aproximace – nezohledňuje dnešní výhry/prohry vyhodnocené mezitím.
     staked_today = sum(b["stake"] for b in agent_bets() if _placed_today(b))
     balance = bankroll.state()["balance"]
     reference_balance = balance + staked_today
@@ -117,81 +245,73 @@ def run(predictions: list) -> dict:
 
     placed = skipped_dup = skipped_soft = skipped_cap = skipped_ml = skipped_sim = 0
     no_funds = 0
-    only_real = bool(cfg.get("only_real_odds", False))
+    ticket_pool = []   # kandidáti pro AKO tikety (i nad denní strop singlů)
 
-    # Priorita: zápasy s REÁLNÝMI kurzy první, pak velké ligy – denní rozpočet
-    # se utratí nejdřív za tipy proti skutečnému trhu, ne za malé kvalifikace
     ordered = sorted(predictions, key=lambda p: (
         0 if p.get("odds_source") == "real" else 1,
         _ds.league_rank(p.get("league", "")),
     ))
 
     for p in ordered:
-        if p.get("result") is not None:  # Skip jen skončené zápasy
-            continue
+        if p.get("result") is not None or p.get("live"):
+            continue   # skončené a živé zápasy do tutovek nepatří
         if p["id"] in already:
             skipped_dup += 1
             continue
         if only_real and p.get("odds_source") != "real":
-            skipped_sim += 1   # simulované kurzy – uživatel chce jen reálný trh
+            skipped_sim += 1
             continue
 
-        bv = p.get("best_value", {})
-        pick = p.get("pick", "home")
-        pick_prob = p.get("probs", {}).get(pick, 0)
-        is_sharp = pick_prob >= SHARP_PROB or bool(bv.get("is_value"))
-        if cfg.get("only_sharp", True) and not is_sharp:
+        cands = _candidates(p, cfg)
+        best = _best_tutovka(cands, min_prob, min_odds, only_real)
+        if not best:
             skipped_soft += 1
             continue
 
-        # value příležitost má přednost, jinak sázíme pick modelu
-        if bv.get("is_value"):
-            outcome, bet = bv.get("outcome"), bv
-            label = bv.get("label", "VAL")
-        else:
-            outcome, bet = pick, p.get("bets", {}).get(pick, {})
-            label = bet.get("label", "?")
-
-        odds = bet.get("best_odds")
-        prob = bet.get("prob", pick_prob)
-        if not outcome or not odds:
-            continue
-
         # ML gate: naučený model může tip vetovat (učí se z vlastních chyb)
-        if _ml_veto(outcome, odds, prob, p.get("league")):
+        if _ml_veto(best["outcome"], best["odds"], best["prob"], p.get("league")):
             skipped_ml += 1
             continue
 
+        # kandidát na tiket (i když se single nevejde do denního stropu)
+        ticket_pool.append(dict(best, match_id=p["id"],
+                                match=f'{p["home"]} – {p["away"]}',
+                                date=p.get("date", ""), time=p.get("time", "")))
+
         if stake_mode == "kelly":
-            stake = bankroll.kelly_stake(prob, odds, balance, kelly_fraction)
-            if stake <= 0:
-                skipped_soft += 1   # Kelly nedoporučuje sázku (žádná reálná výhoda)
-                continue
-            stake = max(stake, MIN_STAKE)
+            stake = bankroll.kelly_stake(best["prob"], best["odds"], balance, kelly_fraction)
+            stake = max(stake, MIN_STAKE) if stake > 0 else flat_stake * 0.5
         else:
             stake = flat_stake
 
         if remaining_budget < MIN_STAKE:
             skipped_cap += 1
             continue
-        stake = round(min(stake, remaining_budget), 2)   # ořízni na zbytek denního stropu
+        stake = round(min(stake, remaining_budget), 2)
 
-        cons = (1.0 / bet["market_prob"]) if bet.get("market_prob") else None
+        cons = (1.0 / best["market_prob"]) if best.get("market_prob") else None
         try:
-            bankroll.place_bet(p["id"], label, outcome, odds, prob, stake,
+            bankroll.place_bet(p["id"], best["label"], best["outcome"],
+                               best["odds"], best["prob"], stake,
                                p["home"], p["away"], consensus_odds=cons, tag=TAG,
-                               match_date=p.get("date"), match_time=p.get("time"), league=p.get("league"),
-                               odds_source=p.get("odds_source", "sim"))
+                               match_date=p.get("date"), match_time=p.get("time"),
+                               league=p.get("league"),
+                               odds_source="real" if best["real"] else "sim",
+                               market="corners" if best["market"] == "corners" else "score",
+                               sport=p.get("sport", "soccer"), slug=p.get("slug", ""))
             placed += 1
             already.add(p["id"])
             remaining_budget -= stake
             balance -= stake
         except ValueError:
-            no_funds += 1     # došel bank – dál to nemá smysl zkoušet
+            no_funds += 1
             break
+
+    tickets = _place_tickets(ticket_pool, cfg, balance)
 
     return {
         "placed": placed,
+        "tickets": tickets,
         "skipped_duplicate": skipped_dup,
         "skipped_not_sharp": skipped_soft,
         "skipped_daily_cap": skipped_cap,

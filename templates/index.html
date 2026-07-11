@@ -822,6 +822,51 @@
               <input type="number" id="flatStake" min="1" step="1">
             </div>
 
+            <h4 style="margin-top:16px;margin-bottom:4px">Tutovka strategie</h4>
+
+            <div class="setting-group">
+              <label title="Minimální pravděpodobnost tipu. 0.75 = agent sází jen tipy se 75%+ šancí na výhru.">Min. pravděpodobnost</label>
+              <input type="number" id="agentMinProb" min="0.5" max="0.95" step="0.05">
+            </div>
+
+            <div class="setting-group">
+              <label title="Minimální kurz. Pod 1.20 se sázka nevyplatí ani při vysoké jistotě.">Min. kurz</label>
+              <input type="number" id="agentMinOdds" min="1.05" max="2" step="0.05">
+            </div>
+
+            <div class="setting-group">
+              <label>Trhy</label>
+              <div class="markets-checks">
+                <label><input type="checkbox" id="mktWinner"> Vítěz (1X2)</label>
+                <label><input type="checkbox" id="mktGoals"> Góly O/U</label>
+                <label><input type="checkbox" id="mktBtts"> BTTS</label>
+                <label><input type="checkbox" id="mktCorners"> Rohy</label>
+              </div>
+            </div>
+
+            <h4 style="margin-top:16px;margin-bottom:4px">Tikety (AKO)</h4>
+
+            <div class="setting-group">
+              <label for="agentDailyTicket" title="Denní AKO z 2–3 nejjistějších tipů, celkový kurz ~2–3.">Denní tiket „Jistota dne"</label>
+              <label class="toggle">
+                <input type="checkbox" id="agentDailyTicket" class="toggle-input">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-group">
+              <label for="agentWeekendTicket" title="Páteční/sobotní tiket ze 4–6 tipů s vyšším celkovým kurzem.">Víkendový tiket</label>
+              <label class="toggle">
+                <input type="checkbox" id="agentWeekendTicket" class="toggle-input">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-group">
+              <label>Vklad na tiket (Kč)</label>
+              <input type="number" id="agentTicketStake" min="1" step="1">
+            </div>
+
             <button class="btn btn-primary" id="saveSettings">Uložit nastavení</button>
           </div>
 

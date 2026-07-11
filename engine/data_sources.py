@@ -371,7 +371,24 @@ def _espn_odds(competition):
     if not (ro["home"] and ro["away"]):
         return None
     provider = (o.get("provider") or {}).get("displayName") or "ESPN BET"
-    return {"provider": provider, "odds": ro, "over_under": o.get("overUnder")}
+
+    # Reálné kurzy na góly over/under (trh "total") – stejná sázkovka
+    totals = None
+    tot = o.get("total") or {}
+    over_d = tot.get("over") or {}
+    under_d = tot.get("under") or {}
+
+    def tpick(d):
+        return (_amer_to_dec((d.get("close") or {}).get("odds"))
+                or _amer_to_dec((d.get("open") or {}).get("odds")))
+
+    over_odds, under_odds = tpick(over_d), tpick(under_d)
+    line = o.get("overUnder")
+    if over_odds and under_odds and line is not None:
+        totals = {"line": float(line), "over": over_odds, "under": under_odds}
+
+    return {"provider": provider, "odds": ro, "over_under": o.get("overUnder"),
+            "totals": totals}
 
 
 def fetch_corners(sport: str, slug: str, event_id: str):

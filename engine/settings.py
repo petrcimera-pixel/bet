@@ -36,6 +36,22 @@ _DEFAULTS = {
         "auto_run_hours": "8,16", # hodiny spuštění (čárkou oddělené, 24h formát)
         "auto_retrain": True,     # automaticky přetrénovat ML po X nových settled sázkách
         "auto_retrain_threshold": 10,  # kolik nových settled sázek spustí retrain
+        # --- Tutovka strategie (multi-market) ---
+        "min_prob": 0.75,         # minimální pravděpodobnost tipu (tutovka = 75 %+)
+        "min_odds": 1.20,         # minimální kurz (pod 1.20 se sázka nevyplatí)
+        "markets": {              # které trhy agent analyzuje
+            "winner": True,       # vítěz 1X2 (resp. 1/2 u two-way sportů)
+            "goals": True,        # góly over/under
+            "btts": True,         # oba týmy skórují
+            "corners": True,      # rohy over/under (jen fotbal, modelované kurzy)
+        },
+        "sports": ["soccer", "hockey", "basketball"],  # které sporty agent pokrývá
+        # --- Tikety (AKO) ---
+        "daily_ticket": True,     # denní AKO z 2–3 tutovek (celkový kurz ~2–3)
+        "daily_ticket_legs": 3,   # max. tipů na denním tiketu
+        "ticket_stake": 20.0,     # vklad na tiket (Kč)
+        "weekend_ticket": True,   # páteční velký tiket (4–6 tipů na víkend)
+        "weekend_ticket_legs": 5, # max. tipů na víkendovém tiketu
     },
 }
 

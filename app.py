@@ -118,12 +118,15 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                     pred.apply_real_odds(p, rb)
     # ESPN kurzy (DraftKings) – zdarma, bez kvóty; doplní zápasy bez reálných kurzů
     for m, p in zip(matches, predictions):
-        if p.get("odds_source") == "real":
-            continue
         ro = m.get("real_odds")
-        if ro:
+        if not ro:
+            continue
+        if p.get("odds_source") != "real":
             book = [{"name": ro["provider"], "sharp": True, "odds": ro["odds"]}]
             pred.apply_real_odds(p, book)
+        # reálné kurzy na góly over/under (trh "total")
+        if ro.get("totals"):
+            pred.apply_real_totals(p, ro["totals"], ro["provider"])
     _PRED_CACHE[key] = predictions
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
     try:
@@ -521,6 +524,13 @@ def _settle_recent():
         for t in open_tips
         if t.get("corner_outcome") and t["id"] in results and t.get("slug")
     ]
+    # + rohové SÁZKY agenta (market="corners") – vyhodnocují se proti počtu rohů
+    corner_targets += [
+        (b.get("sport", "soccer"), b.get("slug", ""), b["match_id"])
+        for b in open_bets
+        if b.get("market") == "corners" and b["match_id"] in results and b.get("slug")
+    ]
+    corner_targets = list(dict.fromkeys(corner_targets))   # dedupe
     if corner_targets:
         def _grab_corners(target):
             sport, slug, mid = target
@@ -543,7 +553,7 @@ def api_autosettle():
     nebo když zápas mezitím doběhl a nebyl v paměťové keši predikcí."""
     results, corner_results, more_pending = _settle_recent()
     tips_db.settle_tips(results, corner_results)   # ať zůstane synchronní s tipy
-    n = bankroll.auto_settle(results)
+    n = bankroll.auto_settle(results, corner_results)
     return jsonify({"settled": n, "stats": bankroll.stats(),
                     "bets": bankroll.state()["bets"][:50], "more_pending": more_pending})
 
@@ -572,7 +582,7 @@ def api_tips_settle():
     """Vyhodnotí otevřené tipy i sázky (bank) – čerstvá data z ESPN, viz _settle_recent()."""
     results, corner_results, more_pending = _settle_recent()
     n = tips_db.settle_tips(results, corner_results)
-    n_bets = bankroll.auto_settle(results)   # stejné výsledky vyhodnotí i sázky (vč. agenta)
+    n_bets = bankroll.auto_settle(results, corner_results)   # sázky vč. agenta a AKO tiketů
     _PRED_CACHE.clear()   # ať se i v UI hned zobrazí čerstvě stažené výsledky
     return jsonify({"settled": n, "settled_bets": n_bets, "stats": tips_db.stats(),
                     "more_pending": more_pending})
@@ -605,7 +615,9 @@ def api_agent_settings():
     d = request.get_json(force=True)
     app_settings.update_settings("agent", {
         k: v for k, v in d.items()
-        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp", "only_real_odds", "auto_run", "auto_run_hours", "auto_retrain", "auto_retrain_threshold")
+        if k in ("enabled", "bet_today", "stake_mode", "stake", "kelly_fraction", "max_daily_stake_pct", "only_sharp", "only_real_odds", "auto_run", "auto_run_hours", "auto_retrain", "auto_retrain_threshold",
+                 "min_prob", "min_odds", "markets", "sports",
+                 "daily_ticket", "daily_ticket_legs", "ticket_stake", "weekend_ticket", "weekend_ticket_legs")
     })
     return jsonify(app_settings.get_settings()["agent"])
 
@@ -620,7 +632,12 @@ def api_agent_run():
         return jsonify({"skipped": "disabled"})
     start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
     days = 2 if cfg.get("bet_today") else 1
-    predictions = _predictions_for(start_date, days=days)
+    predictions = []
+    for sport in cfg.get("sports") or ["soccer"]:
+        try:
+            predictions.extend(_predictions_for(start_date, days=days, sport=sport))
+        except Exception:
+            pass   # výpadek jednoho sportu nesmí shodit celý běh
     result = agent.run(predictions)
     result["stats"] = agent.agent_stats()
     return jsonify(result)
@@ -765,7 +782,7 @@ def _settle_in_background():
             # Natáhni a vyřeš jednu dávku
             results, corner_results, more_pending = _settle_recent()
             n_tips = tips_db.settle_tips(results, corner_results)
-            n_bets = bankroll.auto_settle(results)
+            n_bets = bankroll.auto_settle(results, corner_results)
             _PRED_CACHE.clear()
             _maybe_auto_retrain(n_tips + n_bets)
 
@@ -821,7 +838,12 @@ def _auto_agent_loop():
                     try:
                         start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
                         days = 2 if cfg.get("bet_today") else 1
-                        predictions = _predictions_for(start_date, days=days)
+                        predictions = []
+                        for sport in cfg.get("sports") or ["soccer"]:
+                            try:
+                                predictions.extend(_predictions_for(start_date, days=days, sport=sport))
+                            except Exception:
+                                pass
                         result = agent.run(predictions)
                         print(f"[auto-agent] Hotovo: {result.get('placed', 0)} sázek, balance={result.get('balance')}")
                     except Exception as e:

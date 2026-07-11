@@ -78,7 +78,7 @@ def _clv(odds, consensus_odds):
 
 def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
               consensus_odds=None, tag=None, match_date=None, match_time=None, league=None,
-              odds_source=None):
+              odds_source=None, market=None, sport=None, slug=None):
     st = state()
     stake = round(float(stake), 2)
     if stake <= 0 or stake > st["balance"]:
@@ -100,7 +100,10 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
         "pnl": 0.0,
         "clv": _clv(odds, consensus_odds),
         "tag": tag,                    # "bet-agent" = sázka bet agenta
-        "odds_source": odds_source or "sim",   # "real" = kurzy z The Odds API
+        "odds_source": odds_source or "sim",   # "real" = kurzy sázkovky (ESPN/Odds API)
+        "market": market or "score",   # "score" (góly/výsledek) | "corners" (rohy)
+        "sport": sport or "soccer",    # pro dohledání výsledku (rohy = ESPN summary)
+        "slug": slug or "",            # liga slug pro ESPN summary endpoint
     }
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)
@@ -132,8 +135,9 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
     return bet
 
 
-def place_acca(legs, stake):
-    """Akumulátor – jeden tiket z více výběrů (kombinovaný kurz)."""
+def place_acca(legs, stake, tag=None, name=None):
+    """Akumulátor – jeden tiket z více výběrů (kombinovaný kurz).
+    Legs s match_id + outcome se vyhodnocují automaticky (settle_accas)."""
     st = state()
     stake = round(float(stake), 2)
     if not legs:
@@ -152,7 +156,7 @@ def place_acca(legs, stake):
         "id": uuid.uuid4().hex[:10],
         "ts": int(time.time()),
         "match_id": "",
-        "match": f"Akumulátor ({len(legs)} tipy)",
+        "match": name or f"Akumulátor ({len(legs)} tipy)",
         "match_date": earliest_date,
         "match_time": earliest_time,
         "outcome": "acca",
@@ -163,7 +167,10 @@ def place_acca(legs, stake):
         "status": "open",
         "pnl": 0.0,
         "clv": None,
+        "tag": tag,
         "legs": [{"match": l.get("match", ""), "name": l.get("name", ""),
+                  "match_id": l.get("match_id", ""), "outcome": l.get("outcome", ""),
+                  "prob": float(l.get("prob") or 0), "result": None,
                   "odds": float(l["odds"]), "date": l.get("date", ""), "time": l.get("time", "")}
                  for l in legs],
     }
@@ -195,15 +202,20 @@ def eval_outcome(outcome, hs, as_):
     return None
 
 
-def auto_settle(results: dict) -> int:
-    """results: {match_id: {'home':hs,'away':as_}}. Vyhodnotí otevřené single tipy."""
-    if not results:
+def auto_settle(results: dict, corner_results: dict = None) -> int:
+    """results: {match_id: {'home':hs,'away':as_}} = skóre.
+    corner_results: {match_id: {'home':h,'away':a}} = rohy.
+    Vyhodnotí otevřené single tipy (skóre i rohy) a AKO tikety."""
+    corner_results = corner_results or {}
+    if not results and not corner_results:
         return 0
     to_settle = []
     for bet in state()["bets"]:
         if bet["status"] != "open" or bet.get("outcome") == "acca":
             continue
-        res = results.get(bet["match_id"])
+        # rohové sázky se vyhodnocují proti počtu rohů, ne skóre
+        src = corner_results if bet.get("market") == "corners" else results
+        res = src.get(bet["match_id"])
         if not res:
             continue
         r = eval_outcome(bet["outcome"], res["home"], res["away"])
@@ -211,7 +223,59 @@ def auto_settle(results: dict) -> int:
             to_settle.append((bet["id"], r))
     for bet_id, result in to_settle:
         settle_bet(bet_id, result)
-    return len(to_settle)
+    return len(to_settle) + settle_accas(results)
+
+
+def settle_accas(results: dict) -> int:
+    """Vyhodnotí otevřené AKO tikety: prohraný leg = celý tiket prohrán,
+    všechny legy vyhrané = tiket vyhrán. Nerozhodnuté legy = tiket zůstává open."""
+    if not results:
+        return 0
+    st = state()
+    n = 0
+    changed = False
+    for bet in st["bets"]:
+        if bet["status"] != "open" or bet.get("outcome") != "acca":
+            continue
+        legs = bet.get("legs") or []
+        if not legs or not all(l.get("match_id") and l.get("outcome") for l in legs):
+            continue   # starý tiket bez match_id – nelze vyhodnotit automaticky
+        undecided = False
+        lost = False
+        for l in legs:
+            if l.get("result") in ("won", "lost"):
+                if l["result"] == "lost":
+                    lost = True
+                continue
+            res = results.get(l["match_id"])
+            if not res:
+                undecided = True
+                continue
+            r = eval_outcome(l["outcome"], res["home"], res["away"])
+            if r:
+                l["result"] = r
+                changed = True
+                if r == "lost":
+                    lost = True
+            else:
+                undecided = True
+        if lost:
+            bet["status"] = "lost"
+            bet["pnl"] = round(-bet["stake"], 2)
+            bet["settled_ts"] = int(time.time())
+            changed = True
+            n += 1
+        elif not undecided:
+            payout = round(bet["stake"] * bet["odds"], 2)
+            bet["status"] = "won"
+            bet["pnl"] = round(payout - bet["stake"], 2)
+            st["balance"] = round(st["balance"] + payout, 2)
+            bet["settled_ts"] = int(time.time())
+            changed = True
+            n += 1
+    if changed:
+        _save(st)
+    return n
 
 
 def settle_bet(bet_id, result):

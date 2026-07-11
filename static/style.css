@@ -1430,6 +1430,22 @@ h4 { font-size: 13px; font-weight: 600; color: var(--acc2); }
 }
 .value-tag small { font-weight: 400; opacity: .8; }
 
+/* Markets checkboxes (agent settings) */
+.markets-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.markets-checks label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--fg);
+}
+.markets-checks input[type="checkbox"] { accent-color: var(--acc); }
+
 /* Mobile */
 @media (max-width: 760px) {
   .day-strip { padding: 4px; }

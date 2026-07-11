@@ -554,3 +554,29 @@ def apply_real_odds(p: dict, real_books: list) -> bool:
     p["best_value"] = dict(p["bets"][best_key], outcome=best_key)
     p["odds_source"] = "real"
     return True
+
+
+def apply_real_totals(p: dict, totals: dict, book_name: str) -> bool:
+    """Nahradí modelované kurzy na góly O/U reálnými (ESPN 'total' trh).
+    Aplikuje se jen na linii, kterou model také počítá (např. 2.5)."""
+    line = totals.get("line")
+    over_key, under_key = f"over{line}", f"under{line}"
+    if over_key not in p["bets"] or under_key not in p["bets"]:
+        return False
+    for key, odds in ((over_key, totals["over"]), (under_key, totals["under"])):
+        b = p["bets"][key]
+        prob = b["prob"]
+        ev = prob * odds - 1.0
+        implied = 1.0 / odds
+        b.update({
+            "best_odds": odds,
+            "best_book": book_name,
+            "market_prob": round(implied, 4),
+            "ev": round(ev, 4),
+            "edge": round(prob - implied, 4),
+            "is_value": ev > 0.03 and (prob - implied) > 0.02,
+            "real": True,
+        })
+    best_key = max(p["bets"], key=lambda k: p["bets"][k]["ev"])
+    p["best_value"] = dict(p["bets"][best_key], outcome=best_key)
+    return True

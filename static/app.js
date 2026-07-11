@@ -310,6 +310,26 @@ function showTipDetail(betId) {
 
   if (!content) return;
 
+  const isAcca = bet.outcome === 'acca';
+  const legsHtml = isAcca && bet.legs ? `
+    <h3 style="margin-top: 20px;">Tipy na tiketu (${bet.legs.length})</h3>
+    <div style="margin: 10px 0;">
+      ${bet.legs.map(l => `
+        <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-weight:600;">${l.match || '—'}</div>
+            <div style="font-size:12px; color:var(--dim);">${l.name || l.outcome || ''} · ${l.date || ''} ${l.time || ''}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:monospace; font-weight:700;">${(l.odds || 0).toFixed(2)}</div>
+            <div style="font-size:12px; color:${l.result === 'won' ? 'var(--pos)' : l.result === 'lost' ? 'var(--bad)' : 'var(--dim)'};">
+              ${l.result === 'won' ? '✓ výhra' : l.result === 'lost' ? '✗ prohra' : 'čeká'}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>` : '';
+
   content.innerHTML = `
     <h2>${bet.match || 'Zápas'}</h2>
     <div style="margin: 20px 0; line-height: 1.8;">
@@ -318,17 +338,19 @@ function showTipDetail(betId) {
       <p><strong>Vklad:</strong> ${fmt(bet.stake || 0)} Kč</p>
       <p><strong>Status:</strong> ${(bet.status || 'open').toUpperCase()}</p>
       <p><strong>P&L:</strong> ${bet.pnl > 0 ? '+' : ''}${fmt(bet.pnl || 0)} Kč</p>
+      ${isAcca ? '' : `
       <p><strong>Liga:</strong> ${bet.league || '—'}</p>
-      <p><strong>Čas:</strong> ${bet.match_date || '—'} ${bet.match_time || '—'}</p>
+      <p><strong>Čas:</strong> ${bet.match_date || '—'} ${bet.match_time || '—'}</p>`}
     </div>
-
+    ${legsHtml}
+    ${isAcca ? '' : `
     <h3 style="margin-top: 20px;">Vysvětlení tipu</h3>
     <p>Agent vybral tento tip protože:</p>
     <ul style="margin: 10px 0 10px 20px;">
-      <li><strong>Jistota ≥ 55%:</strong> Model udává ${((bet.prob || 0) * 100).toFixed(1)}% šanci na výhru</li>
-      <li><strong>Value příležitost:</strong> Kurz je lepší než model doporučuje</li>
-      <li><strong>Kelly kritérium:</strong> Vklad ${fmt(bet.stake || 0)} Kč odpovídá frakčnímu Kelly</li>
-    </ul>
+      <li><strong>Tutovka:</strong> Model udává ${((bet.prob || 0) * 100).toFixed(1)}% šanci na výhru</li>
+      <li><strong>Trh:</strong> ${bet.market === 'corners' ? 'Rohy (modelované kurzy)' : bet.odds_source === 'real' ? 'Reálné kurzy sázkovky' : 'Modelované kurzy'}</li>
+      <li><strong>Vklad:</strong> ${fmt(bet.stake || 0)} Kč (${bet.stake_mode === 'flat' ? 'plochý' : 'Kelly'})</li>
+    </ul>`}
   `;
 
   if (modal) {
@@ -505,6 +527,27 @@ function initializeSettings() {
   const flatStake = document.getElementById('flatStake');
   if (flatStake) flatStake.value = agent.stake || 10;
 
+  // Tutovka strategie
+  const minProb = document.getElementById('agentMinProb');
+  if (minProb) minProb.value = agent.min_prob ?? 0.75;
+  const minOdds = document.getElementById('agentMinOdds');
+  if (minOdds) minOdds.value = agent.min_odds ?? 1.20;
+
+  const mkts = agent.markets || {};
+  const mktIds = { winner: 'mktWinner', goals: 'mktGoals', btts: 'mktBtts', corners: 'mktCorners' };
+  for (const [key, id] of Object.entries(mktIds)) {
+    const el = document.getElementById(id);
+    if (el) el.checked = mkts[key] !== false;
+  }
+
+  // Tikety
+  const dailyTicket = document.getElementById('agentDailyTicket');
+  if (dailyTicket) dailyTicket.checked = agent.daily_ticket !== false;
+  const weekendTicket = document.getElementById('agentWeekendTicket');
+  if (weekendTicket) weekendTicket.checked = agent.weekend_ticket !== false;
+  const ticketStake = document.getElementById('agentTicketStake');
+  if (ticketStake) ticketStake.value = agent.ticket_stake ?? 20;
+
   const homeAdv = document.getElementById('homeAdv');
   if (homeAdv) homeAdv.value = STATE.settings.model?.home_adv || 60;
 
@@ -676,7 +719,23 @@ async function saveSettingsQuietly() {
     stake: parseFloat(document.getElementById('flatStake')?.value) || saved.stake || 10,
     kelly_fraction: saved.kelly_fraction ?? 0.25,
     max_daily_stake_pct: saved.max_daily_stake_pct ?? 0.25,
-    only_sharp: saved.only_sharp ?? true
+    only_sharp: saved.only_sharp ?? true,
+    // Tutovka strategie
+    min_prob: parseFloat(document.getElementById('agentMinProb')?.value) || saved.min_prob || 0.75,
+    min_odds: parseFloat(document.getElementById('agentMinOdds')?.value) || saved.min_odds || 1.20,
+    markets: {
+      winner: document.getElementById('mktWinner')?.checked !== false,
+      goals: document.getElementById('mktGoals')?.checked !== false,
+      btts: document.getElementById('mktBtts')?.checked !== false,
+      corners: document.getElementById('mktCorners')?.checked !== false,
+    },
+    sports: saved.sports || ['soccer', 'hockey', 'basketball'],
+    // Tikety
+    daily_ticket: document.getElementById('agentDailyTicket')?.checked !== false,
+    daily_ticket_legs: saved.daily_ticket_legs ?? 3,
+    ticket_stake: parseFloat(document.getElementById('agentTicketStake')?.value) || saved.ticket_stake || 20,
+    weekend_ticket: document.getElementById('agentWeekendTicket')?.checked !== false,
+    weekend_ticket_legs: saved.weekend_ticket_legs ?? 5,
   };
 
   try {

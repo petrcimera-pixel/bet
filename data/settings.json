@@ -25,6 +25,24 @@
     "auto_run": true,
     "auto_run_hours": "8,16",
     "auto_retrain": true,
-    "auto_retrain_threshold": 10
+    "auto_retrain_threshold": 10,
+    "min_prob": 0.75,
+    "min_odds": 1.2,
+    "markets": {
+      "winner": true,
+      "goals": true,
+      "btts": true,
+      "corners": true
+    },
+    "sports": [
+      "soccer",
+      "hockey",
+      "basketball"
+    ],
+    "daily_ticket": true,
+    "daily_ticket_legs": 3,
+    "ticket_stake": 20.0,
+    "weekend_ticket": true,
+    "weekend_ticket_legs": 5
   }
 }
