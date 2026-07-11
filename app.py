@@ -13,6 +13,7 @@ Spuštění:  python app.py   →   http://127.0.0.1:5000
 
 import os
 import sys
+import time as _time
 import webbrowser
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -183,10 +184,16 @@ def api_matches():
 
     # Minimalizuj data pro UI – odstraň zbytečné odds detaily
     def slim_prediction(p):
+        keys = ("home", "away") if p.get("two_way") else ("home", "draw", "away")
+        odds = {k: p["bets"][k]["best_odds"] for k in keys if k in p.get("bets", {})}
         return {
             "id": p.get("id"),
+            "sport": p.get("sport", "soccer"),
+            "slug": p.get("slug", ""),
             "home": p["home"],
             "away": p["away"],
+            "home_id": p.get("home_id", ""),
+            "away_id": p.get("away_id", ""),
             "league": p["league"],
             "country": p["country"],
             "date": p.get("date"),
@@ -197,6 +204,14 @@ def api_matches():
             "result": p.get("result"),
             "live": p.get("live", False),
             "best_value": p.get("best_value", {}),
+            "odds": odds,
+            "odds_source": p.get("odds_source", "sim"),
+            "exp_goals": p.get("exp_goals"),
+            "exp_total": p.get("exp_total"),
+            "exp_corners": p.get("exp_corners"),
+            "goal_lines": p.get("goal_lines", [])[:2],
+            "corner_lines": p.get("corner_lines", [])[:1],
+            "top_scores": p.get("top_scores", [])[:3],
         }
 
     slim_preds = [slim_prediction(p) for p in predictions]
@@ -598,6 +613,85 @@ def api_settle_status():
 # ---------------------------------------------------------------------------
 # API – Automatický sázecí agent (zítřejší tipy, plochý vklad z banku)
 # ---------------------------------------------------------------------------
+@app.route("/api/dashboard")
+def api_dashboard():
+    """Data pro dashboard: tip dne, dnešní tiket agenta, včerejší bilance,
+    úspěšnost tutovek a poslední automatický běh agenta."""
+    import datetime as _dt
+    today = ds.today_str()
+    cfg = app_settings.get_settings()["agent"]
+
+    # Tip dne = nejjistější tutovka z dnešních zápasů (fotbal, cached predikce)
+    tip = None
+    try:
+        preds = _predictions_for(today, days=1, sport="soccer")
+        best_p, best_c = None, None
+        for p in preds:
+            if p.get("result") is not None or p.get("live"):
+                continue
+            cands = agent._candidates(p, cfg)
+            c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
+                                    float(cfg.get("min_odds", 1.20)), only_real=False)
+            if c and (best_c is None or c["prob"] > best_c["prob"]):
+                best_p, best_c = p, c
+        if best_c:
+            tip = {
+                "match": f'{best_p["home"]} – {best_p["away"]}',
+                "league": best_p.get("league"),
+                "date": best_p.get("date"), "time": best_p.get("time"),
+                "name": best_c["name"], "label": best_c["label"],
+                "odds": best_c["odds"], "prob": best_c["prob"],
+                "real": best_c["real"], "market": best_c["market"],
+            }
+    except Exception:
+        pass
+
+    bets = agent.agent_bets()
+    yesterday = (_dt.date.today() - _dt.timedelta(days=1))
+
+    def _settled_on(b, day):
+        try:
+            return _dt.date.fromtimestamp(b.get("settled_ts") or 0) == day
+        except Exception:
+            return False
+
+    y_bets = [b for b in bets if b["status"] in ("won", "lost") and _settled_on(b, yesterday)]
+    y_summary = {
+        "settled": len(y_bets),
+        "won": sum(1 for b in y_bets if b["status"] == "won"),
+        "pnl": round(sum(b["pnl"] for b in y_bets), 2),
+    }
+
+    # Úspěšnost tutovek (single tipy s prob >= min_prob)
+    min_prob = float(cfg.get("min_prob", 0.75))
+    tut = [b for b in bets if b["status"] in ("won", "lost")
+           and b.get("outcome") != "acca" and (b.get("prob") or 0) >= min_prob]
+    tut_won = sum(1 for b in tut if b["status"] == "won")
+    tutovka_stats = {
+        "settled": len(tut), "won": tut_won,
+        "accuracy": round(tut_won / len(tut) * 100, 1) if tut else None,
+    }
+
+    # Dnešní AKO tiket agenta
+    ticket = None
+    for b in bets:
+        if b.get("outcome") == "acca":
+            try:
+                if _dt.date.fromtimestamp(b["ts"]) == _dt.date.today():
+                    ticket = b
+                    break
+            except Exception:
+                pass
+
+    return jsonify({
+        "tip": tip,
+        "ticket": ticket,
+        "yesterday": y_summary,
+        "tutovka": tutovka_stats,
+        "last_run": storage.load("agent_last_run.json", None),
+    })
+
+
 @app.route("/api/agent")
 def api_agent():
     """Stav agenta: nastavení, statistiky výkonu a jeho sázky."""
@@ -640,6 +734,11 @@ def api_agent_run():
             pass   # výpadek jednoho sportu nesmí shodit celý běh
     result = agent.run(predictions)
     result["stats"] = agent.agent_stats()
+    storage.save("agent_last_run.json", {
+        "ts": int(_time.time()), "placed": result.get("placed", 0),
+        "tickets": result.get("tickets", []), "balance": result.get("balance"),
+        "mode": "manual",
+    })
     return jsonify(result)
 
 
@@ -845,6 +944,11 @@ def _auto_agent_loop():
                             except Exception:
                                 pass
                         result = agent.run(predictions)
+                        storage.save("agent_last_run.json", {
+                            "ts": int(time.time()), "placed": result.get("placed", 0),
+                            "tickets": result.get("tickets", []),
+                            "balance": result.get("balance"), "mode": "auto",
+                        })
                         print(f"[auto-agent] Hotovo: {result.get('placed', 0)} sázek, balance={result.get('balance')}")
                     except Exception as e:
                         print(f"[auto-agent] Chyba při běhu agenta: {e}")

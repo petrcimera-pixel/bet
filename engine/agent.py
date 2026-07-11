@@ -213,6 +213,44 @@ def _place_tickets(ticket_pool, cfg, balance):
     return placed
 
 
+def _attach_reasoning(bet_id, p, best):
+    """Uloží k sázce konkrétní zdůvodnění (proč agent tip vybral)."""
+    why = []
+    why.append(f'Model dává {best["prob"]*100:.0f}% šanci – nejjistější tip zápasu '
+               f'napříč trhy ({_MARKET_CZ.get(best["market"], best["market"])}).')
+    eg = p.get("exp_goals")
+    if eg:
+        why.append(f'Očekávané skóre {eg.get("home", "?")} : {eg.get("away", "?")} gólů '
+                   f'(celkem {p.get("exp_total", "?")}).')
+    ts = p.get("top_scores") or []
+    if ts:
+        s = ts[0]
+        try:
+            why.append(f'Nejpravděpodobnější výsledek {s["score"]} ({s["prob"]*100:.0f} %).')
+        except (KeyError, TypeError):
+            pass
+    rh, ra = p.get("rating_home"), p.get("rating_away")
+    if rh and ra:
+        diff = rh - ra
+        if abs(diff) >= 50:
+            stronger = p["home"] if diff > 0 else p["away"]
+            why.append(f'{stronger} je výrazně silnější tým (Elo rozdíl {abs(diff)} bodů).')
+    if best["real"]:
+        why.append(f'Kurz {best["odds"]} je reálný kurz sázkovky – ne odhad modelu.')
+    else:
+        why.append(f'Kurz {best["odds"]} je modelovaný (trh pro tento tip nemá reálné kurzy).')
+    st = bankroll.state()
+    for b in st["bets"]:
+        if b["id"] == bet_id:
+            b["why"] = why
+            break
+    bankroll._save(st)
+
+
+_MARKET_CZ = {"winner": "vítěz 1X2", "goals": "góly O/U", "btts": "oba skórují",
+              "corners": "rohy"}
+
+
 def _mark_ticket_kind(bet_id, kind):
     """Uloží druh tiketu do bet záznamu (pro denní dedupe)."""
     st = bankroll.state()
@@ -291,7 +329,7 @@ def run(predictions: list) -> dict:
 
         cons = (1.0 / best["market_prob"]) if best.get("market_prob") else None
         try:
-            bankroll.place_bet(p["id"], best["label"], best["outcome"],
+            bet = bankroll.place_bet(p["id"], best["label"], best["outcome"],
                                best["odds"], best["prob"], stake,
                                p["home"], p["away"], consensus_odds=cons, tag=TAG,
                                match_date=p.get("date"), match_time=p.get("time"),
@@ -299,6 +337,7 @@ def run(predictions: list) -> dict:
                                odds_source="real" if best["real"] else "sim",
                                market="corners" if best["market"] == "corners" else "score",
                                sport=p.get("sport", "soccer"), slug=p.get("slug", ""))
+            _attach_reasoning(bet["id"], p, best)
             placed += 1
             already.add(p["id"])
             remaining_budget -= stake

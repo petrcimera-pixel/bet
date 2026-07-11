@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Vykresl dashboard
   renderDashboard();
+  loadDashboardExtras();
   console.log('App ready');
 });
 
@@ -80,6 +81,10 @@ function showPage(pageName) {
 
   if (page) page.classList.add('active');
   if (navBtn) navBtn.classList.add('active');
+
+  // bottom nav active stav
+  document.querySelectorAll('.bottom-nav-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.page === pageName));
 
   STATE.currentPage = pageName;
 
@@ -179,19 +184,31 @@ function renderDashboard() {
   setElText('dashWinCount', `${s.won_count || 0}/${s.settled_count || 0} výher`);
   setElText('dashSharpe', `${((s.sharpe_ratio || 0).toFixed(2))}`);
 
-  // Balance change
+  // Balance change + peníze vázané v otevřených sázkách
   const change = s.balance - s.start_balance;
   const changeEl = document.getElementById('dashBalanceChange');
   if (changeEl) {
+    const inPlay = s.open_stake ? ` · v sázkách ${fmt(s.open_stake)} ${cur}` : '';
     if (change > 0) {
-      changeEl.textContent = `+${fmt(change)} od startu`;
+      changeEl.textContent = `+${fmt(change)} od startu${inPlay}`;
       changeEl.style.color = 'var(--pos)';
     } else if (change < 0) {
-      changeEl.textContent = `${fmt(change)} od startu`;
+      changeEl.textContent = `${fmt(change)} od startu${inPlay}`;
       changeEl.style.color = 'var(--bad)';
     } else {
-      changeEl.textContent = 'Beze změny';
+      changeEl.textContent = `Beze změny${inPlay}`;
     }
+  }
+
+  // 7denní trend (z lokálních dat sázek)
+  const week = (STATE.agentTips || []).filter(b => {
+    const ts = (b.settled_ts || 0) * 1000;
+    return (b.status === 'won' || b.status === 'lost') && ts > Date.now() - 7 * 86400000;
+  });
+  const weekPnl = week.reduce((sum, b) => sum + (b.pnl || 0), 0);
+  const roiEl = document.getElementById('dashROI');
+  if (roiEl && week.length) {
+    roiEl.textContent = `${s.roi || 0}% ROI · 7 dní: ${weekPnl > 0 ? '+' : ''}${fmt(weekPnl)} ${cur}`;
   }
 
   // Agent status
@@ -231,10 +248,10 @@ function renderDashboardTips() {
     .map(b => `
       <div class="tip-item">
         <div class="tip-match">
-          <div class="tip-teams">🤖 ${b.match || 'Neznámý zápas'}</div>
+          <div class="tip-teams">${b.outcome === 'acca' ? '🎫' : '🤖'} ${b.match || 'Neznámý zápas'}</div>
           <div class="tip-meta">
-            <span>${b.match_date || '—'} ${b.match_time || '—'}</span>
-            <span>${b.league || 'Liga'}</span>
+            <span>${czDate(b.match_date, b.match_time)} ${czTime(b.match_date, b.match_time)}</span>
+            <span>${b.outcome === 'acca' ? `${(b.legs || []).length} tipů` : (b.league || 'Liga')}</span>
           </div>
           <div class="tip-meta">
             <span>${b.label || '?'}</span>
@@ -267,12 +284,12 @@ function renderAgentTips() {
 
   container.innerHTML = bets
     .map(b => `
-      <div class="tip-item" data-status="${b.status || 'open'}" onclick="showTipDetail('${b.id}')">
+      <div class="tip-item" data-status="${b.status || 'open'}" data-acca="${b.outcome === 'acca' ? '1' : '0'}" onclick="showTipDetail('${b.id}')">
         <div class="tip-match">
-          <div class="tip-teams">🤖 ${b.match || 'Neznámý zápas'}</div>
+          <div class="tip-teams">${b.outcome === 'acca' ? '🎫' : '🤖'} ${b.match || 'Neznámý zápas'}</div>
           <div class="tip-meta">
-            <span>${b.match_date || '—'} ${b.match_time || '—'}</span>
-            <span>${b.league || 'Liga'}</span>
+            <span>${czDate(b.match_date, b.match_time)} ${czTime(b.match_date, b.match_time)}</span>
+            <span>${b.outcome === 'acca' ? `${(b.legs || []).length} tipů` : (b.league || 'Liga')}</span>
           </div>
           <div class="tip-meta">
             <span>${b.label || '?'}</span>
@@ -293,11 +310,14 @@ function renderAgentTips() {
 function applyTipFilters() {
   const query = (document.getElementById('tipFilter')?.value || '').toLowerCase();
   const status = document.getElementById('tipStatus')?.value || '';
+  const type = document.getElementById('tipType')?.value || '';
 
   document.querySelectorAll('#agentTipsContainer .tip-item').forEach(item => {
     const textOk = !query || item.textContent.toLowerCase().includes(query);
     const statusOk = !status || item.dataset.status === status;
-    item.style.display = (textOk && statusOk) ? '' : 'none';
+    const isAcca = item.dataset.acca === '1';
+    const typeOk = !type || (type === 'acca' ? isAcca : !isAcca);
+    item.style.display = (textOk && statusOk && typeOk) ? '' : 'none';
   });
 }
 
@@ -344,12 +364,12 @@ function showTipDetail(betId) {
     </div>
     ${legsHtml}
     ${isAcca ? '' : `
-    <h3 style="margin-top: 20px;">Vysvětlení tipu</h3>
-    <p>Agent vybral tento tip protože:</p>
+    <h3 style="margin-top: 20px;">Proč agent vybral tento tip</h3>
     <ul style="margin: 10px 0 10px 20px;">
-      <li><strong>Tutovka:</strong> Model udává ${((bet.prob || 0) * 100).toFixed(1)}% šanci na výhru</li>
-      <li><strong>Trh:</strong> ${bet.market === 'corners' ? 'Rohy (modelované kurzy)' : bet.odds_source === 'real' ? 'Reálné kurzy sázkovky' : 'Modelované kurzy'}</li>
-      <li><strong>Vklad:</strong> ${fmt(bet.stake || 0)} Kč (${bet.stake_mode === 'flat' ? 'plochý' : 'Kelly'})</li>
+      ${(bet.why && bet.why.length)
+        ? bet.why.map(w => `<li>${w}</li>`).join('')
+        : `<li>Model udává ${((bet.prob || 0) * 100).toFixed(1)}% šanci na výhru</li>
+           <li>${bet.market === 'corners' ? 'Trh: rohy (modelované kurzy)' : bet.odds_source === 'real' ? 'Reálné kurzy sázkovky' : 'Modelované kurzy'}</li>`}
     </ul>`}
   `;
 
@@ -657,6 +677,10 @@ function setupEventListeners() {
   const statusSelect = document.getElementById('tipStatus');
   if (statusSelect) {
     statusSelect.addEventListener('change', applyTipFilters);
+  }
+  const typeSelect = document.getElementById('tipType');
+  if (typeSelect) {
+    typeSelect.addEventListener('change', applyTipFilters);
   }
 
   // Modal close
@@ -1394,6 +1418,20 @@ function initMatchesPage() {
   });
 
   document.getElementById('matchesRefreshBtn').addEventListener('click', () => loadMatches(true));
+
+  // Filtry – jen překreslení, bez nového fetche
+  ['filterRealOdds', 'filterTutovky', 'filterUpcoming'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', () => {
+      if (MATCHES_STATE.lastLeagues) {
+        renderMatchesLeagues(MATCHES_STATE.lastLeagues, document.getElementById('matchesContainer'));
+      }
+    });
+  });
+
+  // Mobilní bottom nav
+  document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
 }
 
 async function loadMatches(refresh = false) {
@@ -1428,33 +1466,72 @@ function renderMatchesSummary(data, el) {
   `;
 }
 
+const FAV_LEAGUES_KEY = 'kurzanalytik_fav_leagues';
+
+function getFavLeagues() {
+  try { return new Set(JSON.parse(localStorage.getItem(FAV_LEAGUES_KEY) || '[]')); }
+  catch { return new Set(); }
+}
+
+function toggleFavLeague(league) {
+  const favs = getFavLeagues();
+  if (favs.has(league)) favs.delete(league); else favs.add(league);
+  localStorage.setItem(FAV_LEAGUES_KEY, JSON.stringify([...favs]));
+  if (MATCHES_STATE.lastLeagues) {
+    renderMatchesLeagues(MATCHES_STATE.lastLeagues, document.getElementById('matchesContainer'));
+  }
+}
+
+function _matchPassesFilters(m) {
+  const probs = m.probs || {};
+  if (document.getElementById('filterRealOdds')?.checked && m.odds_source !== 'real') return false;
+  if (document.getElementById('filterUpcoming')?.checked && (m.result || m.live)) return false;
+  if (document.getElementById('filterTutovky')?.checked) {
+    const maxProb = Math.max(...Object.values(probs), 0);
+    if (maxProb < 0.75) return false;
+  }
+  return true;
+}
+
 function renderMatchesLeagues(leagues, container) {
+  MATCHES_STATE.lastLeagues = leagues;
   if (!leagues.length) {
     container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den a sport</div>';
     return;
   }
+  const favs = getFavLeagues();
+  // oblíbené ligy první
+  const sorted = [...leagues].sort((a, b) =>
+    (favs.has(b.league) ? 1 : 0) - (favs.has(a.league) ? 1 : 0));
 
-  container.innerHTML = leagues.map(lg => `
+  let html = '';
+  for (const lg of sorted) {
+    const matches = lg.matches.filter(_matchPassesFilters);
+    if (!matches.length) continue;
+    const isFav = favs.has(lg.league);
+    html += `
     <div class="match-league">
       <div class="match-league-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="league-star ${isFav ? 'fav' : ''}" onclick="event.stopPropagation(); toggleFavLeague('${lg.league.replace(/'/g, "\\'")}')">${isFav ? '★' : '☆'}</span>
         <span class="league-flag">${lg.flag || '🏳️'}</span>
         <span class="league-name">${lg.league}</span>
-        <span class="league-count">${lg.matches.length}</span>
+        <span class="league-count">${matches.length}</span>
         <span class="league-chevron">▾</span>
       </div>
       <div class="match-league-body">
-        ${lg.matches.map(m => renderMatchRow(m)).join('')}
+        ${matches.map(m => renderMatchRow(m)).join('')}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }
+  container.innerHTML = html || '<div class="empty-state">Žádný zápas neodpovídá filtrům</div>';
 }
 
 function renderMatchRow(m) {
   const probs = m.probs || {};
   const bv = m.best_value || {};
+  const odds = m.odds || {};
   const isValue = bv.is_value;
-  const pickLabel = m.pick === 'home' ? '1' : m.pick === 'draw' ? 'X' : m.pick === 'away' ? '2' : '';
-  const probPct = probs[m.pick] ? (probs[m.pick] * 100).toFixed(0) + '%' : '';
+  const isReal = m.odds_source === 'real';
 
   let statusHtml;
   if (m.live) {
@@ -1462,31 +1539,244 @@ function renderMatchRow(m) {
   } else if (m.result) {
     statusHtml = `<span class="status-ft">Ukončen</span>`;
   } else {
-    statusHtml = `<span class="status-time">${m.time || '—'}</span>`;
+    statusHtml = `<span class="status-time">${czTime(m.date, m.time)}</span>`;
   }
 
   let scoreHtml;
   if (m.result) {
     scoreHtml = `<span class="score final">${m.result.home} – ${m.result.away}</span>`;
   } else if (m.live) {
-    scoreHtml = `<span class="score live">${m.result ? m.result.home + ' – ' + m.result.away : '— –  —'}</span>`;
+    scoreHtml = `<span class="score live">${m.result ? m.result.home + ' – ' + m.result.away : '— – —'}</span>`;
   } else {
     scoreHtml = `<span class="score upcoming">–</span>`;
   }
 
+  // kurzy 1 / X / 2 vedle sebe, zvýrazněný pick modelu
+  const oddsKeys = 'draw' in odds ? ['home', 'draw', 'away'] : ['home', 'away'];
+  const oddsHtml = oddsKeys.map(k => {
+    const o = odds[k];
+    const lbl = k === 'home' ? '1' : k === 'draw' ? 'X' : '2';
+    const isPick = m.pick === k;
+    return `<span class="odd-cell ${isPick ? 'pick' : ''}" title="${lbl}${probs[k] ? ': ' + (probs[k]*100).toFixed(0) + '%' : ''}">${o ? o.toFixed(2) : '—'}</span>`;
+  }).join('');
+
+  const probPct = probs[m.pick] ? (probs[m.pick] * 100).toFixed(0) + '%' : '';
+
   return `
-    <div class="match-row${isValue ? ' value' : ''}${m.live ? ' live' : ''}">
-      <div class="mr-status">${statusHtml}</div>
+    <div class="match-row${isValue ? ' value' : ''}${m.live ? ' live' : ''}" onclick='showMatchDetail(${JSON.stringify(m.id)})'>
+      <div class="mr-status">${statusHtml}${isReal ? '<span class="real-dot" title="Reálné kurzy sázkovky">●</span>' : ''}</div>
       <div class="mr-teams">
         <span class="team home">${m.home}</span>
         <span class="team away">${m.away}</span>
       </div>
       <div class="mr-score">${scoreHtml}</div>
+      <div class="mr-odds">${oddsHtml}</div>
       <div class="mr-prediction">
-        ${pickLabel ? `<span class="pick-badge pick-${m.pick}">${pickLabel}</span>` : ''}
         ${probPct ? `<span class="pred-prob">${probPct}</span>` : ''}
       </div>
       <div class="mr-value">${isValue ? `<span class="value-tag">${(bv.odds || 0).toFixed(2)} <small>EV ${((bv.ev || 0) * 100).toFixed(0)}%</small></span>` : ''}</div>
     </div>
   `;
+}
+
+// ============================================================================
+// MATCH DETAIL MODAL
+// ============================================================================
+
+function _findMatch(id) {
+  for (const lg of MATCHES_STATE.lastLeagues || []) {
+    const m = lg.matches.find(x => x.id === id);
+    if (m) return { ...m, flag: lg.flag };
+  }
+  return null;
+}
+
+function closeMatchDetail() {
+  const modal = document.getElementById('matchDetailModal');
+  if (modal) { modal.classList.add('hidden'); modal.classList.remove('active'); }
+}
+
+async function showMatchDetail(id) {
+  const m = _findMatch(id);
+  if (!m) return;
+  const modal = document.getElementById('matchDetailModal');
+  const content = document.getElementById('matchDetailContent');
+  if (!content) return;
+
+  const probs = m.probs || {};
+  const odds = m.odds || {};
+  const keys = 'draw' in odds ? ['home', 'draw', 'away'] : ['home', 'away'];
+  const lbl = { home: '1', draw: 'X', away: '2' };
+
+  const marketsHtml = keys.map(k => `
+    <div class="md-market ${m.pick === k ? 'pick' : ''}">
+      <div class="md-market-lbl">${lbl[k]}</div>
+      <div class="md-market-odds">${odds[k] ? odds[k].toFixed(2) : '—'}</div>
+      <div class="md-market-prob">${probs[k] ? (probs[k]*100).toFixed(0)+' %' : ''}</div>
+    </div>`).join('');
+
+  const glHtml = (m.goal_lines || []).map(g => `
+    <div class="md-line">
+      <span>Góly ${g.line}</span>
+      <span>Over ${g.over.best_odds ? g.over.best_odds.toFixed(2) : '—'} (${(g.over.prob*100).toFixed(0)} %)</span>
+      <span>Under ${g.under.best_odds ? g.under.best_odds.toFixed(2) : '—'} (${(g.under.prob*100).toFixed(0)} %)</span>
+    </div>`).join('');
+
+  const clHtml = (m.corner_lines || []).map(g => `
+    <div class="md-line">
+      <span>Rohy ${g.line}${m.exp_corners ? ` (oček. ${m.exp_corners})` : ''}</span>
+      <span>Over ${g.over.best_odds ? g.over.best_odds.toFixed(2) : '—'} (${(g.over.prob*100).toFixed(0)} %)</span>
+      <span>Under ${g.under.best_odds ? g.under.best_odds.toFixed(2) : '—'} (${(g.under.prob*100).toFixed(0)} %)</span>
+    </div>`).join('');
+
+  const scoresHtml = (m.top_scores || []).map(s =>
+    `<span class="md-score-chip">${s.score} <small>${(s.prob*100).toFixed(0)} %</small></span>`).join('');
+
+  content.innerHTML = `
+    <h2>${m.flag || ''} ${m.home} – ${m.away}</h2>
+    <div class="md-meta">${m.league} · ${czDate(m.date, m.time)} ${czTime(m.date, m.time)}
+      ${m.odds_source === 'real' ? '· <span class="real-dot">●</span> reálné kurzy' : '· modelované kurzy'}</div>
+    ${m.result ? `<div class="md-result">Výsledek: <strong>${m.result.home} – ${m.result.away}</strong></div>` : ''}
+    <h3>Vítěz zápasu</h3>
+    <div class="md-markets">${marketsHtml}</div>
+    ${m.exp_goals ? `<div class="md-meta">Očekávané góly: ${m.exp_goals.home} – ${m.exp_goals.away} (celkem ${m.exp_total})</div>` : ''}
+    ${scoresHtml ? `<h3>Nejpravděpodobnější výsledky</h3><div class="md-scores">${scoresHtml}</div>` : ''}
+    ${glHtml ? `<h3>Góly Over/Under</h3>${glHtml}` : ''}
+    ${clHtml ? `<h3>Rohy</h3>${clHtml}` : ''}
+    <h3>Forma týmů</h3>
+    <div id="mdForm" class="md-form"><div class="loading">Načítání formy...</div></div>
+  `;
+  modal.classList.remove('hidden');
+  modal.classList.add('active');
+
+  // Forma + H2H on-demand z ESPN
+  try {
+    const q = new URLSearchParams({ sport: m.sport || 'soccer', slug: m.slug || '',
+      home_id: m.home_id || '', away_id: m.away_id || '', home: m.home, away: m.away });
+    const res = await fetch(`/api/form?${q}`, { credentials: 'include' });
+    const f = await res.json();
+    const formEl = document.getElementById('mdForm');
+    if (!formEl) return;
+    const score = g => (g.gf != null && g.ga != null) ? `${g.gf}:${g.ga}` : '';
+    const fmtForm = (games) => (games || []).slice(0, 5).map(g =>
+      `<span class="form-chip ${g.res === 'W' ? 'w' : g.res === 'L' ? 'l' : 'd'}" title="${g.opp || ''} ${score(g)}">${g.res || '?'}</span>`).join('');
+    const h2h = (f.h2h || []).slice(0, 3).map(g =>
+      `<div class="md-h2h-row">${g.date || ''} · ${g.opp || ''} · ${score(g)} (${g.res || '?'})</div>`).join('');
+    formEl.innerHTML = `
+      <div class="md-form-row"><strong>${m.home}:</strong> ${fmtForm(f.home) || '—'}</div>
+      <div class="md-form-row"><strong>${m.away}:</strong> ${fmtForm(f.away) || '—'}</div>
+      ${h2h ? `<h4>Vzájemné zápasy</h4>${h2h}` : ''}
+    `;
+  } catch {
+    const formEl = document.getElementById('mdForm');
+    if (formEl) formEl.innerHTML = '<div class="empty-state">Forma není k dispozici</div>';
+  }
+}
+
+// ============================================================================
+// ČESKÝ ČAS — ESPN vrací UTC, převádíme na lokální čas prohlížeče
+// ============================================================================
+
+function czTime(dateStr, timeStr) {
+  if (!dateStr || !timeStr) return timeStr || '—';
+  try {
+    const d = new Date(`${dateStr}T${timeStr}:00Z`);
+    if (isNaN(d)) return timeStr;
+    return d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+  } catch { return timeStr; }
+}
+
+function czDate(dateStr, timeStr) {
+  if (!dateStr) return '—';
+  try {
+    const d = new Date(`${dateStr}T${timeStr || '12:00'}:00Z`);
+    if (isNaN(d)) return dateStr;
+    return d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' });
+  } catch { return dateStr; }
+}
+
+// ============================================================================
+// DASHBOARD EXTRAS — tip dne, dnešní tiket, včerejší bilance
+// ============================================================================
+
+async function loadDashboardExtras() {
+  try {
+    const res = await fetch('/api/dashboard', { credentials: 'include' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    renderTipOfDay(d.tip, d.tutovka);
+    renderTodayTicket(d.ticket);
+    renderYesterdayBanner(d.yesterday, d.last_run);
+  } catch (e) {
+    console.error('Dashboard extras error:', e);
+    const el = document.getElementById('tipOfDayContainer');
+    if (el) el.innerHTML = '<div class="empty-state">Nepodařilo se načíst</div>';
+  }
+}
+
+function renderTipOfDay(tip, tutovka) {
+  const el = document.getElementById('tipOfDayContainer');
+  if (!el) return;
+  if (!tip) {
+    el.innerHTML = '<div class="empty-state">Dnes žádná tutovka nesplňuje kritéria</div>';
+    return;
+  }
+  const acc = tutovka?.accuracy != null
+    ? `<div class="tip-day-acc">Tutovky historicky: ${tutovka.won}/${tutovka.settled} (${tutovka.accuracy} %)</div>` : '';
+  el.innerHTML = `
+    <div class="tip-day-match">${tip.match}</div>
+    <div class="tip-day-meta">${tip.league} · ${czDate(tip.date, tip.time)} ${czTime(tip.date, tip.time)}</div>
+    <div class="tip-day-bet">
+      <span class="tip-day-pick">${tip.name}</span>
+      <span class="tip-day-odds">${(tip.odds || 0).toFixed(2)}</span>
+    </div>
+    <div class="tip-day-prob">
+      <div class="prob-bar"><div class="prob-fill" style="width:${(tip.prob * 100).toFixed(0)}%"></div></div>
+      <span>${(tip.prob * 100).toFixed(0)} % jistota${tip.real ? ' · reálný kurz' : ''}</span>
+    </div>
+    ${acc}
+  `;
+}
+
+function renderTodayTicket(ticket) {
+  const el = document.getElementById('todayTicketContainer');
+  if (!el) return;
+  if (!ticket) {
+    el.innerHTML = '<div class="empty-state">Agent dnes tiket nevytvořil</div>';
+    return;
+  }
+  const legs = (ticket.legs || []).map(l => `
+    <div class="ticket-leg">
+      <span class="ticket-leg-status ${l.result === 'won' ? 'won' : l.result === 'lost' ? 'lost' : ''}">${l.result === 'won' ? '✓' : l.result === 'lost' ? '✗' : '·'}</span>
+      <span class="ticket-leg-match">${l.match}</span>
+      <span class="ticket-leg-odds">${(l.odds || 0).toFixed(2)}</span>
+    </div>`).join('');
+  el.innerHTML = `
+    <div class="ticket-head">
+      <span>${ticket.match}</span>
+      <span class="ticket-total">${(ticket.odds || 0).toFixed(2)}×</span>
+    </div>
+    ${legs}
+    <div class="ticket-foot">
+      Vklad ${fmt(ticket.stake)} Kč → možná výhra ${fmt(ticket.stake * ticket.odds)} Kč
+      <span class="tip-badge" data-status="${ticket.status}">${(ticket.status || 'open').toUpperCase()}</span>
+    </div>
+  `;
+}
+
+function renderYesterdayBanner(y, lastRun) {
+  const el = document.getElementById('yesterdayBanner');
+  if (!el) return;
+  const parts = [];
+  if (y && y.settled > 0) {
+    const cls = y.pnl >= 0 ? 'pos' : 'neg';
+    parts.push(`Včera: ${y.won}/${y.settled} výher, <strong class="${cls}">${y.pnl > 0 ? '+' : ''}${fmt(y.pnl)} Kč</strong>`);
+  }
+  if (lastRun && lastRun.ts) {
+    const t = new Date(lastRun.ts * 1000).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' });
+    parts.push(`Poslední běh agenta ${t} (${lastRun.mode === 'auto' ? 'auto' : 'ručně'}): ${lastRun.placed} sázek${(lastRun.tickets || []).length ? ' + tiket' : ''}`);
+  }
+  if (!parts.length) { el.classList.add('hidden'); return; }
+  el.innerHTML = parts.join(' &nbsp;·&nbsp; ');
+  el.classList.remove('hidden');
 }

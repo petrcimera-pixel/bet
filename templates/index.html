@@ -149,6 +149,21 @@
           </div>
         </div>
 
+        <!-- YESTERDAY BANNER -->
+        <div id="yesterdayBanner" class="day-banner hidden"></div>
+
+        <!-- TIP OF THE DAY + TODAY'S TICKET -->
+        <div class="dash-highlight-grid">
+          <div class="card tip-of-day">
+            <h2>💡 Tip dne</h2>
+            <div id="tipOfDayContainer"><div class="loading">Hledám tutovku...</div></div>
+          </div>
+          <div class="card today-ticket">
+            <h2>🎫 Dnešní tiket</h2>
+            <div id="todayTicketContainer"><div class="loading">Načítání...</div></div>
+          </div>
+        </div>
+
         <!-- TODAY'S & TOMORROW'S TIPS -->
         <div class="tips-section">
           <h2>Dnešní + Zítřejší tipy</h2>
@@ -194,6 +209,13 @@
           <button class="sport-tab" data-sport="football">🏈 Am. fotbal</button>
         </div>
 
+        <!-- Filters -->
+        <div class="matches-filter-bar">
+          <label><input type="checkbox" id="filterRealOdds"> Jen reálné kurzy</label>
+          <label><input type="checkbox" id="filterTutovky"> Jen tutovky (75 %+)</label>
+          <label><input type="checkbox" id="filterUpcoming"> Jen nadcházející</label>
+        </div>
+
         <!-- Summary bar -->
         <div class="matches-summary" id="matchesSummary"></div>
 
@@ -217,6 +239,11 @@
             <option value="open">Otevřené</option>
             <option value="won">Vyhrané</option>
             <option value="lost">Prohry</option>
+          </select>
+          <select id="tipType" class="filter-select">
+            <option value="">Vše</option>
+            <option value="single">Jen single</option>
+            <option value="acca">Jen tikety (AKO)</option>
           </select>
         </div>
 
@@ -896,6 +923,29 @@
       <div id="tipDetailContent">—</div>
     </div>
   </div>
+
+  <div id="matchDetailModal" class="modal hidden">
+    <div class="modal-content modal-wide">
+      <button class="modal-close" onclick="closeMatchDetail()">&times;</button>
+      <div id="matchDetailContent">—</div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button data-page="dashboard" class="bottom-nav-btn active">
+      <span class="bn-icon">▦</span><span>Přehled</span>
+    </button>
+    <button data-page="matches" class="bottom-nav-btn">
+      <span class="bn-icon">⚽</span><span>Zápasy</span>
+    </button>
+    <button data-page="agent-tips" class="bottom-nav-btn">
+      <span class="bn-icon">🤖</span><span>Tipy</span>
+    </button>
+    <button data-page="bankroll" class="bottom-nav-btn">
+      <span class="bn-icon">💰</span><span>Bank</span>
+    </button>
+  </nav>
 
   <script src="/static/app.js"></script>
 </body>
