@@ -1649,3 +1649,37 @@ h4 { font-size: 13px; font-weight: 600; color: var(--acc2); }
   .mr-value { grid-column: 3; grid-row: 2; text-align: right; }
   body { font-size: 14px; }
 }
+
+/* Settle progress panel */
+.settle-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--warn);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.settle-panel.hidden { display: none; }
+.settle-info { display: flex; align-items: center; gap: 12px; }
+.settle-icon { font-size: 20px; }
+.settle-icon.spin { display: inline-block; animation: settle-spin 1.2s linear infinite; }
+@keyframes settle-spin { to { transform: rotate(360deg); } }
+.settle-text { font-weight: 600; font-size: 13px; }
+.settle-sub { font-size: 12px; color: var(--dim); }
+.settle-actions { display: flex; align-items: center; gap: 12px; }
+.settle-progress {
+  width: 140px; height: 6px;
+  background: var(--bg); border-radius: 3px; overflow: hidden;
+}
+.settle-progress.hidden { display: none; }
+.settle-progress-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--warn), var(--pos));
+  border-radius: 3px;
+  transition: width .5s;
+}

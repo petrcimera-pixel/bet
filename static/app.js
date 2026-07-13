@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Vykresl dashboard
   renderDashboard();
   loadDashboardExtras();
+  initSettlePanel();
   console.log('App ready');
 });
 
@@ -1787,4 +1788,80 @@ function renderYesterdayBanner(y, lastRun) {
   if (!parts.length) { el.classList.add('hidden'); return; }
   el.innerHTML = parts.join(' &nbsp;·&nbsp; ');
   el.classList.remove('hidden');
+}
+
+// ============================================================================
+// SETTLE PROGRESS — průběh vyhodnocování zápasů
+// ============================================================================
+
+let _settleTimer = null;
+
+function initSettlePanel() {
+  const btn = document.getElementById('settleNowBtn');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = 'Vyhodnocuji...';
+      try {
+        await fetch('/api/tips/settle', { method: 'POST', credentials: 'include' });
+        await loadStats();          // obnov bank i tipy
+        renderDashboard();
+      } catch (e) { console.error('Settle error:', e); }
+      btn.disabled = false;
+      btn.textContent = 'Zkontrolovat výsledky';
+      pollSettleStatus();
+    });
+  }
+  pollSettleStatus();
+}
+
+async function pollSettleStatus() {
+  clearTimeout(_settleTimer);
+  let interval = 30000;
+  try {
+    const res = await fetch('/api/settle/status', { credentials: 'include' });
+    if (res.ok) {
+      const s = await res.json();
+      renderSettlePanel(s);
+      interval = s.in_progress ? 5000 : 30000;   // při běhu obnovuj rychleji
+    }
+  } catch (e) { /* ticho – další pokus za interval */ }
+  _settleTimer = setTimeout(pollSettleStatus, interval);
+}
+
+function renderSettlePanel(s) {
+  const panel = document.getElementById('settlePanel');
+  if (!panel) return;
+  const totalOpen = (s.open_tips || 0) + (s.open_bets || 0);
+  const text = document.getElementById('settleText');
+  const sub = document.getElementById('settleSub');
+  const icon = document.getElementById('settleIcon');
+  const progWrap = document.getElementById('settleProgressWrap');
+  const progFill = document.getElementById('settleProgressFill');
+
+  if (totalOpen === 0 && !s.in_progress) {
+    panel.classList.add('hidden');
+    return;
+  }
+  panel.classList.remove('hidden');
+
+  if (s.in_progress) {
+    icon.textContent = '🔄';
+    icon.classList.add('spin');
+    text.textContent = `Vyhodnocování běží — ${s.settled_so_far || 0} vyřešeno`;
+    const pct = s.total_pending ? Math.min(100, (s.settled_so_far / s.total_pending) * 100) : 0;
+    progWrap.classList.remove('hidden');
+    progFill.style.width = pct.toFixed(0) + '%';
+    sub.textContent = `Čeká ${totalOpen} položek (${s.open_bets || 0} sázek, ${s.open_tips || 0} tipů)${s.more_pending ? ' · další dávka následuje' : ''}`;
+  } else {
+    icon.textContent = '⏳';
+    icon.classList.remove('spin');
+    progWrap.classList.add('hidden');
+    text.textContent = `Čeká na vyhodnocení: ${totalOpen} položek`;
+    const last = s.last_check
+      ? new Date(s.last_check * 1000).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })
+      : null;
+    sub.textContent = `${s.open_bets || 0} sázek + ${s.open_tips || 0} tipů modelu` +
+      (last ? ` · poslední kontrola ${last}` : ' · kontrola běží automaticky na pozadí');
+  }
 }

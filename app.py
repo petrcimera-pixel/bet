@@ -467,6 +467,7 @@ _settle_status = {
     "settled_so_far": 0,
     "total_pending": 0,
     "more_pending": False,
+    "last_check": None,     # unix ts posledního dokončeného průchodu
 }
 _settle_lock = threading.Lock()
 
@@ -607,9 +608,17 @@ def api_tips_settle():
 
 @app.route("/api/settle/status")
 def api_settle_status():
-    """Live stav automatické kontroly výsledků na pozadí."""
+    """Live stav automatické kontroly výsledků na pozadí + počty otevřených."""
+    today = ds.today_str()
+    open_tips = [t for t in tips_db.get_tips(status="open", limit=2000)
+                 if t.get("date") and t["date"] <= today]
+    open_bets = [b for b in bankroll.state()["bets"]
+                 if b["status"] == "open" and (b.get("match_date") or "") <= today]
     with _settle_lock:
-        return jsonify(_settle_status)
+        out = dict(_settle_status)
+    out["open_tips"] = len(open_tips)
+    out["open_bets"] = len(open_bets)
+    return jsonify(out)
 
 
 # ---------------------------------------------------------------------------
@@ -926,6 +935,7 @@ def _settle_in_background():
             with _settle_lock:
                 _settle_status["settled_so_far"] += n_tips + n_bets
                 _settle_status["more_pending"] = more_pending
+                _settle_status["last_check"] = int(_time.time())
                 if not more_pending:
                     _settle_status["in_progress"] = False
 
