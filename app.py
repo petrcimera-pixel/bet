@@ -1352,14 +1352,34 @@ def api_bankroll_roi_odds():
         return jsonify({"error": str(e), "success": False}), 500
 
 
-if __name__ == "__main__":
+_BG_STARTED = False
+
+
+def _start_background_threads():
+    """Spustí background smyčky (prewarm, settle, auto-agent). Volá se jak při
+    lokálním běhu (python app.py), tak pod gunicornem na Renderu – tam se
+    __main__ blok nikdy nespustí, takže bez tohoto by na serveru neběželo
+    automatické načítání zápasů, vyhodnocování ani auto-run agenta."""
+    global _BG_STARTED
+    if _BG_STARTED:
+        return
+    _BG_STARTED = True
     n_cleaned = storage.cleanup_old_caches(max_age_days=14)
     if n_cleaned:
         print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
-    print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
-    if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
-        threading.Timer(1.2, _open_browser).start()
     threading.Thread(target=_prewarm, daemon=True).start()
     threading.Thread(target=_settle_in_background, daemon=True).start()
     threading.Thread(target=_auto_agent_loop, daemon=True).start()
+
+
+# Pod gunicornem (Render) se modul jen importuje – nastartuj pozadí hned tady.
+if os.environ.get("RENDER") or "gunicorn" in os.environ.get("SERVER_SOFTWARE", ""):
+    _start_background_threads()
+
+
+if __name__ == "__main__":
+    _start_background_threads()
+    print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
+    if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
+        threading.Timer(1.2, _open_browser).start()
     app.run(host=_HOST, port=_PORT, debug=False, threaded=True)
