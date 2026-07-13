@@ -640,30 +640,43 @@ def api_dashboard():
     today = ds.today_str()
     cfg = app_settings.get_settings()["agent"]
 
-    # Tip dne = nejjistější tutovka z dnešních zápasů (fotbal, cached predikce)
+    # Tip dne = nejjistější tutovka z dnešních zápasů (fotbal, cached predikce).
+    # NIKDY neblokuj na čerstvém ESPN fetchi (30–60 s) – když cache není,
+    # vrať "warming" a nastartuj načtení na pozadí; frontend se doptá znovu.
     tip = None
-    try:
-        preds = _predictions_for(today, days=1, sport="soccer")
-        best_p, best_c = None, None
-        for p in preds:
-            if p.get("result") is not None or p.get("live"):
-                continue
-            cands = agent._candidates(p, cfg)
-            c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
-                                    float(cfg.get("min_odds", 1.20)), only_real=False)
-            if c and (best_c is None or c["prob"] > best_c["prob"]):
-                best_p, best_c = p, c
-        if best_c:
-            tip = {
-                "match": f'{best_p["home"]} – {best_p["away"]}',
-                "league": best_p.get("league"),
-                "date": best_p.get("date"), "time": best_p.get("time"),
-                "name": best_c["name"], "label": best_c["label"],
-                "odds": best_c["odds"], "prob": best_c["prob"],
-                "real": best_c["real"], "market": best_c["market"],
-            }
-    except Exception:
-        pass
+    warming = False
+    key = f"soccer~{today}~{today}"
+    cache_file = f"cache_soccer_{today}_{today}.json"
+    disk_ready = (storage.load(cache_file, None) is not None
+                  and not storage.is_cache_stale(cache_file, ttl_hours=12))
+    if key not in _PRED_CACHE and not disk_ready:
+        # cache není → nastartuj fetch na pozadí, frontend se doptá za chvíli
+        warming = True
+        threading.Thread(target=lambda: _predictions_for(today, days=1, sport="soccer"),
+                         daemon=True).start()
+    else:
+        try:
+            preds = _predictions_for(today, days=1, sport="soccer")
+            best_p, best_c = None, None
+            for p in preds:
+                if p.get("result") is not None or p.get("live"):
+                    continue
+                cands = agent._candidates(p, cfg)
+                c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
+                                        float(cfg.get("min_odds", 1.20)), only_real=False)
+                if c and (best_c is None or c.get("cal_prob", c["prob"]) > best_c.get("cal_prob", best_c["prob"])):
+                    best_p, best_c = p, c
+            if best_c:
+                tip = {
+                    "match": f'{best_p["home"]} – {best_p["away"]}',
+                    "league": best_p.get("league"),
+                    "date": best_p.get("date"), "time": best_p.get("time"),
+                    "name": best_c["name"], "label": best_c["label"],
+                    "odds": best_c["odds"], "prob": best_c.get("cal_prob", best_c["prob"]),
+                    "real": best_c["real"], "market": best_c["market"],
+                }
+        except Exception:
+            pass
 
     bets = agent.agent_bets()
     yesterday = (_dt.date.today() - _dt.timedelta(days=1))
@@ -704,6 +717,7 @@ def api_dashboard():
 
     return jsonify({
         "tip": tip,
+        "warming": warming,
         "ticket": ticket,
         "yesterday": y_summary,
         "tutovka": tutovka_stats,

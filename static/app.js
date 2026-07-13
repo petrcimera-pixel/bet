@@ -1699,16 +1699,24 @@ function czDate(dateStr, timeStr) {
 // DASHBOARD EXTRAS — tip dne, dnešní tiket, včerejší bilance
 // ============================================================================
 
-async function loadDashboardExtras() {
+async function loadDashboardExtras(attempt = 0) {
   try {
     const res = await fetch('/api/dashboard', { credentials: 'include' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const d = await res.json();
-    renderTipOfDay(d.tip, d.tutovka);
     renderTodayTicket(d.ticket);
     renderYesterdayBanner(d.yesterday, d.last_run);
+    if (d.warming && attempt < 12) {
+      // server teprve stahuje zápasy z ESPN – zkus znovu za 15 s
+      const el = document.getElementById('tipOfDayContainer');
+      if (el) el.innerHTML = '<div class="loading">Stahuji dnešní zápasy z ESPN...</div>';
+      setTimeout(() => loadDashboardExtras(attempt + 1), 15000);
+      return;
+    }
+    renderTipOfDay(d.tip, d.tutovka);
   } catch (e) {
     console.error('Dashboard extras error:', e);
+    if (attempt < 3) { setTimeout(() => loadDashboardExtras(attempt + 1), 10000); return; }
     const el = document.getElementById('tipOfDayContainer');
     if (el) el.innerHTML = '<div class="empty-state">Nepodařilo se načíst</div>';
   }
