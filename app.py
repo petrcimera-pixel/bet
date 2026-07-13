@@ -47,6 +47,8 @@ from engine import odds_api
 from engine import tips_db
 from engine import settings as app_settings
 from engine import agent
+from engine import calibration
+from engine import persist
 from engine import backtester
 from engine import explainer
 
@@ -613,6 +615,23 @@ def api_settle_status():
 # ---------------------------------------------------------------------------
 # API – Automatický sázecí agent (zítřejší tipy, plochý vklad z banku)
 # ---------------------------------------------------------------------------
+@app.route("/api/persist/status")
+def api_persist_status():
+    """Stav zálohování dat do GitHub Gistu (persistence na Renderu)."""
+    return jsonify(persist.status())
+
+
+@app.route("/api/calibration")
+def api_calibration():
+    """Stav kalibrace pravděpodobností (kolik dat, jak křivka opravuje)."""
+    return jsonify(calibration.status())
+
+
+@app.route("/api/calibration/rebuild", methods=["POST"])
+def api_calibration_rebuild():
+    return jsonify(calibration.rebuild())
+
+
 @app.route("/api/dashboard")
 def api_dashboard():
     """Data pro dashboard: tip dne, dnešní tiket agenta, včerejší bilance,
@@ -884,6 +903,11 @@ def _settle_in_background():
             n_bets = bankroll.auto_settle(results, corner_results)
             _PRED_CACHE.clear()
             _maybe_auto_retrain(n_tips + n_bets)
+            if n_tips:
+                try:
+                    calibration.rebuild()   # nové výsledky → aktualizuj kalibrační křivku
+                except Exception:
+                    pass
 
             with _settle_lock:
                 _settle_status["settled_so_far"] += n_tips + n_bets
@@ -1367,6 +1391,7 @@ def _start_background_threads():
     n_cleaned = storage.cleanup_old_caches(max_age_days=14)
     if n_cleaned:
         print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
+    persist.start()   # obnova dat z gistu (Render) + zálohovací smyčka
     threading.Thread(target=_prewarm, daemon=True).start()
     threading.Thread(target=_settle_in_background, daemon=True).start()
     threading.Thread(target=_auto_agent_loop, daemon=True).start()

@@ -29,7 +29,9 @@ _SPORT_GROUP = {
 
 
 def get_key() -> str:
-    return (storage.load("config.json", {}) or {}).get("odds_api_key", "")
+    import os
+    return ((storage.load("config.json", {}) or {}).get("odds_api_key", "")
+            or os.environ.get("ODDS_API_KEY", ""))
 
 
 def set_key(key: str) -> None:

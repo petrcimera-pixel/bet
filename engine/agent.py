@@ -18,6 +18,7 @@ Vše je virtuální – slouží k analýze úspěšnosti modelu na reálném ba
 import datetime
 
 from . import bankroll
+from . import calibration
 from . import settings as app_settings
 from . import data_sources as _ds
 from .tips_db import SHARP_PROB
@@ -112,6 +113,9 @@ def _candidates(p, cfg):
             "outcome": outcome, "label": b.get("label", "?"),
             "name": b.get("name", b.get("label", "?")),
             "odds": float(odds), "prob": float(prob),
+            # kalibrovaná pravděpodobnost = model prob opravená podle skutečné
+            # historické úspěšnosti (model je systematicky překalibrovaný)
+            "cal_prob": calibration.calibrate(float(prob)),
             "market_prob": b.get("market_prob"), "market": market, "real": real,
         })
 
@@ -141,11 +145,11 @@ def _candidates(p, cfg):
 
 
 def _best_tutovka(cands, min_prob, min_odds, only_real):
-    """Nejjistější tip zápasu: nejvyšší pravděpodobnost splňující prahy."""
+    """Nejjistější tip zápasu podle KALIBROVANÉ pravděpodobnosti."""
     ok = [c for c in cands
-          if c["prob"] >= min_prob and c["odds"] >= min_odds
+          if c.get("cal_prob", c["prob"]) >= min_prob and c["odds"] >= min_odds
           and not (only_real and not c["real"])]
-    return max(ok, key=lambda c: c["prob"]) if ok else None
+    return max(ok, key=lambda c: c.get("cal_prob", c["prob"])) if ok else None
 
 
 def _has_ticket_today(kind: str) -> bool:
@@ -167,8 +171,8 @@ def _build_ticket(pool, max_legs, min_total_odds, min_prob):
     legs = []
     used = set()
     total = 1.0
-    for c in sorted(pool, key=lambda c: c["prob"], reverse=True):
-        if c["prob"] < min_prob or c["match_id"] in used or c["market"] == "corners":
+    for c in sorted(pool, key=lambda c: c.get("cal_prob", c["prob"]), reverse=True):
+        if c.get("cal_prob", c["prob"]) < min_prob or c["match_id"] in used or c["market"] == "corners":
             continue   # rohy do tiketů ne – nejdou vyhodnotit ze skóre
         legs.append(c)
         used.add(c["match_id"])
@@ -216,8 +220,14 @@ def _place_tickets(ticket_pool, cfg, balance):
 def _attach_reasoning(bet_id, p, best):
     """Uloží k sázce konkrétní zdůvodnění (proč agent tip vybral)."""
     why = []
-    why.append(f'Model dává {best["prob"]*100:.0f}% šanci – nejjistější tip zápasu '
-               f'napříč trhy ({_MARKET_CZ.get(best["market"], best["market"])}).')
+    cal = best.get("cal_prob", best["prob"])
+    if abs(cal - best["prob"]) >= 0.02:
+        why.append(f'Kalibrovaná jistota {cal*100:.0f} % (model říká {best["prob"]*100:.0f} %, '
+                   f'korekce podle skutečné historické úspěšnosti) – nejjistější tip '
+                   f'zápasu napříč trhy ({_MARKET_CZ.get(best["market"], best["market"])}).')
+    else:
+        why.append(f'Model dává {best["prob"]*100:.0f}% šanci – nejjistější tip zápasu '
+                   f'napříč trhy ({_MARKET_CZ.get(best["market"], best["market"])}).')
     eg = p.get("exp_goals")
     if eg:
         why.append(f'Očekávané skóre {eg.get("home", "?")} : {eg.get("away", "?")} gólů '
@@ -316,8 +326,10 @@ def run(predictions: list) -> dict:
                                 match=f'{p["home"]} – {p["away"]}',
                                 date=p.get("date", ""), time=p.get("time", "")))
 
+        cal = best.get("cal_prob", best["prob"])
         if stake_mode == "kelly":
-            stake = bankroll.kelly_stake(best["prob"], best["odds"], balance, kelly_fraction)
+            # Kelly z KALIBROVANÉ pravděpodobnosti – syrová by nadhodnocovala vklady
+            stake = bankroll.kelly_stake(cal, best["odds"], balance, kelly_fraction)
             stake = max(stake, MIN_STAKE) if stake > 0 else flat_stake * 0.5
         else:
             stake = flat_stake
@@ -330,7 +342,7 @@ def run(predictions: list) -> dict:
         cons = (1.0 / best["market_prob"]) if best.get("market_prob") else None
         try:
             bet = bankroll.place_bet(p["id"], best["label"], best["outcome"],
-                               best["odds"], best["prob"], stake,
+                               best["odds"], cal, stake,
                                p["home"], p["away"], consensus_odds=cons, tag=TAG,
                                match_date=p.get("date"), match_time=p.get("time"),
                                league=p.get("league"),

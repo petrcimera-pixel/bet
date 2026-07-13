@@ -1,8 +1,8 @@
 {
   "status": "trained",
   "accuracy": 0.42857142857142855,
-  "last_trained": "2026-07-10T22:14:41.666741",
-  "total_feedback": 37,
+  "last_trained": "2026-07-13T22:33:29.208741",
+  "total_feedback": 58,
   "training_samples": 28,
   "test_samples": 7,
   "auc": 0.35,
