@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 """Jednoduché ukládání stavu do JSON souborů v ./data."""
 
+import copy
 import os, json, glob, threading
 
 _DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 _LOCK = threading.Lock()
+
+# In-memory cache klíčovaná podle mtime souboru. Bez ní se velké soubory
+# (hlavně tips.json, roste bez omezení – stovky KB až desítky MB po týdnech
+# běhu) parsovaly z disku znovu při KAŽDÉM API volání, což pod jedním
+# gunicorn workerem na Renderu dokázalo appku zcela ucpat (frontend polluje
+# /api/settle/status a dashboard každých 5–30 s).
+_CACHE = {}   # name -> (mtime, deep-copy dat)
 
 
 def _path(name: str) -> str:
@@ -24,12 +32,26 @@ def remove_matching(pattern: str) -> int:
 
 
 def load(name: str, default):
+    path = _path(name)
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        _CACHE.pop(name, None)
+        return default
+
+    cached = _CACHE.get(name)
+    if cached and cached[0] == mtime:
+        return copy.deepcopy(cached[1])   # deepcopy: volající nesmí měnit cache in-place
+
     # utf-8-sig: soubory upravené externě (PowerShell) mohou mít BOM
     try:
-        with open(_path(name), encoding="utf-8-sig") as f:
-            return json.load(f)
+        with open(path, encoding="utf-8-sig") as f:
+            data = json.load(f)
     except Exception:
         return default
+
+    _CACHE[name] = (mtime, data)
+    return copy.deepcopy(data)
 
 
 def save(name: str, data) -> None:
@@ -39,6 +61,12 @@ def save(name: str, data) -> None:
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         os.replace(tmp, _path(name))
+        # rovnou naplň cache aktuálním mtime, ať následující load() ve stejném
+        # requestu nemusí znovu číst z disku
+        try:
+            _CACHE[name] = (os.path.getmtime(_path(name)), copy.deepcopy(data))
+        except OSError:
+            _CACHE.pop(name, None)
 
 
 def get_cache_mtime(name: str) -> float:

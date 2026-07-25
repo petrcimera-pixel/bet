@@ -201,8 +201,32 @@ def save_tips(predictions: list) -> int:
         added += 1
 
     if added:
+        _prune(db)
         _save(db)
     return added
+
+
+_MAX_TIPS = 12000   # strop velikosti tips.json – bez něj roste bez omezení
+
+
+def _prune(db: dict) -> int:
+    """Když tips.json přeroste strop, zahodí nejstarší VYHODNOCENÉ tipy (nikdy
+    otevřené – ty čekají na settle). Bez tohoto stropu soubor po měsících
+    nepřetržitého běhu naroste na desítky MB a KAŽDÝ request (settle/status,
+    dashboard, tips) ho musí znovu načíst a parsovat – na jednom gunicorn
+    workeru to appku dokáže úplně ucpat."""
+    tips = db["tips"]
+    over = len(tips) - _MAX_TIPS
+    if over <= 0:
+        return 0
+    settled = sorted(
+        (i for i, t in enumerate(tips) if t.get("pick_result") is not None),
+        key=lambda i: tips[i].get("settled_at") or "")
+    drop = set(settled[:over])
+    if not drop:
+        return 0   # samé otevřené tipy – nemáme co bezpečně zahodit
+    db["tips"] = [t for i, t in enumerate(tips) if i not in drop]
+    return len(drop)
 
 
 # ---------------------------------------------------------------------------
@@ -267,6 +291,7 @@ def settle_tips(results: dict, corner_results: dict = None) -> int:
         settled += 1
 
     if settled:
+        _prune(db)
         _save(db)
     return settled
 
