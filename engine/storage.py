@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Jednoduché ukládání stavu do JSON souborů v ./data."""
 
-import copy
 import os, json, glob, threading
 
 _DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
@@ -12,7 +11,14 @@ _LOCK = threading.Lock()
 # běhu) parsovaly z disku znovu při KAŽDÉM API volání, což pod jedním
 # gunicorn workerem na Renderu dokázalo appku zcela ucpat (frontend polluje
 # /api/settle/status a dashboard každých 5–30 s).
-_CACHE = {}   # name -> (mtime, deep-copy dat)
+#
+# POZOR: load() vrací PŘÍMOU referenci na cache, ne kopii (deepcopy velkého
+# tips.json při každém čtení dvojnásobil paměť i čas a appku na Renderu
+# shazoval na OOM). Bezpečné to je proto, že celý kód drží konvenci
+# "načti → uprav in-place → hned ulož" (viz tips_db.py, bankroll.py) – mezi
+# načtením a uložením se objekt nikdy nezahazuje ani nedrží přes více
+# requestů. Čistě čtecí přístupy (filtrování, iterace) objekt nemutují.
+_CACHE = {}   # name -> (mtime, data)
 
 
 def _path(name: str) -> str:
@@ -41,7 +47,7 @@ def load(name: str, default):
 
     cached = _CACHE.get(name)
     if cached and cached[0] == mtime:
-        return copy.deepcopy(cached[1])   # deepcopy: volající nesmí měnit cache in-place
+        return cached[1]
 
     # utf-8-sig: soubory upravené externě (PowerShell) mohou mít BOM
     try:
@@ -51,7 +57,7 @@ def load(name: str, default):
         return default
 
     _CACHE[name] = (mtime, data)
-    return copy.deepcopy(data)
+    return data
 
 
 def save(name: str, data) -> None:
@@ -64,7 +70,7 @@ def save(name: str, data) -> None:
         # rovnou naplň cache aktuálním mtime, ať následující load() ve stejném
         # requestu nemusí znovu číst z disku
         try:
-            _CACHE[name] = (os.path.getmtime(_path(name)), copy.deepcopy(data))
+            _CACHE[name] = (os.path.getmtime(_path(name)), data)
         except OSError:
             _CACHE.pop(name, None)
 
