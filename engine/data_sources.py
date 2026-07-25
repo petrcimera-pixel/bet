@@ -316,7 +316,10 @@ def _parse_espn(slug, country, data, start, end, sport="soccer"):
         hs = raw_hs if (completed or is_live) else None
         as_ = raw_as if (completed or is_live) else None
 
-        real_odds = _espn_odds(c)
+        try:
+            real_odds = _espn_odds(c)
+        except Exception:
+            real_odds = None   # kurzy jsou bonus – nesmí shodit parsování zápasu
 
         out.append({
             "id": str(ev.get("id") or f"{slug}-{hn}-{an}-{start}"),
@@ -354,9 +357,9 @@ def _espn_odds(competition):
     """Reálné kurzy sázkovky (DraftKings/ESPN BET) přímo ze scoreboard API.
     Zdarma, bez kvóty – narozdíl od The Odds API. Vrací None když nejsou."""
     odds_list = competition.get("odds") or []
-    if not odds_list:
-        return None
-    o = odds_list[0]
+    o = odds_list[0] if odds_list else None
+    if not o:
+        return None   # u starších zápasů ESPN vrací [null]
     ml = o.get("moneyline") or {}
 
     def pick(side):
@@ -389,6 +392,19 @@ def _espn_odds(competition):
 
     return {"provider": provider, "odds": ro, "over_under": o.get("overUnder"),
             "totals": totals}
+
+
+def fetch_league_scores(sport: str, slug: str, date_str: str) -> list:
+    """Zápasy JEDNÉ ligy pro jeden den – cílený dotaz pro vyhodnocování.
+    Jeden HTTP request místo skenu všech 244 lig (20–50× rychlejší settle)."""
+    try:
+        r = requests.get(ESPN.format(sport=sport, slug=slug),
+                         params={"dates": date_str.replace("-", "")},
+                         timeout=TIMEOUT)
+        r.raise_for_status()
+        return _parse_espn(slug, "", r.json(), date_str, date_str, sport)
+    except Exception:
+        return []
 
 
 def fetch_corners(sport: str, slug: str, event_id: str):

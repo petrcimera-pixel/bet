@@ -300,6 +300,16 @@ def _eval_outcome(outcome: str, hs: int, as_: int):
 # ---------------------------------------------------------------------------
 # Dotazy a statistiky
 # ---------------------------------------------------------------------------
+def open_tips_until(date_str: str, limit: int = 3000) -> list:
+    """Otevřené tipy se zápasem do daného data VČETNĚ, od nejstarších.
+    Pro vyhodnocování – get_tips řadí od nejnovějších a s limitem by staré
+    (vyhodnotitelné) tipy zahodil ve prospěch budoucích."""
+    out = [t for t in _db()["tips"]
+           if t["pick_result"] is None and (t.get("date") or "") <= date_str]
+    out.sort(key=lambda t: t.get("date", ""))
+    return out[:limit]
+
+
 def get_tips(sport: str = None, status: str = None,
              limit: int = 200, offset: int = 0) -> list:
     """Vrátí tipy seřazené od nejnovějšího s volitelnými filtry."""

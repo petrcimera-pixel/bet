@@ -457,8 +457,7 @@ def api_settle():
     return jsonify({"bet": bet, "stats": bankroll.stats()})
 
 
-_SETTLE_BATCH_DAYS = 2   # max dny na batch
-_SETTLE_BATCH_MATCHES = 500   # max zápasů na batch (244 lig × 2 dny = ~488 zápasů)
+_SETTLE_BATCH_TARGETS = 120   # max liga-dnů (requestů) na jeden průchod settle
 
 # Globální stav kontroly výsledků na pozadí
 _settle_status = {
@@ -473,65 +472,72 @@ _settle_lock = threading.Lock()
 
 
 def _settle_recent():
-    """Sdílená logika vyhodnocení: pro dny <= dnešek (jediné, kde už zápas může mít
-    výsledek) natáhne ČERSTVÁ data z ESPN (mimo kešku) – jinak by zůstal výsledek
-    zápasu odehraného po posledním zobrazení toho dne v appce navždy chybějící.
-    Bere v potaz dny jak z otevřených TIPŮ, tak z otevřených SÁZEK (bank), aby
-    fungovalo vyhodnocení z libovolného místa appky (Bankroll, Tipy, Agent).
-    Dotaz na 244 lig je pomalý, takže se zpracuje jen pár nejnovějších dnů
-    najednou; starší zbytek se dovyhodnotí při dalším kliknutí.
-    Vrací (results, corner_results, more_pending)."""
+    """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
+    Každý otevřený tip/sázka nese slug ligy → místo skenu všech 244 lig na den
+    se ptáme jen konkrétních lig (1 request na ligu a den, paralelně).
+    Staré záznamy bez slugu se dořeší celoplošným skenem, až je cílená fronta
+    prázdná. Vrací (results, corner_results, more_pending)."""
     today = ds.today_str()
-    open_tips = tips_db.get_tips(status="open", limit=1000)  # max 1000 tipů – dost na vyřešení
+    open_tips = tips_db.open_tips_until(today)   # od nejstarších, jen vyhodnotitelné
     open_bets = [b for b in bankroll.state()["bets"] if b["status"] == "open" and b.get("match_id")]
 
-    # Priorita dnů v dávce: NEJSTARŠÍ DNY DŘÍV (aby se nedostaly "uvězněné" na konci).
-    # Sekundárně váha – SÁZKY (reálný bank) váží 3× víc než tipy.
-    # Řazení: (1) čím starší, tím dřív; (2) čím více otevřených položek, tím dřív.
-    weight = {}
+    # Cíle: (sport, slug, date) s váhou – sázky (reálný bank) váží 3× víc než tipy
+    targets = {}
+    slugless_days = {}   # (sport, date) – staré záznamy bez slugu
     for t in open_tips:
-        if t.get("date") and t["date"] <= today:
-            weight[(t.get("sport", "soccer"), t["date"])] = \
-                weight.get((t.get("sport", "soccer"), t["date"]), 0) + 1
+        if not t.get("date") or t["date"] > today:
+            continue
+        sport = t.get("sport", "soccer")
+        if t.get("slug"):
+            k = (sport, t["slug"], t["date"])
+            targets[k] = targets.get(k, 0) + 1
+        else:
+            k = (sport, t["date"])
+            slugless_days[k] = slugless_days.get(k, 0) + 1
     for b in open_bets:
-        if b.get("match_date") and b["match_date"] <= today:
-            key = (b.get("sport", "soccer"), b["match_date"])
-            weight[key] = weight.get(key, 0) + 3
-    # Seřaď: nejstarší dny dřív (sd[1] ascending), pak více položek dřív (-weight desc)
-    past_dates = sorted(weight, key=lambda sd: (sd[1], -weight[sd]))
+        if not b.get("match_date") or b["match_date"] > today:
+            continue
+        sport = b.get("sport", "soccer")
+        if b.get("slug"):
+            k = (sport, b["slug"], b["match_date"])
+            targets[k] = targets.get(k, 0) + 3
+        else:
+            k = (sport, b["match_date"])
+            slugless_days[k] = slugless_days.get(k, 0) + 3
 
-    # Vyber dny dokud počet zápasů <= _SETTLE_BATCH_MATCHES a počet dní <= _SETTLE_BATCH_DAYS
-    batch = []
-    match_count = 0
-    for sd in past_dates:
-        if len(batch) >= _SETTLE_BATCH_DAYS:
-            break
-        batch.append(sd)
-        match_count += weight[sd]
-        if match_count >= _SETTLE_BATCH_MATCHES:
-            break
-
-    remaining = past_dates[len(batch):]
-
-    def _grab(sd):
-        sport, date_str = sd
-        try:
-            return ds.fetch_range(date_str, date_str, use_cache=False, sport=sport)
-        except Exception:
-            return []
+    # Nejstarší dny první, pak dle váhy; dávka = max N liga-dnů (N requestů)
+    ordered = sorted(targets, key=lambda t: (t[2], -targets[t]))
+    batch = ordered[:_SETTLE_BATCH_TARGETS]
+    remaining = len(ordered) - len(batch)
 
     results = {}
+
+    def _collect(matches):
+        for m in matches:
+            if m.get("home_score") is None or m.get("away_score") is None:
+                continue
+            if m.get("live"):
+                continue   # neukončené, skóre se ještě může změnit
+            results[m["id"]] = {"home": m["home_score"], "away": m["away_score"]}
+
     if batch:
-        # Max 3 workers – míň paralelizmu = míň zatížení ESPN
-        with ThreadPoolExecutor(max_workers=min(3, len(batch))) as ex:
-            for matches in ex.map(_grab, batch):
-                for m in matches:
-                    # raw zápasy z data_sources mají home_score/away_score, ne "result"
-                    if m.get("home_score") is None or m.get("away_score") is None:
-                        continue
-                    if m.get("live"):
-                        continue   # neukončené, score se ještě může změnit
-                    results[m["id"]] = {"home": m["home_score"], "away": m["away_score"]}
+        def _grab_league(t):
+            sport, slug, date_str = t
+            return ds.fetch_league_scores(sport, slug, date_str)
+        with ThreadPoolExecutor(max_workers=min(12, len(batch))) as ex:
+            for matches in ex.map(_grab_league, batch):
+                _collect(matches)
+
+    # Fallback pro záznamy bez slugu: celoplošný sken, max 1 den za průchod,
+    # a jen když cílená fronta je hotová (jinak by brzdil rychlou cestu)
+    if not remaining and slugless_days:
+        oldest = sorted(slugless_days, key=lambda sd: (sd[1], -slugless_days[sd]))[:1]
+        for sport, date_str in oldest:
+            try:
+                _collect(ds.fetch_range(date_str, date_str, use_cache=False, sport=sport))
+            except Exception:
+                pass
+        remaining += max(0, len(slugless_days) - 1)
 
     # Rohy se ověřují zvlášť přes ESPN boxscore (summary endpoint, statistika
     # "wonCorners") – jen pro zápasy, které právě skončily a mají otevřený
@@ -561,7 +567,7 @@ def _settle_recent():
                 if c:
                     corner_results[mid] = c
 
-    return results, corner_results, len(remaining) > 0
+    return results, corner_results, remaining > 0
 
 
 @app.route("/api/bet/autosettle", methods=["POST"])
@@ -610,8 +616,7 @@ def api_tips_settle():
 def api_settle_status():
     """Live stav automatické kontroly výsledků na pozadí + počty otevřených."""
     today = ds.today_str()
-    open_tips = [t for t in tips_db.get_tips(status="open", limit=2000)
-                 if t.get("date") and t["date"] <= today]
+    open_tips = tips_db.open_tips_until(today)
     open_bets = [b for b in bankroll.state()["bets"]
                  if b["status"] == "open" and (b.get("match_date") or "") <= today]
     with _settle_lock:
@@ -899,10 +904,12 @@ def _settle_in_background():
     while True:
         try:
             with _settle_lock:
-                # Počet otevřených položek na začátku běhu
+                # Počet VYHODNOTITELNÝCH položek (zápas do dneška) na začátku běhu
+                today = ds.today_str()
                 open_bets = [b for b in bankroll.state()["bets"]
-                            if b["status"] == "open" and b.get("match_id")]
-                open_tips = tips_db.get_tips(status="open", limit=1000)  # stejný limit jako v _settle_recent
+                            if b["status"] == "open" and b.get("match_id")
+                            and (b.get("match_date") or "") <= today]
+                open_tips = tips_db.open_tips_until(today)
                 total = len(open_bets) + len(open_tips)
 
                 if total == 0:
