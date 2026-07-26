@@ -158,15 +158,24 @@ def sync_loop():
         time.sleep(_INTERVAL)
 
 
-def start():
-    """Obnova při startu + spuštění zálohovací smyčky."""
-    if not enabled():
-        return
+def _restore_then_loop():
     try:
         restore()
     except Exception as e:
         print(f"[persist] {e}")
-    threading.Thread(target=sync_loop, daemon=True).start()
+    sync_loop()
+
+
+def start():
+    """Obnova při startu + spuštění zálohovací smyčky – VŠE v jednom
+    background threadu. restore() dělá síťová volání na GitHub API (mohou
+    trvat několik sekund) – pokud by běžela synchronně při importu modulu
+    (jak dělal gunicorn worker na Renderu), blokovala by start appky natolik,
+    že Render mohl health-check vyhodnotit jako selhaný a worker opakovaně
+    restartovat, ještě než appka stihla přijmout první request."""
+    if not enabled():
+        return
+    threading.Thread(target=_restore_then_loop, daemon=True).start()
 
 
 def status() -> dict:
