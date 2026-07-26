@@ -478,6 +478,18 @@ _settle_status = {
 _settle_lock = threading.Lock()
 _last_slugless_fallback = 0.0   # throttle: plný sken 244 lig, ne každý průchod
 
+# Diagnostika bootu – kdy se který background thread reálně spustil (nebo
+# vůbec ne). Nastaveno jako VŮBEC PRVNÍ řádek v každé thread funkci, ať jde
+# rozlišit "thread se nespustil" od "thread běží, ale visí/spí".
+_boot_diag = {
+    "module_import_at": None,
+    "start_bg_threads_called_at": None,
+    "prewarm_thread_entered_at": None,
+    "settle_thread_entered_at": None,
+    "agent_thread_entered_at": None,
+    "persist_thread_entered_at": None,
+}
+
 
 def _settle_recent(allow_slugless_fallback=True):
     """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
@@ -643,6 +655,16 @@ def _rss_mb():
         return round(kb / 1024, 1)
     except Exception:
         return None
+
+
+@app.route("/api/boot-diag")
+def api_boot_diag():
+    """Diagnostika bootu bez nutnosti Render logů: kdy se který background
+    thread reálně spustil (nebo vůbec ne), navíc přidá čas 'teď' aby šlo
+    přímo vypočítat stáří (kolik s uplynulo od boot)."""
+    out = dict(_boot_diag)
+    out["now"] = int(_time.time())
+    return jsonify(out)
 
 
 @app.route("/api/settle/status")
@@ -930,6 +952,7 @@ def _prewarm():
     ať nekoliduje s ostatními background thready (settle, persist) v
     kritickém prvním minutě po bootu, kdy appka na Render free tieru
     (512 MB) opakovaně padala."""
+    _boot_diag["prewarm_thread_entered_at"] = int(_time.time())
     try:
         _time.sleep(10)   # ať gunicorn worker nejdřív stihne přijmout první requesty
         _predictions_for(ds.today_str(), days=3)
@@ -942,6 +965,7 @@ def _settle_in_background():
     otevřené sázky/tipy v dávkách. Aktualizuje _settle_status pro live progress v UI.
     Když není co řešit, čeká 10s a pak zkusí znovu."""
     import time
+    _boot_diag["settle_thread_entered_at"] = int(_time.time())
 
     # Rozestup od _prewarm (start +10s, běh desítky s) a persist (první push
     # v +60s) – ať v kritické první minutě po bootu neběží víc síťově těžkých
@@ -1029,6 +1053,7 @@ def _auto_agent_loop():
     Kontroluje každých 60 s, zda nastal čas pro běh."""
     import time
     import datetime as _dt
+    _boot_diag["agent_thread_entered_at"] = int(_time.time())
 
     time.sleep(90)   # rozestup od ostatních background threadů, viz _settle_in_background
 
@@ -1474,16 +1499,25 @@ def _start_background_threads():
     __main__ blok nikdy nespustí, takže bez tohoto by na serveru neběželo
     automatické načítání zápasů, vyhodnocování ani auto-run agenta."""
     global _BG_STARTED
+    _boot_diag["start_bg_threads_called_at"] = int(_time.time())
     if _BG_STARTED:
         return
     _BG_STARTED = True
-    n_cleaned = storage.cleanup_old_caches(max_age_days=14)
-    if n_cleaned:
-        print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
-    persist.start()   # obnova dat z gistu (Render) + zálohovací smyčka
-    threading.Thread(target=_prewarm, daemon=True).start()
-    threading.Thread(target=_settle_in_background, daemon=True).start()
-    threading.Thread(target=_auto_agent_loop, daemon=True).start()
+    try:
+        n_cleaned = storage.cleanup_old_caches(max_age_days=14)
+        if n_cleaned:
+            print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
+        persist.start()   # obnova dat z gistu (Render) + zálohovací smyčka
+        threading.Thread(target=_prewarm, daemon=True).start()
+        threading.Thread(target=_settle_in_background, daemon=True).start()
+        threading.Thread(target=_auto_agent_loop, daemon=True).start()
+        _boot_diag["start_bg_threads_completed_ok"] = True
+    except Exception as e:
+        # Nikdy nesmí shodit import modulu – ale ať je vidět CO selhalo
+        import traceback
+        _boot_diag["start_bg_threads_error"] = f"{type(e).__name__}: {e}\n{traceback.format_exc()[-800:]}"
+        print(f"[boot] _start_background_threads selhalo: {e}")
+        traceback.print_exc()
 
 
 # Pod gunicornem (Render) se modul jen importuje, __main__ blok se nespustí –
@@ -1494,6 +1528,7 @@ def _start_background_threads():
 # RENDER env proměnnou, a pokud by chyběla, thready by se NIKDY nespustily.
 # _BG_STARTED guard zajistí, že se nespustí dvakrát, když __main__ blok
 # zavolá totéž znovu při lokálním běhu.)
+_boot_diag["module_import_at"] = int(_time.time())
 _start_background_threads()
 
 
