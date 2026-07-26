@@ -721,6 +721,37 @@ def _rss_mb():
         return None
 
 
+@app.route("/api/settle/diag")
+def api_settle_diag():
+    """Proč fronta klesá tak pomalu i po úspěšných /api/cron/settle voláních?
+    Rozpad otevřených tipů: kolik jich má/nemá uložený slug ligy (bez slugu
+    = nikdy se automaticky nevyhodnotí, fallback je vypnutý), kolik
+    unikátních (sport, slug, datum) cílů čeká, a vzorek nejstarších."""
+    today = ds.today_str()
+    open_tips = tips_db.open_tips_until(today, limit=100000)
+    with_slug = [t for t in open_tips if t.get("slug")]
+    without_slug = [t for t in open_tips if not t.get("slug")]
+    targets = {}
+    for t in with_slug:
+        k = (t.get("sport", "soccer"), t["slug"], t["date"])
+        targets[k] = targets.get(k, 0) + 1
+    oldest_targets = sorted(targets, key=lambda k: k[2])[:15]
+    oldest_slugless_dates = sorted({t["date"] for t in without_slug})[:10]
+    return jsonify({
+        "open_total": len(open_tips),
+        "with_slug": len(with_slug),
+        "without_slug": len(without_slug),
+        "unique_targets": len(targets),
+        "batch_size_per_call": _SETTLE_BATCH_TARGETS,
+        "passes_needed_estimate": max(1, -(-len(targets) // _SETTLE_BATCH_TARGETS)),
+        "oldest_targets_sample": [
+            {"sport": s, "slug": sl, "date": d, "count": targets[(s, sl, d)]}
+            for (s, sl, d) in oldest_targets
+        ],
+        "oldest_slugless_dates_sample": oldest_slugless_dates,
+    })
+
+
 @app.route("/api/boot-diag")
 def api_boot_diag():
     """Diagnostika bootu bez nutnosti Render logů: kdy se který background
