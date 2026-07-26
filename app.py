@@ -1486,9 +1486,15 @@ def _start_background_threads():
     threading.Thread(target=_auto_agent_loop, daemon=True).start()
 
 
-# Pod gunicornem (Render) se modul jen importuje – nastartuj pozadí hned tady.
-if os.environ.get("RENDER") or "gunicorn" in os.environ.get("SERVER_SOFTWARE", ""):
-    _start_background_threads()
+# Pod gunicornem (Render) se modul jen importuje, __main__ blok se nespustí –
+# proto se background thready startují VŽDY při importu modulu, ne podmíněně.
+# (Dřívější podmínka `RENDER env / "gunicorn" in SERVER_SOFTWARE` byla křehká:
+# SERVER_SOFTWARE je WSGI environ klíč dostupný per-request, ne v os.environ
+# při importu – ta část podmínky nikdy nebyla pravda; spoléhalo se čistě na
+# RENDER env proměnnou, a pokud by chyběla, thready by se NIKDY nespustily.
+# _BG_STARTED guard zajistí, že se nespustí dvakrát, když __main__ blok
+# zavolá totéž znovu při lokálním běhu.)
+_start_background_threads()
 
 
 if __name__ == "__main__":
