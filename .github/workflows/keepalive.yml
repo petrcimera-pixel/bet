@@ -1,0 +1,22 @@
+name: Keep Render app awake
+
+on:
+  schedule:
+    # Každých 10 minut – Render free tier appku uspí po ~15 min nečinnosti;
+    # background smyčky (settle, prewarm, agent) potřebují nepřetržitý běh,
+    # aby vůbec stihly dokončit svůj cyklus (viz time.sleep(45) v app.py).
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}   # umožní i ruční spuštění z GitHub UI (tlačítko "Run workflow")
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping app
+        run: |
+          echo "Pinging https://kurzanalytik.onrender.com/login ..."
+          code=$(curl -s -o /dev/null -w "%{http_code}" -m 60 "https://kurzanalytik.onrender.com/login")
+          echo "HTTP status: $code"
+          if [ "$code" != "200" ] && [ "$code" != "302" ]; then
+            echo "::warning::Neočekávaný status kód $code"
+          fi
