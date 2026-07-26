@@ -488,6 +488,9 @@ _boot_diag = {
     "settle_thread_entered_at": None,
     "agent_thread_entered_at": None,
     "persist_thread_entered_at": None,
+    "canary_started_at": None,
+    "canary_last_tick_at": None,
+    "canary_ticks": 0,
 }
 
 
@@ -969,6 +972,20 @@ _PORT = int(os.environ.get("PORT", "5000"))
 
 def _open_browser():
     webbrowser.open(f"http://{_HOST}:{_PORT}")
+
+
+def _canary_loop():
+    """Nejjednodušší možný background thread – žádná síť, žádný sleep(45),
+    jen tikající čítač co 2s. Test: může na Render+gunicornu VŮBEC nějaký
+    background thread běžet nepřetržitě? Pokud ani tohle netiká, problém
+    není v settle logice, ale ve schopnosti threadů běžet na pozadí vůbec."""
+    _boot_diag["canary_started_at"] = int(_time.time())
+    n = 0
+    while True:
+        n += 1
+        _boot_diag["canary_ticks"] = n
+        _boot_diag["canary_last_tick_at"] = int(_time.time())
+        _time.sleep(2)
 
 
 def _prewarm():
@@ -1542,6 +1559,7 @@ def _start_background_threads():
         if n_cleaned:
             print(f"[cleanup] Smazáno {n_cleaned} starých cache souborů")
         persist.start()   # obnova dat z gistu (Render) + zálohovací smyčka
+        threading.Thread(target=_canary_loop, daemon=True).start()
         threading.Thread(target=_prewarm, daemon=True).start()
         threading.Thread(target=_settle_in_background, daemon=True).start()
         threading.Thread(target=_auto_agent_loop, daemon=True).start()
