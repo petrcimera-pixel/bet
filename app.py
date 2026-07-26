@@ -900,9 +900,15 @@ def _open_browser():
 
 
 def _prewarm():
-    """Na pozadí předehřeje predikce na dnešek (7denní okno), ať je první zobrazení svižné."""
+    """Na pozadí předehřeje predikce na dnešek (3denní okno), ať je první
+    zobrazení svižné. Zkráceno ze 7 na 3 dny a zúženo na 244→top ligy by
+    fetch_range udělal stejně, ale hlavně: nespouští se hned při startu,
+    ať nekoliduje s ostatními background thready (settle, persist) v
+    kritickém prvním minutě po bootu, kdy appka na Render free tieru
+    (512 MB) opakovaně padala."""
     try:
-        _predictions_for(ds.today_str(), days=7)
+        _time.sleep(10)   # ať gunicorn worker nejdřív stihne přijmout první requesty
+        _predictions_for(ds.today_str(), days=3)
     except Exception:
         pass
 
@@ -912,6 +918,11 @@ def _settle_in_background():
     otevřené sázky/tipy v dávkách. Aktualizuje _settle_status pro live progress v UI.
     Když není co řešit, čeká 10s a pak zkusí znovu."""
     import time
+
+    # Rozestup od _prewarm (start +10s, běh desítky s) a persist (první push
+    # v +60s) – ať v kritické první minutě po bootu neběží víc síťově těžkých
+    # operací najednou (appka na Render free tieru na to opakovaně padala).
+    time.sleep(45)
 
     while True:
         try:
@@ -985,6 +996,8 @@ def _auto_agent_loop():
     Kontroluje každých 60 s, zda nastal čas pro běh."""
     import time
     import datetime as _dt
+
+    time.sleep(90)   # rozestup od ostatních background threadů, viz _settle_in_background
 
     while True:
         try:
