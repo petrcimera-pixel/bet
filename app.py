@@ -491,7 +491,7 @@ _boot_diag = {
 }
 
 
-def _settle_recent(allow_slugless_fallback=True):
+def _settle_recent(allow_slugless_fallback=False):
     """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
     Každý otevřený tip/sázka nese slug ligy → místo skenu všech 244 lig na den
     se ptáme jen konkrétních lig (1 request na ligu a den, paralelně).
