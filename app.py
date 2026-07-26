@@ -92,6 +92,10 @@ def check_login():
     # Allow login and logout without auth
     if request.path in ["/login", "/logout"]:
         return
+    # Cron endpoint má vlastní token-based auth (viz api_cron_settle) – běžná
+    # session zde nedává smysl, volá ho externí scheduler (GitHub Actions).
+    if request.path == "/api/cron/settle":
+        return
 
     # Check if user is authenticated
     if "user" not in session:
@@ -661,6 +665,37 @@ def api_tips():
 def api_tips_stats():
     sport = request.args.get("sport")
     return jsonify(tips_db.stats(sport=sport))
+
+
+@app.route("/api/cron/settle", methods=["GET", "POST"])
+def api_cron_settle():
+    """Vyhodnocení tipů/sázek spouštěné EXTERNĚ (GitHub Actions cron), ne
+    interním background threadem. Zjištěno: na Render free tieru se proces
+    mezi requesty zřejmě zcela pozastaví (i nejjednodušší canary thread bez
+    sítě, jen s time.sleep(2), tikne přesně jednou a pak už nikdy) – interní
+    background smyčky se sleep() tak strukturálně nemohou spolehlivě
+    dokončit. Řešení: vyhodnocování žene SKUTEČNÝ příchozí HTTP request,
+    ne vlákno čekající na wall-clock čas mezi requesty.
+
+    Auth: token v query/header, ne session – volá to externí scheduler.
+    Nastav env CRON_TOKEN na Renderu a stejný token v GitHub Actions secret.
+    """
+    expected = os.environ.get("CRON_TOKEN", "")
+    got = request.args.get("token") or request.headers.get("X-Cron-Token", "")
+    if not expected or got != expected:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    results, corner_results, more_pending = _settle_recent()
+    n_tips = tips_db.settle_tips(results, corner_results)
+    n_bets = bankroll.auto_settle(results, corner_results)
+    _PRED_CACHE.clear()
+    if n_tips:
+        try:
+            calibration.rebuild()
+        except Exception:
+            pass
+    return jsonify({"settled_tips": n_tips, "settled_bets": n_bets,
+                    "more_pending": more_pending, "ts": int(_time.time())})
 
 
 @app.route("/api/tips/settle", methods=["POST"])
