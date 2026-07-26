@@ -498,6 +498,9 @@ _boot_diag = {
 }
 
 
+_last_settle_debug = {}
+
+
 def _run_bounded(fn, items, max_workers, deadline_s, collect):
     """Spustí fn(item) pro každý item přes max_workers vláken, ale NIKDY nečeká
     déle než deadline_s celkem – na rozdíl od ThreadPoolExecutor().map() uvnitř
@@ -583,6 +586,23 @@ def _settle_recent(allow_slugless_fallback=False):
         n_stuck = _run_bounded(_grab_league, batch, min(4, len(batch)), 25, _collect)
         if n_stuck:
             remaining += n_stuck   # nedokončené cíle → další průchod je zkusí znovu
+
+        # Diagnostika: proč fronta neklesá i když results != {}? Porovná ID
+        # zápasů, které ESPN vrátil, s ID, která čekají otevřené tipy z
+        # PRÁVĚ zpracované dávky – nulový průnik = neshoda formátu/zdroje ID.
+        batch_set = set(batch)
+        batch_tip_ids = [t["id"] for t in open_tips
+                         if t.get("slug") and (t.get("sport", "soccer"), t["slug"], t["date"]) in batch_set]
+        _last_settle_debug.clear()
+        _last_settle_debug.update({
+            "batch_sample": [list(x) for x in batch[:5]],
+            "results_count": len(results),
+            "results_id_sample": list(results.keys())[:8],
+            "batch_tip_ids_count": len(batch_tip_ids),
+            "batch_tip_ids_sample": batch_tip_ids[:8],
+            "matched_count": len(set(batch_tip_ids) & set(results.keys())),
+            "n_stuck": n_stuck,
+        })
 
     # Fallback pro záznamy bez slugu: celoplošný sken (všech 244 lig – drahé),
     # max 1 den za průchod, jen když cílená fronta je hotová, a navíc throttle
@@ -719,6 +739,14 @@ def _rss_mb():
         return round(kb / 1024, 1)
     except Exception:
         return None
+
+
+@app.route("/api/settle/debug")
+def api_settle_debug():
+    """Detail POSLEDNÍHO volání _settle_recent(): vzorek ID zápasů, které ESPN
+    vrátil, vs. ID, na která čekají tipy z právě zpracované dávky. Nulový
+    'matched_count' i přes results_count > 0 = neshoda ve formátu/zdroji ID."""
+    return jsonify(_last_settle_debug)
 
 
 @app.route("/api/settle/diag")
