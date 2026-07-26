@@ -470,6 +470,8 @@ _settle_status = {
     "total_pending": 0,
     "more_pending": False,
     "last_check": None,     # unix ts posledního dokončeného průchodu
+    "last_error": None,     # text poslední výjimky ze settle smyčky (diagnostika bez logů)
+    "error_count": 0,
 }
 _settle_lock = threading.Lock()
 _last_slugless_fallback = 0.0   # throttle: plný sken 244 lig, ne každý průchod
@@ -624,6 +626,18 @@ def api_tips_settle():
                     "more_pending": more_pending})
 
 
+def _rss_mb():
+    """Aktuální paměť procesu v MB (diagnostika OOM na Render free tieru bez
+    přístupu k dashboardu). resource je jen na Unixu (Render ano, Windows ne)."""
+    try:
+        import resource
+        kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        # Linux: ru_maxrss v KB. macOS: v bajtech (zde nerelevantní – Render = Linux)
+        return round(kb / 1024, 1)
+    except Exception:
+        return None
+
+
 @app.route("/api/settle/status")
 def api_settle_status():
     """Live stav automatické kontroly výsledků na pozadí + počty otevřených."""
@@ -635,6 +649,7 @@ def api_settle_status():
         out = dict(_settle_status)
     out["open_tips"] = len(open_tips)
     out["open_bets"] = len(open_bets)
+    out["rss_mb"] = _rss_mb()
     return jsonify(out)
 
 
@@ -966,6 +981,7 @@ def _settle_in_background():
                 _settle_status["settled_so_far"] += n_tips + n_bets
                 _settle_status["more_pending"] = more_pending
                 _settle_status["last_check"] = int(_time.time())
+                _settle_status["last_error"] = None   # úspěšný průchod smaže starou chybu
                 if not more_pending:
                     _settle_status["in_progress"] = False
 
@@ -977,11 +993,14 @@ def _settle_in_background():
                 time.sleep(60)
 
         except Exception as e:
-            print(f"[settle_bg] Chyba: {e}")
             import traceback
-            traceback.print_exc()
+            tb = traceback.format_exc()
+            print(f"[settle_bg] Chyba: {e}")
+            print(tb)
             with _settle_lock:
                 _settle_status["in_progress"] = False
+                _settle_status["last_error"] = f"{type(e).__name__}: {e}\n{tb[-800:]}"
+                _settle_status["error_count"] = _settle_status.get("error_count", 0) + 1
             time.sleep(10)  # více čekat při chybě
 
 
