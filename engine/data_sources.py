@@ -21,7 +21,8 @@ import requests
 
 from . import storage
 
-TIMEOUT = 15  # ESPN API needs more time for 244 leagues
+TIMEOUT = 8   # kratší timeout = rychlejší selhání jednotlivého požadavku
+              # při síťových problémech, místo dlouhého blokování celé dávky
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/{sport}/{slug}/scoreboard"
 ESPN_SUMMARY = "https://site.api.espn.com/apis/site/v2/sports/{sport}/{slug}/summary"
 ESPN_LIST = "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=1000"

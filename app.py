@@ -472,17 +472,23 @@ _settle_status = {
     "last_check": None,     # unix ts posledního dokončeného průchodu
     "last_error": None,     # text poslední výjimky ze settle smyčky (diagnostika bez logů)
     "error_count": 0,
+    "pass_started_at": None,       # unix ts začátku PRÁVĚ BĚŽÍCÍHO průchodu
+    "last_pass_duration_s": None,  # jak dlouho trval poslední DOKONČENÝ průchod
 }
 _settle_lock = threading.Lock()
 _last_slugless_fallback = 0.0   # throttle: plný sken 244 lig, ne každý průchod
 
 
-def _settle_recent():
+def _settle_recent(allow_slugless_fallback=True):
     """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
     Každý otevřený tip/sázka nese slug ligy → místo skenu všech 244 lig na den
     se ptáme jen konkrétních lig (1 request na ligu a den, paralelně).
     Staré záznamy bez slugu se dořeší celoplošným skenem, až je cílená fronta
-    prázdná. Vrací (results, corner_results, more_pending)."""
+    prázdná – POKUD allow_slugless_fallback (automatická smyčka ho vypíná:
+    v nejhorším případě, kdy hodně požadavků timeoutuje, může sken 244 lig
+    trvat i desítky minut a blokovat celý průchod bez chyby k odchycení;
+    ruční "Zkontrolovat výsledky" ho pořád smí použít). Vrací (results,
+    corner_results, more_pending)."""
     today = ds.today_str()
     open_tips = tips_db.open_tips_until(today)   # od nejstarších, jen vyhodnotitelné
     open_bets = [b for b in bankroll.state()["bets"] if b["status"] == "open" and b.get("match_id")]
@@ -541,7 +547,8 @@ def _settle_recent():
     # na 1× za 2 minuty – jinak by jakmile fronta klesne, běžel skoro pořád
     # a byl by to dominantní zdroj zátěže na paměť/síť.
     global _last_slugless_fallback
-    if not remaining and slugless_days and _time.time() - _last_slugless_fallback > 120:
+    if (allow_slugless_fallback and not remaining and slugless_days
+            and _time.time() - _last_slugless_fallback > 120):
         _last_slugless_fallback = _time.time()
         oldest = sorted(slugless_days, key=lambda sd: (sd[1], -slugless_days[sd]))[:1]
         for sport, date_str in oldest:
@@ -650,6 +657,8 @@ def api_settle_status():
     out["open_tips"] = len(open_tips)
     out["open_bets"] = len(open_bets)
     out["rss_mb"] = _rss_mb()
+    if out.get("in_progress") and out.get("pass_started_at"):
+        out["current_pass_elapsed_s"] = int(_time.time()) - out["pass_started_at"]
     return jsonify(out)
 
 
@@ -959,14 +968,19 @@ def _settle_in_background():
                     _settle_status["current_batch"] = []
                     _settle_status["total_pending"] = total
                     _settle_status["settled_so_far"] = 0  # reset na začátku běhu
+                    _settle_status["pass_started_at"] = int(_time.time())
 
             if total == 0:
                 # Nic k vyřešení – delší čekání (snížení CPU)
                 time.sleep(30)
                 continue
 
-            # Natáhni a vyřeš jednu dávku
-            results, corner_results, more_pending = _settle_recent()
+            # Natáhni a vyřeš jednu dávku – bez drahého fallbacku (viz docstring
+            # _settle_recent); ten dostanou jen ruční/API požadavky.
+            _pass_t0 = _time.time()
+            results, corner_results, more_pending = _settle_recent(allow_slugless_fallback=False)
+            with _settle_lock:
+                _settle_status["last_pass_duration_s"] = round(_time.time() - _pass_t0, 1)
             n_tips = tips_db.settle_tips(results, corner_results)
             n_bets = bankroll.auto_settle(results, corner_results)
             _PRED_CACHE.clear()
