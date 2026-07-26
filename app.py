@@ -971,8 +971,13 @@ def _settle_in_background():
     # v +60s) – ať v kritické první minutě po bootu neběží víc síťově těžkých
     # operací najednou (appka na Render free tieru na to opakovaně padala).
     time.sleep(45)
+    _boot_diag["settle_loop_reached_at"] = int(_time.time())
+    _loop_n = 0
 
     while True:
+        _loop_n += 1
+        _boot_diag["settle_loop_iteration"] = _loop_n
+        _boot_diag["settle_loop_iter_at"] = int(_time.time())
         try:
             with _settle_lock:
                 # Počet VYHODNOTITELNÝCH položek (zápas do dneška) na začátku běhu
@@ -982,6 +987,9 @@ def _settle_in_background():
                             and (b.get("match_date") or "") <= today]
                 open_tips = tips_db.open_tips_until(today)
                 total = len(open_bets) + len(open_tips)
+                _boot_diag["settle_loop_last_total"] = total
+                _boot_diag["settle_loop_last_open_bets"] = len(open_bets)
+                _boot_diag["settle_loop_last_open_tips"] = len(open_tips)
 
                 if total == 0:
                     # Nic k vyřešení – dále v cyklu
