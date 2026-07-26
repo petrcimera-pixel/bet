@@ -8,7 +8,13 @@ on:
     # (ověřeno canary threadem: tikne přesně jednou, pak nikdy víc). Řešení
     # není appku jen "budit", ale PŘÍMO spouštět vyhodnocení skutečným HTTP
     # requestem přes /api/cron/settle (token-based, viz app.py).
-    - cron: "*/10 * * * *"
+    #
+    # Časy posunuté MIMO celé desítky minut (:00/:10/:20...) – GitHub
+    # dokumentuje, že schedule běhy jsou "best effort" a nejvyšší zátěž
+    # (tedy zpoždění) nastává právě na začátku každé hodiny a kolem kulatých
+    # čísel. Offset :07/:17/:27... se podle GitHubu i komunitních zkušeností
+    # spouští spolehlivěji.
+    - cron: "7,17,27,37,47,57 * * * *"
   workflow_dispatch: {}   # umožní i ruční spuštění z GitHub UI (tlačítko "Run workflow")
 
 jobs:
