@@ -1,22 +1,30 @@
-name: Keep Render app awake
+name: Keep Render app awake + trigger settle
 
 on:
   schedule:
-    # Každých 10 minut – Render free tier appku uspí po ~15 min nečinnosti;
-    # background smyčky (settle, prewarm, agent) potřebují nepřetržitý běh,
-    # aby vůbec stihly dokončit svůj cyklus (viz time.sleep(45) v app.py).
+    # Každých 10 minut. Zjištěno: interní background thready appky (settle
+    # smyčka, prewarm, agent) se na Render free tieru NIKDY spolehlivě
+    # nedokončí – proces se mezi příchozími requesty zřejmě zcela pozastaví
+    # (ověřeno canary threadem: tikne přesně jednou, pak nikdy víc). Řešení
+    # není appku jen "budit", ale PŘÍMO spouštět vyhodnocení skutečným HTTP
+    # requestem přes /api/cron/settle (token-based, viz app.py).
     - cron: "*/10 * * * *"
   workflow_dispatch: {}   # umožní i ruční spuštění z GitHub UI (tlačítko "Run workflow")
 
 jobs:
-  ping:
+  settle:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping app
+      - name: Trigger settle
+        env:
+          CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
         run: |
-          echo "Pinging https://kurzanalytik.onrender.com/login ..."
-          code=$(curl -s -o /dev/null -w "%{http_code}" -m 60 "https://kurzanalytik.onrender.com/login")
+          echo "Volám /api/cron/settle ..."
+          resp=$(curl -s -m 60 -w "\n%{http_code}" "https://kurzanalytik.onrender.com/api/cron/settle?token=${CRON_TOKEN}")
+          code=$(echo "$resp" | tail -n1)
+          body=$(echo "$resp" | sed '$d')
           echo "HTTP status: $code"
-          if [ "$code" != "200" ] && [ "$code" != "302" ]; then
+          echo "Odpověď: $body"
+          if [ "$code" != "200" ]; then
             echo "::warning::Neočekávaný status kód $code"
           fi
