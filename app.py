@@ -457,7 +457,10 @@ def api_settle():
     return jsonify({"bet": bet, "stats": bankroll.stats()})
 
 
-_SETTLE_BATCH_TARGETS = 120   # max liga-dnů (requestů) na jeden průchod settle
+_SETTLE_BATCH_TARGETS = 24    # max liga-dnů (requestů) na jeden průchod settle –
+                              # drženo nízko: víc paralelních vláken/spojení = víc
+                              # paměti, na Render free tieru (512 MB) to shazovalo
+                              # proces ještě před dokončením PRVNÍHO průchodu
 
 # Globální stav kontroly výsledků na pozadí
 _settle_status = {
@@ -469,6 +472,7 @@ _settle_status = {
     "last_check": None,     # unix ts posledního dokončeného průchodu
 }
 _settle_lock = threading.Lock()
+_last_slugless_fallback = 0.0   # throttle: plný sken 244 lig, ne každý průchod
 
 
 def _settle_recent():
@@ -524,13 +528,19 @@ def _settle_recent():
         def _grab_league(t):
             sport, slug, date_str = t
             return ds.fetch_league_scores(sport, slug, date_str)
-        with ThreadPoolExecutor(max_workers=min(12, len(batch))) as ex:
+        # nízká paralelizace záměrně – víc vláken = víc paměti na síťová
+        # spojení, na Render free tieru (512 MB) vyšší počty appku shazovaly
+        with ThreadPoolExecutor(max_workers=min(4, len(batch))) as ex:
             for matches in ex.map(_grab_league, batch):
                 _collect(matches)
 
-    # Fallback pro záznamy bez slugu: celoplošný sken, max 1 den za průchod,
-    # a jen když cílená fronta je hotová (jinak by brzdil rychlou cestu)
-    if not remaining and slugless_days:
+    # Fallback pro záznamy bez slugu: celoplošný sken (všech 244 lig – drahé),
+    # max 1 den za průchod, jen když cílená fronta je hotová, a navíc throttle
+    # na 1× za 2 minuty – jinak by jakmile fronta klesne, běžel skoro pořád
+    # a byl by to dominantní zdroj zátěže na paměť/síť.
+    global _last_slugless_fallback
+    if not remaining and slugless_days and _time.time() - _last_slugless_fallback > 120:
+        _last_slugless_fallback = _time.time()
         oldest = sorted(slugless_days, key=lambda sd: (sd[1], -slugless_days[sd]))[:1]
         for sport, date_str in oldest:
             try:
@@ -538,6 +548,8 @@ def _settle_recent():
             except Exception:
                 pass
         remaining += max(0, len(slugless_days) - 1)
+    elif slugless_days:
+        remaining += len(slugless_days)   # zatím netknuté – ať more_pending zůstane pravdivé
 
     # Rohy se ověřují zvlášť přes ESPN boxscore (summary endpoint, statistika
     # "wonCorners") – jen pro zápasy, které právě skončily a mají otevřený
@@ -562,7 +574,7 @@ def _settle_recent():
                 return mid, ds.fetch_corners(sport, slug, mid)
             except Exception:
                 return mid, None
-        with ThreadPoolExecutor(max_workers=min(20, len(corner_targets))) as ex:
+        with ThreadPoolExecutor(max_workers=min(6, len(corner_targets))) as ex:
             for mid, c in ex.map(_grab_corners, corner_targets):
                 if c:
                     corner_results[mid] = c

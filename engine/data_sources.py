@@ -264,7 +264,7 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return []
 
     try:
-        with ThreadPoolExecutor(max_workers=10) as ex:  # Reduced from 40 to prevent ESPN throttling
+        with ThreadPoolExecutor(max_workers=6) as ex:  # nízko drženo kvůli paměti na Render free tieru
             for res in ex.map(grab, league_slugs(sport)):
                 out.extend(res)
     except Exception:
