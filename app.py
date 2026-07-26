@@ -499,6 +499,7 @@ _boot_diag = {
 
 
 _last_settle_debug = {}
+_settle_batch_cursor = 0   # rotuje napříč voláními, ať se dávka nezasekne na stejné pomalé podmnožině
 
 
 def _run_bounded(fn, items, max_workers, deadline_s, collect):
@@ -560,9 +561,20 @@ def _settle_recent(allow_slugless_fallback=False):
             k = (sport, b["match_date"])
             slugless_days[k] = slugless_days.get(k, 0) + 3
 
-    # Nejstarší dny první, pak dle váhy; dávka = max N liga-dnů (N requestů)
+    # Nejstarší dny první, pak dle váhy; dávka = max N liga-dnů (N requestů).
+    # ROTACE: debug ukázal, že ~15/24 cílů v dávce pravidelně nestihne 25s
+    # deadline (pomalá ESPN liga/síť) – protože výběr byl VŽDY stejných
+    # nejstarších 24, appka donekonečna zkoušela tu samou rychlou polovinu
+    # a pomalá polovina (s hledanými tipy) se nikdy nedostala ke zpracování.
+    # Kurzor rotuje napříč voláními, ať se postupně dostane na všechny.
+    global _settle_batch_cursor
     ordered = sorted(targets, key=lambda t: (t[2], -targets[t]))
-    batch = ordered[:_SETTLE_BATCH_TARGETS]
+    if ordered:
+        start_i = _settle_batch_cursor % len(ordered)
+        batch = (ordered[start_i:] + ordered[:start_i])[:_SETTLE_BATCH_TARGETS]
+        _settle_batch_cursor = (start_i + _SETTLE_BATCH_TARGETS) % len(ordered)
+    else:
+        batch = []
     remaining = len(ordered) - len(batch)
 
     results = {}
