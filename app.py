@@ -16,7 +16,7 @@ import sys
 import time as _time
 import webbrowser
 import threading
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait as _futures_wait
 
 # Spustitelné z libovolného adresáře (kvůli importům a šablonám)
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -491,6 +491,27 @@ _boot_diag = {
 }
 
 
+def _run_bounded(fn, items, max_workers, deadline_s, collect):
+    """Spustí fn(item) pro každý item přes max_workers vláken, ale NIKDY nečeká
+    déle než deadline_s celkem – na rozdíl od ThreadPoolExecutor().map() uvnitř
+    `with` bloku, který při shutdown() vždy počká na VŠECHNA zadaná vlákna,
+    i když jsme se je už vzdali čekat (na Renderu se jednotlivé ESPN requesty
+    i s timeout=8s na požadavek chovaly, jako by visely podstatně déle –
+    shutdown(wait=False) tohle omezení obchází, ať se appka nikdy nezasekne
+    na jednom pomalém/mrtvém síťovém spojení)."""
+    ex = ThreadPoolExecutor(max_workers=max_workers)
+    futures = [ex.submit(fn, item) for item in items]
+    done, not_done = _futures_wait(futures, timeout=deadline_s)
+    for fut in done:
+        try:
+            collect(fut.result())
+        except Exception:
+            pass
+    # Nedokončené necháme běžet na pozadí, ale request na ně dál nečeká.
+    ex.shutdown(wait=False, cancel_futures=True)
+    return len(not_done)
+
+
 def _settle_recent(allow_slugless_fallback=False):
     """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
     Každý otevřený tip/sázka nese slug ligy → místo skenu všech 244 lig na den
@@ -549,10 +570,12 @@ def _settle_recent(allow_slugless_fallback=False):
             sport, slug, date_str = t
             return ds.fetch_league_scores(sport, slug, date_str)
         # nízká paralelizace záměrně – víc vláken = víc paměti na síťová
-        # spojení, na Render free tieru (512 MB) vyšší počty appku shazovaly
-        with ThreadPoolExecutor(max_workers=min(4, len(batch))) as ex:
-            for matches in ex.map(_grab_league, batch):
-                _collect(matches)
+        # spojení, na Render free tieru (512 MB) vyšší počty appku shazovaly.
+        # Tvrdý deadline 25s – jednotlivé ESPN requesty se na Renderu chovaly,
+        # jako by visely déle než jejich vlastní timeout=8s naznačuje.
+        n_stuck = _run_bounded(_grab_league, batch, min(4, len(batch)), 25, _collect)
+        if n_stuck:
+            remaining += n_stuck   # nedokončené cíle → další průchod je zkusí znovu
 
     # Fallback pro záznamy bez slugu: celoplošný sken (všech 244 lig – drahé),
     # max 1 den za průchod, jen když cílená fronta je hotová, a navíc throttle
@@ -595,10 +618,13 @@ def _settle_recent(allow_slugless_fallback=False):
                 return mid, ds.fetch_corners(sport, slug, mid)
             except Exception:
                 return mid, None
-        with ThreadPoolExecutor(max_workers=min(6, len(corner_targets))) as ex:
-            for mid, c in ex.map(_grab_corners, corner_targets):
-                if c:
-                    corner_results[mid] = c
+
+        def _collect_corner(pair):
+            mid, c = pair
+            if c:
+                corner_results[mid] = c
+        # Tvrdý deadline 15s ze stejného důvodu jako u ligových požadavků výše.
+        _run_bounded(_grab_corners, corner_targets, min(6, len(corner_targets)), 15, _collect_corner)
 
     return results, corner_results, remaining > 0
 
