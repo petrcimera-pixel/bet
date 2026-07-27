@@ -389,29 +389,123 @@ function renderAnalytics() {
 
   renderMonthlyAnalytics();
   renderLeaguesAnalytics();
+  renderDistributionAnalytics();
 }
 
-function renderMonthlyAnalytics() {
-  const monthly = STATE.stats?.monthly_pnl || {};
+async function renderMonthlyAnalytics() {
+  // STATE.stats.monthly_pnl je jen {mesic: pnl} bez detailů (Sázky/Výhry/Win%/ROI
+  // proto dřív byly natvrdo "—") a graf se nikdy nevykresloval – žádný kód
+  // do #monthlyChartSVG nikdy nic nekreslil. /api/bankroll/monthly ale má
+  // plný rozpad po měsících (stejný, jaký používá stránka Bankroll), tak ho
+  // použij i tady.
   const tbody = document.querySelector('#monthlyTable tbody');
-
   if (!tbody) return;
 
-  tbody.innerHTML = Object.entries(monthly)
+  let monthly = {};
+  try {
+    const res = await fetch('/api/bankroll/monthly', { credentials: 'include' });
+    const data = await res.json();
+    if (data.success) monthly = data.monthly || {};
+  } catch (e) {
+    return;
+  }
+
+  const entries = Object.entries(monthly);
+
+  tbody.innerHTML = entries
+    .slice()
     .reverse()
-    .map(([month, pnl]) => `
+    .map(([month, d]) => `
       <tr>
         <td>${month}</td>
-        <td>—</td>
-        <td>—</td>
-        <td>—</td>
-        <td style="color: ${pnl > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
-          ${pnl > 0 ? '+' : ''}${fmt(pnl)} Kč
+        <td>${d.bets}</td>
+        <td>${d.wins}</td>
+        <td>${d.win_rate}%</td>
+        <td style="color: ${d.pnl > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
+          ${d.pnl > 0 ? '+' : ''}${fmt(d.pnl)} Kč
         </td>
-        <td>—</td>
+        <td>${d.roi > 0 ? '+' : ''}${d.roi}%</td>
       </tr>
     `)
     .join('');
+
+  drawBarChart('monthlyChartSVG', entries.map(([month, d]) => ({ label: month, value: d.pnl })));
+}
+
+function renderDistributionAnalytics() {
+  // Rozdělení sázek podle velikosti stake (kolik sázek, jaké ROI) – dřív se
+  // do #distributionChartSVG nikdy nic nekreslilo (chyběla vykreslovací
+  // funkce úplně). Počítá se z už načtených STATE.agentTips (stejná data
+  // jako historie sázek na Bankroll stránce).
+  const svg = document.getElementById('distributionChartSVG');
+  if (!svg) return;
+
+  const settled = (STATE.agentTips || []).filter(b => b.status === 'won' || b.status === 'lost');
+  if (!settled.length) {
+    svg.innerHTML = '';
+    return;
+  }
+
+  const buckets = [
+    { label: '<50', min: 0, max: 50 },
+    { label: '50-100', min: 50, max: 100 },
+    { label: '100-200', min: 100, max: 200 },
+    { label: '200-500', min: 200, max: 500 },
+    { label: '500+', min: 500, max: Infinity },
+  ].map(b => ({ ...b, bets: 0, staked: 0, pnl: 0 }));
+
+  for (const b of settled) {
+    const stake = b.stake || 0;
+    const bucket = buckets.find(bk => stake >= bk.min && stake < bk.max) || buckets[buckets.length - 1];
+    bucket.bets += 1;
+    bucket.staked += stake;
+    bucket.pnl += (b.pnl || 0);
+  }
+
+  const bars = buckets
+    .filter(bk => bk.bets > 0)
+    .map(bk => ({
+      label: `${bk.label} Kč (${bk.bets}×)`,
+      value: bk.staked ? Math.round((bk.pnl / bk.staked) * 1000) / 10 : 0,
+    }));
+
+  drawBarChart('distributionChartSVG', bars, '%');
+}
+
+function drawBarChart(svgId, items, unit = '') {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  if (!items.length) { svg.innerHTML = ''; return; }
+
+  const vb = svg.getAttribute('viewBox') || '0 0 800 300';
+  const [, , width, height] = vb.split(' ').map(Number);
+  const padding = 40;
+  const plotWidth = width - 2 * padding;
+  const plotHeight = height - 2 * padding;
+
+  const values = items.map(it => it.value);
+  const maxVal = Math.max(...values, 0);
+  const minVal = Math.min(...values, 0);
+  const range = (maxVal - minVal) || 1;
+  const zeroY = height - padding - ((0 - minVal) / range) * plotHeight;
+
+  const barWidth = plotWidth / items.length;
+  const bars = items.map((it, i) => {
+    const x = padding + i * barWidth + barWidth * 0.15;
+    const w = barWidth * 0.7;
+    const barH = Math.abs(it.value) / range * plotHeight;
+    const y = it.value >= 0 ? zeroY - barH : zeroY;
+    const color = it.value >= 0 ? 'var(--pos)' : 'var(--bad)';
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${barH.toFixed(1)}" fill="${color}" rx="2"/>
+      <text x="${(x + w / 2).toFixed(1)}" y="${height - padding + 14}" text-anchor="middle" font-size="10" fill="var(--txt2)">${it.label}</text>`;
+  }).join('');
+
+  svg.innerHTML = `
+    <line x1="${padding}" y1="${zeroY.toFixed(1)}" x2="${width - padding}" y2="${zeroY.toFixed(1)}" stroke="var(--line)" stroke-width="1"/>
+    <text x="${padding - 5}" y="${padding + 4}" text-anchor="end" font-size="11" fill="var(--txt2)">${maxVal.toFixed(0)}${unit}</text>
+    <text x="${padding - 5}" y="${height - padding + 4}" text-anchor="end" font-size="11" fill="var(--txt2)">${minVal.toFixed(0)}${unit}</text>
+    ${bars}
+  `;
 }
 
 function renderLeaguesAnalytics() {
@@ -470,8 +564,8 @@ function renderBankroll() {
           <td>${fmt(b.stake || 0)} ${cur}</td>
           <td>${b.odds || 0}×</td>
           <td><span class="tip-badge">${(b.status || 'open').toUpperCase()}</span></td>
-          <td style="color: ${(b.pnl || 0) > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
-            ${(b.pnl || 0) > 0 ? '+' : ''}${fmt(b.pnl || 0)} ${cur}
+          <td style="color: ${b.status === 'open' ? 'var(--txt2)' : (b.pnl || 0) > 0 ? 'var(--pos)' : 'var(--bad)'}; font-weight: 600;">
+            ${b.status === 'open' ? '—' : ((b.pnl || 0) > 0 ? '+' : '') + fmt(b.pnl || 0) + ' ' + cur}
           </td>
         </tr>
       `)
@@ -987,6 +1081,23 @@ function loadAdvancedAnalytics() {
   loadOddsAnalysis();
 }
 
+function computeMaxDrawdownPct(equity) {
+  // Bylo natvrdo '0%' – equity curve pod tím přitom viditelně klesá. Max
+  // drawdown proti PRŮBĚŽNÉMU peaku (ne globálnímu maximu), stejný princip
+  // jako oprava v engine/backtester.py (viz VERSION.md).
+  if (!equity || equity.length < 2) return '0';
+  let peak = equity[0];
+  let maxDd = 0;
+  for (const v of equity) {
+    if (v > peak) peak = v;
+    if (peak > 0) {
+      const dd = (peak - v) / peak * 100;
+      if (dd > maxDd) maxDd = dd;
+    }
+  }
+  return maxDd.toFixed(1);
+}
+
 async function loadBacktestSummary() {
   try {
     const res = await fetch('/api/analytics/summary', { credentials: 'include' });
@@ -1001,7 +1112,7 @@ async function loadBacktestSummary() {
     setElText('backtestWinRate', (stats.win_rate || 0) + '%');
     setElText('backtestROI', (stats.roi || 0) + '%');
     setElText('backtestSharpe', (stats.sharpe_ratio || 0).toFixed(2));
-    setElText('backtestDrawdown', '0%');
+    setElText('backtestDrawdown', computeMaxDrawdownPct(stats.equity) + '%');
     setElText('backtestBalance', fmt(stats.balance || 0) + ' Kč');
 
     // Draw equity curve
@@ -1066,6 +1177,34 @@ async function loadLeaguePerformance() {
     });
   } catch (e) {
     console.error('League perf error:', e);
+  }
+
+  // "Worst Performing Leagues" – get_worst_leagues() v backtester.py existoval,
+  // ale žádný endpoint/JS ho nikdy nevolal, tabulka tak byla trvale prázdná.
+  try {
+    const res2 = await fetch('/api/backtest/worst-leagues?top=5', { credentials: 'include' });
+    if (!res2.ok) return;
+    const data2 = await res2.json();
+    if (!data2.success) return;
+
+    const worstTbody = document.querySelector('#worstLeaguesTable tbody');
+    if (!worstTbody) return;
+
+    worstTbody.innerHTML = '';
+    Object.entries(data2.results || {}).forEach(([league, stats]) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${league}</td>
+        <td>${stats.total_bets || 0}</td>
+        <td>${stats.wins || 0}</td>
+        <td>${(stats.win_rate || 0).toFixed(1)}%</td>
+        <td>${fmt(stats.pnl || 0)} Kč</td>
+        <td>${(stats.roi || 0).toFixed(1)}%</td>
+      `;
+      worstTbody.appendChild(row);
+    });
+  } catch (e) {
+    console.error('Worst league perf error:', e);
   }
 }
 
@@ -1292,7 +1431,7 @@ function renderBestWorstDays(data) {
     bestTbody.innerHTML = Object.entries(data.best_days).map(([day, d]) => `
       <tr>
         <td>${day}</td>
-        <td style="color: var(--pos)">+${fmt(d.pnl)} Kč</td>
+        <td style="color: ${d.pnl >= 0 ? 'var(--pos)' : 'var(--bad)'}">${d.pnl > 0 ? '+' : ''}${fmt(d.pnl)} Kč</td>
       </tr>
     `).join('');
   }
@@ -1440,18 +1579,51 @@ async function loadMatches(refresh = false) {
   const summary = document.getElementById('matchesSummary');
   if (!container) return;
 
+  // Na studenou cache může /api/matches trvat desítky sekund (ESPN scan
+  // přes desítky lig) – dřív tu visel jen statický spinner bez zpětné
+  // vazby a bez timeoutu, takže se chyba/zaseknutí nedalo od "prostě to
+  // trvá" rozlišit. Teď: postupné zprávy + tvrdý timeout + tlačítko zkusit
+  // znovu.
   container.innerHTML = '<div class="loading">Načítání zápasů...</div>';
   summary.innerHTML = '';
 
+  const loadingEl = container.querySelector('.loading');
+  const t1 = setTimeout(() => {
+    if (loadingEl && document.body.contains(loadingEl)) {
+      loadingEl.textContent = 'Stahuji čerstvá data z ESPN, může to chvíli trvat...';
+    }
+  }, 6000);
+  const t2 = setTimeout(() => {
+    if (loadingEl && document.body.contains(loadingEl)) {
+      loadingEl.textContent = 'Pořád stahuji – při první návštěvě dne to bývá pomalejší, díky za trpělivost...';
+    }
+  }, 20000);
+
+  const controller = new AbortController();
+  const abortTimer = setTimeout(() => controller.abort(), 55000);
+
   try {
     const url = `/api/matches?date=${MATCHES_STATE.selectedDate}&sport=${MATCHES_STATE.sport}&days=1${refresh ? '&refresh=1' : ''}`;
-    const res = await fetch(url, { credentials: 'include' });
+    const res = await fetch(url, { credentials: 'include', signal: controller.signal });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     renderMatchesSummary(data, summary);
     renderMatchesLeagues(data.leagues || [], container);
   } catch (e) {
-    container.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
+    const timedOut = e.name === 'AbortError';
+    const msg = timedOut
+      ? 'Načítání trvá příliš dlouho (ESPN neodpovídá). Zkus to prosím znovu.'
+      : `Chyba: ${e.message}`;
+    container.innerHTML = `
+      <div class="empty-state">
+        ${msg}
+        <div style="margin-top:12px"><button class="btn" id="matchesRetryBtn">Zkusit znovu</button></div>
+      </div>`;
+    document.getElementById('matchesRetryBtn')?.addEventListener('click', () => loadMatches(refresh));
+  } finally {
+    clearTimeout(t1);
+    clearTimeout(t2);
+    clearTimeout(abortTimer);
   }
 }
 

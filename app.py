@@ -726,8 +726,12 @@ def api_cron_settle():
             calibration.rebuild()
         except Exception:
             pass
+
+    agent_info = _run_auto_agent_if_due()
+
     return jsonify({"settled_tips": n_tips, "settled_bets": n_bets,
-                    "more_pending": more_pending, "ts": int(_time.time())})
+                    "more_pending": more_pending, "ts": int(_time.time()),
+                    "auto_agent": agent_info})
 
 
 @app.route("/api/tips/settle", methods=["POST"])
@@ -848,42 +852,36 @@ def api_dashboard():
     cfg = app_settings.get_settings()["agent"]
 
     # Tip dne = nejjistější tutovka z dnešních zápasů (fotbal, cached predikce).
-    # NIKDY neblokuj na čerstvém ESPN fetchi (30–60 s) – když cache není,
-    # vrať "warming" a nastartuj načtení na pozadí; frontend se doptá znovu.
+    # Dřív se při chybějící cache spouštěl fetch na background threadu a
+    # vracelo se "warming: true" – na Render free tieru se ale takový thread
+    # mezi requesty prakticky nikdy nedokončí (viz canary-thread zjištění),
+    # takže "Tip dne" zůstával navždy v načítání. Řešení: fetch proveď
+    # SYNCHRONNĚ v rámci tohoto skutečného requestu (jednou za ~12 h, kdy
+    # cache vyprší, bude odpověď pomalejší – to je lepší než nekonečný spinner).
     tip = None
     warming = False
-    key = f"soccer~{today}~{today}"
-    cache_file = f"cache_soccer_{today}_{today}.json"
-    disk_ready = (storage.load(cache_file, None) is not None
-                  and not storage.is_cache_stale(cache_file, ttl_hours=12))
-    if key not in _PRED_CACHE and not disk_ready:
-        # cache není → nastartuj fetch na pozadí, frontend se doptá za chvíli
-        warming = True
-        threading.Thread(target=lambda: _predictions_for(today, days=1, sport="soccer"),
-                         daemon=True).start()
-    else:
-        try:
-            preds = _predictions_for(today, days=1, sport="soccer")
-            best_p, best_c = None, None
-            for p in preds:
-                if p.get("result") is not None or p.get("live"):
-                    continue
-                cands = agent._candidates(p, cfg)
-                c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
-                                        float(cfg.get("min_odds", 1.20)), only_real=False)
-                if c and (best_c is None or c.get("cal_prob", c["prob"]) > best_c.get("cal_prob", best_c["prob"])):
-                    best_p, best_c = p, c
-            if best_c:
-                tip = {
-                    "match": f'{best_p["home"]} – {best_p["away"]}',
-                    "league": best_p.get("league"),
-                    "date": best_p.get("date"), "time": best_p.get("time"),
-                    "name": best_c["name"], "label": best_c["label"],
-                    "odds": best_c["odds"], "prob": best_c.get("cal_prob", best_c["prob"]),
-                    "real": best_c["real"], "market": best_c["market"],
-                }
-        except Exception:
-            pass
+    try:
+        preds = _predictions_for(today, days=1, sport="soccer")
+        best_p, best_c = None, None
+        for p in preds:
+            if p.get("result") is not None or p.get("live"):
+                continue
+            cands = agent._candidates(p, cfg)
+            c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
+                                    float(cfg.get("min_odds", 1.20)), only_real=False)
+            if c and (best_c is None or c.get("cal_prob", c["prob"]) > best_c.get("cal_prob", best_c["prob"])):
+                best_p, best_c = p, c
+        if best_c:
+            tip = {
+                "match": f'{best_p["home"]} – {best_p["away"]}',
+                "league": best_p.get("league"),
+                "date": best_p.get("date"), "time": best_p.get("time"),
+                "name": best_c["name"], "label": best_c["label"],
+                "odds": best_c["odds"], "prob": best_c.get("cal_prob", best_c["prob"]),
+                "real": best_c["real"], "market": best_c["market"],
+            }
+    except Exception:
+        pass
 
     bets = agent.agent_bets()
     yesterday = (_dt.date.today() - _dt.timedelta(days=1))
@@ -1205,51 +1203,71 @@ def _settle_in_background():
 
 _auto_agent_last_run_date = {}  # {hour: "YYYY-MM-DD"} – aby se agent nespouštěl 2× za hodinu
 
-def _auto_agent_loop():
-    """Automaticky spouští agenta v nastavených hodinách (např. 8:00, 16:00).
-    Kontroluje každých 60 s, zda nastal čas pro běh."""
-    import time
+
+def _run_auto_agent_if_due():
+    """Zkontroluje, zda je čas na automatický běh agenta (dle Nastavení) a
+    pokud ano, spustí ho. Voláno SYNCHRONNĚ ze skutečného HTTP requestu
+    (/api/cron/settle) – ne z background threadu, viz _auto_agent_loop níže.
+    Na Render free tieru se totiž background thready mezi requesty prakticky
+    nikdy neprobudí (ověřeno canary threadem), takže spoléhat jen na
+    _auto_agent_loop by znamenalo, že agent nikdy automaticky nezasází.
+    Vrací info dict, hlavně pro diagnostiku přes /api/cron/settle odpověď."""
     import datetime as _dt
-    _boot_diag["agent_thread_entered_at"] = int(_time.time())
+    try:
+        cfg = app_settings.get_settings()["agent"]
+        if not (cfg.get("enabled") and cfg.get("auto_run")):
+            return {"ran": False, "reason": "disabled"}
 
-    time.sleep(90)   # rozestup od ostatních background threadů, viz _settle_in_background
-
-    while True:
+        now = _dt.datetime.now()
+        today_str = now.strftime("%Y-%m-%d")
+        hours_raw = str(cfg.get("auto_run_hours", "8,16"))
         try:
-            cfg = app_settings.get_settings()["agent"]
-            if cfg.get("enabled") and cfg.get("auto_run"):
-                now = _dt.datetime.now()
-                today_str = now.strftime("%Y-%m-%d")
-                hours_raw = str(cfg.get("auto_run_hours", "8,16"))
+            run_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
+        except ValueError:
+            run_hours = [8, 16]
+
+        if now.hour not in run_hours:
+            return {"ran": False, "reason": "not_due"}
+        if _auto_agent_last_run_date.get(now.hour) == today_str:
+            return {"ran": False, "reason": "already_ran"}
+
+        print(f"[auto-agent] Automatický běh agenta v {now.hour}:00")
+        _auto_agent_last_run_date[now.hour] = today_str
+        try:
+            start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
+            days = 2 if cfg.get("bet_today") else 1
+            predictions = []
+            for sport in cfg.get("sports") or ["soccer"]:
                 try:
-                    run_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
-                except ValueError:
-                    run_hours = [8, 16]
-
-                if now.hour in run_hours and _auto_agent_last_run_date.get(now.hour) != today_str:
-                    print(f"[auto-agent] Automatický běh agenta v {now.hour}:00")
-                    _auto_agent_last_run_date[now.hour] = today_str
-                    try:
-                        start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
-                        days = 2 if cfg.get("bet_today") else 1
-                        predictions = []
-                        for sport in cfg.get("sports") or ["soccer"]:
-                            try:
-                                predictions.extend(_predictions_for(start_date, days=days, sport=sport))
-                            except Exception:
-                                pass
-                        result = agent.run(predictions)
-                        storage.save("agent_last_run.json", {
-                            "ts": int(time.time()), "placed": result.get("placed", 0),
-                            "tickets": result.get("tickets", []),
-                            "balance": result.get("balance"), "mode": "auto",
-                        })
-                        print(f"[auto-agent] Hotovo: {result.get('placed', 0)} sázek, balance={result.get('balance')}")
-                    except Exception as e:
-                        print(f"[auto-agent] Chyba při běhu agenta: {e}")
+                    predictions.extend(_predictions_for(start_date, days=days, sport=sport))
+                except Exception:
+                    pass
+            result = agent.run(predictions)
+            storage.save("agent_last_run.json", {
+                "ts": int(time.time()), "placed": result.get("placed", 0),
+                "tickets": result.get("tickets", []),
+                "balance": result.get("balance"), "mode": "auto",
+            })
+            print(f"[auto-agent] Hotovo: {result.get('placed', 0)} sázek, balance={result.get('balance')}")
+            return {"ran": True, "placed": result.get("placed", 0)}
         except Exception as e:
-            print(f"[auto-agent] Chyba: {e}")
+            print(f"[auto-agent] Chyba při běhu agenta: {e}")
+            return {"ran": False, "reason": "error", "error": str(e)}
+    except Exception as e:
+        print(f"[auto-agent] Chyba: {e}")
+        return {"ran": False, "reason": "error", "error": str(e)}
 
+
+def _auto_agent_loop():
+    """Ponecháno pro LOKÁLNÍ běh (python app.py) – na Renderu se na tento
+    background thread nelze spolehnout (viz _run_auto_agent_if_due výše),
+    produkce používá /api/cron/settle, který _run_auto_agent_if_due volá
+    synchronně při každém externím cron ticku."""
+    import time
+    _boot_diag["agent_thread_entered_at"] = int(_time.time())
+    time.sleep(90)   # rozestup od ostatních background threadů, viz _settle_in_background
+    while True:
+        _run_auto_agent_if_due()
         time.sleep(60)
 
 
@@ -1381,6 +1399,22 @@ def api_best_leagues():
         bets = bankroll.state()["bets"]
         top_n = int(request.args.get("top", 5))
         results = bt.get_best_leagues(bets, top_n)
+        return jsonify({"success": True, "results": results})
+    except Exception as e:
+        return jsonify({"error": str(e), "success": False}), 500
+
+
+@app.route("/api/backtest/worst-leagues", methods=["GET"])
+@login_required
+def api_worst_leagues():
+    """Get worst performing leagues (get_worst_leagues existoval v backtester.py,
+    ale nikdy nebyl vystavený přes žádný endpoint – tabulka 'Worst Performing
+    Leagues' ve frontendu tak byla natrvalo prázdná)."""
+    try:
+        bt = backtester.Backtester()
+        bets = bankroll.state()["bets"]
+        top_n = int(request.args.get("top", 5))
+        results = bt.get_worst_leagues(bets, top_n)
         return jsonify({"success": True, "results": results})
     except Exception as e:
         return jsonify({"error": str(e), "success": False}), 500

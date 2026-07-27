@@ -174,8 +174,16 @@ class BankrollAnalytics:
 
         sorted_daily = sorted(daily.items(), key=lambda x: x[1]["pnl"], reverse=True)
 
-        best = dict(sorted_daily[:n])
-        worst = dict(sorted_daily[-n:])
+        # Když je dnů málo (<= 2n), sorted_daily[:n] a sorted_daily[-n:] se
+        # překrývají – stejné dny by se objevily v obou tabulkách. Rozděl je
+        # napůl, ať se nikdy nepřekrývají.
+        if len(sorted_daily) <= 2 * n:
+            half = max(1, len(sorted_daily) // 2)
+            best = dict(sorted_daily[:half])
+            worst = dict(sorted_daily[half:])
+        else:
+            best = dict(sorted_daily[:n])
+            worst = dict(sorted_daily[-n:])
 
         return {"best": best, "worst": worst}
 

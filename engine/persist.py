@@ -27,6 +27,12 @@ from . import storage
 FILES = ["bankroll.json", "tips.json", "settings.json", "ratings.json",
          "calibration.json", "config.json", "learning_metrics.json",
          "agent_last_run.json"]
+# JSONL soubory (řádkový formát, ne JSON) – zálohují se jako syrový text,
+# ne přes storage.load/save (ten by je parsoval jako JSON a spadl). Bez
+# tohoto se ML learner (engine/ml_learner.py) trénovací log ztrácel při
+# každém Render deployi, protože nebyl zálohovaný vůbec.
+RAW_FILES = ["data/agent_feedback.jsonl"]
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 META = "persist_meta.json"     # {"pushed_at": ts} – rozhoduje, čí data jsou novější
 _INTERVAL = 300                # push každých 5 minut (když se něco změnilo)
 _API = "https://api.github.com/gists/{gist_id}"
@@ -48,6 +54,10 @@ def _headers(token):
             "Accept": "application/vnd.github+json"}
 
 
+def _raw_path(name: str) -> str:
+    return os.path.join(_ROOT, name)
+
+
 def _local_snapshot() -> dict:
     """Obsah sledovaných souborů (jen existující, neprázdné)."""
     out = {}
@@ -55,6 +65,14 @@ def _local_snapshot() -> dict:
         data = storage.load(name, None)
         if data is not None:
             out[name] = json.dumps(data, ensure_ascii=False)
+    for name in RAW_FILES:
+        try:
+            with open(_raw_path(name), encoding="utf-8-sig") as f:
+                content = f.read()
+            if content.strip():
+                out[name] = content
+        except OSError:
+            pass
     return out
 
 
@@ -109,6 +127,18 @@ def restore() -> int:
             continue
         try:
             storage.save(name, json.loads(raw))
+            n += 1
+        except Exception:
+            pass
+    for name in RAW_FILES:
+        raw = _content(name)
+        if raw is None:
+            continue
+        try:
+            path = _raw_path(name)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(raw)
             n += 1
         except Exception:
             pass
@@ -182,5 +212,5 @@ def status() -> dict:
     return {
         "enabled": enabled(),
         "last_push": (storage.load(META, {}) or {}).get("pushed_at"),
-        "files": FILES,
+        "files": FILES + RAW_FILES,
     }
