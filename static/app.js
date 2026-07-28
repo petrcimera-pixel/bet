@@ -314,9 +314,12 @@ async function loadMatches(refresh = false) {
 
   try {
     const url = `/api/matches?date=${STATE.date}&sport=${STATE.sport}&days=1${refresh ? '&refresh=1' : ''}`;
-    const data = await api(url, { timeoutMs: 90000 });
+    const [data, betMap] = await Promise.all([
+      api(url, { timeoutMs: 90000 }),
+      loadMatchBetMap(),
+    ]);
     renderMatchesSummary(data, summary);
-    renderMatchesLeagues(data.leagues || [], container);
+    renderMatchesLeagues(data.leagues || [], container, betMap);
   } catch (e) {
     container.innerHTML = `<div class="empty-state">Chyba: ${e.message}
       <button class="btn small" id="matchesRetryBtn" style="margin-top:8px;">Zkusit znovu</button></div>`;
@@ -324,6 +327,26 @@ async function loadMatches(refresh = false) {
   } finally {
     clearTimeout(t1); clearTimeout(t2);
   }
+}
+
+async function loadMatchBetMap() {
+  // Proč byl zápas vsazen – spáruje zápasy s agentovými sázkami podle
+  // match_id (jednotlivé tipy mají "why" zdůvodnění, nohy AKO tiketů ho
+  // nemají, tak aspoň ukážeme, že jde o součást tiketu).
+  const map = {};
+  try {
+    const data = await api('/api/agent', { timeoutMs: 15000 });
+    for (const b of data.bets || []) {
+      if (b.outcome === 'acca') {
+        for (const leg of b.legs || []) {
+          if (leg.match_id) map[leg.match_id] = { label: leg.name, why: null, ticket: b.match, status: b.status };
+        }
+      } else if (b.match_id) {
+        map[b.match_id] = { label: b.label, why: b.why || null, ticket: null, status: b.status };
+      }
+    }
+  } catch (e) { /* bez zdůvodnění, jen zápasy */ }
+  return map;
 }
 
 function renderMatchesSummary(data, box) {
@@ -335,7 +358,7 @@ function renderMatchesSummary(data, box) {
     </div>`;
 }
 
-function renderMatchesLeagues(leagues, container) {
+function renderMatchesLeagues(leagues, container, betMap = {}) {
   if (!leagues.length) {
     container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den a sport</div>';
     return;
@@ -343,22 +366,58 @@ function renderMatchesLeagues(leagues, container) {
   container.innerHTML = leagues.map(lg => `
     <div class="league-group">
       <div class="league-head"><span class="flag">${lg.flag || ''}</span> ${lg.league} <span class="count">${lg.matches.length}</span></div>
-      ${lg.matches.map(matchCardHtml).join('')}
+      ${lg.matches.map(m => matchCardHtml(m, betMap[m.id])).join('')}
     </div>`).join('');
+
+  // Rozbalení/sbalení zdůvodnění sázky ("Proč vsazeno")
+  container.querySelectorAll('.why-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.closest('.match-card').querySelector('.why-box');
+      const open = box.style.display !== 'none';
+      box.style.display = open ? 'none' : 'block';
+      btn.textContent = open ? '💡 Proč vsazeno ▾' : '💡 Proč vsazeno ▴';
+    });
+  });
 }
 
-function matchCardHtml(m) {
+function fmtDateShort(dateStr) {
+  if (!dateStr) return '';
+  const [, m, d] = dateStr.split('-');
+  return `${d}.${m}.`;
+}
+
+function matchCardHtml(m, bet) {
   const finished = m.result !== null;
-  const timeLabel = finished ? 'Konec' : m.live ? 'ŽIVĚ' : (m.time || '');
-  const scoreLine = m.result ? `${m.result.home} : ${m.result.away}` : `${m.home}<br>${m.away}`;
+  // Datum + čas začátku ukázat VŽDY, i u odehraných/živých zápasů – dřív se
+  // pro "Konec"/"ŽIVĚ" čas začátku vůbec nezobrazoval a u zápasů, které
+  // ESPN vrátí pod jiným kalendářním dnem než vybraný filtr (kolem půlnoci
+  // UTC), nebylo bez data poznat, kdy přesně začínají.
+  const statusLabel = finished ? 'Konec' : m.live ? 'ŽIVĚ' : 'Začátek';
+  const startLabel = `${fmtDateShort(m.date)} ${m.time || ''}`.trim();
   const best = m.best_value || {};
   const hasPick = best.outcome && m.odds_source === 'real';
+
+  const why = bet ? `
+    <button class="btn small why-toggle" style="margin-top:8px;">💡 Proč vsazeno ▾</button>
+    <div class="why-box" style="display:none; margin-top:8px; font-size:12.5px; color:var(--txt2); background:var(--panel-2); border-radius:var(--radius-sm); padding:10px 12px;">
+      ${bet.ticket ? `Součást tiketu <strong>${bet.ticket}</strong> – tip <strong>${bet.label}</strong>.`
+        : bet.why && bet.why.length ? `<strong>${bet.label}</strong><ul style="margin:6px 0 0; padding-left:18px;">${bet.why.map(w => `<li>${w}</li>`).join('')}</ul>`
+        : `Vsazeno na <strong>${bet.label}</strong>.`}
+      <div style="margin-top:6px;"><span class="badge ${bet.status}">${(bet.status || 'open').toUpperCase()}</span></div>
+    </div>` : '';
+
   return `
-    <div class="match-card">
-      <div class="time ${m.live ? 'live' : ''}">${timeLabel}</div>
-      <div class="teams">
-        <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score">${m.result.home}</span>` : ''}</div>
-        <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score">${m.result.away}</span>` : ''}</div>
+    <div class="match-card" style="grid-template-columns: 60px 1fr auto; align-items: start;">
+      <div class="time ${m.live ? 'live' : ''}" style="display:flex; flex-direction:column; gap:2px;">
+        <span>${statusLabel}</span>
+        <span style="font-size:10.5px; color:var(--txt3); font-weight:500;">${startLabel}</span>
+      </div>
+      <div>
+        <div class="teams">
+          <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score">${m.result.home}</span>` : ''}</div>
+          <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score">${m.result.away}</span>` : ''}</div>
+        </div>
+        ${why}
       </div>
       <div class="pick-col">
         ${hasPick ? `
@@ -368,6 +427,7 @@ function matchCardHtml(m) {
           </div>
           <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
         ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
+        ${bet ? '<span class="badge open" style="margin-top:6px;">💰 vsazeno</span>' : ''}
       </div>
     </div>`;
 }
