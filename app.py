@@ -40,7 +40,7 @@ from functools import wraps
 
 from engine import storage
 from engine import data_sources as ds
-from engine import prediction as pred
+from engine import goals_model as pred
 from engine import bankroll
 from engine import accumulator as acc
 from engine import odds_api
@@ -114,26 +114,17 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
     if not refresh and key in _PRED_CACHE:
         return _PRED_CACHE[key]
     matches = ds.fetch_range(date_str, end, use_cache=not refresh, sport=sport)
-    predictions = pred.predict_all(matches)
-    # Volitelné: nahradit modelované kurzy SKUTEČNÝMI (když je nastaven API klíč)
+    # Volitelné: nahradit ESPN kurzy přesnějšími ze zpoplatněného The Odds API,
+    # pokud je nastaven klíč – jinak zůstávají zdarma ESPN (DraftKings) kurzy,
+    # co už jsou v matches[i]["real_odds"].
     if odds_api.has_key():
         index = odds_api.fetch_index(sport)
         if index:
-            for p in predictions:
-                rb = odds_api.lookup(index, p["home"], p["away"])
+            for m in matches:
+                rb = odds_api.lookup(index, m["home"], m["away"])
                 if rb:
-                    pred.apply_real_odds(p, rb)
-    # ESPN kurzy (DraftKings) – zdarma, bez kvóty; doplní zápasy bez reálných kurzů
-    for m, p in zip(matches, predictions):
-        ro = m.get("real_odds")
-        if not ro:
-            continue
-        if p.get("odds_source") != "real":
-            book = [{"name": ro["provider"], "sharp": True, "odds": ro["odds"]}]
-            pred.apply_real_odds(p, book)
-        # reálné kurzy na góly over/under (trh "total")
-        if ro.get("totals"):
-            pred.apply_real_totals(p, ro["totals"], ro["provider"])
+                    m["real_odds"] = {"provider": rb[0]["name"], "odds": rb[0]["odds"]}
+    predictions = pred.predict_all(matches)
     _PRED_CACHE[key] = predictions
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
     try:
@@ -191,7 +182,7 @@ def api_matches():
     # Minimalizuj data pro UI – odstraň zbytečné odds detaily
     def slim_prediction(p):
         keys = ("home", "away") if p.get("two_way") else ("home", "draw", "away")
-        odds = {k: p["bets"][k]["best_odds"] for k in keys if k in p.get("bets", {})}
+        odds = {k: p["bets"][k].get("odds") for k in keys if k in p.get("bets", {}) and p["bets"][k].get("odds")}
         return {
             "id": p.get("id"),
             "sport": p.get("sport", "soccer"),
@@ -207,16 +198,15 @@ def api_matches():
             "status": p.get("status", ""),
             "probs": p.get("probs", {}),
             "pick": p.get("pick"),
+            "confidence": p.get("confidence"),
             "result": p.get("result"),
             "live": p.get("live", False),
-            "best_value": p.get("best_value", {}),
+            "best_value": p.get("best_value") or {},
             "odds": odds,
-            "odds_source": p.get("odds_source", "sim"),
+            "odds_source": p.get("odds_source", "model"),
             "exp_goals": p.get("exp_goals"),
             "exp_total": p.get("exp_total"),
-            "exp_corners": p.get("exp_corners"),
             "goal_lines": p.get("goal_lines", [])[:2],
-            "corner_lines": p.get("corner_lines", [])[:1],
             "top_scores": p.get("top_scores", [])[:3],
         }
 
@@ -237,7 +227,7 @@ def api_matches():
         key=lambda l: (ds.league_rank(l["league"]), -len(l["matches"]), l["league"]))
 
     value_count = sum(1 for p in slim_preds if p["best_value"].get("is_value"))
-    # Tip dne = nejvyšší EV value napříč nadcházejícími zápasy
+    # Tip dne = nejvyšší EV value napříč nadcházejícími zápasy (jen reálné kurzy)
     upcoming = [p for p in slim_preds if p["result"] is None and p["best_value"].get("is_value")]
     tip = max(upcoming, key=lambda p: p["best_value"].get("ev", 0), default=None)
     return jsonify({
@@ -359,7 +349,7 @@ def api_team():
     wins = sum(1 for e in past if e["res"] == "W")
     return jsonify({
         "name": name,
-        "rating": pred.rating_of(name, league),
+        "rating": pred.rating_of(name),
         "form": last,
         "upcoming": upcoming,
         "played": len(past),
@@ -634,37 +624,23 @@ def _settle_recent(allow_slugless_fallback=False):
     elif slugless_days:
         remaining += len(slugless_days)   # zatím netknuté – ať more_pending zůstane pravdivé
 
-    # Rohy se ověřují zvlášť přes ESPN boxscore (summary endpoint, statistika
-    # "wonCorners") – jen pro zápasy, které právě skončily a mají otevřený
-    # rohový tip. Ne každá liga má detailní boxscore, proto best-effort.
+    # Model se učí přímo z každého potvrzeného výsledku – attack/defense
+    # rating obou týmů se posune podle skutečného skóre vs. očekávání.
+    # Dřív se rating aktualizoval JEN přes ruční /api/result endpoint, takže
+    # se model ve skutečnosti z automatického vyhodnocování nikdy neučil.
+    id_to_teams = {t["id"]: (t.get("home"), t.get("away"), t.get("league", ""))
+                   for t in open_tips if t.get("home") and t.get("away")}
+    for mid, r in results.items():
+        info = id_to_teams.get(mid)
+        if not info:
+            continue
+        home, away, league = info
+        try:
+            pred.update_from_result(home, away, league, r["home"], r["away"])
+        except Exception:
+            pass
+
     corner_results = {}
-    corner_targets = [
-        (t.get("sport", "soccer"), t.get("slug", ""), t["id"])
-        for t in open_tips
-        if t.get("corner_outcome") and t["id"] in results and t.get("slug")
-    ]
-    # + rohové SÁZKY agenta (market="corners") – vyhodnocují se proti počtu rohů
-    corner_targets += [
-        (b.get("sport", "soccer"), b.get("slug", ""), b["match_id"])
-        for b in open_bets
-        if b.get("market") == "corners" and b["match_id"] in results and b.get("slug")
-    ]
-    corner_targets = list(dict.fromkeys(corner_targets))   # dedupe
-    if corner_targets:
-        def _grab_corners(target):
-            sport, slug, mid = target
-            try:
-                return mid, ds.fetch_corners(sport, slug, mid)
-            except Exception:
-                return mid, None
-
-        def _collect_corner(pair):
-            mid, c = pair
-            if c:
-                corner_results[mid] = c
-        # Tvrdý deadline 15s ze stejného důvodu jako u ligových požadavků výše.
-        _run_bounded(_grab_corners, corner_targets, min(6, len(corner_targets)), 15, _collect_corner)
-
     return results, corner_results, remaining > 0
 
 

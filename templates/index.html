@@ -3,967 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KurzAnalytik Pro – Analytika kurzových sázek</title>
-  <link rel="stylesheet" href="/static/style.css?v=2.3">
+  <title>KurzAnalytik</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="theme-dark accent-violet">
-  <div class="app-container">
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="sidebar">
-      <div class="logo">
-        <span class="logo-icon">⚽</span>
-        <div style="display: flex; flex-direction: column; gap: 2px;">
-          <span class="logo-text">KurzAnalytik</span>
-          <span style="font-size: 11px; color: var(--acc); font-weight: 500; letter-spacing: 0.5px;">v1.3</span>
+<body>
+
+<div class="mobile-topbar">
+  <button id="mobileMenuBtn">☰</button>
+  <span class="brand">⚽ KurzAnalytik</span>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="logo">⚽</span> KurzAnalytik <span class="ver">v3</span></div>
+    <nav class="nav" id="nav">
+      <button class="nav-btn active" data-page="dashboard"><span class="icon">▦</span> Dashboard</button>
+      <button class="nav-btn" data-page="matches"><span class="icon">⚽</span> Zápasy</button>
+      <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
+      <button class="nav-btn" data-page="settings"><span class="icon">⚙</span> Nastavení</button>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="who">
+        <span class="name">{{ session.get('user', 'Admin') }}</span>
+        <span class="role">Přihlášen</span>
+      </div>
+      <a href="/logout">Odhlásit se</a>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-head">
+        <h1>Dashboard</h1>
+        <p class="lead">Přehled výkonu a dnešního tipu</p>
+      </div>
+
+      <div class="grid-stats" id="statTiles">
+        <div class="stat-tile"><div class="label">Zůstatek banku</div><div class="value" id="stBalance">—</div><div class="hint" id="stBalanceHint"></div></div>
+        <div class="stat-tile"><div class="label">Celkový zisk</div><div class="value" id="stProfit">—</div><div class="hint" id="stProfitHint"></div></div>
+        <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="stWinRate">—</div><div class="hint" id="stWinHint"></div></div>
+        <div class="stat-tile"><div class="label">Otevřené sázky</div><div class="value" id="stOpen">—</div><div class="hint">čeká na vyhodnocení</div></div>
+      </div>
+
+      <div id="settleBar" class="card" style="display:none; margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span class="spinner" style="width:16px;height:16px;"></span>
+          <span id="settleText" style="flex:1; font-size:13px; color:var(--txt2);"></span>
+          <button class="btn small" id="settleNowBtn">Zkontrolovat výsledky</button>
         </div>
       </div>
 
-      <nav class="nav-main">
-        <button class="nav-item active" data-page="dashboard">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
-          </svg>
-          <span>Dashboard</span>
-        </button>
-
-        <button class="nav-item" data-page="matches">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M2 12h20M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10c-2.5-3-4-6.5-4-10s1.5-7 4-10z" fill="none" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <span>Zápasy</span>
-        </button>
-
-        <button class="nav-item" data-page="agent-tips">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-            <polyline points="13 2 13 9 20 9"/>
-            <path d="M9 12h6M9 16h6"/>
-          </svg>
-          <span>Tipy agenta</span>
-        </button>
-
-        <button class="nav-item" data-page="analytics">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <line x1="12" y1="2" x2="12" y2="22"/>
-            <path d="M17 5H9.5a1.5 1.5 0 0 0 0 3h5a1.5 1.5 0 0 1 0 3h-5.5"/>
-            <path d="M6 18a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2h8"/>
-          </svg>
-          <span>Analytics</span>
-        </button>
-
-        <button class="nav-item" data-page="bankroll">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="1"/>
-            <circle cx="19" cy="12" r="1"/>
-            <circle cx="5" cy="12" r="1"/>
-            <ellipse cx="12" cy="5" rx="7" ry="3"/>
-            <path d="M5 5v14a7 7 0 0 0 14 0V5"/>
-          </svg>
-          <span>Bankroll</span>
-        </button>
-
-        <button class="nav-item" data-page="learning">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-          </svg>
-          <span>ML Learning</span>
-        </button>
-
-        <button class="nav-item" data-page="advanced-analytics">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 9.5c0 .83-.67 1.5-1.5 1.5S11 13.33 11 12.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5zM6 6h12v2H6zm6 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-          </svg>
-          <span>Advanced</span>
-        </button>
-
-        <button class="nav-item" data-page="settings">
-          <svg class="nav-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
-          </svg>
-          <span>Nastavení</span>
-        </button>
-      </nav>
-
-      <div class="sidebar-bottom">
-        <div class="user-info">
-          <div class="user-avatar">👤</div>
-          <div>
-            <div class="user-name">Admin</div>
-            <div class="user-status">Přihlášen</div>
-          </div>
+      <div class="two-col">
+        <div class="tip-hero" id="tipHero">
+          <div class="kicker">💡 Tip dne</div>
+          <div class="loading" id="tipLoading"><span class="spinner"></span> Hledám tutovku…</div>
+          <div id="tipContent" style="display:none;"></div>
         </div>
-        <a href="/logout" class="logout-btn">Odhlášit</a>
+
+        <div class="card">
+          <h3>Agent</h3>
+          <div id="agentSummary" class="loading"><span class="spinner"></span></div>
+          <button class="btn primary" id="runAgentBtn" style="width:100%; justify-content:center; margin-top:12px;">Spustit agenta teď</button>
+        </div>
       </div>
-    </aside>
 
-    <!-- MOBILE HEADER -->
-    <header class="mobile-header">
-      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <span class="mobile-title">KurzAnalytik</span>
-    </header>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <div class="card">
+        <h3>Poslední tipy agenta</h3>
+        <div id="recentBets" class="loading"><span class="spinner"></span></div>
+      </div>
+    </section>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-      <!-- DASHBOARD PAGE -->
-      <section id="dashboard" class="page active">
-        <div class="page-header">
-          <div>
-            <h1>Dashboard</h1>
-            <p class="page-desc">Přehled výkonu a aktuálních tipů</p>
-          </div>
-        </div>
+    <!-- MATCHES -->
+    <section id="page-matches" class="page">
+      <div class="page-head">
+        <h1>Zápasy</h1>
+        <p class="lead">Přehled zápasů a predikcí modelu</p>
+      </div>
 
-        <!-- STATS CARDS -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Zůstatek banku</div>
-            <div class="stat-value" id="dashBalance">0 Kč</div>
-            <div class="stat-subtext" id="dashBalanceChange">—</div>
-          </div>
+      <div class="pill-row" id="dateStrip"></div>
+      <div class="pill-row" id="sportStrip">
+        <button class="pill active" data-sport="soccer">⚽ Fotbal</button>
+        <button class="pill" data-sport="hockey">🏒 Hokej</button>
+        <button class="pill" data-sport="basketball">🏀 Basketbal</button>
+        <button class="pill" data-sport="football">🏈 Am. fotbal</button>
+        <button class="btn small" id="refreshMatchesBtn" style="margin-left:auto;">⟳ Obnovit</button>
+      </div>
 
-          <div class="stat-card">
-            <div class="stat-label">Celkový zisk</div>
-            <div class="stat-value" id="dashProfit">0 Kč</div>
-            <div class="stat-subtext" id="dashROI">—</div>
-          </div>
+      <div id="matchesSummary"></div>
+      <div id="matchesContainer" class="loading"><span class="spinner"></span> Načítání zápasů…</div>
+    </section>
 
-          <div class="stat-card">
-            <div class="stat-label">Win Rate</div>
-            <div class="stat-value" id="dashWinRate">—</div>
-            <div class="stat-subtext" id="dashWinCount">—</div>
-          </div>
+    <!-- BANKROLL -->
+    <section id="page-bankroll" class="page">
+      <div class="page-head">
+        <h1>Bankroll</h1>
+        <p class="lead">Vývoj banku a historie sázek</p>
+      </div>
 
-          <div class="stat-card">
-            <div class="stat-label">Sharpe Ratio</div>
-            <div class="stat-value" id="dashSharpe">—</div>
-            <div class="stat-subtext">Riziko/výnos</div>
-          </div>
-        </div>
+      <div class="grid-stats">
+        <div class="stat-tile"><div class="label">Počáteční bank</div><div class="value" id="bStart">—</div></div>
+        <div class="stat-tile"><div class="label">Aktuální zůstatek</div><div class="value" id="bCurrent">—</div></div>
+        <div class="stat-tile"><div class="label">ROI</div><div class="value" id="bRoi">—</div></div>
+        <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="bWinRate">—</div></div>
+      </div>
 
-        <!-- YESTERDAY BANNER -->
-        <div id="yesterdayBanner" class="day-banner hidden"></div>
+      <div class="card">
+        <h3>Equity Curve</h3>
+        <div class="chart-wrap"><svg id="equitySVG" viewBox="0 0 800 260" class="chart"></svg></div>
+      </div>
 
-        <!-- SETTLE PROGRESS -->
-        <div id="settlePanel" class="settle-panel hidden">
-          <div class="settle-info">
-            <span id="settleIcon" class="settle-icon">⏳</span>
-            <div>
-              <div id="settleText" class="settle-text">—</div>
-              <div id="settleSub" class="settle-sub"></div>
-            </div>
-          </div>
-          <div class="settle-actions">
-            <div id="settleProgressWrap" class="settle-progress hidden">
-              <div id="settleProgressFill" class="settle-progress-fill"></div>
-            </div>
-            <button id="settleNowBtn" class="btn btn-sm">Zkontrolovat výsledky</button>
-          </div>
-        </div>
-
-        <!-- TIP OF THE DAY + TODAY'S TICKET -->
-        <div class="dash-highlight-grid">
-          <div class="card tip-of-day">
-            <h2>💡 Tip dne</h2>
-            <div id="tipOfDayContainer"><div class="loading">Hledám tutovku...</div></div>
-          </div>
-          <div class="card today-ticket">
-            <h2>🎫 Dnešní tiket</h2>
-            <div id="todayTicketContainer"><div class="loading">Načítání...</div></div>
-          </div>
-        </div>
-
-        <!-- TODAY'S & TOMORROW'S TIPS -->
-        <div class="tips-section">
-          <h2>Dnešní + Zítřejší tipy</h2>
-          <div id="dashTipsContainer" class="tips-list">
-            <div class="loading">Načítání...</div>
-          </div>
-        </div>
-
-        <!-- AGENT SUMMARY -->
-        <div class="agent-summary">
-          <h2>Běh agenta</h2>
-          <div class="agent-controls">
-            <button id="runAgentBtn" class="btn btn-primary">Spustit agenta teď</button>
-            <div id="agentStatus" class="agent-status">—</div>
-          </div>
-          <div id="agentLastRun" class="agent-info">—</div>
-        </div>
-      </section>
-
-      <!-- MATCHES PAGE -->
-      <section id="matches" class="page">
-        <div class="page-header">
-          <div>
-            <h1>Zápasy</h1>
-            <p class="page-desc">Přehled zápasů a predikcí</p>
-          </div>
-          <button class="btn btn-primary" id="matchesRefreshBtn">⟳ Obnovit</button>
-        </div>
-
-        <!-- Day strip navigation (Livesport style) -->
-        <div class="day-strip">
-          <button class="day-strip-arrow" id="matchesPrevDay">‹</button>
-          <div class="day-strip-days" id="dayStripDays"></div>
-          <button class="day-strip-arrow" id="matchesNextDay">›</button>
-        </div>
-
-        <!-- Sport tabs -->
-        <div class="sport-tabs">
-          <button class="sport-tab active" data-sport="soccer">⚽ Fotbal</button>
-          <button class="sport-tab" data-sport="hockey">🏒 Hokej</button>
-          <button class="sport-tab" data-sport="basketball">🏀 Basketbal</button>
-          <button class="sport-tab" data-sport="baseball">⚾ Baseball</button>
-          <button class="sport-tab" data-sport="football">🏈 Am. fotbal</button>
-        </div>
-
-        <!-- Filters -->
-        <div class="matches-filter-bar">
-          <label><input type="checkbox" id="filterRealOdds"> Jen reálné kurzy</label>
-          <label><input type="checkbox" id="filterTutovky"> Jen tutovky (75 %+)</label>
-          <label><input type="checkbox" id="filterUpcoming"> Jen nadcházející</label>
-        </div>
-
-        <!-- Summary bar -->
-        <div class="matches-summary" id="matchesSummary"></div>
-
-        <!-- Matches list -->
-        <div id="matchesContainer" class="matches-leagues">
-          <div class="loading">Načítání zápasů...</div>
-        </div>
-      </section>
-
-      <!-- AGENT TIPS PAGE -->
-      <section id="agent-tips" class="page">
-        <div class="page-header">
-          <h1>Tipy Bet Agenta</h1>
-          <p class="page-desc">Detailní analýza každého tipu s vysvětlením</p>
-        </div>
-
-        <div class="filter-bar">
-          <input type="text" id="tipFilter" placeholder="🔍 Hledat tým, ligu..." class="filter-input">
-          <select id="tipStatus" class="filter-select">
-            <option value="">Všechny statusy</option>
-            <option value="open">Otevřené</option>
-            <option value="won">Vyhrané</option>
-            <option value="lost">Prohry</option>
-          </select>
-          <select id="tipType" class="filter-select">
-            <option value="">Vše</option>
-            <option value="single">Jen single</option>
-            <option value="acca">Jen tikety (AKO)</option>
-          </select>
-        </div>
-
-        <div id="agentTipsContainer" class="agent-tips-list">
-          <div class="loading">Načítání...</div>
-        </div>
-      </section>
-
-      <!-- ANALYTICS PAGE -->
-      <section id="analytics" class="page">
-        <div class="page-header">
-          <h1>Pokročilé Analytics</h1>
-          <p class="page-desc">Detailní analýza výkonu a metriky</p>
-        </div>
-
-        <!-- METRICS TABS -->
-        <div class="analytics-tabs">
-          <button class="tab-btn active" data-tab="monthly">Měsíční</button>
-          <button class="tab-btn" data-tab="leagues">Po ligách</button>
-          <button class="tab-btn" data-tab="distribution">Distribuace</button>
-        </div>
-
-        <!-- MONTHLY PERFORMANCE -->
-        <div id="monthly-tab" class="tab-content active">
-          <div class="card">
-            <h3>Měsíční P&L</h3>
-            <div id="monthlyChart" class="chart-container">
-              <svg id="monthlyChartSVG" viewBox="0 0 800 300" class="chart"></svg>
-            </div>
-            <table id="monthlyTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Měsíc</th>
-                  <th>Sázky</th>
-                  <th>Výhry</th>
-                  <th>Win%</th>
-                  <th>P&L</th>
-                  <th>ROI</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- LEAGUE PERFORMANCE -->
-        <div id="leagues-tab" class="tab-content">
-          <div class="card">
-            <h3>Výkon po ligách</h3>
-            <table id="leaguesTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Liga</th>
-                  <th>Sázky</th>
-                  <th>Výhry</th>
-                  <th>Win%</th>
-                  <th>P&L</th>
-                  <th>ROI</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- DISTRIBUTION -->
-        <div id="distribution-tab" class="tab-content">
-          <div class="card">
-            <h3>Distribuce stake / ROI</h3>
-            <div id="distributionChart" class="chart-container">
-              <svg id="distributionChartSVG" viewBox="0 0 400 400" class="chart"></svg>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- BANKROLL PAGE -->
-      <section id="bankroll" class="page">
-        <div class="page-header">
-          <h1>Vývoj Banku</h1>
-          <p class="page-desc">Detailní analýza banku, grafů a statistik</p>
-        </div>
-
-        <!-- TOP METRICS -->
-        <div class="bankroll-stats">
-          <div class="stat-box">
-            <span class="label">Počáteční bank:</span>
-            <span class="value" id="startBalance">—</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">Aktuální zůstatek:</span>
-            <span class="value" id="currentBalance">—</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">Otevřené sázky:</span>
-            <span class="value" id="openBets">—</span>
-          </div>
-        </div>
-
-        <!-- SUMMARY STATS -->
-        <div class="card">
-          <h3>Klíčové statistiky</h3>
-          <div class="summary-grid">
-            <div class="summary-stat">
-              <span class="label">Celkem sázek</span>
-              <span class="value" id="summaryTotalBets">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Celkový P&L</span>
-              <span class="value" id="summaryPnL">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">ROI</span>
-              <span class="value" id="summaryROI">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Win Rate</span>
-              <span class="value" id="summaryWinRate">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Vyhrané dny</span>
-              <span class="value" id="summaryWinDays">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Prohry dny</span>
-              <span class="value" id="summaryLoseDays">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Peak Balance</span>
-              <span class="value" id="summaryPeak">—</span>
-            </div>
-            <div class="summary-stat">
-              <span class="label">Trough Balance</span>
-              <span class="value" id="summaryTrough">—</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- EQUITY CURVE -->
-        <div class="card">
-          <h3>Equity Curve</h3>
-          <div id="equityChart" class="chart-container">
-            <svg id="equitySVG" viewBox="0 0 800 300" class="chart"></svg>
-          </div>
-        </div>
-
-        <!-- DAILY/MONTHLY CHARTS -->
-        <div class="chart-tabs">
-          <button class="chart-tab-btn active" data-chart="daily">Denně</button>
-          <button class="chart-tab-btn" data-chart="monthly">Měsíčně</button>
-          <button class="chart-tab-btn" data-chart="hourly">Po hodinách</button>
-        </div>
-
-        <!-- DAILY CHART -->
-        <div id="daily-chart" class="chart-tab-content active">
-          <div class="card">
-            <h3>Denní P&L (posledních 30 dní)</h3>
-            <div class="chart-container">
-              <svg id="dailyChartSVG" viewBox="0 0 1000 300" class="chart"></svg>
-            </div>
-            <table id="dailyTable" class="data-table small">
-              <thead>
-                <tr><th>Den</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- MONTHLY CHART -->
-        <div id="monthly-chart" class="chart-tab-content">
-          <div class="card">
-            <h3>Měsíční P&L</h3>
-            <table id="bankrollMonthlyTable" class="data-table">
-              <thead>
-                <tr><th>Měsíc</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th><th>ROI</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- HOURLY CHART -->
-        <div id="hourly-chart" class="chart-tab-content">
-          <div class="card">
-            <h3>Nejlepší Hodiny pro Sázení</h3>
-            <table id="hourlyTable" class="data-table">
-              <thead>
-                <tr><th>Hodina</th><th>Sázky</th><th>Výhry</th><th>Win%</th><th>P&L</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- BEST/WORST DAYS -->
-        <div class="card">
-          <h3>Nejlepší vs Nejhorší dny</h3>
-          <div class="best-worst-grid">
-            <div class="best-worst-box">
-              <h4>Nejlepší dny</h4>
-              <table id="bestDaysTable" class="data-table small">
-                <thead>
-                  <tr><th>Den</th><th>P&L</th></tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-            <div class="best-worst-box">
-              <h4>Nejhorší dny</h4>
-              <table id="worstDaysTable" class="data-table small">
-                <thead>
-                  <tr><th>Den</th><th>P&L</th></tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- STREAKS -->
-        <div class="card">
-          <h3>Analýza sérií</h3>
-          <div class="streaks-grid">
-            <div class="streak-stat">
-              <span class="label">Nejdelší výherní série</span>
-              <span class="value" id="longestWinStreak">—</span>
-            </div>
-            <div class="streak-stat">
-              <span class="label">Nejdelší prohraná série</span>
-              <span class="value" id="longestLossStreak">—</span>
-            </div>
-            <div class="streak-stat">
-              <span class="label">Aktuální série</span>
-              <span class="value" id="currentStreak">—</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- BET HISTORY -->
-        <div class="card">
-          <h3>Historie sázek</h3>
-          <table id="betsTable" class="data-table">
-            <thead>
-              <tr>
-                <th>Zápas</th>
-                <th>Tip</th>
-                <th>Vklad</th>
-                <th>Kurz</th>
-                <th>Status</th>
-                <th>P&L</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
+      <div class="card">
+        <h3>Historie sázek</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Zápas</th><th>Tip</th><th>Vklad</th><th>Kurz</th><th>Status</th><th>P&L</th></tr></thead>
+            <tbody id="betsTable"></tbody>
           </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- LEARNING PAGE -->
-      <section id="learning" class="page">
-        <div class="page-header">
-          <h1>ML Learning</h1>
-          <p class="page-desc">Agent se učí z vlastních tipů a chyb</p>
+    <!-- SETTINGS -->
+    <section id="page-settings" class="page">
+      <div class="page-head">
+        <h1>Nastavení</h1>
+        <p class="lead">Chování agenta a bankroll parametry</p>
+      </div>
+
+      <div class="card">
+        <h3>Automatický agent</h3>
+        <div class="field" style="display:flex; align-items:center; justify-content:space-between;">
+          <label style="margin:0;">Agent zapnutý</label>
+          <label class="toggle"><input type="checkbox" id="cfgEnabled"><span class="slider"></span></label>
         </div>
-
-        <div class="learning-grid">
-          <!-- Model Status -->
-          <div class="card">
-            <h3>Model Status</h3>
-            <div class="status-box">
-              <div class="status-label">Status:</div>
-              <div class="status-value" id="modelStatus">—</div>
-            </div>
-            <div class="status-box">
-              <div class="status-label">Celkových tipů:</div>
-              <div class="status-value" id="totalBets">—</div>
-            </div>
-            <div class="status-box">
-              <div class="status-label">Win Rate:</div>
-              <div class="status-value" id="winRate">—</div>
-            </div>
-            <button class="btn btn-primary" id="trainModelBtn" style="margin-top: 16px; width: 100%;">
-              🧠 Přetrénovat Model
-            </button>
-          </div>
-
-          <!-- Performance Metrics -->
-          <div class="card">
-            <h3>Model Performance</h3>
-            <div class="metric-row">
-              <span>Accuracy:</span>
-              <span id="accuracy" class="metric-value">—</span>
-            </div>
-            <div class="metric-row">
-              <span>AUC Score:</span>
-              <span id="aucScore" class="metric-value">—</span>
-            </div>
-            <div class="metric-row">
-              <span>Precision:</span>
-              <span id="precision" class="metric-value">—</span>
-            </div>
-            <div class="metric-row">
-              <span>Last Trained:</span>
-              <span id="lastTrained" class="metric-value">—</span>
-            </div>
-          </div>
+        <div class="field" style="display:flex; align-items:center; justify-content:space-between;">
+          <label style="margin:0;">Auto-run podle rozvrhu (8:00, 16:00)</label>
+          <label class="toggle"><input type="checkbox" id="cfgAutoRun"><span class="slider"></span></label>
         </div>
-
-        <!-- Learning Curve -->
-        <div class="card">
-          <h3>📈 Learning Curve (90 days)</h3>
-          <div class="chart-container">
-            <svg id="learningCurve" viewBox="0 0 800 300" class="chart"></svg>
-          </div>
+        <div class="field-row">
+          <div class="field"><label>Min. jistota (%)</label><input type="number" id="cfgMinProb" min="50" max="99"></div>
+          <div class="field"><label>Min. kurz</label><input type="number" step="0.05" id="cfgMinOdds"></div>
         </div>
-
-        <!-- Real-time Monitoring -->
-        <div class="card">
-          <h3>Monitoring</h3>
-          <div class="monitoring-grid">
-            <div class="monitor-stat">
-              <span class="label">Active Alerts</span>
-              <span class="value" id="activeAlerts">—</span>
-            </div>
-            <div class="monitor-stat">
-              <span class="label">High Priority</span>
-              <span class="value" id="highPriorityAlerts">—</span>
-            </div>
-            <div class="monitor-stat">
-              <span class="label">Model Health</span>
-              <span class="value" id="modelHealth">—</span>
-            </div>
-            <div class="monitor-stat">
-              <span class="label">Last Alert</span>
-              <span class="value" id="lastAlert">—</span>
-            </div>
+        <div class="field-row">
+          <div class="field"><label>Způsob vkladu</label>
+            <select id="cfgStakeMode"><option value="kelly">Kelly kritérium</option><option value="flat">Plochá částka</option></select>
           </div>
+          <div class="field"><label>Denní strop banku (%)</label><input type="number" id="cfgDailyCap" min="5" max="100"></div>
         </div>
+        <button class="btn primary" id="saveSettingsBtn">Uložit nastavení</button>
+      </div>
 
-        <!-- Feature Importance -->
-        <div class="card">
-          <h3>Feature Importance</h3>
-          <div id="featureImportance" class="feature-list">
-            <p class="loading">Načítání...</p>
-          </div>
+      <div class="card">
+        <h3>Bankroll</h3>
+        <div class="field-row">
+          <div class="field"><label>Počáteční bank (Kč)</label><input type="number" id="cfgStartBalance"></div>
+          <div class="field"><label>Kelly frakce</label><input type="number" step="0.05" id="cfgKellyFraction"></div>
         </div>
-      </section>
+        <button class="btn" id="saveBankrollBtn">Uložit bankroll</button>
+      </div>
 
-      <!-- ADVANCED ANALYTICS PAGE -->
-      <section id="advanced-analytics" class="page">
-        <div class="page-header">
-          <h1>Advanced Analytics</h1>
-          <p class="page-desc">Backtesting, metriky a detailní analýza výkonu</p>
-        </div>
+      <div class="card">
+        <h3>Diagnostika</h3>
+        <div id="diagInfo" class="muted" style="font-size:12.5px; line-height:1.8;"></div>
+      </div>
+    </section>
 
-        <div class="analytics-tabs">
-          <button class="tab-btn active" data-tab="backtest">Backtesting</button>
-          <button class="tab-btn" data-tab="league-perf">Liga Performance</button>
-          <button class="tab-btn" data-tab="agent-manual">Agent vs Manual</button>
-          <button class="tab-btn" data-tab="odds-analysis">Odds Analysis</button>
-        </div>
+  </main>
+</div>
 
-        <!-- BACKTESTING TAB -->
-        <div id="backtest-tab" class="tab-content active">
-          <div class="card">
-            <h3>Backtesting</h3>
-            <div id="backtestSummary" class="backtesting-grid">
-              <div class="metric-card">
-                <div class="metric-label">Total Bets</div>
-                <div class="metric-value" id="backtestTotal">—</div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-label">Win Rate</div>
-                <div class="metric-value" id="backtestWinRate">—</div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-label">ROI</div>
-                <div class="metric-value" id="backtestROI">—</div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-label">Sharpe Ratio</div>
-                <div class="metric-value" id="backtestSharpe">—</div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-label">Max Drawdown</div>
-                <div class="metric-value" id="backtestDrawdown">—</div>
-              </div>
-              <div class="metric-card">
-                <div class="metric-label">Final Balance</div>
-                <div class="metric-value" id="backtestBalance">—</div>
-              </div>
-            </div>
-          </div>
+<div id="toast"></div>
 
-          <div class="card">
-            <h3>Equity Curve</h3>
-            <div id="backtestChart" class="chart-container">
-              <svg id="backtestChartSVG" viewBox="0 0 800 300" class="chart"></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- LEAGUE PERFORMANCE TAB -->
-        <div id="league-perf-tab" class="tab-content">
-          <div class="card">
-            <h3>Best Performing Leagues</h3>
-            <table id="bestLeaguesTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Liga</th>
-                  <th>Sázky</th>
-                  <th>Výhry</th>
-                  <th>Win%</th>
-                  <th>P&L</th>
-                  <th>ROI</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="card">
-            <h3>Worst Performing Leagues</h3>
-            <table id="worstLeaguesTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Liga</th>
-                  <th>Sázky</th>
-                  <th>Výhry</th>
-                  <th>Win%</th>
-                  <th>P&L</th>
-                  <th>ROI</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- AGENT VS MANUAL TAB -->
-        <div id="agent-manual-tab" class="tab-content">
-          <div class="card">
-            <h3>Agent vs Manual</h3>
-            <div id="agentManualComparison" class="comparison-grid">
-              <div class="comparison-box">
-                <h4>Agent</h4>
-                <div class="comparison-stat">
-                  <span>Total:</span>
-                  <span id="agentTotal">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>Win Rate:</span>
-                  <span id="agentWinRate">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>ROI:</span>
-                  <span id="agentROI">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>P&L:</span>
-                  <span id="agentPnL">—</span>
-                </div>
-              </div>
-
-              <div class="comparison-box">
-                <h4>👤 Manual Bets</h4>
-                <div class="comparison-stat">
-                  <span>Total:</span>
-                  <span id="manualTotal">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>Win Rate:</span>
-                  <span id="manualWinRate">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>ROI:</span>
-                  <span id="manualROI">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>P&L:</span>
-                  <span id="manualPnL">—</span>
-                </div>
-              </div>
-
-              <div class="comparison-box">
-                <h4>Combined</h4>
-                <div class="comparison-stat">
-                  <span>Total:</span>
-                  <span id="combinedTotal">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>Win Rate:</span>
-                  <span id="combinedWinRate">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>ROI:</span>
-                  <span id="combinedROI">—</span>
-                </div>
-                <div class="comparison-stat">
-                  <span>P&L:</span>
-                  <span id="combinedPnL">—</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ODDS ANALYSIS TAB -->
-        <div id="odds-analysis-tab" class="tab-content">
-          <div class="card">
-            <h3>Performance by Odds Range</h3>
-            <table id="oddsTable" class="data-table">
-              <thead>
-                <tr>
-                  <th>Odds Range</th>
-                  <th>Sázky</th>
-                  <th>Výhry</th>
-                  <th>Win%</th>
-                  <th>P&L</th>
-                  <th>ROI</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- SETTINGS PAGE -->
-      <section id="settings" class="page">
-        <div class="page-header">
-          <h1>Nastavení</h1>
-          <p class="page-desc">Konfigurace agenta a aplikace</p>
-        </div>
-
-        <div class="settings-grid">
-          <div class="card">
-            <h3>Bet Agent</h3>
-            <div class="setting-group">
-              <label for="agentEnabled">Zapnout agenta</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentEnabled" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group">
-              <label for="agentBetToday">Sázet i na dnešní zápasy</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentBetToday" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group">
-              <label for="agentOnlyRealOdds" title="Agent vsadí jen na zápasy, kde jsou k dispozici skutečné kurzy sázkovek (The Odds API). Jediný poctivý test ziskovosti proti reálnému trhu.">Jen reálné kurzy sázkovek</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentOnlyRealOdds" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <h4 style="margin-top:16px;margin-bottom:4px">Automatizace</h4>
-
-            <div class="setting-group">
-              <label for="agentAutoRun" title="Agent se automaticky spustí v nastavených hodinách (např. 8:00 a 16:00) a vsadí na dostupné zápasy.">Auto-run agenta (podle rozvrhu)</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentAutoRun" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group" id="autoRunHoursGroup">
-              <label title="Hodiny spuštění agenta (24h formát, čárkou oddělené). Např. 8,16 = v 8:00 a 16:00.">Hodiny spuštění</label>
-              <input type="text" id="agentAutoRunHours" placeholder="8,16">
-            </div>
-
-            <div class="setting-group">
-              <label for="agentAutoRetrain" title="ML model se automaticky přetrénuje po zadaném počtu nově vyhodnocených sázek.">Auto-retrain ML modelu</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentAutoRetrain" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group" id="autoRetrainThresholdGroup">
-              <label title="Po kolika nově settled sázkách se automaticky přetrénuje ML model.">Retrain po X sázkách</label>
-              <input type="number" id="agentAutoRetrainThreshold" min="3" max="100" step="1">
-            </div>
-
-            <h4 style="margin-top:16px;margin-bottom:4px">Sázení</h4>
-
-            <div class="setting-group">
-              <label>Režim sázky</label>
-              <select id="stakeMode">
-                <option value="kelly">Kelly (doporučeno)</option>
-                <option value="flat">Plochý vklad</option>
-              </select>
-            </div>
-
-            <div class="setting-group" id="flatStakeGroup">
-              <label>Vklad na sázku (Kč)</label>
-              <input type="number" id="flatStake" min="1" step="1">
-            </div>
-
-            <h4 style="margin-top:16px;margin-bottom:4px">Tutovka strategie</h4>
-
-            <div class="setting-group">
-              <label title="Minimální pravděpodobnost tipu. 0.75 = agent sází jen tipy se 75%+ šancí na výhru.">Min. pravděpodobnost</label>
-              <input type="number" id="agentMinProb" min="0.5" max="0.95" step="0.05">
-            </div>
-
-            <div class="setting-group">
-              <label title="Minimální kurz. Pod 1.20 se sázka nevyplatí ani při vysoké jistotě.">Min. kurz</label>
-              <input type="number" id="agentMinOdds" min="1.05" max="2" step="0.05">
-            </div>
-
-            <div class="setting-group">
-              <label>Trhy</label>
-              <div class="markets-checks">
-                <label><input type="checkbox" id="mktWinner"> Vítěz (1X2)</label>
-                <label><input type="checkbox" id="mktGoals"> Góly O/U</label>
-                <label><input type="checkbox" id="mktBtts"> BTTS</label>
-                <label><input type="checkbox" id="mktCorners"> Rohy</label>
-              </div>
-            </div>
-
-            <h4 style="margin-top:16px;margin-bottom:4px">Tikety (AKO)</h4>
-
-            <div class="setting-group">
-              <label for="agentDailyTicket" title="Denní AKO z 2–3 nejjistějších tipů, celkový kurz ~2–3.">Denní tiket „Jistota dne"</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentDailyTicket" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group">
-              <label for="agentWeekendTicket" title="Páteční/sobotní tiket ze 4–6 tipů s vyšším celkovým kurzem.">Víkendový tiket</label>
-              <label class="toggle">
-                <input type="checkbox" id="agentWeekendTicket" class="toggle-input">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-group">
-              <label>Vklad na tiket (Kč)</label>
-              <input type="number" id="agentTicketStake" min="1" step="1">
-            </div>
-
-            <button class="btn btn-primary" id="saveSettings">Uložit nastavení</button>
-          </div>
-
-          <div class="card">
-            <h3>Model</h3>
-            <div class="setting-group">
-              <label>Domácí výhoda (Elo)</label>
-              <input type="number" id="homeAdv" min="0" max="200">
-            </div>
-
-            <div class="setting-group">
-              <label>Rating to Goals</label>
-              <input type="number" id="ratingToGoals" min="0.1" max="1" step="0.1">
-            </div>
-
-            <button class="btn btn-primary" id="resetSettings">Obnovit výchozí</button>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- MODALS -->
-  <div id="tipDetailModal" class="modal hidden">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <div id="tipDetailContent">—</div>
-    </div>
-  </div>
-
-  <div id="matchDetailModal" class="modal hidden">
-    <div class="modal-content modal-wide">
-      <button class="modal-close" onclick="closeMatchDetail()">&times;</button>
-      <div id="matchDetailContent">—</div>
-    </div>
-  </div>
-
-  <!-- MOBILE BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <button data-page="dashboard" class="bottom-nav-btn active">
-      <span class="bn-icon">▦</span><span>Přehled</span>
-    </button>
-    <button data-page="matches" class="bottom-nav-btn">
-      <span class="bn-icon">⚽</span><span>Zápasy</span>
-    </button>
-    <button data-page="agent-tips" class="bottom-nav-btn">
-      <span class="bn-icon">🤖</span><span>Tipy</span>
-    </button>
-    <button data-page="bankroll" class="bottom-nav-btn">
-      <span class="bn-icon">💰</span><span>Bank</span>
-    </button>
-  </nav>
-
-  <script src="/static/app.js?v=2.3"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
