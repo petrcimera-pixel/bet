@@ -1,0 +1,102 @@
+{
+  "kelly": {
+    "name": "Kelly Kateřina",
+    "emoji": "📐",
+    "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "quarter": {
+    "name": "Čtvrtinový Čeněk",
+    "emoji": "🎯",
+    "tagline": "Kvartový Kelly (25 %) – rozumný kompromis mezi růstem a rizikem.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "conservative": {
+    "name": "Konzervativní Klára",
+    "emoji": "🛡️",
+    "tagline": "Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "value": {
+    "name": "Value Hunter Viktor",
+    "emoji": "🔍",
+    "tagline": "Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "favorite": {
+    "name": "Favorit Fanda",
+    "emoji": "⭐",
+    "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "underdog": {
+    "name": "Outsider Olda",
+    "emoji": "🎲",
+    "tagline": "Honí nejvyšší kurz s aspoň 15% šancí – vysoké riziko, vysoký výnos.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "martingale": {
+    "name": "Martingale Magda",
+    "emoji": "📈",
+    "tagline": "Po prohře zdvojnásobí vklad – klasický (rizikový) progresivní systém.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "random": {
+    "name": "Náhodný Norbert",
+    "emoji": "🎰",
+    "tagline": "Kontrolní skupina: sází náhodně. Srovnávací základna pro ostatní strategie.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "disciplined": {
+    "name": "Disciplinovaný Dan",
+    "emoji": "📋",
+    "tagline": "Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  },
+  "cautious": {
+    "name": "Opatrná Olga",
+    "emoji": "🐢",
+    "tagline": "Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.",
+    "balance": 1000.0,
+    "start_balance": 1000.0,
+    "bets": [],
+    "last_run_date": null,
+    "loss_streak": 0
+  }
+}

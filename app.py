@@ -47,6 +47,7 @@ from engine import odds_api
 from engine import tips_db
 from engine import settings as app_settings
 from engine import agent
+from engine import virtual_bettors
 from engine import calibration
 from engine import persist
 from engine import backtester
@@ -185,9 +186,29 @@ def api_matches():
     predictions = _predictions_for(date_str, days=days, sport=sport, refresh=refresh)
 
     # Minimalizuj data pro UI – odstraň zbytečné odds detaily
+    def _slim_bet(b):
+        if not b:
+            return None
+        return {"label": b.get("label"), "name": b.get("name"), "prob": b.get("prob"),
+                "odds": b.get("odds"), "real": bool(b.get("real")), "is_value": bool(b.get("is_value"))}
+
     def slim_prediction(p):
         keys = ("home", "away") if p.get("two_way") else ("home", "draw", "away")
-        odds = {k: p["bets"][k].get("odds") for k in keys if k in p.get("bets", {}) and p["bets"][k].get("odds")}
+        bets = p.get("bets", {})
+        odds = {k: bets[k].get("odds") for k in keys if k in bets and bets[k].get("odds")}
+        # Další trhy pro kartičku zápasu (víc typů tipů, ne jen jeden "best
+        # value" pick) – vítěz, nejjistější góly O/U linie, BTTS.
+        best_goal_line = None
+        for gl in p.get("goal_lines") or []:
+            side = "over" if gl["over"]["prob"] >= gl["under"]["prob"] else "under"
+            cand = gl[side]
+            if best_goal_line is None or cand.get("prob", 0) > best_goal_line.get("prob", 0):
+                best_goal_line = cand
+        btts = None
+        if not p.get("two_way"):
+            by, bn = bets.get("btts_yes"), bets.get("btts_no")
+            if by and bn:
+                btts = _slim_bet(by if by.get("prob", 0) >= bn.get("prob", 0) else bn)
         return {
             "id": p.get("id"),
             "sport": p.get("sport", "soccer"),
@@ -701,6 +722,7 @@ def api_cron_settle():
     results, corner_results, more_pending = _settle_recent()
     n_tips = tips_db.settle_tips(results, corner_results)
     n_bets = bankroll.auto_settle(results, corner_results)
+    n_vb_settled = virtual_bettors.settle_all(results)
     _PRED_CACHE.clear()
     if n_tips:
         try:
@@ -709,10 +731,12 @@ def api_cron_settle():
             pass
 
     agent_info = _run_auto_agent_if_due()
+    vb_info = _run_virtual_bettors_if_due()
 
     return jsonify({"settled_tips": n_tips, "settled_bets": n_bets,
+                    "settled_virtual": n_vb_settled,
                     "more_pending": more_pending, "ts": int(_time.time()),
-                    "auto_agent": agent_info})
+                    "auto_agent": agent_info, "virtual_bettors": vb_info})
 
 
 @app.route("/api/tips/settle", methods=["POST"])
@@ -959,6 +983,32 @@ def api_agent_run():
         "mode": "manual",
     })
     return jsonify(result)
+
+
+# ---------------------------------------------------------------------------
+# API – Aréna 10 virtuálních sázkařů (engine/virtual_bettors.py)
+# ---------------------------------------------------------------------------
+@app.route("/api/bettors")
+def api_bettors():
+    """Žebříček 10 virtuálních sázkařů seřazený podle zisku."""
+    return jsonify({"bettors": virtual_bettors.leaderboard()})
+
+
+@app.route("/api/bettors/<bid>")
+def api_bettor_detail(bid):
+    detail = virtual_bettors.bettor_detail(bid)
+    if not detail:
+        return jsonify({"error": "not found"}), 404
+    return jsonify(detail)
+
+
+@app.route("/api/bettors/run", methods=["POST"])
+def api_bettors_run():
+    """Ruční spuštění kola sázení pro sázkaře, kteří dnes ještě nesázeli."""
+    today = ds.today_str()
+    predictions = _predictions_for(today, days=1, sport="soccer")
+    placed = virtual_bettors.run_all(predictions, today)
+    return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
 
 
 # ---------------------------------------------------------------------------
@@ -1250,6 +1300,22 @@ def _auto_agent_loop():
     while True:
         _run_auto_agent_if_due()
         time.sleep(60)
+
+
+def _run_virtual_bettors_if_due():
+    """10 virtuálních sázkařů (engine/virtual_bettors.py) sází jednou denně,
+    stejný princip jako _run_auto_agent_if_due – synchronně z reálného
+    HTTP requestu (/api/cron/settle), ne z nespolehlivého background threadu."""
+    today = ds.today_str()
+    try:
+        st = virtual_bettors.load_state()
+        if all(b.get("last_run_date") == today for b in st.values()):
+            return {"ran": False, "reason": "already_ran"}
+        predictions = _predictions_for(today, days=1, sport="soccer")
+        placed = virtual_bettors.run_all(predictions, today)
+        return {"ran": True, "placed": placed}
+    except Exception as e:
+        return {"ran": False, "reason": "error", "error": str(e)}
 
 
 # ============================================================================

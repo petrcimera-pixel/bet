@@ -20,6 +20,7 @@
     <nav class="nav" id="nav">
       <button class="nav-btn active" data-page="dashboard"><span class="icon">▦</span> Dashboard</button>
       <button class="nav-btn" data-page="matches"><span class="icon">⚽</span> Zápasy</button>
+      <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
       <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
       <button class="nav-btn" data-page="settings"><span class="icon">⚙</span> Nastavení</button>
     </nav>
@@ -98,6 +99,23 @@
 
       <div id="matchesSummary"></div>
       <div id="matchesContainer" class="loading"><span class="spinner"></span> Načítání zápasů…</div>
+    </section>
+
+    <!-- BETTORS ARENA -->
+    <section id="page-bettors" class="page">
+      <div class="page-head">
+        <h1>Aréna sázkařů</h1>
+        <p class="lead">10 virtuálních sázkařů, každý s vlastní strategií a bankem 1000 Kč – sází na stejná reálná data, ať je vidět, co skutečně funguje.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:13px; color:var(--txt2); flex:1;">Sázkaři sází automaticky jednou denně (přes stejný cron, co vyhodnocuje výsledky). Tlačítko spustí kolo hned, pro sázkaře, kteří dnes ještě nesázeli.</span>
+          <button class="btn primary" id="runBettorsBtn">Spustit kolo teď</button>
+        </div>
+      </div>
+
+      <div id="bettorsContainer" class="loading"><span class="spinner"></span> Načítání sázkařů…</div>
     </section>
 
     <!-- BANKROLL -->

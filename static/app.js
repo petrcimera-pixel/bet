@@ -79,6 +79,7 @@ function setupNav() {
       closeMobileMenu();
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
+      if (page === 'bettors') loadBettors();
       if (page === 'bankroll') loadBankroll();
       if (page === 'settings') loadSettings();
     });
@@ -103,6 +104,7 @@ function bindEvents() {
   el('refreshMatchesBtn')?.addEventListener('click', () => loadMatches(true));
   el('saveSettingsBtn')?.addEventListener('click', saveAgentSettings);
   el('saveBankrollBtn')?.addEventListener('click', saveBankrollSettings);
+  el('runBettorsBtn')?.addEventListener('click', runBettorsRound);
   document.querySelectorAll('#sportStrip .pill[data-sport]').forEach(p => {
     p.addEventListener('click', () => {
       document.querySelectorAll('#sportStrip .pill').forEach(x => x.classList.remove('active'));
@@ -597,5 +599,104 @@ async function saveBankrollSettings() {
     toast('Bankroll uložen.');
   } catch (e) {
     toast('Uložení selhalo.', 'err');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// BETTORS ARENA – 10 virtuálních sázkařů
+// ---------------------------------------------------------------------------
+async function loadBettors() {
+  const box = el('bettorsContainer');
+  box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
+  try {
+    const data = await api('/api/bettors', { timeoutMs: 20000 });
+    renderBettors(data.bettors || []);
+  } catch (e) {
+    box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
+  }
+}
+
+function renderBettors(bettors) {
+  const box = el('bettorsContainer');
+  if (!bettors.length) { box.innerHTML = '<div class="empty-state">Žádní sázkaři</div>'; return; }
+
+  box.innerHTML = bettors.map(b => {
+    const profitClass = b.profit >= 0 ? 'pos' : 'bad';
+    const rankBadge = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : `#${b.rank}`;
+    return `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="font-size:22px; min-width:36px; text-align:center;">${rankBadge}</div>
+        <div style="font-size:26px;">${b.emoji}</div>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-weight:700; font-size:14.5px;">${b.name}</div>
+          <div style="font-size:12px; color:var(--txt2); margin-top:2px;">${b.tagline}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:18px; font-weight:700;" class="${profitClass}">${b.balance.toFixed(0)} Kč</div>
+          <div style="font-size:11.5px; color:var(--txt2);">${b.profit >= 0 ? '+' : ''}${b.profit.toFixed(0)} Kč · ROI ${b.roi}%</div>
+        </div>
+        <button class="btn small bettor-toggle" data-id="${b.id}" style="margin-left:8px;">Detail ▾</button>
+      </div>
+      <div style="display:flex; gap:18px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--txt2); flex-wrap:wrap;">
+        <span>Umístěno: <strong style="color:var(--txt);">${b.placed}</strong></span>
+        <span>Vyřešeno: <strong style="color:var(--txt);">${b.settled}</strong></span>
+        <span>Win rate: <strong style="color:var(--txt);">${b.win_rate !== null ? b.win_rate + '%' : '—'}</strong></span>
+        <span>Otevřené: <strong style="color:var(--txt);">${b.open_count}</strong></span>
+      </div>
+      <div id="bettorDetail-${b.id}" style="display:none; margin-top:12px;"></div>
+    </div>`;
+  }).join('');
+
+  box.querySelectorAll('.bettor-toggle').forEach(btn => {
+    btn.addEventListener('click', () => toggleBettorDetail(btn.dataset.id, btn));
+  });
+}
+
+async function toggleBettorDetail(id, btn) {
+  const box = el(`bettorDetail-${id}`);
+  const opening = box.style.display === 'none';
+  if (!opening) { box.style.display = 'none'; btn.textContent = 'Detail ▾'; return; }
+  btn.textContent = 'Detail ▴';
+  box.style.display = 'block';
+  box.innerHTML = '<div class="loading" style="padding:14px 0;"><span class="spinner"></span></div>';
+  try {
+    const data = await api(`/api/bettors/${id}`, { timeoutMs: 15000 });
+    const bets = data.bets || [];
+    if (!bets.length) { box.innerHTML = '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>'; return; }
+    box.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Zápas</th><th>Kdy</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Status</th><th>P&L</th></tr></thead>
+      <tbody>${bets.map(bt => `
+        <tr>
+          <td>${bt.match}</td>
+          <td class="muted">${fmtDateShort(bt.match_date)} ${bt.match_time || ''}</td>
+          <td>${bt.label}</td>
+          <td>${bt.odds}×</td>
+          <td>${fmt(bt.stake)} Kč</td>
+          <td><span class="badge ${bt.status}">${bt.status.toUpperCase()}</span></td>
+          <td class="${bt.status === 'open' ? 'muted' : bt.pnl > 0 ? 'pos' : 'bad'}">
+            ${bt.status === 'open' ? '—' : `${bt.pnl > 0 ? '+' : ''}${fmt(bt.pnl)} Kč`}
+          </td>
+        </tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch (e) {
+    box.innerHTML = `<div class="empty-state" style="padding:14px 0;">Chyba: ${e.message}</div>`;
+  }
+}
+
+async function runBettorsRound() {
+  const btn = el('runBettorsBtn');
+  btn.disabled = true;
+  btn.textContent = 'Spouštím…';
+  try {
+    const data = await api('/api/bettors/run', { method: 'POST', timeoutMs: 60000 });
+    const totalPlaced = Object.values(data.placed || {}).reduce((a, b) => a + b, 0);
+    toast(totalPlaced > 0 ? `Sázkaři umístili ${totalPlaced} sázek.` : 'Všichni sázkaři už dnes sázeli.');
+    renderBettors(data.bettors || []);
+  } catch (e) {
+    toast('Kolo sázení selhalo.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Spustit kolo teď';
   }
 }
