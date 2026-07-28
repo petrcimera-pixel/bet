@@ -265,7 +265,10 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return []
 
     try:
-        with ThreadPoolExecutor(max_workers=6) as ex:  # nízko drženo kvůli paměti na Render free tieru
+        with ThreadPoolExecutor(max_workers=15) as ex:  # zvýšeno z 6 – 244 lig / 6 = ~41 sekvenčních dávek
+                                                          # dělalo /api/matches na studené cache nesnesitelně
+                                                          # pomalé (desítky s až přes minutu). 15 je opatrný
+                                                          # kompromis vůči OOM na Render free tieru (512 MB).
             for res in ex.map(grab, league_slugs(sport)):
                 out.extend(res)
     except Exception:
