@@ -451,42 +451,49 @@ function matchCardHtml(m, bet) {
     ])
     .filter(x => x.real && x.odds)
     .slice(0, 4)
-    .map(x => `<span class="badge real" title="${x.side} ${x.line}" style="margin:2px 3px 0 0;">${x.side[0]}${x.line} · ${x.odds.toFixed(2)}× · ${Math.round((x.prob || 0) * 100)}%</span>`)
+    .map(x => `<span class="badge real" title="${x.side} ${x.line}">${x.side[0]}${x.line} · ${x.odds.toFixed(2)}× · ${Math.round((x.prob || 0) * 100)}%</span>`)
     .join('');
 
   const why = bet ? `
-    <button class="btn small why-toggle" style="margin-top:8px;">💡 Proč vsazeno ▾</button>
-    <div class="why-box" style="display:none; margin-top:8px; font-size:12.5px; color:var(--txt2); background:var(--panel-2); border-radius:var(--radius-sm); padding:10px 12px;">
+    <div class="why-box" style="display:none;">
       ${bet.ticket ? `Součást tiketu <strong>${bet.ticket}</strong> – tip <strong>${bet.label}</strong>.`
-        : bet.why && bet.why.length ? `<strong>${bet.label}</strong><ul style="margin:6px 0 0; padding-left:18px;">${bet.why.map(w => `<li>${w}</li>`).join('')}</ul>`
+        : bet.why && bet.why.length ? `<strong>${bet.label}</strong><ul>${bet.why.map(w => `<li>${w}</li>`).join('')}</ul>`
         : `Vsazeno na <strong>${bet.label}</strong>.`}
-      <div style="margin-top:6px;"><span class="badge ${bet.status}">${(bet.status || 'open').toUpperCase()}</span></div>
     </div>` : '';
 
+  const hasExtra = marketChips || bet;
+
   return `
-    <div class="match-card" style="grid-template-columns: 60px 1fr auto; align-items: start;">
-      <div class="time ${m.live ? 'live' : ''}" style="display:flex; flex-direction:column; gap:2px;">
-        <span>${statusLabel}</span>
-        <span style="font-size:10.5px; color:var(--txt3); font-weight:500;">${startLabel}</span>
-      </div>
-      <div>
+    <div class="match-card">
+      <div class="mc-row">
+        <div class="time ${m.live ? 'live' : ''}">
+          <span class="status">${statusLabel}</span>
+          <span>${startLabel}</span>
+        </div>
         <div class="teams">
           <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score">${m.result.home}</span>` : ''}</div>
           <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score">${m.result.away}</span>` : ''}</div>
         </div>
-        ${marketChips ? `<div style="margin-top:6px;">${marketChips}</div>` : ''}
-        ${why}
+        <div class="pick-col">
+          ${hasPick ? `
+            <div class="pick-badge">
+              <span class="pl">${best.label || '?'}</span>
+              <span class="pv">${(best.odds || 0).toFixed(2)}</span>
+            </div>
+            <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
+          ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
+          ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
+        </div>
       </div>
-      <div class="pick-col">
-        ${hasPick ? `
-          <div class="pick-badge">
-            <span class="pl">${best.label || '?'}</span>
-            <span class="pv">${(best.odds || 0).toFixed(2)}</span>
-          </div>
-          <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
-        ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
-        ${bet ? '<span class="badge open" style="margin-top:6px;">💰 vsazeno</span>' : ''}
-      </div>
+      ${hasExtra ? `
+      <div class="mc-extra">
+        ${marketChips ? `<div class="mc-markets">${marketChips}</div>` : ''}
+        ${bet ? `
+        <div class="mc-why-row">
+          <button class="btn small why-toggle">💡 Proč vsazeno ▾</button>
+        </div>
+        ${why}` : ''}
+      </div>` : ''}
     </div>`;
 }
 
