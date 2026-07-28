@@ -220,6 +220,18 @@ tr:hover td { background: var(--panel-2); }
 .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
 .pill:hover { border-color: var(--accent-dim); }
 
+/* Zápasy – filtr toolbar (datum + sport + status pohromadě v jedné kartě) */
+.matches-toolbar { margin-bottom: 16px; padding: 14px 16px; }
+.matches-toolbar #dateStrip { margin-bottom: 12px; }
+.matches-toolbar .toolbar-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.matches-toolbar .toolbar-row .pill-row { margin-bottom: 0; }
+.matches-toolbar .toolbar-sep { width: 1px; align-self: stretch; background: var(--border); min-height: 20px; }
+.matches-toolbar #refreshMatchesBtn { margin-left: auto; }
+@media (max-width: 760px) {
+  .matches-toolbar .toolbar-sep { display: none; }
+  .matches-toolbar #refreshMatchesBtn { margin-left: 0; }
+}
+
 /* ---------------------------------------------------------------------- */
 /* Match cards */
 /* ---------------------------------------------------------------------- */

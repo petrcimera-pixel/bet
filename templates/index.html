@@ -85,17 +85,22 @@
         <p class="lead">Přehled zápasů a predikcí modelu</p>
       </div>
 
-      <div class="pill-row" id="dateStrip"></div>
-      <div class="pill-row" id="sportStrip">
-        <button class="pill active" data-sport="soccer">⚽ Fotbal</button>
-        <button class="pill" data-sport="hockey">🏒 Hokej</button>
-        <button class="pill" data-sport="basketball">🏀 Basketbal</button>
-        <button class="pill" data-sport="football">🏈 Am. fotbal</button>
-        <button class="btn small" id="refreshMatchesBtn" style="margin-left:auto;">⟳ Obnovit</button>
-      </div>
-      <div class="pill-row" id="statusStrip">
-        <button class="pill active" data-status="all">Vše</button>
-        <button class="pill" data-status="upcoming">⏳ Nehrané / nedohrané</button>
+      <div class="card matches-toolbar">
+        <div class="pill-row" id="dateStrip"></div>
+        <div class="toolbar-row">
+          <div class="pill-row" id="sportStrip">
+            <button class="pill active" data-sport="soccer">⚽ Fotbal</button>
+            <button class="pill" data-sport="hockey">🏒 Hokej</button>
+            <button class="pill" data-sport="basketball">🏀 Basketbal</button>
+            <button class="pill" data-sport="football">🏈 Am. fotbal</button>
+          </div>
+          <div class="toolbar-sep"></div>
+          <div class="pill-row" id="statusStrip">
+            <button class="pill active" data-status="all">Vše</button>
+            <button class="pill" data-status="upcoming">⏳ Nehrané / nedohrané</button>
+          </div>
+          <button class="btn small" id="refreshMatchesBtn">⟳ Obnovit</button>
+        </div>
       </div>
 
       <div id="matchesSummary"></div>
