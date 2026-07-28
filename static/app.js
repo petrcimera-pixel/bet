@@ -232,18 +232,42 @@ function renderRecentBets(bets) {
   const box = el('recentBets');
   if (!bets.length) { box.innerHTML = `<div class="empty-state">Agent zatím nevsadil žádný tip</div>`; return; }
   box.innerHTML = `<div class="table-wrap"><table>
-    <thead><tr><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Status</th><th>P&L</th></tr></thead>
-    <tbody>${bets.slice(0, 12).map(b => `
+    <thead><tr><th>Zápas</th><th>Kdy</th><th>Tip</th><th>Kurz</th><th>Status</th><th>P&L</th><th></th></tr></thead>
+    <tbody>${bets.slice(0, 12).map((b, i) => {
+      const hasWhy = (b.why && b.why.length) || b.outcome === 'acca';
+      const when = `${fmtDateShort(b.match_date)} ${b.match_time || ''}`.trim() || '—';
+      const whyId = `betWhy${i}`;
+      return `
       <tr>
         <td>${b.match || '—'}</td>
+        <td class="muted">${when}</td>
         <td>${b.label || '?'}</td>
         <td>${b.odds || 0}×</td>
         <td><span class="badge ${b.status}">${(b.status || 'open').toUpperCase()}</span></td>
         <td class="${b.status === 'open' ? 'muted' : (b.pnl || 0) > 0 ? 'pos' : 'bad'}">
           ${b.status === 'open' ? '—' : `${(b.pnl || 0) > 0 ? '+' : ''}${fmt(b.pnl || 0)} Kč`}
         </td>
-      </tr>`).join('')}</tbody>
+        <td>${hasWhy ? `<button class="btn small bet-why-toggle" data-target="${whyId}">💡</button>` : ''}</td>
+      </tr>
+      ${hasWhy ? `
+      <tr id="${whyId}" class="bet-why-row" style="display:none;">
+        <td colspan="7" style="background:var(--panel-2);">
+          ${b.outcome === 'acca'
+            ? `<div style="font-size:12.5px; color:var(--txt2);"><strong>AKO tiket – nohy:</strong><ul style="margin:6px 0 0; padding-left:18px;">
+                ${(b.legs || []).map(l => `<li>${l.match}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
+              </ul></div>`
+            : `<ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--txt2);">${(b.why || []).map(w => `<li>${w}</li>`).join('')}</ul>`}
+        </td>
+      </tr>` : ''}`;
+    }).join('')}</tbody>
   </table></div>`;
+
+  box.querySelectorAll('.bet-why-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = el(btn.dataset.target);
+      row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+    });
+  });
 }
 
 async function loadSettleStatus() {
