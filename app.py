@@ -92,6 +92,11 @@ def check_login():
     # Allow login and logout without auth
     if request.path in ["/login", "/logout"]:
         return
+    # Statické soubory (CSS/JS) musí jít i nepřihlášenému uživateli – jinak
+    # se přihlašovací stránka sama vykreslí nestylovaná (link na style.css
+    # dostane 302 na /login místo CSS, prohlížeč to zahodí jako 0 pravidel).
+    if request.path.startswith("/static/"):
+        return
     # Cron endpoint má vlastní token-based auth (viz api_cron_settle) – běžná
     # session zde nedává smysl, volá ho externí scheduler (GitHub Actions).
     if request.path == "/api/cron/settle":

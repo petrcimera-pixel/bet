@@ -9,27 +9,43 @@
 <body>
     <div class="login-shell">
         <div class="login-card">
-            <div class="brand">⚽ KurzAnalytik</div>
+            <div class="mark">⚽</div>
+            <div class="brand">KurzAnalytik</div>
             <div class="tagline">Analytika kurzových sázek</div>
 
             {% if error %}
-            <div class="error">{{ error }}</div>
+            <div class="error">⚠ {{ error }}</div>
             {% endif %}
 
-            <form method="POST">
+            <form method="POST" id="loginForm">
                 <div class="field">
                     <label for="username">Jméno</label>
-                    <input type="text" id="username" name="username" required autofocus>
+                    <input type="text" id="username" name="username" required autofocus autocomplete="username">
                 </div>
                 <div class="field">
                     <label for="password">Heslo</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                    <button type="button" class="pw-toggle" id="pwToggle" tabindex="-1" aria-label="Zobrazit heslo">👁</button>
                 </div>
-                <button type="submit" class="btn primary" style="width:100%; justify-content:center; padding:11px;">Přihlásit se</button>
+                <button type="submit" class="btn primary submit-btn" id="submitBtn">
+                    <span class="spinner"></span>
+                    <span class="btn-label">Přihlásit se</span>
+                </button>
             </form>
 
             <div class="foot">KurzAnalytik © 2026</div>
         </div>
     </div>
+    <script>
+        document.getElementById('pwToggle').addEventListener('click', () => {
+            const pw = document.getElementById('password');
+            const isText = pw.type === 'text';
+            pw.type = isText ? 'password' : 'text';
+            document.getElementById('pwToggle').textContent = isText ? '👁' : '🙈';
+        });
+        document.getElementById('loginForm').addEventListener('submit', () => {
+            document.getElementById('submitBtn').classList.add('loading');
+        });
+    </script>
 </body>
 </html>
