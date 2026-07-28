@@ -36,9 +36,23 @@ function el(id) { return document.getElementById(id); }
 function setText(id, text) { const e = el(id); if (e) e.textContent = text; }
 
 async function api(path, opts = {}) {
-  const res = await fetch(path, { credentials: 'include', ...opts });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  // Bez timeoutu tu appka na Render free tieru s vychladlou ESPN cache (po
+  // deployi, po delší neaktivitě) vypadala jako navždy zaseknutá – žádný
+  // fetch v appce neměl žádnou horní hranici čekání. Sdílený timeout tady
+  // ochrání VŠECHNA volání /api/*, ne jen jednu stránku.
+  const timeoutMs = opts.timeoutMs ?? 60000;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(path, { credentials: 'include', signal: controller.signal, ...opts });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    if (e.name === 'AbortError') throw new Error('Požadavek trvá příliš dlouho – zkus to prosím znovu.');
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function toast(msg, kind = 'ok') {
@@ -155,9 +169,18 @@ async function loadTipOfDay() {
   const loadingEl = el('tipLoading');
   const contentEl = el('tipContent');
   loadingEl.style.display = 'flex';
+  loadingEl.innerHTML = '<span class="spinner"></span> Hledám tutovku…';
   contentEl.style.display = 'none';
+
+  // /api/dashboard stahuje čerstvá ESPN data SYNCHRONNĚ, když je cache
+  // vychladlá (po deployi, po delší neaktivitě appky) – může to trvat
+  // desítky sekund až přes minutu. Bez postupné zprávy to vypadá jako
+  // appka je navždy zaseknutá.
+  const t1 = setTimeout(() => { loadingEl.innerHTML = '<span class="spinner"></span> Stahuji čerstvá data z ESPN, může to chvíli trvat…'; }, 6000);
+  const t2 = setTimeout(() => { loadingEl.innerHTML = '<span class="spinner"></span> Pořád stahuji – po delší neaktivitě appky to bývá pomalejší…'; }, 20000);
+
   try {
-    const data = await api('/api/dashboard');
+    const data = await api('/api/dashboard', { timeoutMs: 90000 });
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
     if (!data.tip) {
@@ -177,7 +200,14 @@ async function loadTipOfDay() {
   } catch (e) {
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
-    contentEl.innerHTML = `<div class="match" style="color:var(--bad); font-size:14px;">Nepodařilo se načíst tip dne.</div>`;
+    contentEl.innerHTML = `<div class="match" style="color:var(--bad); font-size:14px;">
+      Nepodařilo se načíst tip dne (${e.message}).
+      <div style="margin-top:8px;"><button class="btn small" id="tipRetryBtn">Zkusit znovu</button></div>
+    </div>`;
+    el('tipRetryBtn')?.addEventListener('click', loadTipOfDay);
+  } finally {
+    clearTimeout(t1);
+    clearTimeout(t2);
   }
 }
 
@@ -281,22 +311,18 @@ async function loadMatches(refresh = false) {
   const loadingEl = container.querySelector('.loading');
   const t1 = setTimeout(() => { if (loadingEl) loadingEl.innerHTML = '<span class="spinner"></span> Stahuji čerstvá data z ESPN, může to chvíli trvat…'; }, 6000);
   const t2 = setTimeout(() => { if (loadingEl) loadingEl.innerHTML = '<span class="spinner"></span> Pořád stahuji – první návštěva dne bývá pomalejší…'; }, 20000);
-  const controller = new AbortController();
-  const abortTimer = setTimeout(() => controller.abort(), 55000);
 
   try {
     const url = `/api/matches?date=${STATE.date}&sport=${STATE.sport}&days=1${refresh ? '&refresh=1' : ''}`;
-    const data = await api(url, { signal: controller.signal });
+    const data = await api(url, { timeoutMs: 90000 });
     renderMatchesSummary(data, summary);
     renderMatchesLeagues(data.leagues || [], container);
   } catch (e) {
-    const msg = e.name === 'AbortError'
-      ? 'Načítání trvá příliš dlouho (ESPN neodpovídá).' : `Chyba: ${e.message}`;
-    container.innerHTML = `<div class="empty-state">${msg}
+    container.innerHTML = `<div class="empty-state">Chyba: ${e.message}
       <button class="btn small" id="matchesRetryBtn" style="margin-top:8px;">Zkusit znovu</button></div>`;
     el('matchesRetryBtn')?.addEventListener('click', () => loadMatches(refresh));
   } finally {
-    clearTimeout(t1); clearTimeout(t2); clearTimeout(abortTimer);
+    clearTimeout(t1); clearTimeout(t2);
   }
 }
 
