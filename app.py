@@ -113,6 +113,19 @@ def check_login():
             return redirect(url_for("login_page"))
 
 
+def _persist_push_safe():
+    """Okamžitě zazálohuje stav (bankroll, tipy, sázkaři, ratingy) do gistu,
+    nečeká na 5min periodickou smyčku (persist.sync_loop). Render při
+    KAŽDÉM redeployi resetuje efemérní disk na stav z repa – když appka
+    mezitím vsadila/vyhodnotila a nestihla to zazálohovat před dalším
+    deployem, data se nenávratně ztratí. Volej po každé mutaci stavu, co
+    jde spustit z reálného requestu (cron tick, ruční tlačítko)."""
+    try:
+        persist.push()
+    except Exception:
+        pass
+
+
 def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refresh=False):
     days = max(1, min(14, int(days)))
     end = ds.add_days(date_str, days - 1)
@@ -678,6 +691,7 @@ def api_autosettle():
     results, corner_results, more_pending = _settle_recent()
     tips_db.settle_tips(results, corner_results)   # ať zůstane synchronní s tipy
     n = bankroll.auto_settle(results, corner_results)
+    _persist_push_safe()
     return jsonify({"settled": n, "stats": bankroll.stats(),
                     "bets": bankroll.state()["bets"][:50], "more_pending": more_pending})
 
@@ -733,6 +747,8 @@ def api_cron_settle():
     agent_info = _run_auto_agent_if_due()
     vb_info = _run_virtual_bettors_if_due()
 
+    _persist_push_safe()
+
     return jsonify({"settled_tips": n_tips, "settled_bets": n_bets,
                     "settled_virtual": n_vb_settled,
                     "more_pending": more_pending, "ts": int(_time.time()),
@@ -746,6 +762,7 @@ def api_tips_settle():
     n = tips_db.settle_tips(results, corner_results)
     n_bets = bankroll.auto_settle(results, corner_results)   # sázky vč. agenta a AKO tiketů
     _PRED_CACHE.clear()   # ať se i v UI hned zobrazí čerstvě stažené výsledky
+    _persist_push_safe()
     return jsonify({"settled": n, "settled_bets": n_bets, "stats": tips_db.stats(),
                     "more_pending": more_pending})
 
@@ -982,6 +999,7 @@ def api_agent_run():
         "tickets": result.get("tickets", []), "balance": result.get("balance"),
         "mode": "manual",
     })
+    _persist_push_safe()
     return jsonify(result)
 
 
@@ -1008,6 +1026,7 @@ def api_bettors_run():
     today = ds.today_str()
     predictions = _predictions_for(today, days=1, sport="soccer")
     placed = virtual_bettors.run_all(predictions, today)
+    _persist_push_safe()
     return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
 
 
