@@ -1030,6 +1030,13 @@ def api_bettors_run():
     return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
 
 
+@app.route("/api/bettors/calibration")
+def api_bettors_calibration():
+    """Kalibrace modelu napříč settled sázkami všech 10 sázkařů – dává-li
+    model 'X% jistotu', vyhrává reálně ~X % případů?"""
+    return jsonify({"buckets": virtual_bettors.calibration_data()})
+
+
 # ---------------------------------------------------------------------------
 # API – Pokročilé nastavení a správa dat
 # ---------------------------------------------------------------------------

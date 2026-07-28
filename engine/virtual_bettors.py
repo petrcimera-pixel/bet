@@ -295,10 +295,16 @@ def run_all(predictions, today_str: str) -> dict:
             decisions = []
         placed = 0
         used_matches = set()
+        # Ochrana proti totálnímu vytunelování: jednotlivá sázka nesmí nikdy
+        # přesáhnout 20 % AKTUÁLNÍHO banku bez ohledu na to, co strategie
+        # (např. plný Kelly) sama spočítá. Pod 10 % startovního banku (vážná
+        # série proher) se strop dál zpřísní na 5 %, ať i "agresivní"
+        # strategie nemůže bank definitivně dorazit jednou špatnou sázkou.
+        single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", 1000.0) * 0.10 else 0.20
         for c, stake in decisions:
             if c["match_id"] in used_matches:
                 continue
-            stake = round(min(stake, b["balance"], b["balance"] * DAILY_STAKE_CAP_PCT), 2)
+            stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap), 2)
             if stake < 1 or stake > b["balance"]:
                 continue
             bet = {
@@ -398,3 +404,41 @@ def bettor_detail(bid: str) -> dict:
     stats = _bettor_stats(bid, b)
     stats["bets"] = b["bets"][:50]
     return stats
+
+
+# ---------------------------------------------------------------------------
+# Kalibrace modelu – říká "75 % jistota" skutečně vyhrává ~75 % případů?
+# ---------------------------------------------------------------------------
+_CAL_BUCKETS = [(0.50, 0.60), (0.60, 0.70), (0.70, 0.80), (0.80, 0.90), (0.90, 1.01)]
+
+
+def calibration_data() -> list:
+    """Napříč VŠEMI settled sázkami všech 10 sázkařů (velký, různorodý vzorek
+    díky 10 různým strategiím) spočítá pro každý interval modelové
+    pravděpodobnosti skutečnou úspěšnost. Ideálně kalibrovaný model má
+    'skutečná úspěšnost' == střed intervalu; systematická odchylka = model
+    je přehnaně/nedostatečně sebevědomý."""
+    st = load_state()
+    buckets = [{"lo": lo, "hi": hi, "n": 0, "wins": 0, "prob_sum": 0.0} for lo, hi in _CAL_BUCKETS]
+    for b in st.values():
+        for bet in b["bets"]:
+            if bet["status"] not in ("won", "lost"):
+                continue
+            p = bet.get("prob", 0)
+            for bucket in buckets:
+                if bucket["lo"] <= p < bucket["hi"]:
+                    bucket["n"] += 1
+                    bucket["prob_sum"] += p
+                    if bet["status"] == "won":
+                        bucket["wins"] += 1
+                    break
+    out = []
+    for bucket in buckets:
+        n = bucket["n"]
+        out.append({
+            "range": f'{int(bucket["lo"]*100)}–{int(min(bucket["hi"],1.0)*100)}%',
+            "n": n,
+            "avg_predicted": round(bucket["prob_sum"] / n * 100, 1) if n else None,
+            "actual_win_rate": round(bucket["wins"] / n * 100, 1) if n else None,
+        })
+    return out

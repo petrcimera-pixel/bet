@@ -609,11 +609,30 @@ async function loadBettors() {
   const box = el('bettorsContainer');
   box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
   try {
-    const data = await api('/api/bettors', { timeoutMs: 20000 });
+    const [data, calib] = await Promise.all([
+      api('/api/bettors', { timeoutMs: 20000 }),
+      api('/api/bettors/calibration', { timeoutMs: 15000 }).catch(() => ({ buckets: [] })),
+    ]);
     renderBettors(data.bettors || []);
+    drawCalibrationChart(calib.buckets || []);
   } catch (e) {
     box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
   }
+}
+
+function sparklineSvg(equity) {
+  if (!equity || equity.length < 2) return '';
+  const w = 90, h = 32, pad = 2;
+  const minV = Math.min(...equity), maxV = Math.max(...equity);
+  const range = (maxV - minV) || 1;
+  let path = '';
+  equity.forEach((v, i) => {
+    const x = pad + (i / (equity.length - 1)) * (w - 2 * pad);
+    const y = h - pad - ((v - minV) / range) * (h - 2 * pad);
+    path += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  });
+  const color = equity[equity.length - 1] >= equity[0] ? 'var(--pos)' : 'var(--bad)';
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${path}" stroke="${color}" stroke-width="1.6" fill="none"/></svg>`;
 }
 
 function renderBettors(bettors) {
@@ -632,6 +651,7 @@ function renderBettors(bettors) {
           <div style="font-weight:700; font-size:14.5px;">${b.name}</div>
           <div style="font-size:12px; color:var(--txt2); margin-top:2px;">${b.tagline}</div>
         </div>
+        <div style="min-width:90px;">${sparklineSvg(b.equity)}</div>
         <div style="text-align:right;">
           <div style="font-size:18px; font-weight:700;" class="${profitClass}">${b.balance.toFixed(0)} Kč</div>
           <div style="font-size:11.5px; color:var(--txt2);">${b.profit >= 0 ? '+' : ''}${b.profit.toFixed(0)} Kč · ROI ${b.roi}%</div>
@@ -651,6 +671,48 @@ function renderBettors(bettors) {
   box.querySelectorAll('.bettor-toggle').forEach(btn => {
     btn.addEventListener('click', () => toggleBettorDetail(btn.dataset.id, btn));
   });
+}
+
+function drawCalibrationChart(buckets) {
+  const svg = el('calibrationSVG');
+  if (!svg) return;
+  const withData = buckets.filter(b => b.n > 0);
+  if (!withData.length) {
+    svg.innerHTML = `<text x="350" y="130" text-anchor="middle" font-size="13" fill="var(--txt3)">Zatím nedostatek vyhodnocených sázek pro kalibraci</text>`;
+    return;
+  }
+  const width = 700, height = 260, padding = 44;
+  const pw = width - 2 * padding, ph = height - 2 * padding;
+  const n = buckets.length;
+  const barW = pw / n;
+
+  // ideální kalibrace = diagonála (0% dole vlevo .. 100% nahoře vpravo v rámci 50-100% rozsahu zobrazení)
+  const toY = pct => height - padding - (pct / 100) * ph;
+  let idealPath = '';
+  [50, 100].forEach((pct, i) => {
+    const x = padding + (i === 0 ? 0 : pw);
+    idealPath += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + toY(pct).toFixed(1);
+  });
+
+  const bars = buckets.map((b, i) => {
+    const x = padding + i * barW;
+    if (!b.n) {
+      return `<text x="${(x + barW / 2).toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${b.range}</text>`;
+    }
+    const actualY = toY(b.actual_win_rate);
+    const barH = height - padding - actualY;
+    const color = Math.abs(b.actual_win_rate - b.avg_predicted) <= 8 ? 'var(--pos)' : 'var(--warn)';
+    return `
+      <rect x="${(x + barW * 0.2).toFixed(1)}" y="${actualY.toFixed(1)}" width="${(barW * 0.6).toFixed(1)}" height="${barH.toFixed(1)}" fill="${color}" rx="2" opacity="0.85"/>
+      <text x="${(x + barW / 2).toFixed(1)}" y="${(actualY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="var(--txt)">${b.actual_win_rate}%</text>
+      <text x="${(x + barW / 2).toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${b.range} (n=${b.n})</text>`;
+  }).join('');
+
+  svg.innerHTML = `
+    <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="var(--border)"/>
+    <path d="${idealPath}" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="4,4" fill="none"/>
+    <text x="${width - padding}" y="${(toY(100) - 6).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--blue)">ideál</text>
+    ${bars}`;
 }
 
 async function toggleBettorDetail(id, btn) {
