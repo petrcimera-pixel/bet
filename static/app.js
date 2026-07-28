@@ -2,7 +2,7 @@
 // KurzAnalytik v3 — Frontend (kompletně přepsáno)
 // ============================================================================
 
-const STATE = { page: 'dashboard', sport: 'soccer', date: todayStr() };
+const STATE = { page: 'dashboard', sport: 'soccer', date: todayStr(), statusFilter: 'all', lastMatchesData: null, lastBetMap: {} };
 
 document.addEventListener('DOMContentLoaded', () => {
   setupNav();
@@ -109,6 +109,17 @@ function bindEvents() {
       p.classList.add('active');
       STATE.sport = p.dataset.sport;
       loadMatches();
+    });
+  });
+  document.querySelectorAll('#statusStrip .pill[data-status]').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('#statusStrip .pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      STATE.statusFilter = p.dataset.status;
+      // Filtr je čistě klientský (data už máme) – není potřeba nový fetch.
+      if (STATE.lastMatchesData) {
+        renderMatchesLeagues(STATE.lastMatchesData.leagues || [], el('matchesContainer'), STATE.lastBetMap);
+      }
     });
   });
 }
@@ -342,6 +353,8 @@ async function loadMatches(refresh = false) {
       api(url, { timeoutMs: 90000 }),
       loadMatchBetMap(),
     ]);
+    STATE.lastMatchesData = data;
+    STATE.lastBetMap = betMap;
     renderMatchesSummary(data, summary);
     renderMatchesLeagues(data.leagues || [], container, betMap);
   } catch (e) {
@@ -382,9 +395,15 @@ function renderMatchesSummary(data, box) {
     </div>`;
 }
 
-function renderMatchesLeagues(leagues, container, betMap = {}) {
+function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
+  // "Nehrané / nedohrané" = zápasy, které ještě nemají finální výsledek
+  // (nezačaly NEBO právě běží živě) – čistě klientský filtr, data už máme.
+  const leagues = (STATE.statusFilter === 'upcoming'
+    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.result === null) })).filter(lg => lg.matches.length)
+    : leaguesIn);
+
   if (!leagues.length) {
-    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento den a sport</div>';
+    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento filtr</div>';
     return;
   }
   container.innerHTML = leagues.map(lg => `
@@ -421,6 +440,18 @@ function matchCardHtml(m, bet) {
   const best = m.best_value || {};
   const hasPick = best.outcome && m.odds_source === 'real';
 
+  // Víc typů trhů na kartičce, ne jen jeden "nejlepší" tip – gólové linie
+  // (Over/Under) s reálnými kurzy, pokud je ESPN poskytlo.
+  const marketChips = (m.goal_lines || [])
+    .flatMap(gl => [
+      { side: 'Over', ...gl.over, line: gl.line },
+      { side: 'Under', ...gl.under, line: gl.line },
+    ])
+    .filter(x => x.real && x.odds)
+    .slice(0, 4)
+    .map(x => `<span class="badge real" title="${x.side} ${x.line}" style="margin:2px 3px 0 0;">${x.side[0]}${x.line} · ${x.odds.toFixed(2)}× · ${Math.round((x.prob || 0) * 100)}%</span>`)
+    .join('');
+
   const why = bet ? `
     <button class="btn small why-toggle" style="margin-top:8px;">💡 Proč vsazeno ▾</button>
     <div class="why-box" style="display:none; margin-top:8px; font-size:12.5px; color:var(--txt2); background:var(--panel-2); border-radius:var(--radius-sm); padding:10px 12px;">
@@ -441,6 +472,7 @@ function matchCardHtml(m, bet) {
           <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score">${m.result.home}</span>` : ''}</div>
           <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score">${m.result.away}</span>` : ''}</div>
         </div>
+        ${marketChips ? `<div style="margin-top:6px;">${marketChips}</div>` : ''}
         ${why}
       </div>
       <div class="pick-col">
