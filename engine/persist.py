@@ -84,38 +84,13 @@ def _snapshot_hash(snap: dict) -> str:
     return h.hexdigest()
 
 
-RESET_MARKER = "reset_v3_applied.json"
-
-
-def _reset_requested() -> bool:
-    return os.environ.get("FORCE_FRESH_START") == "1"
-
-
 def restore() -> int:
     """Při startu: pokud má gist NOVĚJŠÍ data než lokální disk, obnov je.
     (Po deployi na Render jsou lokální soubory staré kopie z repa.)
-    Vrací počet obnovených souborů.
-
-    Jednorázový reset (radikální přepracování appky, v3): pokud je nastaven
-    env FORCE_FRESH_START=1 A gist ještě nemá marker reset_v3_applied.json,
-    PŘESKOČ obnovu staré historie a rovnou přepiš gist čistým (prázdným)
-    stavem – marker se zapíše, aby se reset provedl jen jednou, i kdyby env
-    proměnná zůstala nastavená přes další redeploy."""
+    Vrací počet obnovených souborů."""
     token, gist_id = _cfg()
     if not enabled():
         return 0
-
-    if _reset_requested():
-        try:
-            r = requests.get(_API.format(gist_id=gist_id), headers=_headers(token), timeout=20)
-            r.raise_for_status()
-            already = RESET_MARKER in (r.json().get("files") or {})
-        except Exception:
-            already = False
-        if not already:
-            print("[persist] FORCE_FRESH_START=1 – přeskakuji obnovu staré historie, zapisuji čistý stav do gistu")
-            push(force=True, extra_files={RESET_MARKER: json.dumps({"ts": int(time.time())})})
-            return 0
 
     try:
         r = requests.get(_API.format(gist_id=gist_id), headers=_headers(token), timeout=20)
