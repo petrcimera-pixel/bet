@@ -23,6 +23,7 @@
       <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
       <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
       <button class="nav-btn" data-page="settings"><span class="icon">⚙</span> Nastavení</button>
+      <button class="nav-btn" data-page="guide"><span class="icon">📖</span> Návod</button>
     </nav>
     <div class="sidebar-foot">
       <div class="who">
@@ -190,6 +191,111 @@
       <div class="card">
         <h3>Diagnostika</h3>
         <div id="diagInfo" class="muted" style="font-size:12.5px; line-height:1.8;"></div>
+      </div>
+    </section>
+
+    <!-- GUIDE -->
+    <section id="page-guide" class="page">
+      <div class="page-head">
+        <h1>Návod a informace o appce</h1>
+        <p class="lead">Co appka dělá, jak funguje predikční model a co znamená každá stránka</p>
+      </div>
+
+      <div class="card">
+        <h3>🎯 Co appka dělá</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          KurzAnalytik stahuje zápasy a reálné kurzy sázkových kanceláří (přes veřejné ESPN API, zdarma),
+          spočítá vlastní odhad pravděpodobnosti výsledku a porovná ho s kurzem sázkovky. Když model
+          věří ve výsledek víc, než kurz naznačuje, jde o potenciálně výhodnou sázku ("value"). Appka
+          si tyhle tipy sama zapisuje, automatický agent na ně virtuálně sází ze společného banku a
+          appka sleduje, jak si vede – vše je <strong>virtuální/papírové sázení</strong>, žádné skutečné peníze.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🧮 Predikční model</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7;">
+          Model počítá <strong>očekávané góly</strong> obou týmů (Poissonovo rozdělení s Dixon-Coles
+          korekcí nízkých skóre) a z nich pravděpodobnosti výsledku (1X2), gólových linií (Over/Under)
+          a dalších trhů. Síla týmu se měří <strong>attack/defense ratingem</strong> – poměrem skutečně
+          daných/obdržených gólů oproti očekávání, který se po každém odehraném a vyhodnoceném zápase
+          automaticky aktualizuje (učí se z reálných výsledků, ne z ručního zásahu).
+        </p>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin-bottom:0;">
+          <strong>Důležité:</strong> appka pracuje jen se <strong>skutečnými kurzy sázkovek</strong> z ESPN.
+          Pokud pro zápas/trh nejsou reálné kurzy k dispozici, appka nikdy kurz nevymýšlí ani
+          nesimuluje – ukáže jen odhad modelu (badge "MODEL"), bez porovnání s trhem a bez EV.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🗺️ Stránky appky</h3>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <strong>▦ Dashboard</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, tip dne (nejjistější sázka na reálný kurz dnes), stav agenta a posledních 12 jeho tipů s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
+          </div>
+          <div>
+            <strong>⚽ Zápasy</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr "Nehrané/nedohrané", u každého zápasu datum+čas začátku, dostupné reálné trhy (1X2 i gólové linie) a u vsazených zápasů zdůvodnění agenta.</p>
+          </div>
+          <div>
+            <strong>🎲 Sázkaři</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 10 virtuálních sázkařů, každý s vlastním bankem 1000 Kč a jinou strategií (viz níže) – žebříček podle zisku, detail historie sázek každého z nich. Slouží ke srovnání, která strategie sázení dlouhodobě funguje nejlíp.</p>
+          </div>
+          <div>
+            <strong>💰 Bankroll</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek.</p>
+          </div>
+          <div>
+            <strong>⚙ Nastavení</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (8:00 a 16:00), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku a nastavení počátečního banku.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🤖 Automatický agent</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          Když je v Nastavení zapnutý "Auto-run", agent automaticky vsadí nejjistější tip každého
+          zápasu, který splňuje prahy jistoty a kurzu – vždy jen na trhy s reálným kurzem sázkovky.
+          Výše vkladu se počítá <strong>Kelly kritériem</strong> (podíl banku úměrný matematické výhodě
+          sázky) nebo plochou částkou, podle nastavení. Denní strop hlídá, aby agent neprosázel celý
+          bank najednou. Auto-run i vyhodnocování výsledků běží přes stejný externí "budík" – appka na
+          Renderu neběží nepřetržitě na pozadí, takže se obojí spouští při pravidelných kontrolách
+          (cca každých 10–15 minut), ne okamžitě po skončení zápasu.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🎲 Strategie 10 virtuálních sázkařů</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Sázkař</th><th>Strategie</th></tr></thead>
+            <tbody>
+              <tr><td>📐 Kelly Kateřina</td><td>Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.</td></tr>
+              <tr><td>🎯 Čtvrtinový Čeněk</td><td>Kvartový Kelly (25 %), jistota aspoň 55 % – rozumný kompromis.</td></tr>
+              <tr><td>🛡️ Konzervativní Klára</td><td>Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.</td></tr>
+              <tr><td>🔍 Value Hunter Viktor</td><td>Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.</td></tr>
+              <tr><td>⭐ Favorit Fanda</td><td>Vždy vsadí na favorita zápasu, i bez ohledu na value.</td></tr>
+              <tr><td>🎲 Outsider Olda</td><td>Honí nejvyšší kurz s aspoň 15% šancí – vysoké riziko, vysoký výnos.</td></tr>
+              <tr><td>📈 Martingale Magda</td><td>Po prohře zdvojnásobí vklad – klasický, rizikový progresivní systém.</td></tr>
+              <tr><td>🎰 Náhodný Norbert</td><td>Kontrolní skupina – sází čistě náhodně, srovnávací základna pro ostatní.</td></tr>
+              <tr><td>📋 Disciplinovaný Dan</td><td>Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.</td></tr>
+              <tr><td>🐢 Opatrná Olga</td><td>Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚠️ Na co si dát pozor</h3>
+        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0; padding-left:20px;">
+          <li>Vše je <strong>virtuální sázení</strong> – appka nikdy nesází skutečné peníze, žádná sázková kancelář o ní neví.</li>
+          <li>Model je založen na statistice, ne na jistotě – i "tutovka" s 90% jistotou prohraje jednou z deseti.</li>
+          <li>Reálné kurzy z ESPN nemusí být dostupné pro každý zápas/trh – bez nich appka nenabízí žádné doporučení, jen odhad ("MODEL").</li>
+          <li>Rating týmů se učí postupně – u nových/málo sledovaných týmů je model zpočátku méně přesný.</li>
+        </ul>
       </div>
     </section>
 
