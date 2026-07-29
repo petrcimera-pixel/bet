@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildDateStrip();
   bindEvents();
   loadDashboard();
+  setupNotifications();
 });
 
 // ---------------------------------------------------------------------------
@@ -639,6 +640,7 @@ function renderBetsTable(bets) {
 // SETTINGS
 // ---------------------------------------------------------------------------
 async function loadSettings() {
+  renderNotifStatus();
   try {
     const data = await api('/api/agent');
     const c = data.settings;
@@ -654,10 +656,22 @@ async function loadSettings() {
     el('cfgKellyFraction').value = bdata.stats.kelly_fraction || 0.25;
 
     const diag = await api('/api/settle/status');
+    let calibHtml = '';
+    try {
+      const cal = await api('/api/calibration');
+      if (cal.active) {
+        const ex = cal.example || {};
+        calibHtml = `<br><strong style="color:var(--txt2);">Kalibrace: AKTIVNÍ</strong> (${cal.n_samples} vzorků z tipů + arény sázkařů)<br>
+          Model 60/75/85 % → reálně ${Math.round((ex['0.60'] ?? 0.6) * 100)}/${Math.round((ex['0.75'] ?? 0.75) * 100)}/${Math.round((ex['0.85'] ?? 0.85) * 100)} %
+          (tutovky se vybírají podle TÉTO opravené hodnoty, ne podle syrového odhadu modelu)`;
+      } else {
+        calibHtml = `<br><strong style="color:var(--txt2);">Kalibrace: čeká na data</strong> (${cal.n_samples ?? 0} / 80 vzorků – míň se nepoužije, model by se přeučil na šum)`;
+      }
+    } catch (e) { /* kalibrace je bonus info, appku to nesmí shodit */ }
     el('diagInfo').innerHTML = `
       Otevřených tipů: ${diag.open_tips ?? '—'}<br>
       Otevřených sázek: ${diag.open_bets ?? '—'}<br>
-      Paměť procesu: ${diag.rss_mb ?? '—'} MB`;
+      Paměť procesu: ${diag.rss_mb ?? '—'} MB${calibHtml}`;
   } catch (e) {
     toast('Nepodařilo se načíst nastavení.', 'err');
   }
@@ -852,4 +866,82 @@ async function runBettorsRound() {
     btn.disabled = false;
     btn.textContent = 'Spustit kolo teď';
   }
+}
+
+// ---------------------------------------------------------------------------
+// NOTIFIKACE – čistě klientské (Notification API), appka nemá server push.
+// Musí zůstat otevřená karta v prohlížeči; kontroluje se periodicky, dokud
+// běží. Nový tip dne a nově vyhodnocené sázky agenta = jedno upozornění.
+// ---------------------------------------------------------------------------
+const NOTIF_SEEN_BETS_KEY = 'kurzanalytik_notif_seen_bets';
+const NOTIF_LAST_TIP_KEY = 'kurzanalytik_notif_last_tip';
+const NOTIF_POLL_MS = 3 * 60 * 1000;
+
+function renderNotifStatus() {
+  const box = el('notifStatus');
+  const btn = el('notifEnableBtn');
+  if (!box || !('Notification' in window)) { if (box) box.textContent = 'Tenhle prohlížeč notifikace nepodporuje.'; return; }
+  if (Notification.permission === 'granted') {
+    box.innerHTML = '<span class="badge won">POVOLENO</span>';
+    if (btn) { btn.textContent = 'Notifikace jsou zapnuté'; btn.disabled = true; }
+  } else if (Notification.permission === 'denied') {
+    box.innerHTML = '<span class="badge lost">ZABLOKOVÁNO</span> – povol je v nastavení prohlížeče pro tuhle stránku.';
+  } else {
+    box.innerHTML = '<span class="badge open">NEPOVOLENO</span>';
+  }
+}
+
+function notify(title, body) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try { new Notification(title, { body, icon: undefined }); } catch (e) { /* nic */ }
+}
+
+async function pollForNotifications() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+  // Nový tip dne
+  try {
+    const d = await api('/api/dashboard', { timeoutMs: 20000 });
+    if (d.tip) {
+      const key = `${d.tip.match}|${d.tip.name}`;
+      if (localStorage.getItem(NOTIF_LAST_TIP_KEY) !== key) {
+        localStorage.setItem(NOTIF_LAST_TIP_KEY, key);
+        notify('💡 Nový tip dne', `${d.tip.match} – ${d.tip.name} @ ${d.tip.odds.toFixed(2)}× (${Math.round(d.tip.prob * 100)} %)`);
+      }
+    }
+  } catch (e) { /* nic */ }
+
+  // Nově vyhodnocené sázky agenta
+  try {
+    const a = await api('/api/agent', { timeoutMs: 20000 });
+    const seen = new Set(JSON.parse(localStorage.getItem(NOTIF_SEEN_BETS_KEY) || '[]'));
+    const settled = (a.bets || []).filter(b => b.status === 'won' || b.status === 'lost');
+    const fresh = settled.filter(b => !seen.has(b.id));
+    // první běh po zapnutí notifikací: jen si zapamatuj, co už je vyřešené,
+    // neposílej notifikaci za celou historii najednou
+    if (seen.size > 0) {
+      for (const b of fresh.slice(0, 5)) {
+        const sign = b.status === 'won' ? '✅' : '❌';
+        notify(`${sign} Sázka vyhodnocena`, `${b.match} – ${b.label} (${b.status === 'won' ? '+' : ''}${fmt(b.pnl || 0)} Kč)`);
+      }
+    }
+    localStorage.setItem(NOTIF_SEEN_BETS_KEY, JSON.stringify(settled.map(b => b.id)));
+  } catch (e) { /* nic */ }
+}
+
+function setupNotifications() {
+  renderNotifStatus();
+  el('notifEnableBtn')?.addEventListener('click', async () => {
+    if (!('Notification' in window)) { toast('Prohlížeč notifikace nepodporuje.', 'err'); return; }
+    const perm = await Notification.requestPermission();
+    renderNotifStatus();
+    if (perm === 'granted') {
+      toast('Notifikace zapnuté.');
+      pollForNotifications();
+    }
+  });
+  if ('Notification' in window && Notification.permission === 'granted') {
+    pollForNotifications();
+  }
+  setInterval(pollForNotifications, NOTIF_POLL_MS);
 }

@@ -21,7 +21,11 @@ _CACHE = {"ts": 0, "curve": None, "n": 0}
 
 
 def _samples() -> list:
-    """(model_prob, won) páry ze všech vyhodnocených trhů v tips.json."""
+    """(model_prob, won) páry ze všech vyhodnocených trhů v tips.json PLUS
+    ze settled sázek všech 10 virtuálních sázkařů (engine/virtual_bettors.py).
+    Aréna dává mnohem větší a různorodější vzorek než samotné (konzervativní,
+    jen tutovkové) tipy agenta – kalibrace tak s reálným provozem appky
+    konverguje výrazně rychleji k _MIN_SAMPLES a je statisticky robustnější."""
     db = storage.load("tips.json", {"tips": []})
     out = []
     for t in db.get("tips", []):
@@ -33,6 +37,17 @@ def _samples() -> list:
             r = t.get(res_key)
             if p and r in ("won", "lost"):
                 out.append((float(p), 1.0 if r == "won" else 0.0))
+
+    try:
+        from . import virtual_bettors
+        for bettor in virtual_bettors.load_state().values():
+            for bet in bettor.get("bets", []):
+                p = bet.get("prob")
+                if p and bet.get("status") in ("won", "lost"):
+                    out.append((float(p), 1.0 if bet["status"] == "won" else 0.0))
+    except Exception:
+        pass   # aréna nesmí nikdy shodit kalibraci agenta, kdyby v ní byl problém
+
     return out
 
 
