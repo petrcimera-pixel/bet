@@ -286,23 +286,27 @@
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
             <strong>▦ Dashboard</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, tip dne (nejjistější sázka na reálný kurz dnes), stav agenta a posledních 12 jeho tipů s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
           </div>
           <div>
             <strong>⚽ Zápasy</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr "Nehrané/nedohrané", u každého zápasu datum+čas začátku, dostupné reálné trhy (1X2 i gólové linie) a u vsazených zápasů zdůvodnění agenta.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr "Nehrané/nedohrané", u každého zápasu datum+čas začátku, dostupné reálné trhy (1X2 i gólové linie) a u vsazených zápasů zdůvodnění agenta nebo sázkaře.</p>
           </div>
           <div>
             <strong>🎲 Sázkaři</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 10 virtuálních sázkařů, každý s vlastním bankem 1000 Kč a jinou strategií (viz níže) – žebříček podle zisku, detail historie sázek každého z nich. Slouží ke srovnání, která strategie sázení dlouhodobě funguje nejlíp.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 10 virtuálních sázkařů, každý s vlastním bankem 1000 Kč a jinou strategií (viz níže) – žebříček podle zisku, mini graf vývoje banku, detail historie sázek, a graf kalibrace modelu (viz níže). Slouží ke srovnání, která strategie sázení dlouhodobě funguje nejlíp.</p>
           </div>
           <div>
             <strong>💰 Bankroll</strong>
             <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek.</p>
           </div>
           <div>
+            <strong>🧠 ML Learning</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance a tlačítko pro ruční přetrénování.</p>
+          </div>
+          <div>
             <strong>⚙ Nastavení</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (8:00 a 16:00), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku a nastavení počátečního banku.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (výchozí 8, 12, 16, 20), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku, notifikace a diagnostika (vč. stavu kalibrace).</p>
           </div>
         </div>
       </div>
@@ -311,17 +315,44 @@
         <h3>🤖 Automatický agent</h3>
         <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
           Když je v Nastavení zapnutý "Auto-run", agent automaticky vsadí nejjistější tip každého
-          zápasu, který splňuje prahy jistoty a kurzu – vždy jen na trhy s reálným kurzem sázkovky.
-          Výše vkladu se počítá <strong>Kelly kritériem</strong> (podíl banku úměrný matematické výhodě
-          sázky) nebo plochou částkou, podle nastavení. Denní strop hlídá, aby agent neprosázel celý
-          bank najednou. Auto-run i vyhodnocování výsledků běží přes stejný externí "budík" – appka na
+          zápasu, který splňuje prahy jistoty a kurzu – vždy jen na trhy s reálným kurzem sázkovky,
+          nikdy dvakrát na stejný zápas a nikdy na zápas, který už začal nebo skončil. Výše vkladu se
+          počítá <strong>Kelly kritériem</strong> (podíl banku úměrný matematické výhodě sázky) nebo
+          plochou částkou, podle nastavení. Denní strop hlídá, aby agent neprosázel celý bank najednou.
+        </p>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:8px 0 0;">
+          Sází podle rozvrhu (výchozí 8, 12, 16, 20 hodin) – <strong>víckrát denně</strong>, ne jen
+          jednou. Auto-run i vyhodnocování výsledků běží přes stejný externí "budík" – appka na
           Renderu neběží nepřetržitě na pozadí, takže se obojí spouští při pravidelných kontrolách
-          (cca každých 10–15 minut), ne okamžitě po skončení zápasu.
+          (cca každých 10–15 minut), ne okamžitě po skončení zápasu. Predikce se počítají na 3–4 dny
+          dopředu, ať má agent i pozdější běh v ten samý den reálně na co sázet.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>📈 Kalibrace a zpětná vazba</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          Model je ze své podstaty systematicky mírně nepřesný (řekne třeba 78 % jistoty, realita je
+          jinde). Appka porovnává modelovou pravděpodobnost se skutečnou úspěšností napříč všemi
+          settled sázkami (agent + celá aréna – mnohem větší vzorek než jen agentovy vlastní opatrné
+          tipy) a spočítanou korekční křivkou opravuje pravděpodobnost, podle které se pak vybírají
+          tutovky. Stav (aktivní/čeká na data, kolik vzorků) je vidět v Nastavení → Diagnostika,
+          graf srovnání modelu se skutečností na stránce Sázkaři.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔔 Notifikace</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          Appka běží lokálně bez serverového push – notifikace fungují jen přes prohlížeč (Notification
+          API) a jen dokud je appka otevřená v kartě. Po zapnutí v Nastavení appka každé 3 minuty
+          zkontroluje nový tip dne a nově vyhodnocené sázky agenta a upozorní tě.
         </p>
       </div>
 
       <div class="card">
         <h3>🎲 Strategie 10 virtuálních sázkařů</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Sází podle stejného rozvrhu jako agent, víckrát denně, ale nikdy dvakrát na stejný zápas a jen na zápasy, které ještě nezačaly.</p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Sázkař</th><th>Strategie</th></tr></thead>

@@ -1,1 +1,1787 @@
-{}
+{
+  "Real Madrid": {
+    "a": 2.3086,
+    "d": 0.9394,
+    "n": 1
+  },
+  "Leganés": {
+    "a": 0.9394,
+    "d": 2.3086,
+    "n": 1
+  },
+  "Philippines": {
+    "a": 0.8272,
+    "d": 2.6,
+    "n": 1
+  },
+  "Myanmar": {
+    "a": 2.6,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Malaysia": {
+    "a": 2.3086,
+    "d": 0.4,
+    "n": 1
+  },
+  "Laos": {
+    "a": 0.4,
+    "d": 2.3086,
+    "n": 1
+  },
+  "KuPS Kuopio": {
+    "a": 0.4,
+    "d": 1.375,
+    "n": 1
+  },
+  "Sabah FK": {
+    "a": 1.375,
+    "d": 0.4,
+    "n": 1
+  },
+  "Lincoln Red Imps": {
+    "a": 0.4,
+    "d": 0.4,
+    "n": 1
+  },
+  "Mjällby AIF": {
+    "a": 0.4,
+    "d": 0.4,
+    "n": 1
+  },
+  "Zambia": {
+    "a": 2.6,
+    "d": 0.4,
+    "n": 1
+  },
+  "Egypt": {
+    "a": 0.4,
+    "d": 2.6,
+    "n": 1
+  },
+  "Apollon Limassol": {
+    "a": 1.6667,
+    "d": 0.4,
+    "n": 1
+  },
+  "Dila Gori": {
+    "a": 0.4,
+    "d": 1.6667,
+    "n": 1
+  },
+  "Riga FC": {
+    "a": 2.5556,
+    "d": 1.4444,
+    "n": 1
+  },
+  "Vardar": {
+    "a": 1.4444,
+    "d": 2.5556,
+    "n": 1
+  },
+  "CSKA 1948 Sofia": {
+    "a": 0.4,
+    "d": 0.4,
+    "n": 1
+  },
+  "FC Spartak Trnava": {
+    "a": 0.4,
+    "d": 0.4,
+    "n": 1
+  },
+  "PSV Eindhoven": {
+    "a": 1.8148,
+    "d": 0.4,
+    "n": 1
+  },
+  "FC Eindhoven": {
+    "a": 0.4,
+    "d": 1.8148,
+    "n": 1
+  },
+  "Dinamo Zagreb": {
+    "a": 1.5679,
+    "d": 1.375,
+    "n": 1
+  },
+  "FC Thun": {
+    "a": 1.375,
+    "d": 1.5679,
+    "n": 1
+  },
+  "Drita Gjilan": {
+    "a": 1.2222,
+    "d": 0.8889,
+    "n": 1
+  },
+  "Floriana FC": {
+    "a": 0.8889,
+    "d": 1.2222,
+    "n": 1
+  },
+  "Unión Magdalena": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Independiente Santa Fe": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "NK Celje": {
+    "a": 1.1564,
+    "d": 1.375,
+    "n": 1
+  },
+  "Egnatia": {
+    "a": 1.375,
+    "d": 1.1564,
+    "n": 1
+  },
+  "Heart of Midlothian": {
+    "a": 0.4,
+    "d": 1.375,
+    "n": 1
+  },
+  "SK Sturm Graz": {
+    "a": 1.375,
+    "d": 0.4,
+    "n": 1
+  },
+  "Shamrock Rovers": {
+    "a": 1.1564,
+    "d": 0.8542,
+    "n": 1
+  },
+  "Ararat-Armenia": {
+    "a": 0.8542,
+    "d": 1.1564,
+    "n": 1
+  },
+  "Rubio Ñú": {
+    "a": 0.8272,
+    "d": 0.9394,
+    "n": 1
+  },
+  "Sportivo Ameliano": {
+    "a": 0.9394,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Nigeria": {
+    "a": 1.321,
+    "d": 2.1515,
+    "n": 1
+  },
+  "Malawi": {
+    "a": 2.1515,
+    "d": 1.321,
+    "n": 1
+  },
+  "2 de Mayo": {
+    "a": 1.321,
+    "d": 0.9394,
+    "n": 1
+  },
+  "Cerro Porteño": {
+    "a": 0.9394,
+    "d": 1.321,
+    "n": 1
+  },
+  "Cacahuatique": {
+    "a": 2.3086,
+    "d": 1.5455,
+    "n": 1
+  },
+  "Atletico Balboa": {
+    "a": 1.5455,
+    "d": 2.3086,
+    "n": 1
+  },
+  "Tigre": {
+    "a": 0.8272,
+    "d": 1.5455,
+    "n": 1
+  },
+  "Nacional": {
+    "a": 1.5455,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Banfield": {
+    "a": 1.8148,
+    "d": 1.5455,
+    "n": 1
+  },
+  "Sarmiento (Junín)": {
+    "a": 1.5455,
+    "d": 1.8148,
+    "n": 1
+  },
+  "San Lorenzo": {
+    "a": 0.8272,
+    "d": 0.4,
+    "n": 1
+  },
+  "Gimnasia (Mendoza)": {
+    "a": 0.4,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Juventude": {
+    "a": 0.8272,
+    "d": 0.4,
+    "n": 1
+  },
+  "Avaí": {
+    "a": 0.4,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Ponte Preta": {
+    "a": 0.8272,
+    "d": 0.9394,
+    "n": 1
+  },
+  "Athletic": {
+    "a": 0.9394,
+    "d": 0.8272,
+    "n": 1
+  },
+  "AFC Toronto": {
+    "a": 0.8272,
+    "d": 0.4,
+    "n": 1
+  },
+  "Calgary Wild FC": {
+    "a": 0.4,
+    "d": 0.8272,
+    "n": 1
+  },
+  "Deportes Quindío": {
+    "a": 1.321,
+    "d": 0.9394,
+    "n": 1
+  },
+  "Deportes Tolima": {
+    "a": 0.9394,
+    "d": 1.321,
+    "n": 1
+  },
+  "Bogotá FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Pasto": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Verdes FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Motagua": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Argentinos Juniors": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Estudiantes de Río Cuarto": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rosario Central": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Racing Club": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Santos": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "UCV FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fortaleza": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Botafogo-SP": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tigres FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Nacional": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Club Deportivo Olimpia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Mixco": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Diriangén": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Plaza Amador": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cerezo Osaka": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Borussia Dortmund": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dukagjini": {
+    "a": 0.7778,
+    "d": 2.6,
+    "n": 1
+  },
+  "FC Lugano": {
+    "a": 2.6,
+    "d": 0.7778,
+    "n": 1
+  },
+  "Kairat Almaty": {
+    "a": 0.7449,
+    "d": 0.4,
+    "n": 1
+  },
+  "Omonia Nicosia": {
+    "a": 0.4,
+    "d": 0.7449,
+    "n": 1
+  },
+  "Kauno Zalgiris": {
+    "a": 0.7449,
+    "d": 0.4,
+    "n": 1
+  },
+  "KI Klaksvik": {
+    "a": 0.4,
+    "d": 0.7449,
+    "n": 1
+  },
+  "Mérida": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Al Nassr": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lech Poznan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "AGF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ghana": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cape Verde": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "F.C. København": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Polissya Zhitomir": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CSU Craiova": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Levski Sofia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hapoel Be'er": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vikingur Reykjavik": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Barracas Central": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Aldosivi": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Madrid": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Getafe": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Gornik Zabrze": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fenerbahce": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Red Star Belgrade": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Larne": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético-MG": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Red Bull Bragantino": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Botafogo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Grêmio": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chapecoense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vasco da Gama": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "São Paulo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Slovan Bratislava": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Iberia 1999": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rapid Vienna": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Santa Coloma": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sportivo Luqueño": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sportivo Trinidense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cameroon": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Mali": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Defensa y Justicia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Riestra": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Nacional Asunción": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Club Olimpia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Independiente Medellín": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Inter Palmira": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Internacional de Bogotá": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Gimnasia La Plata": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "River Plate": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Internacional": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Flamengo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Mirassol": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Remo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Barranquilla FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Junior": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Pittsburgh Riverhounds": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Tulsa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Greenville Triumph": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Athletic Club Boise": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CD Municipal Limeño": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Inca Aruba": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Liverpool": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Wrexham": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Louisville City FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Birmingham Legion FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "MLS All-Stars": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Liga MX All-Stars": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Kansas City Current": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Racing Louisville FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Forward Madison FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chattanooga Red Wolves": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "UMECIT FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Saprissa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cienciano del Cusco": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lanús": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sporting Cristal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Instituto (Córdoba)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Platense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fluminense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Bahia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vitória": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Palmeiras": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Utah Royals": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Washington Spirit": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Real Cartagena": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "América de Cali": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Luis Ángel Firpo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fuerte San Francisco": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Bay FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Gotham FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vancouver Rise FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Montreal Roses FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Alajuelense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Xelajú MC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Alianza FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Antigua GFC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlètic Club d'Escaldes": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Vaduz": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tobol Kostanay": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Panevezys": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Trabzonspor": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Al Sadd": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Maccabi Tel-Aviv": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sheriff Tiraspol": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Ilves": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Stjarnan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Inter Turku": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Istanbul Basaksehir": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Noah": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zimbru Chisinau": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FK Auda": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FCSB": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Jablonec": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Varteks": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Nomme Kalju": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Shelbourne": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Pyunik": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Debrecen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zira FK": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Paide Linnameeskond": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Levadia Tallinn": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "IFK Göteborg": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Senegal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Kenya": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Hradec Králové": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tromso": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Midtjylland": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Besiktas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Pafos": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hajduk Split": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dinamo Minsk": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Neftchi": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Nordsjælland": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "GAIS": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Györi ETO FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Atert Bissen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "HB Torshavn": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Motherwell": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Petrocub": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Borac Banja Luka": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "SK Brann": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Universitatea Cluj": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Velez Mostar": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dunajska Streda": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zalgiris Vilnius": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dinamo Tbilisi": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Beitar Jerusalem": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "AEK Larnaca": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Derry City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rijeka": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "The New Saints": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Flora": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Valletta": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Raków Czestochowa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "PAOK": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dynamo Kyiv": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CSKA Sofia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FK Qarabag": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ajax Amsterdam": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vojvodina": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ballkani": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Bohemians": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "KF Shkëndija": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "NK Bravo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ludogorets Razgrad": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hapoel Tel Aviv": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vestri": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rigas Futbola Skola": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Sion": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "BATE Borisov": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "UNA Strassen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Partizan Belgrade": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Anderlecht": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hammarby IF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ferencvaros": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Twente": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Austria Vienna": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FK Liepaja": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CFR Cluj-Napoca": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Alashkert FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "GKS Katowice": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "MSK Zilina": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "KAA Gent": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "LNZ Cherkasy": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Panathinaikos": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Paksi SE": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zrinjski Mostar": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Valur Reykjavik": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Coleraine": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "HJK Helsinki": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Koper": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "NSI Runavik": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Benfica": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "St. Gallen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Braga": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zeleznicar Pancevo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dinamo City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Aluminij": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FK Sutjeska": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "ML Vitebsk": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hibernian": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "KF Malisheva": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sportivo San Lorenzo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Guaraní": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Morocco": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Algeria": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Envigado FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Once Caldas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Libertad": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Recoleta": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Bolívar": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Independiente Rivadavia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Huracán": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Talleres (Córdoba)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vélez Sarsfield": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Corinthians": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Athletico-PR": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sunderland": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Leeds United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Washington Mystics": {
+    "a": 2.6,
+    "d": 2.6,
+    "n": 1
+  },
+  "Connecticut Sun": {
+    "a": 2.6,
+    "d": 2.6,
+    "n": 1
+  },
+  "Isidro Metapán": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CD FAS": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Central Córdoba (Santiago del Estero)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Tucumán": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Independiente": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Newell's Old Boys": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Caracas FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "O'Higgins": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Boca Juniors": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Coritiba": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cruzeiro": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Alebrijes de Oaxaca": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dorados de Sinaloa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Bucaramanga": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Llaneros FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Herediano": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Club Deportivo Marathón": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Internacional Santa Tecla": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Águila": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Municipal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cartaginés": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Timor-Leste": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Indonesia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Henan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dalian Yingbo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vietnam": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Singapore": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Juventus": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Nice": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "South Africa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ivory Coast": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rodina Moscow": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rostov": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vålerenga": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hamarkameratene": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "LASK Linz": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Grazer AK": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Arsenal Sarandi": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Brown de Adrogué": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Birmingham City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Barcelona": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dundee United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rangers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Bodo/Glimt": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lillestrom": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Universitario de Vinto": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Guabirá": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Burkina Faso": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tanzania": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Los Chankas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Comerciantes Unidos": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "The Strongest": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Aurora": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Montevideo City Torque": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Montevideo Wanderers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Excursionistas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Armenio": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Real Tomayapo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "ABB": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "New York City FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Toronto FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  }
+}

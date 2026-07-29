@@ -55,7 +55,7 @@ def save_tips(predictions: list) -> int:
         if p["id"] in existing:
             continue
 
-        bv = p.get("best_value", {})
+        bv = p.get("best_value") or {}
         pick = p.get("pick", "home")
         pick_bet = p.get("bets", {}).get(pick, {})
 

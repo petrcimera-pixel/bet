@@ -1,5 +1,5 @@
 {
-  "ts": 1783572201,
+  "ts": 1785014153,
   "slugs": [
     [
       "fifa.world",
@@ -38,18 +38,6 @@
       "Spain"
     ],
     [
-      "ger.1",
-      "Germany"
-    ],
-    [
-      "ger.playoff.relegation",
-      "Germany"
-    ],
-    [
-      "ger.dfb_pokal",
-      "Germany"
-    ],
-    [
       "usa.1",
       "USA"
     ],
@@ -62,6 +50,14 @@
       "World"
     ],
     [
+      "usa.nwsl",
+      "USA"
+    ],
+    [
+      "usa.nwsl.cup",
+      "USA"
+    ],
+    [
       "fifa.shebelieves",
       "World"
     ],
@@ -72,14 +68,6 @@
     [
       "uefa.wchampions",
       "Europe"
-    ],
-    [
-      "usa.nwsl",
-      "USA"
-    ],
-    [
-      "usa.nwsl.cup",
-      "USA"
     ],
     [
       "uefa.europa",
@@ -96,6 +84,18 @@
     [
       "mex.1",
       "Mexico"
+    ],
+    [
+      "ger.1",
+      "Germany"
+    ],
+    [
+      "ger.playoff.relegation",
+      "Germany"
+    ],
+    [
+      "ger.dfb_pokal",
+      "Germany"
     ],
     [
       "ita.1",
@@ -120,6 +120,10 @@
     [
       "ger.super_cup",
       "Germany"
+    ],
+    [
+      "club.friendly",
+      "World"
     ],
     [
       "eng.w.1",
@@ -214,6 +218,18 @@
       "Europe"
     ],
     [
+      "usa.w.usl.1",
+      "USA"
+    ],
+    [
+      "uefa.champions_qual",
+      "Europe"
+    ],
+    [
+      "uefa.wchampions_qual",
+      "Europe"
+    ],
+    [
       "eng.w.fa",
       "England"
     ],
@@ -232,10 +248,6 @@
     [
       "fra.w.1",
       "France"
-    ],
-    [
-      "usa.w.usl.1",
-      "USA"
     ],
     [
       "ned.cup",
@@ -342,6 +354,34 @@
       "Europe"
     ],
     [
+      "uefa.super_cup",
+      "Europe"
+    ],
+    [
+      "conmebol.america",
+      "South America"
+    ],
+    [
+      "conmebol.america.femenina",
+      "South America"
+    ],
+    [
+      "usa.usl.1",
+      "USA"
+    ],
+    [
+      "usa.usl.l1",
+      "USA"
+    ],
+    [
+      "usa.usl.l1.cup",
+      "USA"
+    ],
+    [
+      "mex.2",
+      "Mexico"
+    ],
+    [
       "global.finalissima",
       "World"
     ],
@@ -356,14 +396,6 @@
     [
       "fifa.world.u20",
       "World"
-    ],
-    [
-      "conmebol.america",
-      "South America"
-    ],
-    [
-      "conmebol.america.femenina",
-      "South America"
     ],
     [
       "afc.asian.cup",
@@ -398,28 +430,8 @@
       "Africa"
     ],
     [
-      "usa.usl.1",
-      "USA"
-    ],
-    [
-      "usa.usl.l1",
-      "USA"
-    ],
-    [
-      "usa.usl.l1.cup",
-      "USA"
-    ],
-    [
-      "mex.2",
-      "Mexico"
-    ],
-    [
       "can.w.nsl",
       "Canada"
-    ],
-    [
-      "uefa.champions_qual",
-      "Europe"
     ],
     [
       "uefa.europa_qual",
@@ -430,15 +442,7 @@
       "Europe"
     ],
     [
-      "uefa.wchampions_qual",
-      "Europe"
-    ],
-    [
       "uefa.w.europa",
-      "Europe"
-    ],
-    [
-      "uefa.super_cup",
       "Europe"
     ],
     [
@@ -510,10 +514,6 @@
       "Netherlands"
     ],
     [
-      "club.friendly",
-      "World"
-    ],
-    [
       "global.pinatar_cup",
       "World"
     ],
@@ -562,10 +562,6 @@
       "Europe"
     ],
     [
-      "global.toulon",
-      "World"
-    ],
-    [
       "fifa.friendly_u21",
       "World"
     ],
@@ -588,6 +584,18 @@
     [
       "eng.5",
       "England"
+    ],
+    [
+      "eng.fa_qual",
+      "England"
+    ],
+    [
+      "usa.ncaa.m.1",
+      "USA"
+    ],
+    [
+      "usa.ncaa.w.1",
+      "USA"
     ],
     [
       "sco.1.promotion.relegation",
@@ -872,14 +880,6 @@
     [
       "rsa.1",
       "South Africa"
-    ],
-    [
-      "usa.ncaa.m.1",
-      "USA"
-    ],
-    [
-      "usa.ncaa.w.1",
-      "USA"
     ]
   ]
 }
