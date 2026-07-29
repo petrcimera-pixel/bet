@@ -83,11 +83,17 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int) -> 
     rh, ra = get_rating(home, ratings), get_rating(away, ratings)
     base_h, base_a = league_goals(league)
 
-    exp_h = max(0.35, base_h * rh["a"] * ra["d"])
+    # HOME_ADV_FACTOR se promítá i sem (stejně jako v predict_match), jinak by
+    # se domácí výhoda systematicky propisovala do attack ratingu domácího
+    # týmu (hs by bylo nadhodnocené proti očekávání bez adv. faktoru) a
+    # kontaminovala tak čistou útočnou sílu efektem hřiště.
+    exp_h = max(0.35, base_h * rh["a"] * ra["d"] * HOME_ADV_FACTOR)
     exp_a = max(0.35, base_a * ra["a"] * rh["d"])
 
-    alpha_h = 2.0 / (rh["n"] + 3.0)
-    alpha_a = 2.0 / (ra["n"] + 3.0)
+    # Spodní hranice alpha zajišťuje, že rating i po desítkách zápasů pořád
+    # citelně reaguje na aktuální formu, ne jen na "celoživotní" průměr.
+    alpha_h = max(0.06, 2.0 / (rh["n"] + 3.0))
+    alpha_a = max(0.06, 2.0 / (ra["n"] + 3.0))
 
     ratio_h = hs / exp_h
     ratio_a = as_ / exp_a
