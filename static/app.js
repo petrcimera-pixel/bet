@@ -283,6 +283,30 @@ function renderRecentBets(bets) {
   });
 }
 
+function fmtTime(ts) {
+  if (!ts) return null;
+  const d = new Date(ts * 1000);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+function renderSettleDetail(s) {
+  const box = el('settleDetail');
+  if (!box) return;
+  const lines = [];
+  const t = fmtTime(s.last_check);
+  if (t) {
+    lines.push(`Poslední kontrola: <strong style="color:var(--txt2);">${t}</strong>${s.last_pass_duration_s != null ? ` (trvala ${s.last_pass_duration_s} s)` : ''}`);
+    lines.push(`Zkontrolovaná dávka: <strong style="color:var(--txt2);">${s.batch_size ?? '—'}</strong> z ${s.total_targets ?? '—'} čekajících lig/dnů`);
+    lines.push(`Nalezeno výsledků: <strong style="color:var(--txt2);">${s.results_found ?? 0}</strong>${s.n_stuck ? ` · ${s.n_stuck} požadavků nestihlo limit (zkusí se příští kolo)` : ''}`);
+  } else {
+    lines.push('Appka ještě neproběhla žádnou kontrolu výsledků (čeká na první cron tik nebo klikni na tlačítko).');
+  }
+  if (s.last_error) {
+    lines.push(`<span style="color:var(--bad);">Poslední chyba: ${s.last_error.split('\n')[0]}</span>`);
+  }
+  box.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+}
+
 async function loadSettleStatus() {
   try {
     const s = await api('/api/settle/status');
@@ -291,6 +315,7 @@ async function loadSettleStatus() {
     if (total > 0) {
       bar.style.display = 'block';
       setText('settleText', `Čeká ${total} položek na vyhodnocení (${s.open_bets || 0} sázek, ${s.open_tips || 0} tipů).`);
+      renderSettleDetail(s);
     } else {
       bar.style.display = 'none';
     }
@@ -299,17 +324,22 @@ async function loadSettleStatus() {
 
 async function settleNow() {
   const btn = el('settleNowBtn');
+  const spinner = el('settleSpinner');
   btn.disabled = true;
   btn.textContent = 'Kontroluji…';
+  spinner.style.display = 'inline-block';
+  setText('settleText', 'Stahuji čerstvé výsledky z ESPN pro čekající ligy…');
   try {
-    const data = await api('/api/tips/settle', { method: 'POST' });
+    const data = await api('/api/tips/settle', { method: 'POST', timeoutMs: 60000 });
     toast(`Vyhodnoceno: ${data.settled || 0} tipů, ${data.settled_bets || 0} sázek.`);
     loadDashboard();
   } catch (e) {
-    toast('Vyhodnocení selhalo.', 'err');
+    toast(`Vyhodnocení selhalo: ${e.message}`, 'err');
+    loadSettleStatus();
   } finally {
     btn.disabled = false;
     btn.textContent = 'Zkontrolovat výsledky';
+    spinner.style.display = 'none';
   }
 }
 

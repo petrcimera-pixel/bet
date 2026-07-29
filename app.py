@@ -607,6 +607,12 @@ def _settle_recent(allow_slugless_fallback=False):
     remaining = len(ordered) - len(batch)
 
     results = {}
+    _pass_t0 = _time.time()
+    with _settle_lock:
+        _settle_status["in_progress"] = True
+        _settle_status["pass_started_at"] = int(_pass_t0)
+        _settle_status["batch_size"] = len(batch)
+        _settle_status["total_targets"] = len(ordered)
 
     def _collect(matches):
         for m in matches:
@@ -616,6 +622,7 @@ def _settle_recent(allow_slugless_fallback=False):
                 continue   # neukončené, skóre se ještě může změnit
             results[m["id"]] = {"home": m["home_score"], "away": m["away_score"]}
 
+    n_stuck = 0
     if batch:
         def _grab_league(t):
             sport, slug, date_str = t
@@ -680,6 +687,16 @@ def _settle_recent(allow_slugless_fallback=False):
             pass
 
     corner_results = {}
+
+    with _settle_lock:
+        _settle_status["in_progress"] = False
+        _settle_status["last_check"] = int(_time.time())
+        _settle_status["last_pass_duration_s"] = round(_time.time() - _pass_t0, 1)
+        _settle_status["results_found"] = len(results)
+        _settle_status["n_stuck"] = n_stuck
+        _settle_status["more_pending"] = remaining > 0
+        _settle_status["last_error"] = None
+
     return results, corner_results, remaining > 0
 
 
