@@ -218,7 +218,7 @@ def _default_state():
         p["id"]: {
             "name": p["name"], "emoji": p["emoji"], "tagline": p["tagline"],
             "balance": 1000.0, "start_balance": 1000.0,
-            "bets": [], "last_run_date": None, "loss_streak": 0,
+            "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
         } for p in PROFILES
     }
 
@@ -264,6 +264,9 @@ def _candidates_for(p):
 def _build_pool(predictions):
     pool = []
     for p in predictions:
+        # Jen zápasy, které ještě ani nezačaly – ne odehrané (result), ne
+        # právě probíhající (live). "Zápasy, které budou", ne které už
+        # proběhly nebo probíhají.
         if p.get("result") is not None or p.get("live"):
             continue
         for c in _candidates_for(p):
@@ -276,21 +279,44 @@ def _build_pool(predictions):
 
 
 # ---------------------------------------------------------------------------
-# Sázení – jednou denně za sázkaře (stejný rytmus jako auto-agent)
+# Sázení – podle rozvrhu (stejné hodiny jako auto-run agenta v Nastavení),
+# víckrát denně místo jen jednou. Každý sázkař navíc nikdy nevsadí na
+# zápas, na který už (kdykoliv dřív) vsadil.
 # ---------------------------------------------------------------------------
-def run_all(predictions, today_str: str) -> dict:
+def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours: list = None,
+            force: bool = False) -> dict:
+    """current_hour/allowed_hours: hodinový rozvrh (stejný jako Nastavení →
+    Auto-run agenta). force=True (ruční tlačítko "Spustit kolo teď")
+    obchází rozvrh úplně, ale pořád respektuje "nikdy dvakrát na stejný
+    zápas" a bezpečnostní stropy."""
     st = load_state()
     pool = _build_pool(predictions)
     placed_total = {}
+
     for prof in PROFILES:
         b = st[prof["id"]]
-        if b.get("last_run_date") == today_str:
-            continue   # dnes už sázel
-        b["last_run_date"] = today_str
+        if b.get("last_run_date") != today_str:
+            b["last_run_date"] = today_str
+            b["ran_hours"] = []
+
+        if not force:
+            if current_hour is None or allowed_hours is None:
+                continue
+            if current_hour not in allowed_hours:
+                continue
+            if current_hour in b.get("ran_hours", []):
+                continue   # tuhle naplánovanou hodinu už dnes odsázel
+
         if not pool:
             continue
+
+        # Nikdy dvakrát na stejný zápas – bez ohledu na to, kolikrát denně
+        # sázkař běží, pool se mu vždy filtruje na zápasy, na které ještě nevsadil.
+        already = {bet["match_id"] for bet in b["bets"]}
+        bettor_pool = [c for c in pool if c["match_id"] not in already]
+
         try:
-            decisions = prof["strategy"](pool, b, b["balance"])
+            decisions = prof["strategy"](bettor_pool, b, b["balance"]) if bettor_pool else []
         except Exception:
             decisions = []
         placed = 0
@@ -319,6 +345,8 @@ def run_all(predictions, today_str: str) -> dict:
             b["bets"].insert(0, bet)
             used_matches.add(c["match_id"])
             placed += 1
+        if current_hour is not None and current_hour not in b.get("ran_hours", []):
+            b.setdefault("ran_hours", []).append(current_hour)
         placed_total[prof["id"]] = placed
     save_state(st)
     return placed_total

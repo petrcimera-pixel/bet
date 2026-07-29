@@ -1068,10 +1068,11 @@ def api_bettor_detail(bid):
 
 @app.route("/api/bettors/run", methods=["POST"])
 def api_bettors_run():
-    """Ruční spuštění kola sázení pro sázkaře, kteří dnes ještě nesázeli."""
+    """Ruční spuštění kola sázení – obchází hodinový rozvrh (force=True),
+    ale sázkaři pořád nikdy nevsadí dvakrát na stejný zápas."""
     today = ds.today_str()
     predictions = _predictions_for(today, days=1, sport="soccer")
-    placed = virtual_bettors.run_all(predictions, today)
+    placed = virtual_bettors.run_all(predictions, today, force=True)
     _persist_push_safe()
     return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
 
@@ -1375,16 +1376,29 @@ def _auto_agent_loop():
 
 
 def _run_virtual_bettors_if_due():
-    """10 virtuálních sázkařů (engine/virtual_bettors.py) sází jednou denně,
-    stejný princip jako _run_auto_agent_if_due – synchronně z reálného
+    """10 virtuálních sázkařů (engine/virtual_bettors.py) sází podle STEJNÉHO
+    hodinového rozvrhu jako auto-run agenta (Nastavení → Auto-run podle
+    rozvrhu), takže víckrát denně, ne jen jednou – synchronně z reálného
     HTTP requestu (/api/cron/settle), ne z nespolehlivého background threadu."""
+    import datetime as _dt
     today = ds.today_str()
+    now = _dt.datetime.now()
     try:
+        cfg = app_settings.get_settings()["agent"]
+        hours_raw = str(cfg.get("auto_run_hours", "8,16"))
+        try:
+            allowed_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
+        except ValueError:
+            allowed_hours = [8, 16]
+
         st = virtual_bettors.load_state()
-        if all(b.get("last_run_date") == today for b in st.values()):
+        if now.hour not in allowed_hours:
+            return {"ran": False, "reason": "not_due"}
+        if all(now.hour in b.get("ran_hours", []) and b.get("last_run_date") == today for b in st.values()):
             return {"ran": False, "reason": "already_ran"}
+
         predictions = _predictions_for(today, days=1, sport="soccer")
-        placed = virtual_bettors.run_all(predictions, today)
+        placed = virtual_bettors.run_all(predictions, today, current_hour=now.hour, allowed_hours=allowed_hours)
         return {"ran": True, "placed": placed}
     except Exception as e:
         return {"ran": False, "reason": "error", "error": str(e)}
