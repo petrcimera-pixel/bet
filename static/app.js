@@ -487,8 +487,10 @@ function renderMatchesSummary(data, box) {
 function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
   // "Nehrané / nedohrané" = zápasy, které ještě nemají finální výsledek
   // (nezačaly NEBO právě běží živě) – čistě klientský filtr, data už máme.
+  // m.result je naplněné i u živých zápasů (průběžné skóre), takže samotné
+  // "result === null" by živé zápasy z tohohle filtru vyhodilo – proto || m.live.
   const leagues = (STATE.statusFilter === 'upcoming'
-    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.result === null) })).filter(lg => lg.matches.length)
+    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.result === null || m.live) })).filter(lg => lg.matches.length)
     : leaguesIn);
 
   if (!leagues.length) {
@@ -519,12 +521,18 @@ function fmtDateShort(dateStr) {
 }
 
 function matchCardHtml(m, bet) {
-  const finished = m.result !== null;
+  // POZOR: m.result je naplněné i u právě hraných zápasů (ESPN vrací průběžné
+  // skóre a goals_model ho propíše do result), takže "má skóre" != "dohráno" –
+  // bez m.live guardu by se živé zápasy označovaly jako "Konec".
+  const finished = m.result !== null && !m.live;
   // Datum + čas začátku ukázat VŽDY, i u odehraných/živých zápasů – dřív se
   // pro "Konec"/"ŽIVĚ" čas začátku vůbec nezobrazoval a u zápasů, které
   // ESPN vrátí pod jiným kalendářním dnem než vybraný filtr (kolem půlnoci
   // UTC), nebylo bez data poznat, kdy přesně začínají.
-  const statusLabel = finished ? 'Konec' : m.live ? 'ŽIVĚ' : 'Začátek';
+  const statusLabel = finished ? 'Konec' : m.live ? '🔴 ŽIVĚ' : 'Začátek';
+  // U živých zápasů je ESPN shortDetail (m.status) aktuální minuta/půle
+  // ("45'", "HT", "2nd Half") – užitečnější než jen "ŽIVĚ".
+  const liveDetail = m.live && m.status ? `<span class="live-min">${m.status}</span>` : '';
   const startLabel = `${fmtDateShort(m.date)} ${m.time || ''}`.trim();
   const best = m.best_value || {};
   const hasPick = best.outcome && m.odds_source === 'real';
@@ -555,11 +563,12 @@ function matchCardHtml(m, bet) {
       <div class="mc-row">
         <div class="time ${m.live ? 'live' : ''}">
           <span class="status">${statusLabel}</span>
+          ${liveDetail}
           <span>${startLabel}</span>
         </div>
         <div class="teams">
-          <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score">${m.result.home}</span>` : ''}</div>
-          <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score">${m.result.away}</span>` : ''}</div>
+          <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.home}</span>` : ''}</div>
+          <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
         </div>
         <div class="pick-col">
           ${hasPick ? `

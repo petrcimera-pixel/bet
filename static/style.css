@@ -253,11 +253,14 @@ tr:hover td { background: var(--panel-2); }
 }
 .match-card .time { font-size: 11px; color: var(--txt3); font-weight: 600; text-align: center; line-height: 1.5; }
 .match-card .time .status { display: block; }
-.match-card .time.live .status { color: var(--bad); }
+.match-card .time.live .status { color: var(--bad); animation: live-pulse 2s ease-in-out infinite; }
+.match-card .time .live-min { display: block; color: var(--bad); font-weight: 700; }
+@keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 .match-card .teams { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .match-card .team-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; font-weight: 500; }
 .match-card .team-row span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .match-card .score { font-weight: 700; color: var(--txt2); flex-shrink: 0; }
+.match-card .score.live { color: var(--bad); }
 .match-card .pick-col { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 .match-card .pick-badge {
   display: flex; align-items: center; gap: 8px;
