@@ -576,6 +576,12 @@ def _settle_recent(allow_slugless_fallback=False):
     today = ds.today_str()
     open_tips = tips_db.open_tips_until(today)   # od nejstarších, jen vyhodnotitelné
     open_bets = [b for b in bankroll.state()["bets"] if b["status"] == "open" and b.get("match_id")]
+    # Otevřené sázky sázkařů (engine/virtual_bettors.py) – BEZ tohohle by se
+    # jejich zápas nikdy nedostal do cílů, jakmile by odpovídající tip/sázka
+    # z reálného banku byly už vyhodnocené jinde (jiný match_id nemá jinam se
+    # připojit) – sázkařova sázka by tak zůstala navždy OPEN.
+    vb_state = virtual_bettors.load_state()
+    open_vb_bets = [b for bettor in vb_state.values() for b in bettor["bets"] if b["status"] == "open"]
 
     # Cíle: (sport, slug, date) s váhou – sázky (reálný bank) váží 3× víc než tipy
     targets = {}
@@ -600,6 +606,16 @@ def _settle_recent(allow_slugless_fallback=False):
         else:
             k = (sport, b["match_date"])
             slugless_days[k] = slugless_days.get(k, 0) + 3
+    for b in open_vb_bets:
+        if not b.get("match_date") or b["match_date"] > today:
+            continue
+        sport = b.get("sport", "soccer")
+        if b.get("slug"):
+            k = (sport, b["slug"], b["match_date"])
+            targets[k] = targets.get(k, 0) + 2
+        else:
+            k = (sport, b["match_date"])
+            slugless_days[k] = slugless_days.get(k, 0) + 2
 
     # Nejstarší dny první, pak dle váhy; dávka = max N liga-dnů (N requestů).
     # ROTACE: debug ukázal, že ~15/24 cílů v dávce pravidelně nestihne 25s
@@ -719,6 +735,7 @@ def api_autosettle():
     results, corner_results, more_pending = _settle_recent()
     tips_db.settle_tips(results, corner_results)   # ať zůstane synchronní s tipy
     n = bankroll.auto_settle(results, corner_results)
+    virtual_bettors.settle_all(results)
     _persist_push_safe()
     return jsonify({"settled": n, "stats": bankroll.stats(),
                     "bets": bankroll.state()["bets"][:50], "more_pending": more_pending})
@@ -789,10 +806,11 @@ def api_tips_settle():
     results, corner_results, more_pending = _settle_recent()
     n = tips_db.settle_tips(results, corner_results)
     n_bets = bankroll.auto_settle(results, corner_results)   # sázky vč. agenta a AKO tiketů
+    n_vb = virtual_bettors.settle_all(results)
     _PRED_CACHE.clear()   # ať se i v UI hned zobrazí čerstvě stažené výsledky
     _persist_push_safe()
-    return jsonify({"settled": n, "settled_bets": n_bets, "stats": tips_db.stats(),
-                    "more_pending": more_pending})
+    return jsonify({"settled": n, "settled_bets": n_bets, "settled_virtual": n_vb,
+                    "stats": tips_db.stats(), "more_pending": more_pending})
 
 
 def _rss_mb():
