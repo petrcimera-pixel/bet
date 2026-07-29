@@ -11,24 +11,43 @@ Křivka se ukládá do data/calibration.json a přepočítává po každém sett
 """
 
 import time
+import datetime
 
 from . import storage
 
 _FILE = "calibration.json"
 _MIN_SAMPLES = 80      # pod tímto počtem se kalibrace nepoužije (identita)
 _BLEND_N = 150         # váha izotonie = n/(n+_BLEND_N) – malá data táhnou k syrové p
+_HALF_LIFE_DAYS = 60   # stáří vzorku, po kterém má poloviční váhu v kalibraci
 _CACHE = {"ts": 0, "curve": None, "n": 0}
 
 
+def _age_weight(settled_epoch) -> float:
+    """Exponenciální útlum váhy vzorku podle stáří – novější settled sázky
+    odráží aktuální chování modelu (po opravách ratingu apod.) líp než staré,
+    které kalibrovaly chyby, jež už dnes neplatí."""
+    if not settled_epoch:
+        return 1.0
+    age_days = max(0.0, (time.time() - settled_epoch) / 86400.0)
+    return 0.5 ** (age_days / _HALF_LIFE_DAYS)
+
+
 def _samples() -> list:
-    """(model_prob, won) páry ze všech vyhodnocených trhů v tips.json PLUS
-    ze settled sázek všech 10 virtuálních sázkařů (engine/virtual_bettors.py).
+    """(model_prob, won, weight) trojice ze všech vyhodnocených trhů v tips.json
+    PLUS ze settled sázek všech 10 virtuálních sázkařů (engine/virtual_bettors.py).
     Aréna dává mnohem větší a různorodější vzorek než samotné (konzervativní,
     jen tutovkové) tipy agenta – kalibrace tak s reálným provozem appky
-    konverguje výrazně rychleji k _MIN_SAMPLES a je statisticky robustnější."""
+    konverguje výrazně rychleji k _MIN_SAMPLES a je statisticky robustnější.
+    Weight klesá se stářím vzorku (viz _age_weight)."""
     db = storage.load("tips.json", {"tips": []})
     out = []
     for t in db.get("tips", []):
+        settled_at = t.get("settled_at")
+        try:
+            settled_epoch = datetime.datetime.fromisoformat(settled_at).timestamp() if settled_at else None
+        except (TypeError, ValueError):
+            settled_epoch = None
+        w = _age_weight(settled_epoch)
         for prob_key, res_key in (("pick_prob", "pick_result"),
                                   ("goal_prob", "goal_result"),
                                   ("corner_prob", "corner_result"),
@@ -36,7 +55,7 @@ def _samples() -> list:
             p = t.get(prob_key)
             r = t.get(res_key)
             if p and r in ("won", "lost"):
-                out.append((float(p), 1.0 if r == "won" else 0.0))
+                out.append((float(p), 1.0 if r == "won" else 0.0, w))
 
     try:
         from . import virtual_bettors
@@ -44,18 +63,19 @@ def _samples() -> list:
             for bet in bettor.get("bets", []):
                 p = bet.get("prob")
                 if p and bet.get("status") in ("won", "lost"):
-                    out.append((float(p), 1.0 if bet["status"] == "won" else 0.0))
+                    w = _age_weight(bet.get("settled_ts"))
+                    out.append((float(p), 1.0 if bet["status"] == "won" else 0.0, w))
     except Exception:
         pass   # aréna nesmí nikdy shodit kalibraci agenta, kdyby v ní byl problém
 
     return out
 
 
-def _pav(pairs: list) -> list:
-    """Pool Adjacent Violators – izotonická regrese. Vrací [(x, y_kalibrované)]."""
-    pairs = sorted(pairs)
-    # bloky: [suma_y, n, x_min, x_max]
-    blocks = [[y, 1.0, x, x] for x, y in pairs]
+def _pav(triples: list) -> list:
+    """Vážená Pool Adjacent Violators – izotonická regrese. Vrací [(x, y_kalibrované)]."""
+    triples = sorted(triples)
+    # bloky: [suma_w*y, suma_w, x_min, x_max]
+    blocks = [[y * w, w, x, x] for x, y, w in triples]
     i = 0
     while i < len(blocks) - 1:
         a, b = blocks[i], blocks[i + 1]
