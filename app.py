@@ -267,7 +267,8 @@ def api_matches():
 
     value_count = sum(1 for p in slim_preds if p["best_value"].get("is_value"))
     # Tip dne = nejvyšší EV value napříč nadcházejícími zápasy (jen reálné kurzy)
-    upcoming = [p for p in slim_preds if p["result"] is None and p["best_value"].get("is_value")]
+    upcoming = [p for p in slim_preds
+                if p["result"] is None and not p["live"] and p["best_value"].get("is_value")]
     tip = max(upcoming, key=lambda p: p["best_value"].get("ev", 0), default=None)
     return jsonify({
         "date": date_str,
