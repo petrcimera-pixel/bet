@@ -282,11 +282,17 @@ def api_matches():
 
 @app.route("/api/tickets")
 def api_tickets():
+    # accumulator.py počítá s trhy (rohy, simulovaný "books" panel), co nový
+    # goals_model engine už neprodukuje, a s frontendem tuhle funkci
+    # nepoužívá – radši prázdný seznam než 500, kdyby na endpoint někdo sáhl.
     date_str = request.args.get("date") or ds.today_str()
     days = request.args.get("days", 1)
     sport = request.args.get("sport", "soccer")
-    predictions = _predictions_for(date_str, days=days, sport=sport)
-    return jsonify({"tickets": acc.build_tickets(predictions)})
+    try:
+        predictions = _predictions_for(date_str, days=days, sport=sport)
+        return jsonify({"tickets": acc.build_tickets(predictions)})
+    except Exception:
+        return jsonify({"tickets": []})
 
 
 @app.route("/api/form")
@@ -344,12 +350,12 @@ def api_backtest():
         b["pred"] += pp
         b["obs"] += 1 if correct else 0
         # ROI value sázek (vsadíme nejlepší value výběr za nejlepší kurz)
-        bv = p["best_value"]
-        if bv["is_value"]:
+        bv = p.get("best_value")   # None, když zápas nemá reálné kurzy sázkovky
+        if bv and bv.get("is_value"):
             r = bankroll.eval_outcome(bv["outcome"], hs, as_)
             if r:
                 val_bets += 1
-                val_profit += (bv["best_odds"] - 1) if r == "won" else -1
+                val_profit += (bv["odds"] - 1) if r == "won" else -1
 
     for b in bins:
         if b["count"]:
@@ -400,11 +406,16 @@ def api_team():
 
 @app.route("/api/alerts")
 def api_alerts():
+    # Stejný důvod jako u /api/tickets výše – accumulator.py cílí na starou
+    # (fake-books) strukturu predikce, novým frontendem se nevolá.
     date_str = request.args.get("date") or ds.today_str()
     days = request.args.get("days", 1)
     sport = request.args.get("sport", "soccer")
-    predictions = _predictions_for(date_str, days=days, sport=sport)
-    return jsonify({"alerts": acc.build_alerts(predictions)})
+    try:
+        predictions = _predictions_for(date_str, days=days, sport=sport)
+        return jsonify({"alerts": acc.build_alerts(predictions)})
+    except Exception:
+        return jsonify({"alerts": []})
 
 
 # ---------------------------------------------------------------------------
