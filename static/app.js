@@ -160,6 +160,60 @@ async function loadDashboard() {
   loadTipOfDay();
   loadAgentSummary();
   loadSettleStatus();
+  loadStrategyInsight();
+}
+
+async function loadStrategyInsight() {
+  const card = el('insightCard');
+  const box = el('insightContent');
+  try {
+    const d = await api('/api/bettors/insight', { timeoutMs: 15000 });
+    if (!d.available) { card.style.display = 'none'; return; }
+    card.style.display = 'block';
+
+    const agentRoi = d.agent_stats?.roi;
+    const agentLine = agentRoi !== null && agentRoi !== undefined
+      ? `Agent má zatím ROI ${agentRoi}% (${d.agent_stats.settled} vyřešeno).`
+      : 'Agent zatím nemá dost vyřešených sázek pro srovnání.';
+
+    const applyBtn = d.agent_settings
+      ? `<button class="btn small" id="applyInsightBtn" style="margin-top:10px;">Použít toto nastavení na agenta</button>`
+      : `<div class="muted" style="font-size:12px; margin-top:8px;">Tuhle strategii nejde na agenta 1:1 nastavit (řídí se jinak než agent umí) – jde jen o inspiraci.</div>`;
+
+    box.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="font-size:24px;">${d.emoji}</span>
+        <div style="flex:1; min-width:200px;">
+          <div style="font-weight:700;">${d.name}</div>
+          <div style="font-size:12px; color:var(--txt2);">${d.tagline}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-weight:700; color:var(--pos);">ROI ${d.roi}%</div>
+          <div style="font-size:11.5px; color:var(--txt2);">${d.win_rate}% win rate · ${d.settled} vyřešeno</div>
+        </div>
+      </div>
+      <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; color:var(--txt2);">${agentLine}</div>
+      ${applyBtn}
+    `;
+    el('applyInsightBtn')?.addEventListener('click', applyStrategyInsight);
+  } catch (e) {
+    card.style.display = 'none';
+  }
+}
+
+async function applyStrategyInsight() {
+  const btn = el('applyInsightBtn');
+  btn.disabled = true;
+  btn.textContent = 'Aplikuji…';
+  try {
+    const data = await api('/api/bettors/insight/apply', { method: 'POST' });
+    toast('Nastavení agenta aktualizováno podle vedoucí strategie.');
+    loadStrategyInsight();
+  } catch (e) {
+    toast(`Nepodařilo se aplikovat: ${e.message}`, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Použít toto nastavení na agenta';
+  }
 }
 
 async function loadBankrollTiles() {

@@ -435,6 +435,41 @@ def bettor_detail(bid: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Propojení s hlavním agentem – "která strategie v aréně vede a proč"
+# ---------------------------------------------------------------------------
+_MIN_SETTLED_FOR_INSIGHT = 3   # míň než 3 vyhodnocené sázky = ještě nic neříká
+
+# Jen strategie, které mají čistý 1:1 překlad do nastavení agenta (min_prob,
+# kurz, stake_mode...). Martingale (rizikový progresivní systém), Náhodný
+# Norbert (kontrolní skupina) a čistě kurzově orientovaní (Outsider, Value
+# Hunter, Favorit) nejdou takhle jednoduše "zapnout" – agent na ně nemá
+# odpovídající přepínač, u nich se doporučení jen popíše slovně.
+AGENT_SETTING_MAP = {
+    "kelly":        {"stake_mode": "kelly", "kelly_fraction": 1.0, "min_prob": 0.50, "min_odds": 1.10},
+    "quarter":      {"stake_mode": "kelly", "kelly_fraction": 0.25, "min_prob": 0.55, "min_odds": 1.10},
+    "conservative": {"stake_mode": "flat", "min_prob": 0.80, "min_odds": 1.10},
+    "disciplined":  {"stake_mode": "flat", "min_prob": 0.60, "max_daily_stake_pct": 0.10},
+    "cautious":     {"stake_mode": "flat", "min_prob": 0.85, "min_odds": 1.10},
+}
+
+
+def leading_strategy_insight() -> dict:
+    """Kdo v aréně aktuálně vede (dost velký vzorek, aby to něco znamenalo)
+    a dá-li se z toho poskládat konkrétní doporučené nastavení pro agenta."""
+    rows = [r for r in leaderboard() if r["settled"] >= _MIN_SETTLED_FOR_INSIGHT]
+    if not rows:
+        return {"available": False, "reason": "not_enough_data"}
+    best = max(rows, key=lambda r: r["roi"])
+    suggestion = AGENT_SETTING_MAP.get(best["id"])
+    return {
+        "available": True,
+        "id": best["id"], "name": best["name"], "emoji": best["emoji"], "tagline": best["tagline"],
+        "roi": best["roi"], "profit": best["profit"], "win_rate": best["win_rate"], "settled": best["settled"],
+        "agent_settings": suggestion,   # None = tahle strategie nejde 1:1 nastavit agentovi
+    }
+
+
+# ---------------------------------------------------------------------------
 # Kalibrace modelu – říká "75 % jistota" skutečně vyhrává ~75 % případů?
 # ---------------------------------------------------------------------------
 _CAL_BUCKETS = [(0.50, 0.60), (0.60, 0.70), (0.70, 0.80), (0.80, 0.90), (0.90, 1.01)]

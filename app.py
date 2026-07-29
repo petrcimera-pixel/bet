@@ -1087,6 +1087,28 @@ def api_bettors_calibration():
     return jsonify({"buckets": virtual_bettors.calibration_data()})
 
 
+@app.route("/api/bettors/insight")
+def api_bettors_insight():
+    """Která strategie v aréně aktuálně vede + srovnání s výkonem agenta,
+    případně konkrétní doporučené nastavení agenta (jen pro strategie
+    s čistým 1:1 překladem, viz AGENT_SETTING_MAP)."""
+    insight = virtual_bettors.leading_strategy_insight()
+    insight["agent_stats"] = agent.agent_stats()
+    return jsonify(insight)
+
+
+@app.route("/api/bettors/insight/apply", methods=["POST"])
+def api_bettors_insight_apply():
+    """Aplikuje doporučené nastavení vedoucí strategie na agenta – jen na
+    explicitní kliknutí uživatele, appka nastavení sama od sebe nemění."""
+    insight = virtual_bettors.leading_strategy_insight()
+    settings_to_apply = insight.get("agent_settings")
+    if not settings_to_apply:
+        return jsonify({"error": "Tuhle strategii nejde na agenta přímo aplikovat."}), 400
+    app_settings.update_settings("agent", settings_to_apply)
+    return jsonify({"applied": settings_to_apply, "agent": app_settings.get_settings()["agent"]})
+
+
 # ---------------------------------------------------------------------------
 # API – Pokročilé nastavení a správa dat
 # ---------------------------------------------------------------------------
