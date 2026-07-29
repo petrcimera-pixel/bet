@@ -420,24 +420,24 @@
     "n": 0
   },
   "Ghana": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0
+    "a": 1.321,
+    "d": 0.4,
+    "n": 1
   },
   "Cape Verde": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0
+    "a": 0.4,
+    "d": 1.321,
+    "n": 1
   },
   "F.C. København": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0
+    "a": 1.2222,
+    "d": 0.8889,
+    "n": 1
   },
   "Polissya Zhitomir": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0
+    "a": 0.8889,
+    "d": 1.2222,
+    "n": 1
   },
   "CSU Craiova": {
     "a": 1.0,
@@ -1783,5 +1783,1085 @@
     "a": 1.0,
     "d": 1.0,
     "n": 0
+  },
+  "North Carolina Courage": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Orlando Pride": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Universidad de Concepción": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Audax Italiano": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Libertad (Ecuador)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Orense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Puebla": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Guadalajara": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "San Antonio FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Indy Eleven": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Correcaminos UAT": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tepatitlán FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Mineros de Zacatecas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tlaxcala FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fortaleza CEIF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Pereira": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Real España": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético de San Luis": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tijuana": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Juarez": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Pumas UNAM": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Club Atlético La Paz": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Durango": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Tokyo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Akron Tolyatti": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rubin Kazan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tianjin Jinmen Tiger": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Yunnan Yukun": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Manchester City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Internazionale": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Beijing Guoan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Zhejiang Professional FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Shanghai Port": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Shandong Taishan": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chengdu Rongcheng": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Wuhan Three Towns": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Manchester United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Thailand": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "BK Häcken": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Kalmar FF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Golden Arrows": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chippa United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Orlando Pirates": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Milford FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Stellenbosch": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "AmaZulu": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CSKA Moscow": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Krylia Sovetov": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tranmere Rovers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Rochdale": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cardiff City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "AS Roma": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Falkirk": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "St Mirren": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ayr United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Arbroath": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Greenock Morton": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Partick Thistle": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Inverness Caledonian Thistle": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dunfermline Athletic": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Livingston": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Queen's Park": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Raith Rovers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Stenhousemuir": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Glenafton Athletic": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Stonehaven": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hawick Royal Albert": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Penicuik": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Shortlees": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dundee North End": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "St Andrew's": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Jeanfield Swifts": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Whitletts": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sauchie Juniors": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fredrikstad": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sandefjord": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "WSG Swarovski Tirol": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Albion FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Danubio": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dynamo Makhachkala": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lokomotiv Moscow": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sekhukhune United FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Durban City": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fiorentina": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lyngby Boldklub": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "IK Start": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Viking FK": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Aberdeen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cobresal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Unión La Calera": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Estrela": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "RB Salzburg": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "TSV Hartberg": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Nueva Chicago": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "San Martín (Tucumán)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Baltika Kaliningrad": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dinamo Moscow": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Girona": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Arsenal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Acassuso": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Colón (Santa Fe)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Almagro": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Midland": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Colegiales": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Gimnasia y Esgrima (Jujuy)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Defensores de Belgrano": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Estudiantes (Buenos Aires)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ferro Carril Oeste": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Godoy Cruz Antonio Tomba": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Argentino de Merlo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Laferrere": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Liniers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Comunicaciones": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Real Pilar": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Defensores Unidos": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sportivo Italiano": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Camioneros": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Talleres de Remedios": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Ituzaingó": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "UAI Urquiza": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Argentino de Quilmes": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Villa Dálmine": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Flandria": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Maldonado": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Juventud": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Cajamarca": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sport Huancayo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Kruger United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Kaizer Chiefs": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Unión (Santa Fe)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Patronato": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Quilmes": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "San Martín (San Juan)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atletico Rafaela": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Everton CD": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Colo Colo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Águilas Doradas": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Manta F.C.": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Mushuc Runa": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Real Oruro": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Independiente Petrolero": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chicago Stars FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlético Grau": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sport Boys": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Belgrano (Córdoba)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Estudiantes de La Plata": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Suchitepequez": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "San Antonio Bulo Bulo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Blooming": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Palestino": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Coquimbo Unido": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Peñarol": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cerro Largo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Universidad Católica (Quito)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Técnico Universitario": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Génesis PN": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CD Choloma": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cruz Azul Hidalgo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Venados FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Angel City FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Querétaro": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tigres UANL": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Lexington": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Monterey Bay": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Loudoun United FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Hartford Athletic": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Miami FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Detroit City FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Charlotte Independence": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "One Knoxville": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Spokane Velocity FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Portland Hearts of Pine": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Richmond Kickers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "AV Alta FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Tapatío": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Club Jaiba Brava": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Cusco FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "UTC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Puntarenas FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sporting San José": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "C.D. Platense": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Deportivo Cali": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "CF Montréal": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "New England Revolution": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "D.C. United": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Nashville SC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Cincinnati": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "San Jose Earthquakes": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Inter Miami CF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Columbus Crew": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Philadelphia Union": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlanta United FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Red Bull New York": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Orlando City SC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Vancouver Whitecaps": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "LAFC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Charleston Battery": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Brooklyn FC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Fort Wayne": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Union Omaha": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Sarasota Paradise": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "FC Naples": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Dallas Wings": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Atlanta Dream": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Phoenix Mercury": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Golden State Valkyries": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Toronto Tempo": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Minnesota Lynx": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Chicago Sky": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Las Vegas Aces": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "New York Liberty": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Seattle Storm": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Portland Fire": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Indiana Fever": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0
+  },
+  "Team A": {
+    "a": 1.1014,
+    "d": 0.8798,
+    "n": 1
+  },
+  "Team B": {
+    "a": 0.8798,
+    "d": 1.1014,
+    "n": 1
   }
 }

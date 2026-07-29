@@ -195,12 +195,26 @@ def _priced(model_prob: float, real_odds) -> dict:
     return out
 
 
+def _shrink(val: float, conf: float) -> float:
+    """Zplošťuje rating směrem k neutrální hodnotě 1.0 podle jistoty vzorku –
+    u málo odehraných zápasů appka věří ratingu jen částečně (jinak by pár
+    zápasů nováčka vytvořilo přehnaně jistou predikci)."""
+    return 1.0 + conf * (val - 1.0)
+
+
 def predict_match(m: dict) -> dict:
     sport = m.get("sport", "soccer")
     cfg = ds.sport_cfg(sport)
     ratings = _ratings()
     rh = get_rating(m["home"], ratings)
     ra = get_rating(m["away"], ratings)
+
+    # Jistota vzorku (0-1, plná důvěra ratingu od ~40 odehraných zápasů obou
+    # týmů dohromady) – používá se k Bayesovskému zplošťování pravděpodobnosti
+    # u nových/málo sledovaných týmů, aby model nebyl přehnaně sebejistý.
+    rating_confidence = min(1.0, (rh["n"] + ra["n"]) / 40.0)
+    sh_a, sh_d = _shrink(rh["a"], rating_confidence), _shrink(rh["d"], rating_confidence)
+    sa_a, sa_d = _shrink(ra["a"], rating_confidence), _shrink(ra["d"], rating_confidence)
 
     bets = {}
     top_scores = []
@@ -210,8 +224,8 @@ def predict_match(m: dict) -> dict:
     if cfg.get("two_way"):
         keys = ("home", "away")
         # bez skóre gridu – jen síla útok/obrana → pravděpodobnost výhry
-        strength_h = rh["a"] / max(0.4, ra["d"])
-        strength_a = ra["a"] / max(0.4, rh["d"])
+        strength_h = sh_a / max(0.4, sa_d)
+        strength_a = sa_a / max(0.4, sh_d)
         strength_h *= HOME_ADV_FACTOR
         total = strength_h + strength_a
         probs = {"home": strength_h / total, "away": strength_a / total}
@@ -223,8 +237,8 @@ def predict_match(m: dict) -> dict:
     else:
         keys = ("home", "draw", "away")
         base_h, base_a = league_goals(m["league"])
-        lam_h = max(0.25, min(4.8, base_h * rh["a"] * ra["d"] * HOME_ADV_FACTOR))
-        lam_a = max(0.25, min(4.8, base_a * ra["a"] * rh["d"]))
+        lam_h = max(0.25, min(4.8, base_h * sh_a * sa_d * HOME_ADV_FACTOR))
+        lam_a = max(0.25, min(4.8, base_a * sa_a * sh_d))
         grid = _score_grid(lam_h, lam_a)
         probs = _markets_1x2(grid)
         exp_goals = {"home": round(lam_h, 2), "away": round(lam_a, 2)}
@@ -273,7 +287,7 @@ def predict_match(m: dict) -> dict:
         "home_id": m.get("home_id", ""), "away_id": m.get("away_id", ""),
         "time": m.get("time", ""), "date": m.get("date", ""),
         "status": m.get("status", ""), "live": m.get("live", False),
-        "rating_home": rh, "rating_away": ra,
+        "rating_home": rh, "rating_away": ra, "rating_confidence": round(rating_confidence, 3),
         "exp_goals": exp_goals, "exp_total": exp_total,
         "probs": {k: round(v, 4) for k, v in probs.items()},
         "pick": pick, "pick_label": labels[pick], "confidence": confidence,
