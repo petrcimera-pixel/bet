@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   loadDashboard();
   setupNotifications();
+  // Po návratu na kartu dohnat skóre hned, ne až za celý interval
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshLiveMatches();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -78,6 +82,7 @@ function setupNav() {
       el(`page-${page}`).classList.add('active');
       STATE.page = page;
       closeMobileMenu();
+      if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
       if (page === 'bettors') loadBettors();
@@ -446,6 +451,7 @@ async function loadMatches(refresh = false) {
     STATE.lastBetMap = betMap;
     renderMatchesSummary(data, summary);
     renderMatchesLeagues(data.leagues || [], container, betMap);
+    syncLivePolling(data);
   } catch (e) {
     container.innerHTML = `<div class="empty-state">Chyba: ${e.message}
       <button class="btn small" id="matchesRetryBtn" style="margin-top:8px;">Zkusit znovu</button></div>`;
@@ -453,6 +459,63 @@ async function loadMatches(refresh = false) {
   } finally {
     clearTimeout(t1); clearTimeout(t2);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Auto-refresh živých zápasů
+// ---------------------------------------------------------------------------
+const LIVE_POLL_MS = 60 * 1000;
+let _livePollTimer = null;
+let _livePollInFlight = false;
+
+function hasLiveMatches(data) {
+  return (data?.leagues || []).some(lg => (lg.matches || []).some(m => m.live));
+}
+
+/** Tiché načtení dat bez rozbourání DOMu spinnerem – jen překreslí karty.
+ *  Musí jít s refresh=1, protože serverová cache zápasů má TTL 12 h a bez
+ *  vynuceného fetchnutí by se průběžné skóre nikdy nezměnilo. */
+async function refreshLiveMatches() {
+  if (_livePollInFlight) return;                       // nepřekrývat requesty
+  if (STATE.page !== 'matches') return;
+  if (document.visibilityState !== 'visible') return;  // skrytá karta = neplýtvat ESPN
+  if (STATE.date !== todayStr()) return;               // historii nemá smysl obnovovat
+  if (!hasLiveMatches(STATE.lastMatchesData)) { stopLivePolling(); return; }
+
+  _livePollInFlight = true;
+  try {
+    const url = `/api/matches?date=${STATE.date}&sport=${STATE.sport}&days=1&refresh=1`;
+    const [data, betMap] = await Promise.all([
+      api(url, { timeoutMs: 90000 }),
+      loadMatchBetMap(),
+    ]);
+    // Mezitím mohl uživatel odejít na jinou stránku / přepnout den
+    if (STATE.page !== 'matches' || STATE.date !== todayStr()) return;
+    STATE.lastMatchesData = data;
+    STATE.lastBetMap = betMap;
+    renderMatchesSummary(data, el('matchesSummary'));
+    renderMatchesLeagues(data.leagues || [], el('matchesContainer'), betMap);
+    if (!hasLiveMatches(data)) stopLivePolling();       // dohráno → přestat pollovat
+  } catch (e) {
+    // Tiché selhání: auto-refresh je bonus, nesmí přepsat zobrazené zápasy chybou
+  } finally {
+    _livePollInFlight = false;
+  }
+}
+
+function startLivePolling() {
+  if (_livePollTimer) return;
+  _livePollTimer = setInterval(refreshLiveMatches, LIVE_POLL_MS);
+}
+
+function stopLivePolling() {
+  if (_livePollTimer) { clearInterval(_livePollTimer); _livePollTimer = null; }
+}
+
+/** Zapne/vypne poller podle toho, jestli je na stránce aspoň jeden živý zápas. */
+function syncLivePolling(data) {
+  if (STATE.page === 'matches' && STATE.date === todayStr() && hasLiveMatches(data)) startLivePolling();
+  else stopLivePolling();
 }
 
 async function loadMatchBetMap() {
@@ -476,10 +539,13 @@ async function loadMatchBetMap() {
 }
 
 function renderMatchesSummary(data, box) {
+  const liveCount = (data?.leagues || [])
+    .reduce((n, lg) => n + (lg.matches || []).filter(m => m.live).length, 0);
   box.innerHTML = `
     <div class="pill-row" style="margin-bottom:10px;">
       <span class="pill">${data.total_matches} zápasů</span>
       <span class="pill">${data.total_leagues} lig</span>
+      ${liveCount ? `<span class="pill live-pill" title="Skóre se samo obnovuje každou minutu">🔴 ${liveCount} živě · auto-obnova</span>` : ''}
       ${data.tip ? `<span class="pill active">💡 ${data.tip.home} – ${data.tip.away}</span>` : ''}
     </div>`;
 }

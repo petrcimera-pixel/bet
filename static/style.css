@@ -261,6 +261,7 @@ tr:hover td { background: var(--panel-2); }
 .match-card .team-row span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .match-card .score { font-weight: 700; color: var(--txt2); flex-shrink: 0; }
 .match-card .score.live { color: var(--bad); }
+.pill.live-pill { border-color: var(--bad); color: var(--bad); }
 .match-card .pick-col { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 .match-card .pick-badge {
   display: flex; align-items: center; gap: 8px;
