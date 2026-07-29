@@ -52,8 +52,14 @@ def settings(start_balance=None, kelly_fraction=None, currency=None):
     return st
 
 
-def kelly_stake(prob: float, odds: float, balance: float, fraction: float) -> float:
-    """Doporučená sázka dle (frakčního) Kelly kritéria."""
+def kelly_stake(prob: float, odds: float, balance: float, fraction: float,
+                 confidence_scale: float = 1.0) -> float:
+    """Doporučená sázka dle (frakčního) Kelly kritéria.
+
+    confidence_scale (0-1, default 1.0) dál srazí vklad, pokud model stojí na
+    málo odehraných zápasech (nízké rating_confidence) – i při stejné
+    pravděpodobnosti/kurzu je odhad u nového týmu míň spolehlivý, takže si
+    zaslouží menší podíl banku."""
     b = odds - 1.0
     if b <= 0:
         return 0.0
@@ -61,7 +67,7 @@ def kelly_stake(prob: float, odds: float, balance: float, fraction: float) -> fl
     if edge <= 0:
         return 0.0
     f = (prob * b - (1 - prob)) / b   # plný Kelly podíl banku
-    f = max(0.0, f) * fraction
+    f = max(0.0, f) * fraction * max(0.0, min(1.0, confidence_scale))
     return round(balance * f, 2)
 
 

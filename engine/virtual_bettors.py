@@ -22,17 +22,24 @@ FILE = "virtual_bettors.json"
 DAILY_STAKE_CAP_PCT = 0.35   # žádný sázkař nevsadí v jeden den víc než 35 % banku (i Martingale)
 
 
-def _kelly_stake(prob, odds, balance, fraction, floor_pct=0.0, cap_pct=1.0):
+def _kelly_stake(prob, odds, balance, fraction, floor_pct=0.0, cap_pct=1.0, confidence_scale=1.0):
     b = odds - 1.0
     if b <= 0:
         return 0.0
     edge = prob * odds - 1.0
     if edge <= 0:
         return 0.0
-    f = max(0.0, (prob * b - (1 - prob)) / b) * fraction
+    f = max(0.0, (prob * b - (1 - prob)) / b) * fraction * max(0.0, min(1.0, confidence_scale))
     stake = balance * f
     stake = max(stake, balance * floor_pct) if floor_pct else stake
     return round(min(stake, balance * cap_pct), 2)
+
+
+def _conf_scale(c):
+    """Stejná logika jako v agent.py: nový/málo sledovaný tým -> menší vklad
+    i při stejném edge (rating_confidence 0-1 z ml_features kandidáta)."""
+    conf = (c.get("ml_features") or {}).get("rating_confidence", 1.0)
+    return 0.5 + 0.5 * conf
 
 
 # ---------------------------------------------------------------------------
@@ -48,7 +55,7 @@ def _s_kelly(pool, b, bal):
             by_match[c["match_id"]] = c
     out = []
     for c in list(by_match.values())[:6]:
-        stake = _kelly_stake(c["prob"], c["odds"], bal, 1.0, cap_pct=0.25)
+        stake = _kelly_stake(c["prob"], c["odds"], bal, 1.0, cap_pct=0.25, confidence_scale=_conf_scale(c))
         if stake >= 1:
             out.append((c, stake))
     return out
@@ -63,7 +70,7 @@ def _s_quarter_kelly(pool, b, bal):
             by_match[c["match_id"]] = c
     out = []
     for c in list(by_match.values())[:5]:
-        stake = _kelly_stake(c["prob"], c["odds"], bal, 0.25, cap_pct=0.15)
+        stake = _kelly_stake(c["prob"], c["odds"], bal, 0.25, cap_pct=0.15, confidence_scale=_conf_scale(c))
         if stake >= 1:
             out.append((c, stake))
     return out

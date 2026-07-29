@@ -245,6 +245,7 @@ def api_matches():
             "odds_source": p.get("odds_source", "model"),
             "exp_goals": p.get("exp_goals"),
             "exp_total": p.get("exp_total"),
+            "rating_confidence": p.get("rating_confidence"),
             "goal_lines": p.get("goal_lines", [])[:2],
             "top_scores": p.get("top_scores", [])[:3],
         }

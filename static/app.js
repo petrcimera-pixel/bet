@@ -569,6 +569,7 @@ function matchCardHtml(m, bet) {
             </div>
             <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
+          ${(m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
         </div>
       </div>

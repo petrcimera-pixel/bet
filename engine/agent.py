@@ -330,8 +330,12 @@ def run(predictions: list) -> dict:
 
         cal = best.get("cal_prob", best["prob"])
         if stake_mode == "kelly":
-            # Kelly z KALIBROVANÉ pravděpodobnosti – syrová by nadhodnocovala vklady
-            stake = bankroll.kelly_stake(cal, best["odds"], balance, kelly_fraction)
+            # Kelly z KALIBROVANÉ pravděpodobnosti – syrová by nadhodnocovala vklady.
+            # confidence_scale (0.5-1.0): i při stejném edge srazí vklad, pokud
+            # rating stojí na málo odehraných zápasech – nejistý odhad si
+            # zaslouží menší podíl banku, ne jen nižší práh jistoty.
+            conf_scale = 0.5 + 0.5 * ml_features["rating_confidence"]
+            stake = bankroll.kelly_stake(cal, best["odds"], balance, kelly_fraction, conf_scale)
             stake = max(stake, MIN_STAKE) if stake > 0 else flat_stake * 0.5
         else:
             stake = flat_stake

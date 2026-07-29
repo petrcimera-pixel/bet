@@ -211,6 +211,7 @@ tr:hover td { background: var(--panel-2); }
 .badge.lost { background: rgba(255, 93, 122, 0.15); color: var(--bad); }
 .badge.real { background: var(--accent-glow); color: var(--pos); }
 .badge.model { background: rgba(255, 181, 71, 0.15); color: var(--warn); }
+.badge.coldstart { background: rgba(255, 181, 71, 0.1); color: var(--warn); font-size: 11px; }
 
 .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .pill {
