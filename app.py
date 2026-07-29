@@ -1031,7 +1031,10 @@ def api_agent_run():
     if not cfg.get("enabled") and not d.get("force"):
         return jsonify({"skipped": "disabled"})
     start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
-    days = 2 if cfg.get("bet_today") else 1
+    # Širší okno (4 dny) – s víc naplánovanými hodinami za den (8,12,16,20)
+    # by úzké okno (dřív 1-2 dny) po prvním běhu vyčerpalo dedup a další
+    # běhy ten den by neměly na co sázet, dokud nepřibudou nové zápasy.
+    days = 4 if cfg.get("bet_today") else 3
     predictions = []
     for sport in cfg.get("sports") or ["soccer"]:
         try:
@@ -1071,7 +1074,7 @@ def api_bettors_run():
     """Ruční spuštění kola sázení – obchází hodinový rozvrh (force=True),
     ale sázkaři pořád nikdy nevsadí dvakrát na stejný zápas."""
     today = ds.today_str()
-    predictions = _predictions_for(today, days=1, sport="soccer")
+    predictions = _predictions_for(today, days=4, sport="soccer")
     placed = virtual_bettors.run_all(predictions, today, force=True)
     _persist_push_safe()
     return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
@@ -1324,11 +1327,11 @@ def _run_auto_agent_if_due():
 
         now = _dt.datetime.now()
         today_str = now.strftime("%Y-%m-%d")
-        hours_raw = str(cfg.get("auto_run_hours", "8,16"))
+        hours_raw = str(cfg.get("auto_run_hours", "8,12,16,20"))
         try:
             run_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
         except ValueError:
-            run_hours = [8, 16]
+            run_hours = [8, 12, 16, 20]
 
         if now.hour not in run_hours:
             return {"ran": False, "reason": "not_due"}
@@ -1339,7 +1342,7 @@ def _run_auto_agent_if_due():
         _auto_agent_last_run_date[now.hour] = today_str
         try:
             start_date = ds.today_str() if cfg.get("bet_today") else ds.add_days(ds.today_str(), 1)
-            days = 2 if cfg.get("bet_today") else 1
+            days = 4 if cfg.get("bet_today") else 3
             predictions = []
             for sport in cfg.get("sports") or ["soccer"]:
                 try:
@@ -1385,11 +1388,11 @@ def _run_virtual_bettors_if_due():
     now = _dt.datetime.now()
     try:
         cfg = app_settings.get_settings()["agent"]
-        hours_raw = str(cfg.get("auto_run_hours", "8,16"))
+        hours_raw = str(cfg.get("auto_run_hours", "8,12,16,20"))
         try:
             allowed_hours = [int(h.strip()) for h in hours_raw.split(",") if h.strip()]
         except ValueError:
-            allowed_hours = [8, 16]
+            allowed_hours = [8, 12, 16, 20]
 
         st = virtual_bettors.load_state()
         if now.hour not in allowed_hours:
@@ -1397,7 +1400,7 @@ def _run_virtual_bettors_if_due():
         if all(now.hour in b.get("ran_hours", []) and b.get("last_run_date") == today for b in st.values()):
             return {"ran": False, "reason": "already_ran"}
 
-        predictions = _predictions_for(today, days=1, sport="soccer")
+        predictions = _predictions_for(today, days=4, sport="soccer")
         placed = virtual_bettors.run_all(predictions, today, current_hour=now.hour, allowed_hours=allowed_hours)
         return {"ran": True, "placed": placed}
     except Exception as e:

@@ -23,7 +23,7 @@
     "bet_today": true,
     "only_real_odds": true,
     "auto_run": true,
-    "auto_run_hours": "8,16",
+    "auto_run_hours": "8,12,16,20",
     "auto_retrain": true,
     "auto_retrain_threshold": 10,
     "min_prob": 0.75,
