@@ -78,7 +78,7 @@ def _clv(odds, consensus_odds):
 
 def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
               consensus_odds=None, tag=None, match_date=None, match_time=None, league=None,
-              odds_source=None, market=None, sport=None, slug=None):
+              odds_source=None, market=None, sport=None, slug=None, ml_features=None):
     st = state()
     stake = round(float(stake), 2)
     if stake <= 0 or stake > st["balance"]:
@@ -104,6 +104,7 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
         "market": market or "score",   # "score" (góly/výsledek) | "corners" (rohy)
         "sport": sport or "soccer",    # pro dohledání výsledku (rohy = ESPN summary)
         "slug": slug or "",            # liga slug pro ESPN summary endpoint
+        "ml_features": ml_features or {},   # signály z goals_model pro ML Learning (viz settle_bet)
     }
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)
@@ -123,11 +124,7 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
                 away_team=away,
                 league=league or "Unknown",
                 match_date=match_date or "",
-                features={
-                    "odds": odds,
-                    "prob": prob,
-                    "stake": stake,
-                }
+                features={"odds": odds, "prob": prob, **(ml_features or {})}
             )
         except Exception:
             pass  # ML logging nie by měl bránit sázce
@@ -310,7 +307,7 @@ def settle_bet(bet_id, result):
                         away_team=bet["match"].split(" – ")[1] if " – " in bet["match"] else "",
                         league=bet.get("league", "Unknown"),
                         match_date=bet.get("match_date", ""),
-                        features={"odds": bet["odds"], "prob": bet["prob"]}
+                        features={"odds": bet["odds"], "prob": bet["prob"], **(bet.get("ml_features") or {})}
                     )
                 except Exception:
                     pass  # ML update nie by měl bránit vyhodnocení

@@ -27,19 +27,25 @@ FEEDBACK_FILE = "data/agent_feedback.jsonl"
 METRICS_FILE = "data/learning_metrics.json"
 
 # Jednotný seznam featur — MUSÍ sedět mezi prepare_features a predict_with_confidence
+#
+# Přepsáno pro nový predikční engine (engine/goals_model.py). Starý seznam
+# featur (elo_*_norm, xg_*_norm, possession_norm, form_*_norm) počítal se
+# staženým Elo ratingem (0-3000) a částečně FINGOVANÝMI daty – possession
+# ESPN scoreboard nikdy neposkytoval (vždy konstanta 50), recent_form se
+# generovala náhodně (seeded random), ne ze skutečných výsledků. Model by
+# se tak reálně učil hlavně z konstant a šumu.
+#
+# Nové featury sedí na to, co goals_model doopravdy počítá: attack/defense
+# multiplikátory (ne Elo), očekávané góly, edge (model_prob - implied,
+# přímo měří "kolik value" sázka má – tohle ve starém seznamu chybělo
+# úplně) a rating_confidence – kolik zápasů rating obou týmů reálně vidělo
+# (nový tým se známým ratingem 1.0 je mnohem nejistější než tým po 30
+# zápasech, to se předtím nikde nezohledňovalo).
 FEATURE_NAMES = [
-    "odds", "log_odds", "model_prob", "is_home",
-    "league_weight", "elo_home_norm", "elo_away_norm",
-    "xg_home_norm", "xg_away_norm", "possession_norm",
-    "form_home_norm", "form_away_norm"
+    "odds", "log_odds", "model_prob", "edge", "is_home",
+    "attack_home", "defense_home", "attack_away", "defense_away",
+    "exp_goals_home", "exp_goals_away", "rating_confidence",
 ]
-
-_TOP_LEAGUES = {"Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1",
-                "UEFA Champions League", "UEFA Europa League"}
-
-
-def _league_weight(league):
-    return 1.0 if league in _TOP_LEAGUES else 0.5
 
 
 def _is_home_enc(prediction):
@@ -143,22 +149,22 @@ class MLLearner:
 
             features = record.get("features", {})
             odds = record.get("odds", 1.5)
+            prob = float(features.get("prob", 1.0 / odds if odds > 1 else 0.5))
+            implied = 1.0 / odds if odds > 1 else 0.5
 
-            # Feature engineering – model_prob (pravděpodobnost z predikčního
-            # enginu) je nejcennější vstup; stake tam nepatří (cirkulární).
             feature_vector = [
                 odds,
                 np.log(odds),
-                float(features.get("prob", 1.0 / odds if odds > 1 else 0.5)),
+                prob,
+                features.get("edge", prob - implied),
                 _is_home_enc(record.get("prediction")),
-                _league_weight(record.get("league")),
-                features.get("home_rating", 1500) / 1500.0,
-                features.get("away_rating", 1500) / 1500.0,
-                features.get("expected_goals_home", 1.5) / 2.0,
-                features.get("expected_goals_away", 1.2) / 2.0,
-                features.get("possession_home", 50) / 100.0,
-                features.get("recent_form_home", 0) / 5.0,
-                features.get("recent_form_away", 0) / 5.0,
+                features.get("attack_home", 1.0),
+                features.get("defense_home", 1.0),
+                features.get("attack_away", 1.0),
+                features.get("defense_away", 1.0),
+                (features.get("exp_goals_home") or 1.3) / 2.0,
+                (features.get("exp_goals_away") or 1.1) / 2.0,
+                features.get("rating_confidence", 0.0),
             ]
 
             X.append(feature_vector)
@@ -175,12 +181,17 @@ class MLLearner:
             return False
 
         feedback = self.load_feedback_log(days=days)
-        if len(feedback) < 10:
+        # 10 záznamů dřív dovolilo 80/20 split s testovacím vzorkem o
+        # velikosti 1-2 – roc_auc_score na tak malém (často jednotřídním)
+        # vzorku občas tiše vrátí NaN místo vyhození výjimky (na rozdíl od
+        # očekávání), což pak rozbilo i JSON odpověď API. 30 záznamů dá
+        # test set alespoň ~6 vzorků.
+        if len(feedback) < 30:
             self.metrics["status"] = f"Not enough data ({len(feedback)} records)"
             return False
 
         X, y = self.prepare_features(feedback)
-        if X is None or len(X) < 5:
+        if X is None or len(X) < 15:
             return False
 
         # Split: 80/20
@@ -224,9 +235,11 @@ class MLLearner:
 
         accuracy = accuracy_score(y_test, y_pred)
         try:
-            auc = roc_auc_score(y_test, y_proba)   # padá když test set má jen 1 třídu
+            auc = roc_auc_score(y_test, y_proba)
         except ValueError:
-            auc = 0.5
+            auc = 0.5   # test set má jen 1 třídu – AUC nedefinované, spadlo by
+        if auc != auc:   # NaN check (roc_auc_score na hraničních vstupech NaN
+            auc = 0.5     # tiše VRACÍ, nevyhazuje – ValueError výše to nechytí)
         precision = precision_score(y_test, y_pred, zero_division=0)
         recall = recall_score(y_test, y_pred, zero_division=0)
 
@@ -256,21 +269,23 @@ class MLLearner:
 
         try:
             odds = features_dict.get("odds", 1.5)
+            prob = float(features_dict.get("prob", 1.0 / odds if odds > 1 else 0.5))
+            implied = 1.0 / odds if odds > 1 else 0.5
             # STEJNÉ kódování jako prepare_features – jinak model dostává
             # při predikci jiné vstupy, než na jakých se učil
             feature_vector = np.array([[
                 odds,
                 np.log(odds),
-                float(features_dict.get("prob", 1.0 / odds if odds > 1 else 0.5)),
+                prob,
+                features_dict.get("edge", prob - implied),
                 _is_home_enc(features_dict.get("prediction")),
-                _league_weight(features_dict.get("league")),
-                features_dict.get("home_rating", 1500) / 1500.0,
-                features_dict.get("away_rating", 1500) / 1500.0,
-                features_dict.get("xg_home", 1.5) / 2.0,
-                features_dict.get("xg_away", 1.2) / 2.0,
-                features_dict.get("possession", 50) / 100.0,
-                features_dict.get("form_home", 0) / 5.0,
-                features_dict.get("form_away", 0) / 5.0,
+                features_dict.get("attack_home", 1.0),
+                features_dict.get("defense_home", 1.0),
+                features_dict.get("attack_away", 1.0),
+                features_dict.get("defense_away", 1.0),
+                (features_dict.get("exp_goals_home") or 1.3) / 2.0,
+                (features_dict.get("exp_goals_away") or 1.1) / 2.0,
+                features_dict.get("rating_confidence", 0.0),
             ]])
 
             X_scaled = self.scaler.transform(feature_vector)
@@ -339,9 +354,16 @@ class MLLearner:
 
         try:
             with open(METRICS_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
         except Exception:
             return {"status": "not_trained"}
+        # Obrana i proti starým souborům z doby, kdy train() mohlo uložit
+        # NaN (viz oprava výše) – NaN v odpovědi rozbíjí JSON.parse na
+        # frontendu úplně (na rozdíl od Pythonu to JS bere jako chybu).
+        for k, v in list(data.items()):
+            if isinstance(v, float) and v != v:
+                data[k] = 0.0
+        return data
 
     def get_learning_stats(self):
         """Get comprehensive learning statistics."""

@@ -269,11 +269,20 @@ def _build_pool(predictions):
         # proběhly nebo probíhají.
         if p.get("result") is not None or p.get("live"):
             continue
+        rh, ra = p.get("rating_home") or {}, p.get("rating_away") or {}
+        eg = p.get("exp_goals") or {}
+        ml_features = {
+            "attack_home": rh.get("a", 1.0), "defense_home": rh.get("d", 1.0),
+            "attack_away": ra.get("a", 1.0), "defense_away": ra.get("d", 1.0),
+            "exp_goals_home": eg.get("home"), "exp_goals_away": eg.get("away"),
+            "rating_confidence": min(1.0, (rh.get("n", 0) + ra.get("n", 0)) / 40.0),
+        }
         for c in _candidates_for(p):
             pool.append({
                 **c, "match_id": p["id"], "match": f'{p["home"]} – {p["away"]}',
                 "league": p.get("league", "Unknown"), "date": p.get("date", ""),
                 "time": p.get("time", ""), "sport": p.get("sport", "soccer"), "slug": p.get("slug", ""),
+                "ml_features": ml_features,
             })
     return pool
 
@@ -340,6 +349,7 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
                 "outcome": c["outcome"], "label": c["label"], "name": c["name"],
                 "odds": round(c["odds"], 2), "prob": round(c["prob"], 4),
                 "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
+                "ml_features": dict(c.get("ml_features") or {}, edge=c.get("edge", 0.0)),
             }
             b["balance"] = round(b["balance"] - stake, 2)
             b["bets"].insert(0, bet)
@@ -384,10 +394,30 @@ def settle_all(results: dict) -> int:
             bet["status"] = r
             bet["settled_ts"] = int(time.time())
             n += 1
+            _record_ml_feedback(bid, bet, r)
         b["loss_streak"] = streak
     if n:
         save_state(st)
     return n
+
+
+def _record_ml_feedback(bettor_id, bet, result):
+    """Pošle settled sázku do ML Learning (engine/ml_learner.py) – aréna
+    dává MNOHEM větší a různorodější trénovací vzorek než jen agentovy
+    vlastní (konzervativní, jen tutovkové) sázky, takže model má šanci se
+    reálně něco naučit v rozumném čase."""
+    try:
+        from . import ml_learner
+        home, away = (bet["match"].split(" – ", 1) + [""])[:2]
+        ml_learner.record_bet_outcome(
+            bet_id=f'vb-{bettor_id}-{bet["id"]}', match_id=bet["match_id"],
+            prediction=bet["outcome"], odds=bet["odds"], stake=bet["stake"],
+            outcome=result, home_team=home, away_team=away,
+            league=bet.get("league", "Unknown"), match_date=bet.get("match_date", ""),
+            features={"odds": bet["odds"], "prob": bet["prob"], **(bet.get("ml_features") or {})},
+        )
+    except Exception:
+        pass   # ML logging nesmí nikdy shodit vyhodnocování sázek
 
 
 # ---------------------------------------------------------------------------

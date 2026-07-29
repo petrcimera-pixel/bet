@@ -22,6 +22,7 @@
       <button class="nav-btn" data-page="matches"><span class="icon">⚽</span> Zápasy</button>
       <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
       <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
+      <button class="nav-btn" data-page="learning"><span class="icon">🧠</span> ML Learning</button>
       <button class="nav-btn" data-page="settings"><span class="icon">⚙</span> Nastavení</button>
       <button class="nav-btn" data-page="guide"><span class="icon">📖</span> Návod</button>
     </nav>
@@ -163,6 +164,34 @@
             <tbody id="betsTable"></tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <!-- ML LEARNING -->
+    <section id="page-learning" class="page">
+      <div class="page-head">
+        <h1>ML Learning</h1>
+        <p class="lead">Druhý, nezávislý model se učí z vyhodnocených sázek agenta i celé arény sázkařů – umí tip agenta vetovat, pokud mu nevěří.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:13px; color:var(--txt2); flex:1;">Trénuje se na settled sázkách agenta i všech 10 sázkařů z arény (mnohem větší vzorek). Přetrénuje se i automaticky po každých pár nových vyhodnocených sázkách.</span>
+          <button class="btn primary" id="retrainMlBtn">Přetrénovat teď</button>
+        </div>
+      </div>
+
+      <div class="grid-stats" id="mlStats">
+        <div class="stat-tile"><div class="label">Stav</div><div class="value" id="mlStatus" style="font-size:16px;">—</div></div>
+        <div class="stat-tile"><div class="label">Trénovacích vzorků</div><div class="value" id="mlTotal">—</div></div>
+        <div class="stat-tile"><div class="label">Přesnost</div><div class="value" id="mlAccuracy">—</div></div>
+        <div class="stat-tile"><div class="label">AUC</div><div class="value" id="mlAuc">—</div></div>
+      </div>
+
+      <div class="card">
+        <h3>Feature importance</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Které vstupy model při rozhodování považuje za nejdůležitější.</p>
+        <div id="mlFeatures" class="loading"><span class="spinner"></span></div>
       </div>
     </section>
 

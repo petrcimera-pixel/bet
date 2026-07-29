@@ -82,6 +82,7 @@ function setupNav() {
       if (page === 'matches') loadMatches();
       if (page === 'bettors') loadBettors();
       if (page === 'bankroll') loadBankroll();
+      if (page === 'learning') loadMlLearning();
       if (page === 'settings') loadSettings();
     });
   });
@@ -106,6 +107,7 @@ function bindEvents() {
   el('saveSettingsBtn')?.addEventListener('click', saveAgentSettings);
   el('saveBankrollBtn')?.addEventListener('click', saveBankrollSettings);
   el('runBettorsBtn')?.addEventListener('click', runBettorsRound);
+  el('retrainMlBtn')?.addEventListener('click', retrainMlModel);
   document.querySelectorAll('#sportStrip .pill[data-sport]').forEach(p => {
     p.addEventListener('click', () => {
       document.querySelectorAll('#sportStrip .pill').forEach(x => x.classList.remove('active'));
@@ -944,4 +946,62 @@ function setupNotifications() {
     pollForNotifications();
   }
   setInterval(pollForNotifications, NOTIF_POLL_MS);
+}
+
+// ---------------------------------------------------------------------------
+// ML LEARNING
+// ---------------------------------------------------------------------------
+const ML_STATUS_CZ = {
+  no_data: 'Čeká na data', not_trained: 'Netrénováno',
+  trained: 'Natrénováno', error: 'Chyba',
+};
+
+async function loadMlLearning() {
+  try {
+    const s = await api('/api/learning/stats', { timeoutMs: 20000 });
+    setText('mlStatus', ML_STATUS_CZ[s.model_status] || s.model_status || '—');
+    setText('mlTotal', s.total_bets ?? 0);
+    setText('mlAccuracy', s.model_accuracy ? pct(s.model_accuracy * 100) : '—');
+    setText('mlAuc', s.model_auc ? s.model_auc.toFixed(3) : '—');
+    renderMlFeatures(s.feature_importance || {});
+  } catch (e) {
+    toast('Nepodařilo se načíst ML Learning.', 'err');
+  }
+}
+
+function renderMlFeatures(importance) {
+  const box = el('mlFeatures');
+  const entries = Object.entries(importance).sort((a, b) => b[1] - a[1]);
+  if (!entries.length) { box.innerHTML = '<div class="empty-state">Model ještě není natrénovaný</div>'; return; }
+  const max = entries[0][1] || 1;
+  box.innerHTML = entries.map(([name, val]) => `
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <span style="width:150px; font-size:12px; color:var(--txt2); flex-shrink:0;">${name}</span>
+      <div style="flex:1; background:var(--panel-2); border-radius:4px; height:8px; overflow:hidden;">
+        <div style="width:${Math.max(2, val / max * 100)}%; height:100%; background:var(--accent);"></div>
+      </div>
+      <span style="width:45px; text-align:right; font-size:11.5px; color:var(--txt3);">${(val * 100).toFixed(1)}%</span>
+    </div>`).join('');
+}
+
+async function retrainMlModel() {
+  const btn = el('retrainMlBtn');
+  btn.disabled = true;
+  btn.textContent = 'Trénuji…';
+  try {
+    const data = await api('/api/learning/train', { method: 'POST', timeoutMs: 30000 });
+    toast(data.success ? 'Model přetrénován.' : (data.message || 'Nedostatek dat pro trénink.'), data.success ? 'ok' : 'err');
+    if (data.stats) {
+      setText('mlStatus', ML_STATUS_CZ[data.stats.model_status] || data.stats.model_status || '—');
+      setText('mlTotal', data.stats.total_bets ?? 0);
+      setText('mlAccuracy', data.stats.model_accuracy ? pct(data.stats.model_accuracy * 100) : '—');
+      setText('mlAuc', data.stats.model_auc ? data.stats.model_auc.toFixed(3) : '—');
+      renderMlFeatures(data.stats.feature_importance || {});
+    }
+  } catch (e) {
+    toast(`Trénink selhal: ${e.message}`, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Přetrénovat teď';
+  }
 }

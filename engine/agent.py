@@ -35,7 +35,7 @@ MIN_STAKE = 1.0   # podlaha pro Kelly sázku, ať nejsou směšně malé/nulové
 ML_VETO_PROB = 0.35   # model musí dávat aspoň tuto šanci na výhru, jinak tip přeskočíme
 
 
-def _ml_veto(outcome, odds, prob, league) -> bool:
+def _ml_veto(outcome, odds, prob, league, ml_features=None) -> bool:
     """True = naučený model tip zamítá. Bez natrénovaného modelu nikdy nevetuje."""
     if not _ML:
         return False
@@ -45,6 +45,7 @@ def _ml_veto(outcome, odds, prob, league) -> bool:
             return False
         pred = learner.predict_with_confidence({
             "odds": odds, "prob": prob, "prediction": outcome, "league": league,
+            **(ml_features or {}),
         })
         return pred.get("model_status") == "ready" and pred.get("win_prob", 0.5) < ML_VETO_PROB
     except Exception:
@@ -117,6 +118,7 @@ def _candidates(p, cfg):
             # kalibrovaná pravděpodobnost = model prob opravená podle skutečné
             # historické úspěšnosti (model je systematicky překalibrovaný)
             "cal_prob": calibration.calibrate(float(prob)),
+            "edge": b.get("edge", 0.0) or 0.0,
             "market": market, "real": True,
         })
 
@@ -301,8 +303,23 @@ def run(predictions: list) -> dict:
             skipped_soft += 1
             continue
 
-        # ML gate: naučený model může tip vetovat (učí se z vlastních chyb)
-        if _ml_veto(best["outcome"], best["odds"], best["prob"], p.get("league")):
+        rh, ra = p.get("rating_home") or {}, p.get("rating_away") or {}
+        eg = p.get("exp_goals") or {}
+        ml_features = {
+            "edge": best.get("edge", 0.0),
+            "attack_home": rh.get("a", 1.0), "defense_home": rh.get("d", 1.0),
+            "attack_away": ra.get("a", 1.0), "defense_away": ra.get("d", 1.0),
+            "exp_goals_home": eg.get("home"), "exp_goals_away": eg.get("away"),
+            # kolik zápasů rating obou týmů reálně viděl – nový/málo sledovaný
+            # tým na 1.0 (neutrální výchozí hodnota) je mnohem nejistější
+            # odhad než tým po desítkách zápasů
+            "rating_confidence": min(1.0, (rh.get("n", 0) + ra.get("n", 0)) / 40.0),
+        }
+
+        # ML gate: naučený model může tip vetovat (učí se z vlastních chyb) –
+        # STEJNÉ featury jako se pak ukládají k tréninku, jinak by veto
+        # rozhodoval podle jiných vstupů, než na jakých se model učil.
+        if _ml_veto(best["outcome"], best["odds"], best["prob"], p.get("league"), ml_features):
             skipped_ml += 1
             continue
 
@@ -331,7 +348,8 @@ def run(predictions: list) -> dict:
                                match_date=p.get("date"), match_time=p.get("time"),
                                league=p.get("league"),
                                odds_source="real", market="score",
-                               sport=p.get("sport", "soccer"), slug=p.get("slug", ""))
+                               sport=p.get("sport", "soccer"), slug=p.get("slug", ""),
+                               ml_features=ml_features)
             _attach_reasoning(bet["id"], p, best)
             placed += 1
             already.add(p["id"])
