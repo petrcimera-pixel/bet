@@ -174,8 +174,21 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     alpha_h = max(0.06, 2.0 / (rh["n"] + 3.0))
     alpha_a = max(0.06, 2.0 / (ra["n"] + 3.0))
 
-    ratio_h = hs / exp_h
-    ratio_a = as_ / exp_a
+    # Bayesovské vyhlazení poměru místo syrového hs/exp.
+    #
+    # Skóre je Poissonovská veličina, takže jeden zápas je hodně zašuměný
+    # vzorek: tým s očekáváním 1.5 gólu nedá gól ve 22 % zápasů úplně běžně.
+    # Syrový poměr by z toho udělal 0.0, tedy maximální trest – a protože se
+    # rating násobí, jediná prohra 0:3 hned v prvním zápase (kde je alpha
+    # nejvyšší) srazila útok rovnou na podlahu 0.4.
+    #
+    # (hs + base) / (exp + base) je střední hodnota posteriorní míry při
+    # gamma prioru se střední hodnotou 1 a silou jednoho zápasu. Tlumí
+    # extrémy na OBOU stranách a je nezávislé na měřítku sportu, takže
+    # funguje stejně pro fotbal (~1.5) i basketbal (~86).
+    prior_h, prior_a = base_goals(league, sport, slug)
+    ratio_h = (hs + prior_h) / (exp_h + prior_h)
+    ratio_a = (as_ + prior_a) / (exp_a + prior_a)
 
     rh["a"] = _clamp(rh["a"] * (1 + alpha_h * (ratio_h - 1)))
     ra["d"] = _clamp(ra["d"] * (1 + alpha_h * (ratio_h - 1)))
