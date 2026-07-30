@@ -776,6 +776,12 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
     return placed_total
 
 
+def staked_since(bid: str, ts: int) -> float:
+    """Kolik daný sázkař vsadil od zadaného času – pro shrnutí posledního kola."""
+    b = load_state().get(bid) or {}
+    return round(sum(x["stake"] for x in b.get("bets", []) if x.get("ts", 0) >= ts), 2)
+
+
 def void_matches(match_ids) -> int:
     """Vrátí vklady u sázek na odložené/zrušené zápasy (void = žádný zisk ani
     ztráta). Bez toho by sázkařům trvale visely v otevřených a peníze by jim

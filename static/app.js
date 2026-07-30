@@ -1582,14 +1582,42 @@ async function toggleBettorDetail(id, btn) {
   }
 }
 
+/** Shrnutí posledního kola – toast zmizí, tohle zůstane, ať je z UI vidět,
+ *  co se stalo, a nemusí se to dohledávat v datech. */
+function renderRoundResult(data) {
+  const box = el('roundResult');
+  if (!box) return;
+  const n = data.total_placed || 0;
+  box.style.display = '';
+  if (!n) {
+    box.innerHTML = `<div style="font-size:12.5px; color:var(--txt2);">
+      Poslední kolo (${fmtTime(Date.now() / 1000)}): <strong>nikdo nevsadil</strong> –
+      sázkaři už mají vsazeno na všechno, co prošlo jejich prahy, a na stejný zápas
+      podruhé nesází.</div>`;
+    return;
+  }
+  const rows = (data.detail || []).map(d =>
+    `<span class="pill info">${d.name} <strong>${d.count}×</strong> · ${fmt(d.staked)} Kč</span>`).join('');
+  box.innerHTML = `
+    <div style="font-size:12.5px; color:var(--txt2); margin-bottom:8px;">
+      Poslední kolo (${fmtTime(Date.now() / 1000)}): vsazeno <strong>${n}</strong>
+      ${n === 1 ? 'sázka' : n < 5 ? 'sázky' : 'sázek'} za <strong>${fmt(data.total_staked || 0)} Kč</strong>
+      ${data.detail?.length ? `napříč ${data.detail.length} sázkaři` : ''}.
+    </div>
+    <div class="pill-row" style="margin:0;">${rows}</div>`;
+}
+
 async function runBettorsRound() {
   const btn = el('runBettorsBtn');
   btn.disabled = true;
   btn.textContent = 'Spouštím…';
   try {
     const data = await api('/api/bettors/run', { method: 'POST', timeoutMs: 60000 });
-    const totalPlaced = Object.values(data.placed || {}).reduce((a, b) => a + b, 0);
-    toast(totalPlaced > 0 ? `Sázkaři umístili ${totalPlaced} sázek.` : 'Všichni sázkaři už dnes sázeli.');
+    const n = data.total_placed ?? Object.values(data.placed || {}).reduce((a, b) => a + b, 0);
+    toast(n > 0
+      ? `Vsazeno ${n} ${n === 1 ? 'sázka' : n < 5 ? 'sázky' : 'sázek'} za ${fmt(data.total_staked || 0)} Kč.`
+      : 'Nikdo nevsadil – na co se dalo, už mají vsazeno.');
+    renderRoundResult(data);
     renderBettors(data.bettors || []);
   } catch (e) {
     toast('Kolo sázení selhalo.', 'err');

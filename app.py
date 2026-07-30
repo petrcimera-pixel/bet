@@ -1466,9 +1466,25 @@ def api_bettors_run():
     ale sázkaři pořád nikdy nevsadí dvakrát na stejný zápas."""
     today = ds.today_str()
     predictions = _predictions_for(today, days=4, sport="soccer")
+    t0 = _time.time()
     placed = virtual_bettors.run_all(predictions, today, force=True)
     _persist_push_safe()
-    return jsonify({"placed": placed, "bettors": virtual_bettors.leaderboard()})
+    board = virtual_bettors.leaderboard()
+    # Detail kola, ať uživatel z UI pozná, co se stalo, a nemusí to dohledávat
+    # v datech – kolik kdo vsadil a za kolik.
+    names = {b["id"]: f'{b.get("emoji", "")} {b["name"]}'.strip() for b in board}
+    detail = sorted(
+        [{"id": bid, "name": names.get(bid, bid), "count": n,
+          "staked": virtual_bettors.staked_since(bid, int(t0))}
+         for bid, n in (placed or {}).items() if n],
+        key=lambda x: -x["count"])
+    return jsonify({
+        "placed": placed, "bettors": board,
+        "detail": detail,
+        "total_placed": sum((placed or {}).values()),
+        "total_staked": round(sum(d["staked"] for d in detail), 2),
+        "eligible": len(board),
+    })
 
 
 @app.route("/api/bettors/calibration")
