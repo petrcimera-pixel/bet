@@ -353,6 +353,52 @@ def api_search():
                     "total": len(hits), "days": SEARCH_DAYS})
 
 
+@app.route("/api/leagues")
+@login_required
+def api_leagues():
+    """Přehled soutěží, ve kterých appka reálně vidí nadcházející zápasy."""
+    sport = request.args.get("sport", "soccer")
+    try:
+        matches = _search_window(sport)
+    except Exception as e:
+        return jsonify({"leagues": [], "error": str(e)}), 200
+
+    today = ds.today_str()
+    horizon = ds.add_days(today, ODDS_HORIZON_DAYS)
+    agg = {}
+    for m in matches:
+        if m.get("home_score") is not None or m.get("live"):
+            continue
+        key = (m.get("league", ""), m.get("country", ""))
+        a = agg.setdefault(key, {
+            "league": key[0], "country": key[1], "flag": ds.flag(key[1]),
+            "matches": 0, "with_odds": 0, "next_date": None, "last_date": None,
+            # zdroj se pozná podle prefixu slugu – ligy z doplňkového zdroje
+            # nemají kurzy, takže se na nich nedá sázet
+            "source": "apifootball" if str(m.get("slug", "")).startswith("apif:") else "espn",
+        })
+        a["matches"] += 1
+        if (m.get("real_odds") or {}).get("odds"):
+            a["with_odds"] += 1
+        d = m.get("date") or ""
+        if d:
+            if not a["next_date"] or d < a["next_date"]:
+                a["next_date"] = d
+            if not a["last_date"] or d > a["last_date"]:
+                a["last_date"] = d
+
+    out = sorted(agg.values(), key=lambda x: (-x["matches"], x["league"]))
+    return jsonify({
+        "leagues": out,
+        "total_leagues": len(out),
+        "total_matches": sum(x["matches"] for x in out),
+        "total_with_odds": sum(x["with_odds"] for x in out),
+        "days": SEARCH_DAYS,
+        "odds_horizon": horizon,
+        "apifootball": apifootball.usage_status(),
+    })
+
+
 @app.route("/api/analysis/<match_id>")
 @login_required
 def api_analysis(match_id):

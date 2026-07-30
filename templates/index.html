@@ -20,6 +20,7 @@
     <nav class="nav" id="nav">
       <button class="nav-btn active" data-page="dashboard"><span class="icon">▦</span> Dashboard</button>
       <button class="nav-btn" data-page="matches"><span class="icon">⚽</span> Zápasy</button>
+      <button class="nav-btn" data-page="search"><span class="icon">🔍</span> Hledat</button>
       <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
       <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
       <button class="nav-btn" data-page="learning"><span class="icon">🧠</span> ML Learning</button>
@@ -108,18 +109,38 @@
           </div>
           <button class="btn small" id="refreshMatchesBtn">⟳ Obnovit</button>
         </div>
+      </div>
+
+      <div id="matchesSummary"></div>
+      <div id="matchesContainer" class="loading"><span class="spinner"></span> Načítání zápasů…</div>
+    </section>
+
+    <!-- SEARCH -->
+    <section id="page-search" class="page">
+      <div class="page-head">
+        <h1>Hledat</h1>
+        <p class="lead">Najdi budoucí zápasy konkrétního týmu a nech si je rozebrat</p>
+      </div>
+
+      <div class="card">
         <div class="toolbar-row search-row">
           <input type="text" id="teamSearch" class="search-input" autocomplete="off"
-                 placeholder="🔍 Hledat tým – vypíše jeho budoucí zápasy (14 dní)…">
+                 placeholder="🔍 Napiš název týmu (stačí část, diakritika nevadí)…">
           <button class="btn small" id="teamSearchClear" style="display:none;">✕ Zrušit</button>
         </div>
       </div>
 
-      <div id="searchResults" style="display:none;"></div>
+      <div id="searchResults"></div>
       <div id="matchAnalysis" style="display:none;"></div>
 
-      <div id="matchesSummary"></div>
-      <div id="matchesContainer" class="loading"><span class="spinner"></span> Načítání zápasů…</div>
+      <div class="card">
+        <h3>Dostupné soutěže</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          Soutěže, ve kterých appka vidí nadcházející zápasy, a kolik jich v nabídce je.
+        </p>
+        <div id="leaguesSummary"></div>
+        <div id="leaguesList" class="loading"><span class="spinner"></span> Načítám soutěže…</div>
+      </div>
     </section>
 
     <!-- BETTORS ARENA -->
@@ -314,6 +335,10 @@
           <div>
             <strong>⚽ Zápasy</strong>
             <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr "Nehrané/nedohrané", u každého zápasu datum+čas začátku, dostupné reálné trhy (1X2 i gólové linie) a u vsazených zápasů zdůvodnění agenta nebo sázkaře.</p>
+          </div>
+          <div>
+            <strong>🔍 Hledat</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vyhledání týmu podle názvu (stačí část, diakritika nevadí) – vypíše jeho nadcházející zápasy na 14 dní dopředu a po rozkliknutí ukáže kompletní rozbor: pravděpodobnosti, očekávané skóre, všechny spočítané trhy a co by na zápas vsadil agent. Pod tím je přehled všech soutěží, ve kterých appka právě vidí zápasy, s počtem zápasů a kolik z nich má reálné kurzy.</p>
           </div>
           <div>
             <strong>🎲 Sázkaři</strong>

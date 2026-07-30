@@ -86,6 +86,7 @@ function setupNav() {
       if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
+      if (page === 'search') loadSearchPage();
       if (page === 'bettors') loadBettors();
       if (page === 'bankroll') loadBankroll();
       if (page === 'learning') loadMlLearning();
@@ -434,10 +435,6 @@ async function runAgent() {
 // MATCHES
 // ---------------------------------------------------------------------------
 async function loadMatches(refresh = false) {
-  // Denní výpis a hledání jsou dva režimy téže stránky – když se načítá den,
-  // hledání se zruší, jinak by zůstaly skryté kontejnery a stránka prázdná.
-  if (el('teamSearch')) el('teamSearch').value = '';
-  exitSearchMode();
   const container = el('matchesContainer');
   const summary = el('matchesSummary');
   container.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání zápasů…</div>';
@@ -480,32 +477,73 @@ function setupTeamSearch() {
     const q = input.value.trim();
     // debounce – první hledání dne stahuje 14denní okno z ESPN (~20 s),
     // nemá smysl ho pouštět po každém písmenu
-    _searchTimer = setTimeout(() => (q.length >= 2 ? runTeamSearch(q) : exitSearchMode()), 450);
+    _searchTimer = setTimeout(() => (q.length >= 2 ? runTeamSearch(q) : clearSearch()), 450);
   });
-  el('teamSearchClear')?.addEventListener('click', () => { input.value = ''; exitSearchMode(); });
+  el('teamSearchClear')?.addEventListener('click', () => { input.value = ''; clearSearch(); });
 }
 
-/** Zpět na normální výpis zápasů podle dne. */
-function exitSearchMode() {
-  el('searchResults').style.display = 'none';
+function clearSearch() {
+  el('searchResults').innerHTML = '';
   el('matchAnalysis').style.display = 'none';
   el('teamSearchClear').style.display = 'none';
-  el('matchesSummary').style.display = '';
-  el('matchesContainer').style.display = '';
 }
 
-function enterSearchMode() {
-  el('matchesSummary').style.display = 'none';
-  el('matchesContainer').style.display = 'none';
-  el('matchAnalysis').style.display = 'none';
-  el('teamSearchClear').style.display = '';
-  stopLivePolling();   // v režimu hledání se dny neobnovují
+async function loadSearchPage() {
+  loadLeagues();
+}
+
+/** Přehled soutěží, ve kterých appka vidí nadcházející zápasy. */
+async function loadLeagues() {
+  const box = el('leaguesList');
+  const sum = el('leaguesSummary');
+  if (!box) return;
+  box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítám soutěže…</div>';
+  try {
+    const d = await api(`/api/leagues?sport=${STATE.sport}`, { timeoutMs: 120000 });
+    if (!d.leagues || !d.leagues.length) {
+      sum.innerHTML = '';
+      box.innerHTML = '<div class="empty-state">Momentálně nevidím žádné nadcházející zápasy.</div>';
+      return;
+    }
+    const apif = d.apifootball || {};
+    sum.innerHTML = `
+      <div class="pill-row" style="margin-bottom:12px;">
+        <span class="pill">${d.total_leagues} soutěží</span>
+        <span class="pill">${d.total_matches} zápasů</span>
+        <span class="pill">${d.total_with_odds} s reálnými kurzy</span>
+        <span class="pill">okno ${d.days} dní</span>
+        ${apif.enabled ? `<span class="pill">+ doplňkové ligy (${apif.window_from} – ${apif.window_to})</span>` : ''}
+      </div>`;
+    const rows = d.leagues.map(l => {
+      // ligy z doplňkového zdroje nemají kurzy, takže na nich agent nesází
+      const odds = l.with_odds
+        ? `<span class="badge real">${l.with_odds}</span>`
+        : '<span class="badge model">jen model</span>';
+      const span = l.next_date === l.last_date
+        ? fmtDateShort(l.next_date)
+        : `${fmtDateShort(l.next_date)} – ${fmtDateShort(l.last_date)}`;
+      return `<tr>
+        <td>${l.flag || ''} ${l.league}</td>
+        <td class="muted">${l.country || ''}</td>
+        <td><strong>${l.matches}</strong></td>
+        <td>${odds}</td>
+        <td class="muted">${span}</td>
+      </tr>`;
+    }).join('');
+    box.className = '';
+    box.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Soutěž</th><th>Země</th><th>Zápasů</th><th>S kurzy</th><th>Kdy</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = `<div class="empty-state">Načtení soutěží selhalo: ${e.message}</div>`;
+  }
 }
 
 async function runTeamSearch(q) {
-  enterSearchMode();
+  el('teamSearchClear').style.display = '';
+  el('matchAnalysis').style.display = 'none';
   const box = el('searchResults');
-  box.style.display = '';
   box.innerHTML = '<div class="card"><div class="loading"><span class="spinner"></span> Hledám zápasy… (první hledání dne stahuje data z ESPN)</div></div>';
   try {
     const d = await api(`/api/search?q=${encodeURIComponent(q)}&sport=${STATE.sport}`, { timeoutMs: 120000 });
