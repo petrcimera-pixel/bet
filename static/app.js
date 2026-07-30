@@ -132,6 +132,7 @@ function bindEvents() {
       STATE.statusFilter = p.dataset.status;
       // Filtr je čistě klientský (data už máme) – není potřeba nový fetch.
       if (STATE.lastMatchesData) {
+        renderMatchesSummary(STATE.lastMatchesData, el('matchesSummary'));
         renderMatchesLeagues(STATE.lastMatchesData.leagues || [], el('matchesContainer'), STATE.lastBetMap);
       }
     });
@@ -537,12 +538,13 @@ async function loadLeagues() {
     const withOddsLeagues = d.leagues.filter(l => l.with_odds).length;
     sum.innerHTML = `
       <div class="pill-row" style="margin-bottom:10px;">
-        <span class="pill">${d.total_leagues} soutěží</span>
-        <span class="pill">${d.total_matches} zápasů</span>
-        <span class="pill">${d.total_with_odds} zápasů s kurzy</span>
-        <span class="pill" title="Na soutěžích bez kurzů agent nesází">${withOddsLeagues} soutěží s kurzy</span>
-        <span class="pill">okno ${d.days} dní</span>
-        ${apif.enabled ? `<span class="pill">+ doplňkové ligy (${apif.window_from} – ${apif.window_to})</span>` : ''}
+        <span class="pill info">${d.total_leagues} soutěží</span>
+        <span class="pill info">${d.total_matches} zápasů</span>
+        <span class="pill info">${d.total_with_odds} zápasů s kurzy</span>
+        <span class="pill clickable" id="pillOnlyOdds"
+              title="Kliknutím necháš jen soutěže s reálnými kurzy">💰 ${withOddsLeagues} soutěží s kurzy</span>
+        <span class="pill info">okno ${d.days} dní</span>
+        ${apif.enabled ? `<span class="pill info">+ doplňkové ligy (${apif.window_from} – ${apif.window_to})</span>` : ''}
       </div>
       <div class="toolbar-row" style="margin-bottom:12px;">
         <input type="text" id="leagueFilter" class="search-input" placeholder="Filtrovat soutěž nebo zemi…">
@@ -550,11 +552,14 @@ async function loadLeagues() {
       </div>`;
     STATE.leaguesData = d.leagues;
     el('leagueFilter')?.addEventListener('input', renderLeagueRows);
-    el('leagueOnlyOdds')?.addEventListener('click', (ev) => {
+    const toggleOnlyOdds = () => {
       _leagueOnlyOdds = !_leagueOnlyOdds;
-      ev.target.classList.toggle('primary', _leagueOnlyOdds);
+      el('leagueOnlyOdds')?.classList.toggle('primary', _leagueOnlyOdds);
+      el('pillOnlyOdds')?.classList.toggle('active', _leagueOnlyOdds);
       renderLeagueRows();
-    });
+    };
+    el('leagueOnlyOdds')?.addEventListener('click', toggleOnlyOdds);
+    el('pillOnlyOdds')?.addEventListener('click', toggleOnlyOdds);
     renderLeagueRows();
   } catch (e) {
     box.className = '';
@@ -908,15 +913,49 @@ function renderMatchesSummary(data, box) {
   const liveCount = all.filter(m => m.live).length;
   const cold = all.filter(m => m.rating_confidence != null && m.rating_confidence < 0.3).length;
   _coldstartIsNorm = all.length > 0 && cold / all.length > 0.6;
+  const oddsCount = all.filter(m => m.odds_source === 'real').length;
+  const f = STATE.statusFilter;
   box.innerHTML = `
     <div class="pill-row" style="margin-bottom:10px;">
-      <span class="pill">${data.total_matches} zápasů</span>
-      <span class="pill">${data.total_leagues} lig</span>
-      <span class="pill" title="Zbytek je jen odhad modelu – appka si kurzy nevymýšlí">💰 ${all.filter(m => m.odds_source === 'real').length} s kurzy</span>
-      ${_coldstartIsNorm ? `<span class="pill" title="Model má zatím málo odehraných zápasů, takže jsou predikce zploštělé k průměru">⚠️ ${Math.round(cold / all.length * 100)} % týmů model ještě nezná</span>` : ''}
-      ${liveCount ? `<span class="pill live-pill" title="Skóre se samo obnovuje každou minutu">🔴 ${liveCount} živě · auto-obnova</span>` : ''}
-      ${data.tip ? `<span class="pill active">💡 ${data.tip.home} – ${data.tip.away}</span>` : ''}
+      <span class="pill info">${data.total_matches} zápasů</span>
+      <span class="pill info">${data.total_leagues} lig</span>
+      <span class="pill clickable ${f === 'odds' ? 'active' : ''}" data-filter="odds"
+            title="Kliknutím zobrazíš jen zápasy s reálným kurzem">💰 ${oddsCount} s kurzy</span>
+      ${_coldstartIsNorm ? `<span class="pill info" title="Model má zatím málo odehraných zápasů, takže jsou predikce zploštělé k průměru">⚠️ ${Math.round(cold / all.length * 100)} % týmů model ještě nezná</span>` : ''}
+      ${liveCount ? `<span class="pill clickable live-pill ${f === 'live' ? 'active' : ''}" data-filter="live"
+            title="Kliknutím zobrazíš jen právě hrané zápasy – skóre se obnovuje samo">🔴 ${liveCount} živě · auto-obnova</span>` : ''}
+      ${data.tip ? `<span class="pill clickable active" data-tip="${escAttr(data.tip.id)}"
+            title="Kliknutím skočíš na zápas">💡 ${data.tip.home} – ${data.tip.away}</span>` : ''}
     </div>`;
+
+  // Pilulky vypadají jako filtry, tak ať jimi taky jsou (info-pilulky jsou
+  // vizuálně odlišené a neklikatelné).
+  box.querySelectorAll('.pill.clickable[data-filter]').forEach(p => {
+    p.addEventListener('click', () => {
+      STATE.statusFilter = (STATE.statusFilter === p.dataset.filter) ? 'all' : p.dataset.filter;
+      syncStatusStrip();
+      renderMatchesSummary(data, box);
+      renderMatchesLeagues(data.leagues || [], el('matchesContainer'), STATE.lastBetMap);
+    });
+  });
+  box.querySelector('.pill.clickable[data-tip]')?.addEventListener('click', (ev) => {
+    const card = el('matchesContainer')?.querySelector(`[data-match-id="${ev.currentTarget.dataset.tip}"]`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('flash');
+      setTimeout(() => card.classList.remove('flash'), 1600);
+    }
+  });
+}
+
+/** Drží horní přepínač (Vše / Jen s kurzy) v souladu s filtrem zvoleným jinde. */
+function syncStatusStrip() {
+  document.querySelectorAll('#statusStrip .pill[data-status]').forEach(x =>
+    x.classList.toggle('active', x.dataset.status === STATE.statusFilter
+      || (STATE.statusFilter === 'live' && x.dataset.status === 'all' && false)));
+  if (!document.querySelector('#statusStrip .pill.active')) {
+    document.querySelector('#statusStrip .pill[data-status="all"]')?.classList.add('active');
+  }
 }
 
 function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
@@ -924,8 +963,12 @@ function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
   // sázet stejně nebude (kurzy si nevymýšlí), takže je to jediný filtr, co
   // reálně mění, na co se dívat. Stav zápasu (nehráno/živě/konec) je vidět
   // přímo na kartičce, takže na to zvláštní filtr netřeba.
-  const leagues = (STATE.statusFilter === 'odds'
-    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.odds_source === 'real') })).filter(lg => lg.matches.length)
+  const pass = {
+    odds: m => m.odds_source === 'real',
+    live: m => !!m.live,
+  }[STATE.statusFilter];
+  const leagues = (pass
+    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(pass) })).filter(lg => lg.matches.length)
     : leaguesIn);
 
   if (!leagues.length) {
@@ -1034,7 +1077,7 @@ function matchCardHtml(m, bet) {
   const hasExtra = marketChips || bet;
 
   return `
-    <div class="match-card">
+    <div class="match-card" data-match-id="${escAttr(m.id)}">
       <div class="mc-row">
         <div class="time ${m.live ? 'live' : ''}">
           <span class="status">${statusLabel}</span>

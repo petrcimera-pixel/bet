@@ -220,6 +220,21 @@ tr:hover td { background: var(--panel-2); }
 }
 .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
 .pill:hover { border-color: var(--accent-dim); }
+/* Klikatelné pilulky vypadají jako filtry (appka je tak používá u data i
+   sportu), takže čistě informativní počty musí být zjevně jiné – jinak na ně
+   uživatel kliká a "nefungují". */
+.pill.info {
+  background: transparent; border-style: dashed; color: var(--txt3);
+  font-weight: 500; cursor: default;
+}
+.pill.info:hover { border-color: var(--border); }
+.pill.clickable { cursor: pointer; }
+/* krátké zvýraznění zápasu, na který se skočilo z pilulky s tipem dne */
+.match-card.flash { animation: card-flash 1.6s ease-out; }
+@keyframes card-flash {
+  0%, 100% { background: var(--panel); }
+  20% { background: var(--accent-glow); }
+}
 
 /* Zápasy – filtr toolbar (datum + sport + status pohromadě v jedné kartě) */
 .matches-toolbar { margin-bottom: 16px; padding: 14px 16px; }
