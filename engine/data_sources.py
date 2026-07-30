@@ -250,8 +250,19 @@ def fetch_day(date_str: str, use_cache: bool = True, sport: str = "soccer") -> l
 # ESPN – primární zdroj (paralelně přes všechny ligy, jedním dotazem na rozsah)
 # ---------------------------------------------------------------------------
 def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
-    s, e = start.replace("-", ""), end.replace("-", "")
-    drange = s if s == e else f"{s}-{e}"
+    # ESPN řadí zápasy podle DATA V USA, ale my filtrujeme podle UTC data
+    # z ev["date"]. Zápas začínající v UTC krátce po půlnoci proto spadne do
+    # slepého místa: dotaz na jeho UTC den ho nevrátí (ESPN ho vede ještě pod
+    # předchozím dnem) a dotaz na předchozí den ho sice vrátí, ale filtr ho
+    # zahodí, protože jeho UTC datum je až zítřek. Takový zápas byl pro
+    # jednodenní dotaz úplně neviditelný a jeho sázky nešly nikdy vyhodnotit
+    # (typicky jihoamerické ligy hrající ve 21-01 UTC).
+    #
+    # Řešení: ptát se ESPN o den širší okno, ale filtrovat pořád přesně na
+    # požadovaný rozsah – navíc přišlé zápasy sousedních dnů filtr zahodí.
+    s = add_days(start, -1).replace("-", "")
+    e = add_days(end, 1).replace("-", "")
+    drange = f"{s}-{e}"
     out = []
 
     def grab(item):
@@ -400,10 +411,17 @@ def _espn_odds(competition):
 
 def fetch_league_scores(sport: str, slug: str, date_str: str) -> list:
     """Zápasy JEDNÉ ligy pro jeden den – cílený dotaz pro vyhodnocování.
-    Jeden HTTP request místo skenu všech 244 lig (20–50× rychlejší settle)."""
+    Jeden HTTP request místo skenu všech 244 lig (20–50× rychlejší settle).
+
+    Stejně jako _from_espn se ptá o den širší okno, ale filtruje přesně na
+    požadovaný den: ESPN řadí zápasy podle data v USA, takže zápas začínající
+    krátce po půlnoci UTC se pod svým vlastním UTC dnem nenajde a jeho sázky
+    by nešlo nikdy vyhodnotit (viz komentář v _from_espn)."""
     try:
+        lo = add_days(date_str, -1).replace("-", "")
+        hi = add_days(date_str, 1).replace("-", "")
         r = requests.get(ESPN.format(sport=sport, slug=slug),
-                         params={"dates": date_str.replace("-", "")},
+                         params={"dates": f"{lo}-{hi}"},
                          timeout=TIMEOUT)
         r.raise_for_status()
         return _parse_espn(slug, "", r.json(), date_str, date_str, sport)

@@ -1805,14 +1805,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-28T06:35:28",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 0,
+        "away": 3
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401857092",
@@ -1926,14 +1929,17 @@
       "dc_recommended": false,
       "is_sharp": true,
       "saved_at": "2026-07-28T06:37:18",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 100,
+        "away": 93
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "lost",
+      "goal_result": "lost",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401857094",
@@ -1985,14 +1991,17 @@
       "dc_recommended": false,
       "is_sharp": true,
       "saved_at": "2026-07-28T06:37:18",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 95,
+        "away": 105
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "lost",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401857095",
@@ -2044,14 +2053,17 @@
       "dc_recommended": false,
       "is_sharp": true,
       "saved_at": "2026-07-28T06:37:18",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 98,
+        "away": 83
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "lost",
+      "goal_result": "lost",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401857096",
@@ -2103,14 +2115,17 @@
       "dc_recommended": false,
       "is_sharp": true,
       "saved_at": "2026-07-28T06:37:18",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 109,
+        "away": 113
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401878124",
@@ -2422,14 +2437,17 @@
       "dc_recommended": false,
       "is_sharp": false,
       "saved_at": "2026-07-29T15:52:53",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 81,
+        "away": 82
+      },
+      "actual": "away",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "lost",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401857098",
@@ -2481,14 +2499,17 @@
       "dc_recommended": false,
       "is_sharp": true,
       "saved_at": "2026-07-29T15:52:53",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 91,
+        "away": 89
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "won",
+      "goal_result": "lost",
       "corner_result": null,
       "dc_result": null,
-      "settled_at": null
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401879497",
@@ -4416,14 +4437,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 4,
+        "away": 3
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401853953",
@@ -4478,14 +4502,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 5,
+        "away": 1
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401841977",
@@ -4540,14 +4567,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 5,
+        "away": 2
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401877928",
@@ -4602,14 +4632,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 2
+      },
+      "actual": "away",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401874158",
@@ -4664,14 +4697,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 4,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401874151",
@@ -4726,14 +4762,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401841454",
@@ -4788,14 +4827,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 2,
+        "away": 1
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "won",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401841177",
@@ -4850,14 +4892,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 0,
+        "away": 0
+      },
+      "actual": "draw",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "lost",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401841172",
@@ -4912,14 +4957,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 0,
+        "away": 4
+      },
+      "actual": "away",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401853954",
@@ -4974,14 +5022,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 0,
+        "away": 1
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401871778",
@@ -5036,14 +5087,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 1,
+        "away": 1
+      },
+      "actual": "draw",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401899688",
@@ -5098,14 +5152,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 4,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401853955",
@@ -5160,14 +5217,17 @@
       "dc_recommended": true,
       "is_sharp": true,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
+      "result": {
+        "home": 0,
+        "away": 1
+      },
+      "actual": "away",
+      "pick_result": "lost",
+      "value_result": "lost",
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401859925",
@@ -5222,14 +5282,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 3,
+        "away": 4
+      },
+      "actual": "away",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "lost",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401875817",
@@ -5284,14 +5347,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 0
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401878109",
@@ -5346,14 +5412,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 2,
+        "away": 1
+      },
+      "actual": "home",
+      "pick_result": "won",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-30T10:03:14"
     },
     {
       "id": "401896211",
