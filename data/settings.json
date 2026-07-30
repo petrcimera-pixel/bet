@@ -19,7 +19,7 @@
     "only_sharp": true,
     "stake_mode": "flat",
     "kelly_fraction": 0.25,
-    "max_daily_stake_pct": 0.25,
+    "max_daily_stake_pct": 0.4,
     "bet_today": true,
     "only_real_odds": true,
     "auto_run": true,
