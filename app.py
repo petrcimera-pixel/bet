@@ -333,18 +333,9 @@ def api_search():
         if not side:
             continue
         teams[side] = teams.get(side, 0) + 1
-        has_odds = bool((m.get("real_odds") or {}).get("odds"))
-        hits.append({
-            "id": m["id"], "sport": sport, "slug": m.get("slug", ""),
-            "home": home, "away": away,
-            "date": m.get("date", ""), "time": m.get("time", ""),
-            "league": m.get("league", ""), "country": m.get("country", ""),
-            "flag": ds.flag(m.get("country", "")),
-            "has_odds": has_odds,
-            # dál než horizont kurzy nečekej – frontend podle toho odliší,
-            # jestli půjde o skutečný tip, nebo jen odhad modelu
-            "odds_expected": m.get("date", "") <= horizon,
-        })
+        # odds_expected: dál než horizont kurzy nečekej – frontend podle toho
+        # odliší, jestli půjde o skutečný tip, nebo jen odhad modelu
+        hits.append(_slim_search_match(m, sport, horizon))
 
     hits.sort(key=lambda x: (x["date"], x["time"]))
     team_list = [{"name": k, "matches": v} for k, v in
@@ -397,6 +388,44 @@ def api_leagues():
         "odds_horizon": horizon,
         "apifootball": apifootball.usage_status(),
     })
+
+
+def _slim_search_match(m: dict, sport: str, horizon: str) -> dict:
+    return {
+        "id": m["id"], "sport": sport, "slug": m.get("slug", ""),
+        "home": m.get("home", ""), "away": m.get("away", ""),
+        "date": m.get("date", ""), "time": m.get("time", ""),
+        "league": m.get("league", ""), "country": m.get("country", ""),
+        "flag": ds.flag(m.get("country", "")),
+        "has_odds": bool((m.get("real_odds") or {}).get("odds")),
+        "odds_expected": m.get("date", "") <= horizon,
+    }
+
+
+@app.route("/api/league/matches")
+@login_required
+def api_league_matches():
+    """Nadcházející zápasy jedné soutěže – pro rozkliknutí ligy v přehledu."""
+    league = (request.args.get("league") or "").strip()
+    country = (request.args.get("country") or "").strip()
+    sport = request.args.get("sport", "soccer")
+    if not league:
+        return jsonify({"matches": [], "error": "Chybí soutěž"}), 400
+
+    try:
+        matches = _search_window(sport)
+    except Exception as e:
+        return jsonify({"matches": [], "error": str(e)}), 200
+
+    horizon = ds.add_days(ds.today_str(), ODDS_HORIZON_DAYS)
+    hits = [_slim_search_match(m, sport, horizon) for m in matches
+            if m.get("league", "") == league
+            and (not country or m.get("country", "") == country)
+            and m.get("home_score") is None and not m.get("live")]
+    hits.sort(key=lambda x: (x["date"], x["time"]))
+    return jsonify({"league": league, "country": country,
+                    "flag": ds.flag(country), "matches": hits,
+                    "total": len(hits)})
 
 
 @app.route("/api/analysis/<match_id>")

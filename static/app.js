@@ -522,21 +522,67 @@ async function loadLeagues() {
       const span = l.next_date === l.last_date
         ? fmtDateShort(l.next_date)
         : `${fmtDateShort(l.next_date)} – ${fmtDateShort(l.last_date)}`;
-      return `<tr>
+      return `<tr class="search-row-item league-row" data-league="${escAttr(l.league)}" data-country="${escAttr(l.country || '')}">
         <td>${l.flag || ''} ${l.league}</td>
         <td class="muted">${l.country || ''}</td>
         <td><strong>${l.matches}</strong></td>
         <td>${odds}</td>
         <td class="muted">${span}</td>
+        <td><button class="btn small">Zápasy →</button></td>
       </tr>`;
     }).join('');
     box.className = '';
     box.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr><th>Soutěž</th><th>Země</th><th>Zápasů</th><th>S kurzy</th><th>Kdy</th></tr></thead>
+      <thead><tr><th>Soutěž</th><th>Země</th><th>Zápasů</th><th>S kurzy</th><th>Kdy</th><th></th></tr></thead>
       <tbody>${rows}</tbody></table></div>`;
+    box.querySelectorAll('.league-row').forEach(tr => {
+      tr.addEventListener('click', () => openLeagueMatches(tr.dataset.league, tr.dataset.country));
+    });
   } catch (e) {
     box.className = '';
     box.innerHTML = `<div class="empty-state">Načtení soutěží selhalo: ${e.message}</div>`;
+  }
+}
+
+/** Názvy soutěží chodí ze zdrojů dat, takže do atributu jen escapované. */
+function escAttr(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Rozkliknutá soutěž – nahradí seznam soutěží jejími zápasy. */
+async function openLeagueMatches(league, country) {
+  const box = el('leaguesList');
+  el('matchAnalysis').style.display = 'none';
+  box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítám zápasy soutěže…</div>';
+  try {
+    const d = await api(`/api/league/matches?league=${encodeURIComponent(league)}`
+      + `&country=${encodeURIComponent(country || '')}&sport=${STATE.sport}`, { timeoutMs: 120000 });
+    const rows = (d.matches || []).map(m => `
+      <tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
+        <td>${fmtDateShort(m.date)} ${m.time || ''}</td>
+        <td><strong>${m.home}</strong> – ${m.away}</td>
+        <td>${m.has_odds ? '<span class="badge real">kurzy</span>'
+              : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává'}">jen model</span>`}</td>
+        <td><button class="btn small">Rozbor →</button></td>
+      </tr>`).join('');
+    box.innerHTML = `
+      <div style="margin-bottom:12px;">
+        <button class="btn small" id="leaguesBackBtn">← Zpět na soutěže</button>
+      </div>
+      <h4 style="margin:0 0 10px;">${d.flag || ''} ${d.league} <span class="muted">(${d.total} zápasů)</span></h4>
+      ${rows ? `<div class="table-wrap"><table>
+        <thead><tr><th>Kdy</th><th>Zápas</th><th></th><th></th></tr></thead>
+        <tbody>${rows}</tbody></table></div>`
+        : '<div class="empty-state">V téhle soutěži teď nevidím žádný nadcházející zápas.</div>'}`;
+    el('leaguesBackBtn').addEventListener('click', loadLeagues);
+    box.querySelectorAll('tr.search-row-item[data-id]').forEach(tr => {
+      tr.addEventListener('click', () => openMatchAnalysis(tr.dataset.id, tr.dataset.sport));
+    });
+  } catch (e) {
+    box.innerHTML = `<div class="empty-state">Načtení zápasů selhalo: ${e.message}
+      <button class="btn small" id="leaguesBackBtn" style="margin-top:8px;">← Zpět na soutěže</button></div>`;
+    el('leaguesBackBtn')?.addEventListener('click', loadLeagues);
   }
 }
 
@@ -565,7 +611,7 @@ function renderSearchResults(d, box) {
     const badge = m.has_odds
       ? '<span class="badge real">kurzy</span>'
       : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
-    return `<tr class="search-row-item" data-id="${m.id}" data-sport="${m.sport}">
+    return `<tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
       <td>${fmtDateShort(m.date)} ${m.time || ''}</td>
       <td><strong>${m.home}</strong> – ${m.away}</td>
       <td class="muted">${m.flag || ''} ${m.league}</td>
