@@ -274,10 +274,19 @@ def api_matches():
         key=lambda l: (ds.league_rank(l["league"]), -len(l["matches"]), l["league"]))
 
     value_count = sum(1 for p in slim_preds if p["best_value"].get("is_value"))
-    # Tip dne = nejvyšší EV value napříč nadcházejícími zápasy (jen reálné kurzy)
-    upcoming = [p for p in slim_preds
-                if p["result"] is None and not p["live"] and p["best_value"].get("is_value")]
-    tip = max(upcoming, key=lambda p: p["best_value"].get("ev", 0), default=None)
+    # Tip dne: nejdřív skutečná value (nejvyšší EV). Když žádná není – což u
+    # neznámých týmů nastává správně, protože model proti trhu nic neví –
+    # ukáže se aspoň nejjistější trh s reálným kurzem, tedy to, co by agent
+    # opravdu vsadil. Dřív se tip vázal jen na value a dashboard zůstal prázdný.
+    upcoming = [p for p in slim_preds if p["result"] is None and not p["live"]
+                and p["best_value"].get("odds")]
+    valued = [p for p in upcoming if p["best_value"].get("is_value")]
+    if valued:
+        tip = max(valued, key=lambda p: p["best_value"].get("ev", 0))
+    else:
+        tip = max(upcoming, key=lambda p: p["best_value"].get("prob", 0), default=None)
+        if tip and (tip["best_value"].get("prob") or 0) < 0.6:
+            tip = None      # nic dost jistého – radši nenabízet nic
     return jsonify({
         "date": date_str,
         "days": max(1, min(14, int(days))),
@@ -757,6 +766,34 @@ _settle_status = {
 }
 _settle_lock = threading.Lock()
 _last_slugless_fallback = 0.0   # throttle: plný sken 244 lig, ne každý průchod
+_SETTLE_STATE_FILE = "settle_status.json"
+
+
+def _load_settle_status():
+    """Stav poslední kontroly přežije restart – jinak appka po každém startu
+    tvrdí, že ještě nikdy nic nekontrolovala, i když kontrola proběhla."""
+    try:
+        saved = storage.load(_SETTLE_STATE_FILE, None) or {}
+        for k in ("last_check", "last_pass_duration_s", "results_found",
+                  "more_pending", "total_targets", "batch_size"):
+            if k in saved:
+                _settle_status[k] = saved[k]
+    except Exception:
+        pass
+
+
+def _save_settle_status():
+    try:
+        with _settle_lock:
+            snap = {k: _settle_status.get(k) for k in
+                    ("last_check", "last_pass_duration_s", "results_found",
+                     "more_pending", "total_targets", "batch_size")}
+        storage.save(_SETTLE_STATE_FILE, snap)
+    except Exception:
+        pass
+
+
+_load_settle_status()
 
 # Diagnostika bootu – kdy se který background thread reálně spustil (nebo
 # vůbec ne). Nastaveno jako VŮBEC PRVNÍ řádek v každé thread funkci, ať jde
@@ -810,6 +847,12 @@ def _settle_recent(allow_slugless_fallback=False):
     ruční "Zkontrolovat výsledky" ho pořád smí použít). Vrací (results,
     corner_results, more_pending)."""
     today = ds.today_str()
+    # Dávno odehrané a přesto nevyhodnocené tipy (odložené/zrušené zápasy) už
+    # výsledek nedostanou – odklidit je, ať nezabírají místo ve frontě.
+    try:
+        tips_db.prune_stale(today)
+    except Exception:
+        pass
     open_tips = tips_db.open_tips_until(today)   # od nejstarších, jen vyhodnotitelné
     open_bets = [b for b in bankroll.state()["bets"] if b["status"] == "open" and b.get("match_id")]
     # Otevřené sázky sázkařů (engine/virtual_bettors.py) – BEZ tohohle by se
@@ -963,6 +1006,7 @@ def _settle_recent(allow_slugless_fallback=False):
         _settle_status["n_stuck"] = n_stuck
         _settle_status["more_pending"] = remaining > 0
         _settle_status["last_error"] = None
+    _save_settle_status()
 
     return results, corner_results, remaining > 0
 
@@ -1061,6 +1105,13 @@ def _rss_mb():
         kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         # Linux: ru_maxrss v KB. macOS: v bajtech (zde nerelevantní – Render = Linux)
         return round(kb / 1024, 1)
+    except Exception:
+        pass
+    # Windows (lokální provoz) modul resource nemá – zkus psutil, a když není
+    # ani ten, vrať None a diagnostika ten řádek prostě neukáže.
+    try:
+        import psutil
+        return round(psutil.Process().memory_info().rss / (1024 * 1024), 1)
     except Exception:
         return None
 

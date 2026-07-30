@@ -443,7 +443,11 @@ def _bettor_stats(bid, b):
     return {
         "id": bid, "name": b["name"], "emoji": b["emoji"], "tagline": b["tagline"],
         "balance": b["balance"], "start_balance": b["start_balance"],
-        "profit": round(b["balance"] - b["start_balance"], 2),
+        # Realizovaný zisk z VYHODNOCENÝCH sázek. balance - start_balance by
+        # počítalo i vklady zamrzlé v otevřených sázkách jako by byly prohrané,
+        # takže vedle sebe svítilo "-55 Kč" a "ROI +64,9 %".
+        "profit": round(pnl, 2),
+        "open_stake": round(sum(x["stake"] for x in b["bets"] if x["status"] == "open"), 2),
         "roi": round(pnl / staked * 100, 1) if staked else 0.0,
         "placed": len(b["bets"]), "settled": len(settled), "won": won,
         "win_rate": round(won / len(settled) * 100, 1) if settled else None,

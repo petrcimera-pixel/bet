@@ -325,6 +325,33 @@ def _eval_outcome(outcome: str, hs: int, as_: int):
 # ---------------------------------------------------------------------------
 # Dotazy a statistiky
 # ---------------------------------------------------------------------------
+STALE_AFTER_DAYS = 10   # po téhle době už výsledek nedorazí (odložené, zrušené…)
+
+
+def prune_stale(today: str = None) -> int:
+    """Označí dávno odehrané, ale nikdy nevyhodnocené tipy jako propadlé.
+
+    Bez toho fronta na vyhodnocení jen roste: u odložených a zrušených zápasů
+    výsledek nikdy nepřijde, takže by se donekonečna dotahovaly z ESPN a
+    ubíraly místo tipům, které vyhodnotit jdou."""
+    today = today or datetime.date.today().isoformat()
+    cutoff = (datetime.date.fromisoformat(today)
+              - datetime.timedelta(days=STALE_AFTER_DAYS)).isoformat()
+    db = _db()
+    n = 0
+    for t in db["tips"]:
+        if t.get("pick_result") is None and (t.get("date") or "") < cutoff:
+            for k in ("pick_result", "value_result", "goal_result",
+                      "corner_result", "dc_result"):
+                if t.get(k) is None:
+                    t[k] = "expired"
+            t["expired_at"] = today
+            n += 1
+    if n:
+        _save(db)
+    return n
+
+
 def open_tips_until(date_str: str, limit: int = 3000) -> list:
     """Otevřené tipy se zápasem do daného data VČETNĚ, od nejstarších.
     Pro vyhodnocování – get_tips řadí od nejnovějších a s limitem by staré

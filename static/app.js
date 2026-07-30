@@ -233,8 +233,12 @@ async function loadBankrollTiles() {
     const data = await api('/api/bankroll');
     const s = data.stats;
     setText('stBalance', `${fmt(s.balance)} ${s.currency || 'Kč'}`);
-    const diff = s.balance - s.start_balance;
-    setText('stBalanceHint', `${diff >= 0 ? '+' : ''}${fmt(diff)} od startu`);
+    // "od startu" mátlo: rozdíl proti startovnímu banku zahrnuje i vklady
+    // zamrzlé v otevřených sázkách, takže vedle "zisk -10 Kč" svítilo
+    // "-301 Kč od startu". Radši ukázat, kolik peněz je zrovna ve hře.
+    setText('stBalanceHint', s.open_stake
+      ? `${fmt(s.open_stake)} ${s.currency || 'Kč'} v otevřených sázkách`
+      : 'žádné otevřené sázky');
     setText('stProfit', `${fmt(s.profit)} ${s.currency || 'Kč'}`);
     el('stProfit').className = 'value ' + (s.profit >= 0 ? 'pos' : 'bad');
     setText('stProfitHint', s.roi !== null && s.roi !== undefined ? `${pct(s.roi)} ROI` : '');
@@ -839,13 +843,21 @@ async function loadMatchBetMap() {
   return map;
 }
 
+// Když je pro model nový skoro každý tým (což na začátku platí), badge
+// "⚠️ nový tým" u každé kartičky nic neříká a jen ruší – v takovém případě
+// se místo něj ukáže jedna souhrnná informace nahoře.
+let _coldstartIsNorm = false;
+
 function renderMatchesSummary(data, box) {
-  const liveCount = (data?.leagues || [])
-    .reduce((n, lg) => n + (lg.matches || []).filter(m => m.live).length, 0);
+  const all = (data?.leagues || []).flatMap(lg => lg.matches || []);
+  const liveCount = all.filter(m => m.live).length;
+  const cold = all.filter(m => m.rating_confidence != null && m.rating_confidence < 0.3).length;
+  _coldstartIsNorm = all.length > 0 && cold / all.length > 0.6;
   box.innerHTML = `
     <div class="pill-row" style="margin-bottom:10px;">
       <span class="pill">${data.total_matches} zápasů</span>
       <span class="pill">${data.total_leagues} lig</span>
+      ${_coldstartIsNorm ? `<span class="pill" title="Model má zatím málo odehraných zápasů, takže jsou predikce zploštělé k průměru">⚠️ ${Math.round(cold / all.length * 100)} % týmů model ještě nezná</span>` : ''}
       ${liveCount ? `<span class="pill live-pill" title="Skóre se samo obnovuje každou minutu">🔴 ${liveCount} živě · auto-obnova</span>` : ''}
       ${data.tip ? `<span class="pill active">💡 ${data.tip.home} – ${data.tip.away}</span>` : ''}
     </div>`;
@@ -945,7 +957,7 @@ function matchCardHtml(m, bet) {
             </div>
             <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
-          ${(m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
+          ${(!_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
         </div>
       </div>
@@ -1056,6 +1068,10 @@ async function loadSettings() {
     const c = data.settings;
     el('cfgEnabled').checked = !!c.enabled;
     el('cfgAutoRun').checked = !!c.auto_run;
+    // rozvrh brát z nastavení, ne natvrdo z šablony – dřív tu svítilo
+    // "(8:00, 16:00)", i když se dávno jezdí 8/12/16/20
+    const hrs = String(c.auto_run_hours || '8,12,16,20').split(',').map(h => h.trim()).filter(Boolean);
+    setText('cfgAutoRunHours', hrs.length ? `(${hrs.map(h => h + ':00').join(', ')})` : '');
     el('cfgMinProb').value = Math.round((c.min_prob || 0.75) * 100);
     el('cfgMinOdds').value = c.min_odds || 1.2;
     el('cfgStakeMode').value = c.stake_mode || 'kelly';
@@ -1079,9 +1095,9 @@ async function loadSettings() {
       }
     } catch (e) { /* kalibrace je bonus info, appku to nesmí shodit */ }
     el('diagInfo').innerHTML = `
-      Otevřených tipů: ${diag.open_tips ?? '—'}<br>
-      Otevřených sázek: ${diag.open_bets ?? '—'}<br>
-      Paměť procesu: ${diag.rss_mb ?? '—'} MB${calibHtml}`;
+      Tipů čeká na vyhodnocení: ${diag.open_tips ?? '—'}<br>
+      Sázek čeká na vyhodnocení: ${diag.open_bets ?? '—'}<br>
+      ${diag.rss_mb != null ? `Paměť procesu: ${diag.rss_mb} MB<br>` : ''}${calibHtml}`;
   } catch (e) {
     toast('Nepodařilo se načíst nastavení.', 'err');
   }
@@ -1177,7 +1193,7 @@ function renderBettors(bettors) {
         <span>Umístěno: <strong style="color:var(--txt);">${b.placed}</strong></span>
         <span>Vyřešeno: <strong style="color:var(--txt);">${b.settled}</strong></span>
         <span>Win rate: <strong style="color:var(--txt);">${b.win_rate !== null ? b.win_rate + '%' : '—'}</strong></span>
-        <span>Otevřené: <strong style="color:var(--txt);">${b.open_count}</strong></span>
+        <span>Otevřené: <strong style="color:var(--txt);">${b.open_count}</strong>${b.open_stake ? ` <span class="muted">(${b.open_stake.toFixed(0)} Kč ve hře)</span>` : ''}</span>
       </div>
       <div id="bettorDetail-${b.id}" style="display:none; margin-top:12px;"></div>
     </div>`;

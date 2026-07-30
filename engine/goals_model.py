@@ -273,16 +273,33 @@ GOAL_LINES = (0.5, 1.5, 2.5, 3.5, 4.5)
 # ---------------------------------------------------------------------------
 # Reálné kurzy → EV/edge (JEN pokud ESPN reálné kurzy poskytlo, nikdy fake)
 # ---------------------------------------------------------------------------
-def _priced(model_prob: float, real_odds) -> dict:
-    out = {"prob": round(model_prob, 4), "odds": None, "ev": None, "edge": None, "is_value": False, "real": False}
+MIN_VALUE_CONF = 0.25   # pod tímhle rating nic neví, takže nemá co nabídnout proti trhu
+
+
+def _priced(model_prob: float, real_odds, confidence: float = 1.0) -> dict:
+    """Ocenění trhu proti reálnému kurzu.
+
+    confidence = jistota ratingu obou týmů. Bez ní model u neznámých týmů
+    vrací ligový průměr (~45/29/26 u fotbalu) NEZÁVISLE na soupeři, což proti
+    reálnému kurzu vypadá jako obrovská výhoda na outsiderovi: "St. Gallen
+    porazí Benficu ve 26 %" proti trhu 5.6 % dá zdánlivé EV +371 %. Jenže to
+    není znalost, jen nevědomost – model o těch týmech neví nic. Proto se
+    value přiznává, až když rating stojí na dost odehraných zápasech, a
+    požadovaný náskok se s klesající jistotou zvyšuje."""
+    out = {"prob": round(model_prob, 4), "odds": None, "ev": None, "edge": None,
+           "is_value": False, "real": False}
     if not real_odds:
         return out
     implied = 1.0 / real_odds
     ev = model_prob * real_odds - 1.0
     edge = model_prob - implied
+    conf = max(0.0, min(1.0, confidence))
+    # čím míň rating ví, tím větší náskok musí model prokázat
+    edge_needed = EDGE_MIN + (1.0 - conf) * 0.20
     out.update({
         "odds": real_odds, "ev": round(ev, 4), "edge": round(edge, 4),
-        "is_value": ev > 0.02 and edge > EDGE_MIN, "real": True,
+        "is_value": bool(conf >= MIN_VALUE_CONF and ev > 0.02 and edge > edge_needed),
+        "real": True,
     })
     return out
 
@@ -391,7 +408,7 @@ def predict_match(m: dict) -> dict:
 
     labels = {"home": "1", "draw": "X", "away": "2"}
     for k in keys:
-        bets[k] = dict(_priced(probs[k], real_odds.get(k)), label=labels[k], name=names[k])
+        bets[k] = dict(_priced(probs[k], real_odds.get(k), rating_confidence), label=labels[k], name=names[k])
 
     goal_lines = []
     totals = (m.get("real_odds") or {}).get("totals")
@@ -406,8 +423,8 @@ def predict_match(m: dict) -> dict:
         po = line_fn(line)
         over_odds = totals["over"] if (totals and totals.get("line") == line) else None
         under_odds = totals["under"] if (totals and totals.get("line") == line) else None
-        over = dict(_priced(po, over_odds), label=f"Over {line}", name=f"Více než {line} {unit}")
-        under = dict(_priced(1 - po, under_odds), label=f"Under {line}", name=f"Méně než {line} {unit}")
+        over = dict(_priced(po, over_odds, rating_confidence), label=f"Over {line}", name=f"Více než {line} {unit}")
+        under = dict(_priced(1 - po, under_odds, rating_confidence), label=f"Under {line}", name=f"Méně než {line} {unit}")
         goal_lines.append({"line": line, "over": over, "under": under})
         bets[f"over{line}"] = over
         bets[f"under{line}"] = under
@@ -425,7 +442,15 @@ def predict_match(m: dict) -> dict:
     real_bets = {k: v for k, v in bets.items() if v.get("real")}
     best_value = None
     if real_bets:
-        best_key = max(real_bets, key=lambda k: real_bets[k]["ev"])
+        # Výběr podle nejvyššího EV dává smysl jen mezi skutečnými value tipy.
+        # Bez nich by "nejlepší" byl vždycky největší outsider (nejvyšší kurz
+        # × plochá pravděpodobnost) a karta zápasu by ho nabízela jako tip –
+        # radši ukázat nejjistější trh, ne nejdivočejší.
+        valued = {k: v for k, v in real_bets.items() if v.get("is_value")}
+        if valued:
+            best_key = max(valued, key=lambda k: valued[k]["ev"])
+        else:
+            best_key = max(real_bets, key=lambda k: real_bets[k]["prob"])
         best_value = dict(real_bets[best_key], outcome=best_key)
 
     return {
