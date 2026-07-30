@@ -19,6 +19,7 @@ Výsledky se kešují do data/cache_<datum>.json.
 
 import re
 import time
+import threading
 import unicodedata
 import datetime as _dt
 from concurrent.futures import ThreadPoolExecutor
@@ -240,12 +241,44 @@ def league_rank(name: str) -> int:
 # ---------------------------------------------------------------------------
 # Veřejné rozhraní
 # ---------------------------------------------------------------------------
+SOFT_TTL_H = 0.5     # po půl hodině se keš obnoví NA POZADÍ (uživatel nečeká)
+HARD_TTL_H = 12      # po 12 h je keš neplatná a čeká se na čerstvá data
+_refreshing = set()  # rozsahy, které se právě obnovují – ať neběží dvakrát
+_refresh_lock = threading.Lock()
+
+
+def _revalidate_async(start: str, end: str, sport: str) -> None:
+    """Obnoví keš na pozadí. Stahování všech lig trvá ~20 s, takže by se na něj
+    nemělo čekat v requestu – uživatel dostane trochu starší data hned a
+    příští načtení už je má čerstvá."""
+    key = (sport, start, end)
+    with _refresh_lock:
+        if key in _refreshing:
+            return
+        _refreshing.add(key)
+
+    def work():
+        try:
+            fetch_range(start, end, use_cache=False, sport=sport)
+        except Exception:
+            pass
+        finally:
+            with _refresh_lock:
+                _refreshing.discard(key)
+
+    threading.Thread(target=work, daemon=True).start()
+
+
 def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "soccer") -> list:
     """Vrátí zápasy daného sportu pro rozsah dat [start, end], seřazené dle data/času."""
     cache_name = f"cache_{sport}_{start}_{end}.json"
     if use_cache:
         cached = storage.load(cache_name, None)
-        if cached is not None and not storage.is_cache_stale(cache_name, ttl_hours=12):
+        if cached is not None and not storage.is_cache_stale(cache_name, ttl_hours=HARD_TTL_H):
+            # stale-while-revalidate: mírně zastaralou keš vrátíme hned a
+            # čerstvá data si dotáhneme na pozadí
+            if storage.is_cache_stale(cache_name, ttl_hours=SOFT_TTL_H):
+                _revalidate_async(start, end, sport)
             return cached
 
     matches = _from_espn(start, end, sport)

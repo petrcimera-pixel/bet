@@ -84,6 +84,7 @@ function setupNav() {
       STATE.page = page;
       closeMobileMenu();
       if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
+      if (page !== 'search') stopSearchPolling();
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
       if (page === 'search') loadSearchPage();
@@ -488,8 +489,30 @@ function clearSearch() {
   el('teamSearchClear').style.display = 'none';
 }
 
+// Server drží zápasy v keši a po půl hodině si je sám obnoví na pozadí,
+// takže tohle jen dotahuje výsledek – není to stahování z ESPN při každém tiku.
+const SEARCH_POLL_MS = 5 * 60 * 1000;
+let _searchPollTimer = null;
+
 async function loadSearchPage() {
   loadLeagues();
+  startSearchPolling();
+}
+
+function startSearchPolling() {
+  if (_searchPollTimer) return;
+  _searchPollTimer = setInterval(() => {
+    if (STATE.page !== 'search' || document.visibilityState !== 'visible') return;
+    // neobnovuj pod rukama: ne když je rozkliknutá liga, rozbor nebo hledání
+    if (el('leaguesBackBtn')) return;
+    if (el('matchAnalysis').style.display !== 'none') return;
+    if ((el('teamSearch')?.value || '').trim().length >= 2) return;
+    loadLeagues();
+  }, SEARCH_POLL_MS);
+}
+
+function stopSearchPolling() {
+  if (_searchPollTimer) { clearInterval(_searchPollTimer); _searchPollTimer = null; }
 }
 
 /** Přehled soutěží, ve kterých appka vidí nadcházející zápasy. */
@@ -740,16 +763,27 @@ function hasLiveMatches(data) {
 /** Tiché načtení dat bez rozbourání DOMu spinnerem – jen překreslí karty.
  *  Musí jít s refresh=1, protože serverová cache zápasů má TTL 12 h a bez
  *  vynuceného fetchnutí by se průběžné skóre nikdy nezměnilo. */
+const IDLE_REFRESH_MS = 5 * 60 * 1000;   // bez živých zápasů stačí pomalejší tempo
+let _lastIdleRefresh = 0;
+
 async function refreshLiveMatches() {
   if (_livePollInFlight) return;                       // nepřekrývat requesty
   if (STATE.page !== 'matches') return;
   if (document.visibilityState !== 'visible') return;  // skrytá karta = neplýtvat ESPN
   if (STATE.date !== todayStr()) return;               // historii nemá smysl obnovovat
-  if (!hasLiveMatches(STATE.lastMatchesData)) { stopLivePolling(); return; }
+
+  // Živé zápasy potřebují průběžné skóre, takže se vynucuje čerstvý fetch.
+  // Bez nich se jen občas dotáhne, co server mezitím sám obnovil na pozadí –
+  // to je levné (jde z keše), tak se ESPN nevynucuje.
+  const live = hasLiveMatches(STATE.lastMatchesData);
+  if (!live) {
+    if (Date.now() - _lastIdleRefresh < IDLE_REFRESH_MS) return;
+    _lastIdleRefresh = Date.now();
+  }
 
   _livePollInFlight = true;
   try {
-    const url = `/api/matches?date=${STATE.date}&sport=${STATE.sport}&days=1&refresh=1`;
+    const url = `/api/matches?date=${STATE.date}&sport=${STATE.sport}&days=1${live ? '&refresh=1' : ''}`;
     const [data, betMap] = await Promise.all([
       api(url, { timeoutMs: 90000 }),
       loadMatchBetMap(),
@@ -779,7 +813,9 @@ function stopLivePolling() {
 
 /** Zapne/vypne poller podle toho, jestli je na stránce aspoň jeden živý zápas. */
 function syncLivePolling(data) {
-  if (STATE.page === 'matches' && STATE.date === todayStr() && hasLiveMatches(data)) startLivePolling();
+  // Poller běží na dnešku vždy – bez živých zápasů jen v klidnějším tempu
+  // (viz IDLE_REFRESH_MS), aby se projevilo, co server obnovil na pozadí.
+  if (STATE.page === 'matches' && STATE.date === todayStr()) startLivePolling();
   else stopLivePolling();
 }
 

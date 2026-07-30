@@ -79,7 +79,8 @@ _USERNAME = os.environ.get("APP_USERNAME", "admin")
 _PASSWORD = os.environ.get("APP_PASSWORD", "8312172165")
 
 # jednoduchá keš predikcí v paměti (klíč = datum)
-_PRED_CACHE = {}
+_PRED_CACHE = {}          # key -> (uloženo_v, predikce)
+PRED_CACHE_TTL = 300      # 5 min – kratší než soft TTL keše zápasů
 
 def login_required(f):
     @wraps(f)
@@ -131,8 +132,13 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
     days = max(1, min(14, int(days)))
     end = ds.add_days(date_str, days - 1)
     key = f"{sport}~{date_str}~{end}"
-    if not refresh and key in _PRED_CACHE:
-        return _PRED_CACHE[key]
+    # Predikce se drží jen krátce. Bez expirace by se čerstvá data z pozadí
+    # (viz stale-while-revalidate v data_sources) nikdy neprojevila – appka by
+    # do restartu servírovala predikce spočítané z prvních stažených zápasů.
+    if not refresh:
+        hit = _PRED_CACHE.get(key)
+        if hit and _time.time() - hit[0] < PRED_CACHE_TTL:
+            return hit[1]
     matches = ds.fetch_range(date_str, end, use_cache=not refresh, sport=sport)
     # Volitelné: nahradit ESPN kurzy přesnějšími ze zpoplatněného The Odds API,
     # pokud je nastaven klíč – jinak zůstávají zdarma ESPN (DraftKings) kurzy,
@@ -145,7 +151,7 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                 if rb:
                     m["real_odds"] = {"provider": rb[0]["name"], "odds": rb[0]["odds"]}
     predictions = pred.predict_all(matches)
-    _PRED_CACHE[key] = predictions
+    _PRED_CACHE[key] = (_time.time(), predictions)
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
     try:
         tips_db.save_tips([p for p in predictions if p.get("result") is None])
