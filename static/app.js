@@ -912,6 +912,7 @@ function renderMatchesSummary(data, box) {
     <div class="pill-row" style="margin-bottom:10px;">
       <span class="pill">${data.total_matches} zápasů</span>
       <span class="pill">${data.total_leagues} lig</span>
+      <span class="pill" title="Zbytek je jen odhad modelu – appka si kurzy nevymýšlí">💰 ${all.filter(m => m.odds_source === 'real').length} s kurzy</span>
       ${_coldstartIsNorm ? `<span class="pill" title="Model má zatím málo odehraných zápasů, takže jsou predikce zploštělé k průměru">⚠️ ${Math.round(cold / all.length * 100)} % týmů model ještě nezná</span>` : ''}
       ${liveCount ? `<span class="pill live-pill" title="Skóre se samo obnovuje každou minutu">🔴 ${liveCount} živě · auto-obnova</span>` : ''}
       ${data.tip ? `<span class="pill active">💡 ${data.tip.home} – ${data.tip.away}</span>` : ''}
@@ -919,12 +920,12 @@ function renderMatchesSummary(data, box) {
 }
 
 function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
-  // "Nehrané / nedohrané" = zápasy, které ještě nemají finální výsledek
-  // (nezačaly NEBO právě běží živě) – čistě klientský filtr, data už máme.
-  // m.result je naplněné i u živých zápasů (průběžné skóre), takže samotné
-  // "result === null" by živé zápasy z tohohle filtru vyhodilo – proto || m.live.
-  const leagues = (STATE.statusFilter === 'upcoming'
-    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.result === null || m.live) })).filter(lg => lg.matches.length)
+  // "Jen s kurzy" = zápasy, kde ESPN dalo reálný kurz. Na ostatních appka
+  // sázet stejně nebude (kurzy si nevymýšlí), takže je to jediný filtr, co
+  // reálně mění, na co se dívat. Stav zápasu (nehráno/živě/konec) je vidět
+  // přímo na kartičce, takže na to zvláštní filtr netřeba.
+  const leagues = (STATE.statusFilter === 'odds'
+    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(m => m.odds_source === 'real') })).filter(lg => lg.matches.length)
     : leaguesIn);
 
   if (!leagues.length) {
