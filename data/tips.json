@@ -835,12 +835,13 @@
       "saved_at": "2026-07-28T06:32:37",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "401891861",
@@ -3021,12 +3022,13 @@
       "saved_at": "2026-07-29T20:46:32",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "401841176",
@@ -3083,12 +3085,13 @@
       "saved_at": "2026-07-29T20:46:32",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "401841175",
@@ -3145,12 +3148,13 @@
       "saved_at": "2026-07-29T20:46:32",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "401841169",
@@ -3207,12 +3211,13 @@
       "saved_at": "2026-07-29T20:46:32",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "401891561",
@@ -27025,12 +27030,13 @@
       "saved_at": "2026-07-30T11:53:22",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": null,
+      "voided_at": "2026-07-30"
     },
     {
       "id": "apif-1606980",

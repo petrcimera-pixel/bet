@@ -913,6 +913,7 @@ def _settle_recent(allow_slugless_fallback=False):
     remaining = len(ordered) - len(batch)
 
     results = {}
+    voided = set()
     _pass_t0 = _time.time()
     with _settle_lock:
         _settle_status["in_progress"] = True
@@ -920,8 +921,19 @@ def _settle_recent(allow_slugless_fallback=False):
         _settle_status["batch_size"] = len(batch)
         _settle_status["total_targets"] = len(ordered)
 
+    # Odložené/zrušené zápasy: výsledek nikdy nepřijde, ale ESPN je dál vrací.
+    # Bez rozpoznání se fronta na nich zasekne a každý průchod je stahuje znovu
+    # (typicky "matched_count: 0" i když se výsledky našly – jen patří jiným
+    # zápasům toho dne).
+    _VOID_MARKS = ("postpon", "cancel", "abandon", "suspend", "await",
+                   "technical", "walkover", "forfeit")
+
     def _collect(matches):
         for m in matches:
+            status = (m.get("status") or "").lower()
+            if any(k in status for k in _VOID_MARKS):
+                voided.add(m["id"])
+                continue
             if m.get("home_score") is None or m.get("away_score") is None:
                 continue
             if m.get("live"):
@@ -996,10 +1008,31 @@ def _settle_recent(allow_slugless_fallback=False):
         except Exception:
             pass
 
+    # Odložené/zrušené zápasy uzavřít, ať se fronta pohne: sázky se vrací jako
+    # void (vklad zpět, žádný zisk ani ztráta), tipy se označí za propadlé.
+    n_voided = 0
+    if voided:
+        try:
+            for b in bankroll.state()["bets"]:
+                if b.get("status") == "open" and b.get("match_id") in voided:
+                    bankroll.settle_bet(b["id"], "void")
+                    n_voided += 1
+        except Exception:
+            pass
+        try:
+            virtual_bettors.void_matches(voided)
+        except Exception:
+            pass
+        try:
+            tips_db.void_tips(voided)
+        except Exception:
+            pass
+
     corner_results = {}
 
     with _settle_lock:
         _settle_status["in_progress"] = False
+        _settle_status["voided"] = len(voided)
         _settle_status["last_check"] = int(_time.time())
         _settle_status["last_pass_duration_s"] = round(_time.time() - _pass_t0, 1)
         _settle_status["results_found"] = len(results)

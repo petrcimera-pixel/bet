@@ -352,6 +352,27 @@ def prune_stale(today: str = None) -> int:
     return n
 
 
+def void_tips(match_ids) -> int:
+    """Uzavře tipy na odložené/zrušené zápasy. Výsledek už nepřijde, takže by
+    jinak zůstaly ve frontě a každý průchod se marně dotahovaly z ESPN."""
+    ids = {str(x) for x in (match_ids or ())}
+    if not ids:
+        return 0
+    db = _db()
+    n = 0
+    for t in db["tips"]:
+        if str(t.get("id")) in ids and t.get("pick_result") is None:
+            for k in ("pick_result", "value_result", "goal_result",
+                      "corner_result", "dc_result"):
+                if t.get(k) is None:
+                    t[k] = "void"
+            t["voided_at"] = datetime.date.today().isoformat()
+            n += 1
+    if n:
+        _save(db)
+    return n
+
+
 def open_tips_until(date_str: str, limit: int = 3000) -> list:
     """Otevřené tipy se zápasem do daného data VČETNĚ, od nejstarších.
     Pro vyhodnocování – get_tips řadí od nejnovějších a s limitem by staré

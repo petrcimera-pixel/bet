@@ -369,6 +369,28 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
     return placed_total
 
 
+def void_matches(match_ids) -> int:
+    """Vrátí vklady u sázek na odložené/zrušené zápasy (void = žádný zisk ani
+    ztráta). Bez toho by sázkařům trvale visely v otevřených a peníze by jim
+    zůstaly zablokované."""
+    ids = {str(x) for x in (match_ids or ())}
+    if not ids:
+        return 0
+    st = load_state()
+    n = 0
+    for b in st.values():
+        for bet in b.get("bets", []):
+            if bet.get("status") == "open" and str(bet.get("match_id")) in ids:
+                bet["status"] = "void"
+                bet["pnl"] = 0.0
+                bet["settled_ts"] = int(time.time())
+                b["balance"] = round(b["balance"] + bet["stake"], 2)
+                n += 1
+    if n:
+        save_state(st)
+    return n
+
+
 def settle_all(results: dict) -> int:
     """results: {match_id: {'home':h,'away':a}} – stejná data jako settle pro
     reálné tipy/sázky (viz app.py _settle_recent)."""
@@ -451,7 +473,9 @@ def _bettor_stats(bid, b):
         "roi": round(pnl / staked * 100, 1) if staked else 0.0,
         "placed": len(b["bets"]), "settled": len(settled), "won": won,
         "win_rate": round(won / len(settled) * 100, 1) if settled else None,
-        "open_count": len(b["bets"]) - len(settled),
+        # void (odložený zápas) není otevřená sázka – vklad se už vrátil
+        "open_count": sum(1 for x in b["bets"] if x["status"] == "open"),
+        "void_count": sum(1 for x in b["bets"] if x["status"] == "void"),
         "equity": equity,
     }
 
