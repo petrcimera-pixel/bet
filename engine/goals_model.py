@@ -45,6 +45,64 @@ LEAGUE_GOALS = {
 }
 DEFAULT_GOALS = (1.35, 1.10)
 
+# Průměrné celkové skóre pro konkrétní nefotbalové soutěže. SPORTS v
+# data_sources drží jen JEDNU hodnotu na sport, jenže "basketball" pokrývá
+# NBA i WNBA i univerzitní ligu, které se liší o desítky bodů – bez tohohle
+# rozlišení by se WNBA (~163) poměřovala s NBA průměrem (224) a každý zápas
+# by vycházel hluboko pod linií. Klíč = slug soutěže z ESPN.
+LEAGUE_TOTALS = {
+    "nba": 228.0,
+    "wnba": 163.0,
+    "mens-college-basketball": 145.0,
+    "euroleague": 160.0,
+    "nhl": 6.1,
+    "nfl": 45.0,
+    "college-football": 55.0,
+}
+
+
+def sport_totals(sport: str, slug: str = "", league: str = ""):
+    """(průměrné celkové skóre, směrodatná odchylka) pro danou soutěž.
+
+    Odchylka se škáluje se stejným poměrem jako průměr, aby zůstal zachovaný
+    variační koeficient sportu (jinak by u nízkoskórových soutěží vycházelo
+    nerealisticky široké rozpětí)."""
+    cfg = ds.sport_cfg(sport)
+    avg, sd = cfg.get("avg_total"), cfg.get("sd_total")
+    if not avg or not sd:
+        return avg, sd
+    key = (slug or "").lower()
+    override = LEAGUE_TOTALS.get(key)
+    if override is None:
+        low = (league or "").lower()
+        for k, v in LEAGUE_TOTALS.items():
+            if k.replace("-", " ") in low:
+                override = v
+                break
+    if override and override != avg:
+        return override, sd * (override / avg)
+    return avg, sd
+
+
+def sport_lines(sport: str, slug: str = "", league: str = ""):
+    """Gólové/bodové linie pro danou soutěž.
+
+    SPORTS drží jedny linie na sport (basketbal 210.5/220.5/230.5 = NBA), což
+    u soutěže s jiným skórováním nedává smysl – WNBA (~163 bodů) by u všech
+    dostala Over 0 %. Když má soutěž vlastní průměr, linie se dopočítají
+    kolem něj se stejným rozestupem, jaký má sport nastavený."""
+    cfg = ds.sport_cfg(sport)
+    lines = cfg.get("lines") or []
+    avg_cfg = cfg.get("avg_total")
+    avg, _sd = sport_totals(sport, slug, league)
+    if not lines or not avg or not avg_cfg or abs(avg - avg_cfg) < 1e-9:
+        return lines
+    step = (lines[1] - lines[0]) if len(lines) > 1 else max(1.0, round(avg * 0.045))
+    center = round(avg - 0.5) + 0.5           # ať linie končí na .5 (nelze remízovat)
+    n = len(lines)
+    start = -(n // 2)
+    return [round(center + (start + i) * step, 1) for i in range(n)]
+
 
 def league_goals(league: str):
     low = (league or "").lower()
@@ -52,6 +110,25 @@ def league_goals(league: str):
         if key in low:
             return vals
     return DEFAULT_GOALS
+
+
+def base_goals(league: str, sport: str = "soccer", slug: str = ""):
+    """Očekávané skóre (domácí, hosté) pro neutrální týmy.
+
+    LEAGUE_GOALS jsou výhradně fotbalová čísla – u ostatních sportů se musí
+    vzít průměr z konfigurace sportu, jinak by se hokejové/basketbalové skóre
+    poměřovalo proti fotbalovému ~1.35 a rating by okamžitě vystřelil na strop
+    (jeden zápas WNBA 80:70 dělený 1.5 dá poměr přes 50)."""
+    if sport and sport != "soccer":
+        avg, _sd = sport_totals(sport, slug, league)
+        if avg:
+            # Domácí výhoda se tu zapracuje jako PŘEROZDĚLENÍ skóre mezi týmy,
+            # ne jako přirážka k součtu – jinak by průměrný zápas dvou
+            # neutrálních týmů vycházel o ~6 % nad ligovým průměrem.
+            # (U fotbalu je rozdělení domácí/hosté už přímo v LEAGUE_GOALS.)
+            hs = HOME_ADV_FACTOR / (1.0 + HOME_ADV_FACTOR)
+            return (avg * hs, avg * (1.0 - hs))
+    return league_goals(league)
 
 
 # ---------------------------------------------------------------------------
@@ -75,20 +152,22 @@ def rating_of(team: str) -> dict:
     return dict(get_rating(team, _ratings()))
 
 
-def update_from_result(home: str, away: str, league: str, hs: int, as_: int) -> None:
+def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
+                        sport: str = "soccer", slug: str = "") -> None:
     """Po vyhodnoceném zápase posune attack/defense obou týmů směrem k tomu,
     co skutečně předvedly oproti očekávání – učení se zpomaluje s počtem
-    odehraných zápasů (n)."""
+    odehraných zápasů (n).
+
+    sport je nutný: bez něj by se nefotbalové skóre porovnávalo s fotbalovou
+    baseline a rating by se po jediném zápase utrhl na strop."""
     ratings = _ratings()
     rh, ra = get_rating(home, ratings), get_rating(away, ratings)
-    base_h, base_a = league_goals(league)
 
-    # HOME_ADV_FACTOR se promítá i sem (stejně jako v predict_match), jinak by
-    # se domácí výhoda systematicky propisovala do attack ratingu domácího
-    # týmu (hs by bylo nadhodnocené proti očekávání bez adv. faktoru) a
-    # kontaminovala tak čistou útočnou sílu efektem hřiště.
-    exp_h = max(0.35, base_h * rh["a"] * ra["d"] * HOME_ADV_FACTOR)
-    exp_a = max(0.35, base_a * ra["a"] * rh["d"])
+    # Stejný vzorec jako v predikci (viz expected_scores) – jinak by se rating
+    # učil proti jinému očekávání, než model předpovídá, a domácí výhoda /
+    # měřítko sportu by kontaminovaly čistou útočnou sílu.
+    raw_h, raw_a = expected_scores(league, sport, rh["a"], rh["d"], ra["a"], ra["d"], slug)
+    exp_h, exp_a = max(0.35, raw_h), max(0.35, raw_a)
 
     # Spodní hranice alpha zajišťuje, že rating i po desítkách zápasů pořád
     # citelně reaguje na aktuální formu, ne jen na "celoživotní" průměr.
@@ -195,6 +274,39 @@ def _priced(model_prob: float, real_odds) -> dict:
     return out
 
 
+_SOCCER_CV = 1.7 / 2.7   # variační koeficient fotbalu = referenční „plný vliv ratingu"
+
+
+def expected_scores(league: str, sport: str, a_h: float, d_h: float,
+                     a_a: float, d_a: float, slug: str = ""):
+    """Očekávané skóre (domácí, hosté) z ratingů – JEDINÉ místo, kde se tenhle
+    vzorec počítá. Používá ho jak predikce, tak učení z výsledku; kdyby se
+    lišily, rating by se učil proti jinému očekávání, než jaké model předpovídá
+    (přesně ten druh nekonzistence, co u domácí výhody dřív kontaminoval útok).
+
+    U fotbalu se domácí výhoda přidává násobkem (LEAGUE_GOALS ji nese jen
+    zčásti), u ostatních sportů je už celá v base_goals() jako přerozdělení."""
+    base_h, base_a = base_goals(league, sport, slug)
+    damp = _rating_damping(sport, slug, league) if sport and sport != "soccer" else 1.0
+    exp_h = base_h * (a_h * d_a) ** damp
+    exp_a = base_a * (a_a * d_h) ** damp
+    if not sport or sport == "soccer":
+        exp_h *= HOME_ADV_FACTOR
+    return exp_h, exp_a
+
+
+def _rating_damping(sport: str, slug: str = "", league: str = "") -> float:
+    """Jak silně se rating promítne do očekávaného skóre (exponent, 0-1).
+
+    Fotbal = 1.0 (plný vliv). Sporty, kde skóre kolísá relativně míň
+    (basketbal), dostanou menší exponent, aby stejná odchylka ratingu
+    neznamenala nesmyslně velký posun v součtu bodů."""
+    avg, sd = sport_totals(sport, slug, league)
+    if not avg or not sd:
+        return 1.0
+    return max(0.1, min(1.0, (sd / avg) / _SOCCER_CV))
+
+
 def _shrink(val: float, conf: float) -> float:
     """Zplošťuje rating směrem k neutrální hodnotě 1.0 podle jistoty vzorku –
     u málo odehraných zápasů appka věří ratingu jen částečně (jinak by pár
@@ -229,16 +341,33 @@ def predict_match(m: dict) -> dict:
         strength_h *= HOME_ADV_FACTOR
         total = strength_h + strength_a
         probs = {"home": strength_h / total, "away": strength_a / total}
-        exp_goals = None
-        exp_total = cfg["avg_total"]
-        mean_total = cfg["avg_total"]
-        line_fn = lambda L: _over_prob_normal(L, mean_total, cfg["sd_total"])
+        # Očekávané skóre z ratingů – dřív tu byla natvrdo ligová konstanta
+        # cfg["avg_total"], takže Over/Under vycházelo úplně stejně pro
+        # souboj dvou elitně útočných i dvou defenzivních týmů (rating se
+        # promítal jen do 1X2). Sázky na gólové linie tak byly u hokeje,
+        # basketbalu a am. fotbalu oceněné podle konstanty, ne podle týmů.
+        slug = m.get("slug", "")
+        lg_avg, lg_sd = sport_totals(sport, slug, m["league"])
+        exp_h, exp_a = expected_scores(m["league"], sport, sh_a, sh_d, sa_a, sa_d, slug)
+        raw_total = exp_h + exp_a
+        # Pojistka: držet součet v pásmu ±2.5 směrodatné odchylky kolem
+        # průměru soutěže (plus podlaha, ať linie nespadne k nule).
+        lo = max(lg_avg * 0.35, lg_avg - 2.5 * lg_sd)
+        hi = lg_avg + 2.5 * lg_sd
+        mean_total = max(lo, min(hi, raw_total))
+        # Rozptyl škáluje s odmocninou průměru (poissonovský vztah), ať u
+        # vysokoskórových zápasů nezůstává nerealisticky úzký.
+        sd_total = max(0.4, lg_sd * math.sqrt(mean_total / lg_avg))
+        scale = mean_total / raw_total if raw_total > 0 else 1.0
+        exp_goals = {"home": round(exp_h * scale, 2), "away": round(exp_a * scale, 2)}
+        exp_total = round(mean_total, 2)
+        line_fn = lambda L: _over_prob_normal(L, mean_total, sd_total)
         names = {"home": f'1 · {m["home"]}', "away": f'2 · {m["away"]}'}
     else:
         keys = ("home", "draw", "away")
-        base_h, base_a = league_goals(m["league"])
-        lam_h = max(0.25, min(4.8, base_h * sh_a * sa_d * HOME_ADV_FACTOR))
-        lam_a = max(0.25, min(4.8, base_a * sa_a * sh_d))
+        raw_h, raw_a = expected_scores(m["league"], sport, sh_a, sh_d, sa_a, sa_d)
+        lam_h = max(0.25, min(4.8, raw_h))
+        lam_a = max(0.25, min(4.8, raw_a))
         grid = _score_grid(lam_h, lam_a)
         probs = _markets_1x2(grid)
         exp_goals = {"home": round(lam_h, 2), "away": round(lam_a, 2)}
@@ -253,7 +382,14 @@ def predict_match(m: dict) -> dict:
 
     goal_lines = []
     totals = (m.get("real_odds") or {}).get("totals")
-    for line in cfg["lines"]:
+    # Linie podle soutěže, ne podle sportu (WNBA má jiné než NBA) – a když
+    # ESPN pošle reálnou linii, přidat ji, ať se dá ocenit proti skutečnému
+    # kurzu i mimo náš odhadnutý rozestup.
+    match_lines = list(sport_lines(sport, m.get("slug", ""), m["league"]))
+    if totals and totals.get("line") is not None and totals["line"] not in match_lines:
+        match_lines.append(totals["line"])
+        match_lines.sort()
+    for line in match_lines:
         po = line_fn(line)
         over_odds = totals["over"] if (totals and totals.get("line") == line) else None
         under_odds = totals["under"] if (totals and totals.get("line") == line) else None

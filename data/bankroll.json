@@ -1,6 +1,6 @@
 {
   "start_balance": 1000.0,
-  "balance": 908.4,
+  "balance": 924.5,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -383,8 +383,8 @@
       "odds": 1.49,
       "prob": 0.7508,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -396,7 +396,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.488 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785384866
     },
     {
       "id": "ff93294957",
@@ -411,8 +412,8 @@
       "odds": 1.61,
       "prob": 0.7508,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 6.1,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -424,7 +425,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785362320
     },
     {
       "id": "8242761e6d",
@@ -439,8 +441,8 @@
       "odds": 1.69,
       "prob": 0.7508,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -452,7 +454,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.69 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785353399
     },
     {
       "id": "ae1daa9b6c",

@@ -1,14 +1,14 @@
 {
   "status": "trained",
-  "accuracy": 0.3333333333333333,
-  "last_trained": "2026-07-29T20:35:57.538449",
-  "total_feedback": 23,
-  "training_samples": 11,
-  "test_samples": 3,
-  "auc": 0.75,
-  "precision": 0.0,
-  "recall": 0.0,
-  "win_rate": 0.45454545454545453,
+  "accuracy": 0.7272727272727273,
+  "last_trained": "2026-07-30T06:22:05.580135",
+  "total_feedback": 115,
+  "training_samples": 87,
+  "test_samples": 22,
+  "auc": 0.8958333333333333,
+  "precision": 0.7,
+  "recall": 0.7,
+  "win_rate": 0.3103448275862069,
   "model_version": 2,
   "note": "smoke-test run s malym vzorkem (14) - NENI produkcne spolehlivy, cekej na 30+ zaznamu pro realny trenink"
 }

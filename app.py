@@ -703,15 +703,19 @@ def _settle_recent(allow_slugless_fallback=False):
     # rating obou týmů se posune podle skutečného skóre vs. očekávání.
     # Dřív se rating aktualizoval JEN přes ruční /api/result endpoint, takže
     # se model ve skutečnosti z automatického vyhodnocování nikdy neučil.
-    id_to_teams = {t["id"]: (t.get("home"), t.get("away"), t.get("league", ""))
+    id_to_teams = {t["id"]: (t.get("home"), t.get("away"), t.get("league", ""),
+                             t.get("sport", "soccer"), t.get("slug", ""))
                    for t in open_tips if t.get("home") and t.get("away")}
     for mid, r in results.items():
         info = id_to_teams.get(mid)
         if not info:
             continue
-        home, away, league = info
+        home, away, league, sport, slug = info
         try:
-            pred.update_from_result(home, away, league, r["home"], r["away"])
+            # sport+slug jsou nutné – bez nich se nefotbalové skóre poměřuje
+            # s fotbalovou baseline (resp. WNBA s průměrem NBA) a rating se
+            # učí proti úplně jinému očekávání, než jaké model předpovídá
+            pred.update_from_result(home, away, league, r["home"], r["away"], sport, slug)
         except Exception:
             pass
 
@@ -1177,7 +1181,8 @@ def api_result():
     """Zadání reálného výsledku – engine aktualizuje Elo ratingy (učí se)."""
     d = request.get_json(force=True)
     pred.update_from_result(d["home"], d["away"], d.get("league", ""),
-                            int(d["home_score"]), int(d["away_score"]))
+                            int(d["home_score"]), int(d["away_score"]),
+                            d.get("sport", "soccer"), d.get("slug", ""))
     _PRED_CACHE.clear()
     return jsonify({"ok": True})
 
