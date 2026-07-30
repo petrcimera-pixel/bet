@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
   loadDashboard();
   setupNotifications();
+  setupTeamSearch();
   // Po návratu na kartu dohnat skóre hned, ne až za celý interval
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') refreshLiveMatches();
@@ -432,6 +433,10 @@ async function runAgent() {
 // MATCHES
 // ---------------------------------------------------------------------------
 async function loadMatches(refresh = false) {
+  // Denní výpis a hledání jsou dva režimy téže stránky – když se načítá den,
+  // hledání se zruší, jinak by zůstaly skryté kontejnery a stránka prázdná.
+  if (el('teamSearch')) el('teamSearch').value = '';
+  exitSearchMode();
   const container = el('matchesContainer');
   const summary = el('matchesSummary');
   container.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání zápasů…</div>';
@@ -459,6 +464,181 @@ async function loadMatches(refresh = false) {
   } finally {
     clearTimeout(t1); clearTimeout(t2);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Vyhledávání týmu + rozbor zápasu
+// ---------------------------------------------------------------------------
+let _searchTimer = null;
+
+function setupTeamSearch() {
+  const input = el('teamSearch');
+  if (!input) return;
+  input.addEventListener('input', () => {
+    clearTimeout(_searchTimer);
+    const q = input.value.trim();
+    // debounce – první hledání dne stahuje 14denní okno z ESPN (~20 s),
+    // nemá smysl ho pouštět po každém písmenu
+    _searchTimer = setTimeout(() => (q.length >= 2 ? runTeamSearch(q) : exitSearchMode()), 450);
+  });
+  el('teamSearchClear')?.addEventListener('click', () => { input.value = ''; exitSearchMode(); });
+}
+
+/** Zpět na normální výpis zápasů podle dne. */
+function exitSearchMode() {
+  el('searchResults').style.display = 'none';
+  el('matchAnalysis').style.display = 'none';
+  el('teamSearchClear').style.display = 'none';
+  el('matchesSummary').style.display = '';
+  el('matchesContainer').style.display = '';
+}
+
+function enterSearchMode() {
+  el('matchesSummary').style.display = 'none';
+  el('matchesContainer').style.display = 'none';
+  el('matchAnalysis').style.display = 'none';
+  el('teamSearchClear').style.display = '';
+  stopLivePolling();   // v režimu hledání se dny neobnovují
+}
+
+async function runTeamSearch(q) {
+  enterSearchMode();
+  const box = el('searchResults');
+  box.style.display = '';
+  box.innerHTML = '<div class="card"><div class="loading"><span class="spinner"></span> Hledám zápasy… (první hledání dne stahuje data z ESPN)</div></div>';
+  try {
+    const d = await api(`/api/search?q=${encodeURIComponent(q)}&sport=${STATE.sport}`, { timeoutMs: 120000 });
+    renderSearchResults(d, box);
+  } catch (e) {
+    box.innerHTML = `<div class="card"><div class="empty-state">Hledání selhalo: ${e.message}</div></div>`;
+  }
+}
+
+function renderSearchResults(d, box) {
+  if (!d.matches || !d.matches.length) {
+    box.innerHTML = `<div class="card"><div class="empty-state">Pro „${d.query}" jsem v příštích ${d.days || 14} dnech nenašel žádný zápas.</div></div>`;
+    return;
+  }
+  const teams = (d.teams || []).map(t => `<span class="pill">${t.name} <span class="muted">(${t.matches})</span></span>`).join('');
+  const rows = d.matches.map(m => {
+    // Kurzy ESPN dává až blízko výkopu – u vzdálenějších zápasů řekni rovnou,
+    // že půjde jen o odhad modelu, ať to není překvapení až v rozboru
+    const badge = m.has_odds
+      ? '<span class="badge real">kurzy</span>'
+      : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
+    return `<tr class="search-row-item" data-id="${m.id}" data-sport="${m.sport}">
+      <td>${fmtDateShort(m.date)} ${m.time || ''}</td>
+      <td><strong>${m.home}</strong> – ${m.away}</td>
+      <td class="muted">${m.flag || ''} ${m.league}</td>
+      <td>${badge}</td>
+      <td><button class="btn small">Rozbor →</button></td>
+    </tr>`;
+  }).join('');
+  box.innerHTML = `
+    <div class="card">
+      <h3>Nalezené týmy</h3>
+      <div class="pill-row">${teams}</div>
+    </div>
+    <div class="card">
+      <h3>Budoucí zápasy (${d.total}${d.total > d.matches.length ? `, zobrazeno ${d.matches.length}` : ''})</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Kdy</th><th>Zápas</th><th>Soutěž</th><th></th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+  box.querySelectorAll('.search-row-item').forEach(tr => {
+    tr.addEventListener('click', () => openMatchAnalysis(tr.dataset.id, tr.dataset.sport));
+  });
+}
+
+async function openMatchAnalysis(id, sport) {
+  const box = el('matchAnalysis');
+  box.style.display = '';
+  box.innerHTML = '<div class="card"><div class="loading"><span class="spinner"></span> Počítám rozbor…</div></div>';
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try {
+    const d = await api(`/api/analysis/${encodeURIComponent(id)}?sport=${encodeURIComponent(sport || STATE.sport)}`, { timeoutMs: 120000 });
+    renderAnalysis(d, box);
+  } catch (e) {
+    box.innerHTML = `<div class="card"><div class="empty-state">Rozbor selhal: ${e.message}</div></div>`;
+  }
+}
+
+function renderAnalysis(d, box) {
+  const m = d.match;
+  const pr = d.probs || {};
+  const probRow = Object.keys(pr).length ? `
+    <div class="grid-stats">
+      ${['home', 'draw', 'away'].filter(k => pr[k] != null).map(k => `
+        <div class="stat-tile">
+          <div class="label">${k === 'home' ? '1 · ' + m.home : k === 'draw' ? 'X · remíza' : '2 · ' + m.away}</div>
+          <div class="value">${Math.round(pr[k] * 100)}%</div>
+        </div>`).join('')}
+    </div>` : '';
+
+  const rec = d.recommendation;
+  // Bez reálných kurzů appka zásadně nedoporučuje sázku – jen ukáže odhad
+  const recCard = !d.has_odds ? `
+    <div class="card">
+      <h3>💡 Doporučení</h3>
+      <p class="muted">Pro tenhle zápas zatím nejsou reálné kurzy ESPN, takže nedoporučuju konkrétní sázku – appka si kurzy nevymýšlí. Níž je čistý odhad modelu. Kurzy se obvykle objeví krátce před výkopem.</p>
+    </div>`
+    : rec ? `
+    <div class="card">
+      <h3>💡 Doporučení</h3>
+      <div class="pick-badge" style="display:inline-flex;">
+        <span class="pl">${rec.label}</span><span class="pv">${(rec.odds || 0).toFixed(2)}×</span>
+      </div>
+      <p style="margin-top:10px;">
+        <strong>${rec.name}</strong> — model ${Math.round((rec.prob || 0) * 100)} %,
+        po kalibraci <strong>${Math.round((rec.cal_prob || 0) * 100)} %</strong>.
+        ${rec.edge != null ? `Náskok proti kurzu ${(rec.edge * 100).toFixed(1)} p.b.` : ''}
+      </p>
+      <p class="muted">Prošlo prahy agenta (jistota ≥ ${Math.round(d.thresholds.min_prob * 100)} %, kurz ≥ ${d.thresholds.min_odds}) — tohle by agent reálně vsadil.</p>
+    </div>` : `
+    <div class="card">
+      <h3>💡 Doporučení</h3>
+      <p class="muted">Žádný trh neprošel prahy agenta (jistota ≥ ${Math.round(d.thresholds.min_prob * 100)} % po kalibraci a kurz ≥ ${d.thresholds.min_odds}). Sázku nedoporučuju — níž jsou přesto všechny spočítané trhy.</p>
+    </div>`;
+
+  const cands = (d.candidates || []).map(c => `
+    <tr class="${c.passes ? 'row-ok' : ''}">
+      <td><strong>${c.label || c.outcome}</strong></td>
+      <td>${c.odds ? c.odds.toFixed(2) + '×' : '<span class="muted">—</span>'}</td>
+      <td>${Math.round((c.prob || 0) * 100)}%</td>
+      <td>${c.cal_prob != null ? Math.round(c.cal_prob * 100) + '%' : '—'}</td>
+      <td>${c.edge != null ? (c.edge * 100).toFixed(1) + ' p.b.' : '—'}</td>
+      <td>${c.passes ? '<span class="badge real">✓ tip</span>' : '<span class="muted">—</span>'}</td>
+    </tr>`).join('');
+
+  const conf = d.rating_confidence;
+  const coldWarn = (conf != null && conf < 0.3)
+    ? `<p class="muted">⚠️ Rating těchhle týmů stojí na málo odehraných zápasech (jistota ${Math.round(conf * 100)} %), takže je predikce zploštělá k průměru a míň rozhodná. To je záměr — model radši přizná nejistotu, než aby si vymyslel jistotu.</p>` : '';
+
+  box.innerHTML = `
+    <div class="card">
+      <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
+      <p class="lead">${m.flag || ''} ${m.league} · ${fmtDateShort(m.date)} ${m.time || ''}</p>
+      ${probRow}
+      <p style="margin-top:10px;">
+        Očekávané skóre <strong>${d.exp_goals ? `${d.exp_goals.home} : ${d.exp_goals.away}` : '—'}</strong>
+        (celkem ${d.exp_total ?? '—'})
+      </p>
+      ${coldWarn}
+    </div>
+    ${recCard}
+    <div class="card">
+      <h3>Všechny spočítané trhy</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Trh</th><th>Kurz</th><th>Model</th><th>Po kalibraci</th><th>Náskok</th><th></th></tr></thead>
+        <tbody>${cands || '<tr><td colspan="6" class="muted">Žádné trhy s reálnými kurzy</td></tr>'}</tbody>
+      </table></div>
+    </div>
+    ${(d.top_scores || []).length ? `
+    <div class="card">
+      <h3>Nejpravděpodobnější výsledky</h3>
+      <div class="pill-row">${d.top_scores.map(s => `<span class="pill">${s.score} <span class="muted">${(s.prob * 100).toFixed(1)}%</span></span>`).join('')}</div>
+    </div>` : ''}`;
 }
 
 // ---------------------------------------------------------------------------

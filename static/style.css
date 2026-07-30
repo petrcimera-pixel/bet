@@ -262,6 +262,19 @@ tr:hover td { background: var(--panel-2); }
 .match-card .score { font-weight: 700; color: var(--txt2); flex-shrink: 0; }
 .match-card .score.live { color: var(--bad); }
 .pill.live-pill { border-color: var(--bad); color: var(--bad); }
+
+/* vyhledávání týmu */
+.search-row { margin-top: 10px; }
+.search-input {
+  flex: 1; min-width: 0; padding: 9px 14px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--panel);
+  color: var(--txt); font-size: 13.5px; font-family: inherit;
+}
+.search-input:focus { outline: none; border-color: var(--accent); }
+.search-input::placeholder { color: var(--txt3); }
+tr.search-row-item { cursor: pointer; }
+tr.search-row-item:hover { background: var(--panel-2); }
+tr.row-ok { background: var(--accent-glow); }
 .match-card .pick-col { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 .match-card .pick-badge {
   display: flex; align-items: center; gap: 8px;

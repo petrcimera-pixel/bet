@@ -72,7 +72,7 @@ _PREFIX_COUNTRY = {
     "sui": "Switzerland", "den": "Denmark", "nor": "Norway", "swe": "Sweden",
     "rus": "Russia", "ukr": "Ukraine", "pol": "Poland", "cze": "Czech Republic",
     "cro": "Croatia", "rou": "Romania", "cyp": "Cyprus", "irl": "Ireland",
-    "ir1": "Iran",
+    "ir1": "Iran", "nir": "Northern Ireland",
     # Amerika
     "usa": "USA", "mex": "Mexico", "can": "Canada", "crc": "Costa Rica",
     "hon": "Honduras", "gua": "Guatemala", "slv": "El Salvador",
@@ -101,6 +101,15 @@ def _country_for(slug: str) -> str:
 # ---------------------------------------------------------------------------
 # Seznam lig – dynamicky z ESPN (všech ~244 lig), s týdenní keší
 # ---------------------------------------------------------------------------
+# Pozn. k pokrytí lig: ESPN vrací ve svém seznamu 220 fotbalových soutěží a
+# některé evropské ligy (česká, polská, slovenská, ukrajinská, chorvatská,
+# srbská, maďarská…) mezi nimi nejsou vůbec. Slugy jako sui.1, rou.1, cyp.1,
+# irl.1, nir.1, nga.1, tha.1 sice ještě odpovídají a mají data do roku 2025,
+# ale od 2026 už jsou prázdné – ESPN je přestal plnit, proto ze seznamu
+# vypadly. Ručně je doplňovat tedy nemá smysl (ověřeno: 0 zápasů 2026 proti
+# 20-30 u lig, které v seznamu jsou). Česká liga na ESPN neexistuje ani
+# historicky – slug cze.1 odpovídá jako "Gambrinus Liga", ale nemá jediný
+# zápas v žádném období. Pro tyhle soutěže by byl potřeba jiný zdroj dat.
 def league_slugs(sport: str = "soccer") -> list:
     """Vrátí [(slug, country), …]. Fotbal = všech ~244 lig dynamicky; ostatní sporty
     používají kurátorovaný seznam z konfigurace SPORTS."""
@@ -108,6 +117,8 @@ def league_slugs(sport: str = "soccer") -> list:
     if not cfg.get("dynamic"):
         return list(cfg.get("leagues", []))
 
+    # Doplněk se přidává až při čtení (ne do keše), aby se projevil i na
+    # seznamu uloženém dřív, než doplněk vůbec existoval.
     cached = storage.load("leagues.json", None)
     if cached and time.time() - cached.get("ts", 0) < LEAGUES_TTL and cached.get("slugs"):
         return [tuple(x) for x in cached["slugs"]]

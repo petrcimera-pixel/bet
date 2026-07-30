@@ -282,6 +282,129 @@ def api_matches():
     })
 
 
+SEARCH_DAYS = 14          # jak daleko dopředu hledat zápasy týmu
+ODDS_HORIZON_DAYS = 4     # za tímhle horizontem ESPN kurzy prakticky nedává
+
+
+def _search_window(sport: str):
+    """Zápasy od dneška na SEARCH_DAYS dopředu. Jeden ESPN dotaz na ligu pro
+    celý rozsah (ne per den), takže je to stejně drahé jako běžný denní fetch
+    a drží se to 12 h v keši."""
+    today = ds.today_str()
+    return ds.fetch_range(today, ds.add_days(today, SEARCH_DAYS - 1), sport=sport)
+
+
+@app.route("/api/search")
+@login_required
+def api_search():
+    """Vyhledání budoucích zápasů podle názvu týmu."""
+    q = (request.args.get("q") or "").strip().lower()
+    sport = request.args.get("sport", "soccer")
+    if len(q) < 2:
+        return jsonify({"query": q, "teams": [], "matches": [], "error": "Zadej aspoň 2 znaky"})
+
+    try:
+        matches = _search_window(sport)
+    except Exception as e:
+        return jsonify({"query": q, "teams": [], "matches": [], "error": str(e)}), 200
+
+    today = ds.today_str()
+    horizon = ds.add_days(today, ODDS_HORIZON_DAYS)
+    hits, teams = [], {}
+    for m in matches:
+        # jen dosud neodehrané – hledáme, na co se dá vsadit
+        if m.get("home_score") is not None or m.get("live"):
+            continue
+        home, away = m.get("home", ""), m.get("away", "")
+        side = None
+        if q in home.lower():
+            side = home
+        elif q in away.lower():
+            side = away
+        if not side:
+            continue
+        teams[side] = teams.get(side, 0) + 1
+        has_odds = bool((m.get("real_odds") or {}).get("odds"))
+        hits.append({
+            "id": m["id"], "sport": sport, "slug": m.get("slug", ""),
+            "home": home, "away": away,
+            "date": m.get("date", ""), "time": m.get("time", ""),
+            "league": m.get("league", ""), "country": m.get("country", ""),
+            "flag": ds.flag(m.get("country", "")),
+            "has_odds": has_odds,
+            # dál než horizont kurzy nečekej – frontend podle toho odliší,
+            # jestli půjde o skutečný tip, nebo jen odhad modelu
+            "odds_expected": m.get("date", "") <= horizon,
+        })
+
+    hits.sort(key=lambda x: (x["date"], x["time"]))
+    team_list = [{"name": k, "matches": v} for k, v in
+                 sorted(teams.items(), key=lambda kv: (-kv[1], kv[0]))]
+    return jsonify({"query": q, "teams": team_list, "matches": hits[:60],
+                    "total": len(hits), "days": SEARCH_DAYS})
+
+
+@app.route("/api/analysis/<match_id>")
+@login_required
+def api_analysis(match_id):
+    """Kompletní rozbor jednoho zápasu + co by na něj agent vsadil."""
+    sport = request.args.get("sport", "soccer")
+    try:
+        matches = _search_window(sport)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    m = next((x for x in matches if str(x["id"]) == str(match_id)), None)
+    if not m:
+        return jsonify({"error": "Zápas nenalezen"}), 404
+
+    p = pred.predict_match(m)
+    cfg = app_settings.get_settings().get("agent", {})
+
+    # Stejná logika, jakou používá agent – ať se doporučení nerozchází s tím,
+    # co by appka reálně vsadila.
+    try:
+        cands = agent._candidates(p, cfg)
+        min_prob = float(cfg.get("min_prob", 0.75))
+        min_odds = float(cfg.get("min_odds", 1.20))
+        best = agent._best_tutovka(cands, min_prob, min_odds, True)
+    except Exception:
+        cands, best, min_prob, min_odds = [], None, 0.75, 1.20
+
+    def _tip(c):
+        cal = c.get("cal_prob", c.get("prob"))
+        return {
+            "outcome": c.get("outcome"), "label": c.get("label"), "name": c.get("name"),
+            "prob": c.get("prob"), "cal_prob": cal, "odds": c.get("odds"),
+            "edge": c.get("edge"), "ev": c.get("ev"),
+            "real": bool(c.get("real")), "is_value": bool(c.get("is_value")),
+            "passes": cal is not None and cal >= min_prob and (c.get("odds") or 0) >= min_odds,
+        }
+
+    ranked = sorted(cands, key=lambda c: -(c.get("cal_prob") or c.get("prob") or 0))
+
+    return jsonify({
+        "match": {
+            "id": p["id"], "home": p["home"], "away": p["away"],
+            "date": p.get("date"), "time": p.get("time"),
+            "league": p.get("league"), "country": p.get("country"),
+            "flag": ds.flag(p.get("country", "")), "sport": sport,
+        },
+        "probs": p.get("probs"), "pick": p.get("pick"),
+        "confidence": p.get("confidence"),
+        "exp_goals": p.get("exp_goals"), "exp_total": p.get("exp_total"),
+        "rating_confidence": p.get("rating_confidence"),
+        "rating_home": p.get("rating_home"), "rating_away": p.get("rating_away"),
+        "top_scores": p.get("top_scores", [])[:5],
+        "goal_lines": p.get("goal_lines", []),
+        "has_odds": p.get("odds_source") == "real",
+        "best_value": p.get("best_value"),
+        "recommendation": _tip(best) if best else None,
+        "candidates": [_tip(c) for c in ranked[:8]],
+        "thresholds": {"min_prob": min_prob, "min_odds": min_odds},
+    })
+
+
 @app.route("/api/tickets")
 def api_tickets():
     # accumulator.py počítá s trhy (rohy, simulovaný "books" panel), co nový
