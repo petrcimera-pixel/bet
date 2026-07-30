@@ -117,6 +117,16 @@ function bindEvents() {
   el('runBettorsBtn')?.addEventListener('click', runBettorsRound);
   el('retrainMlBtn')?.addEventListener('click', retrainMlModel);
   el('apifSaveBtn')?.addEventListener('click', saveApifKey);
+  el('newBettorBtn')?.addEventListener('click', openBettorWizard);
+  el('wizCancel')?.addEventListener('click', () => { el('bettorWizard').style.display = 'none'; });
+  el('wizCreate')?.addEventListener('click', createBettor);
+  el('wizReroll')?.addEventListener('click', () => { el('wizName').value = ''; refreshWizPreview(); });
+  el('depositCancel')?.addEventListener('click', () => { el('depositModal').style.display = 'none'; });
+  el('depositConfirm')?.addEventListener('click', confirmDeposit);
+  // klik mimo okno zavře modal
+  ['bettorWizard', 'depositModal'].forEach(id => {
+    el(id)?.addEventListener('click', (ev) => { if (ev.target.id === id) el(id).style.display = 'none'; });
+  });
   document.querySelectorAll('#sportStrip .pill[data-sport]').forEach(p => {
     p.addEventListener('click', () => {
       document.querySelectorAll('#sportStrip .pill').forEach(x => x.classList.remove('active'));
@@ -1284,6 +1294,130 @@ async function saveBankrollSettings() {
 // ---------------------------------------------------------------------------
 // BETTORS ARENA – 10 virtuálních sázkařů
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Správa sázkařů – vklad, smazání, průvodce vytvořením
+// ---------------------------------------------------------------------------
+let _depositTarget = null;
+let _wizOptions = null;
+let _wizPreviewTimer = null;
+
+function openDeposit(id, name) {
+  _depositTarget = id;
+  setText('depositWho', name);
+  el('depositAmount').value = 500;
+  el('depositNote').value = '';
+  el('depositModal').style.display = 'flex';
+}
+
+async function confirmDeposit() {
+  const amount = parseFloat(el('depositAmount').value);
+  if (!amount) { toast('Zadej nenulovou částku.', 'err'); return; }
+  try {
+    await api(`/api/bettors/${_depositTarget}/deposit`, {
+      method: 'POST',
+      body: JSON.stringify({ amount, note: el('depositNote').value.trim() }),
+    });
+    el('depositModal').style.display = 'none';
+    toast(amount > 0 ? `Vloženo ${fmt(amount)} Kč.` : `Vybráno ${fmt(-amount)} Kč.`);
+    loadBettors();
+  } catch (e) {
+    toast('Vklad se nepovedl: ' + e.message, 'err');
+  }
+}
+
+async function deleteBettor(id, name) {
+  if (!confirm(`Opravdu smazat sázkaře „${name}“?\n\nPřijdeš i o celou jeho historii sázek. Nejde to vrátit.`)) return;
+  try {
+    await api(`/api/bettors/${id}`, { method: 'DELETE' });
+    toast(`Sázkař „${name}“ smazán.`);
+    loadBettors();
+  } catch (e) {
+    toast('Smazání se nepovedlo: ' + e.message, 'err');
+  }
+}
+
+function wizParams() {
+  return {
+    market: el('wizMarket').value,
+    min_prob: (parseFloat(el('wizMinProb').value) || 60) / 100,
+    min_odds: parseFloat(el('wizMinOdds').value) || 1.2,
+    max_odds: parseFloat(el('wizMaxOdds').value) || 10,
+    stake_mode: el('wizStakeMode').value,
+    stake_pct: (parseFloat(el('wizStakePct').value) || 3) / 100,
+    kelly_fraction: parseFloat(el('wizKelly').value) || 0.25,
+    max_bets: parseInt(el('wizMaxBets').value) || 3,
+    progression: el('wizProgression').value,
+    pause_after_losses: parseInt(el('wizPause').value) || 0,
+    one_per_league: el('wizOnePerLeague').checked,
+  };
+}
+
+async function refreshWizPreview() {
+  // Kelly a pevné % se vylučují – ukaž jen to pole, které se použije
+  const kelly = el('wizStakeMode').value === 'kelly';
+  el('wizKellyField').style.display = kelly ? '' : 'none';
+  el('wizStakePctField').style.display = kelly ? 'none' : '';
+  try {
+    const d = await api('/api/bettors/preview', {
+      method: 'POST', body: JSON.stringify({ params: wizParams() }), timeoutMs: 15000,
+    });
+    const custom = el('wizName').value.trim();
+    el('wizPreview').innerHTML =
+      `<div style="font-size:15px; font-weight:700;">${d.emoji} ${custom || d.name}</div>
+       <div style="font-size:12.5px; color:var(--txt2); margin-top:4px;">${d.tagline}</div>`;
+    el('wizPreview').dataset.emoji = d.emoji;
+    el('wizPreview').dataset.name = d.name;
+  } catch (e) {
+    el('wizPreview').textContent = 'Náhled se nepodařilo načíst.';
+  }
+}
+
+async function openBettorWizard() {
+  if (!_wizOptions) {
+    try { _wizOptions = await api('/api/bettors/options'); }
+    catch (e) { toast('Nepodařilo se načíst nastavení průvodce.', 'err'); return; }
+    const fill = (id, items) => {
+      el(id).innerHTML = items.map(o => `<option value="${o.key}">${o.label}</option>`).join('');
+    };
+    fill('wizMarket', _wizOptions.markets);
+    fill('wizProgression', _wizOptions.progressions);
+    fill('wizStakeMode', _wizOptions.stake_modes);
+    // náhled se přepočítá při každé změně
+    ['wizMarket', 'wizMinProb', 'wizMinOdds', 'wizMaxOdds', 'wizStakeMode', 'wizStakePct',
+     'wizKelly', 'wizMaxBets', 'wizProgression', 'wizPause', 'wizOnePerLeague', 'wizName']
+      .forEach(id => el(id)?.addEventListener('input', () => {
+        clearTimeout(_wizPreviewTimer);
+        _wizPreviewTimer = setTimeout(refreshWizPreview, 250);
+      }));
+  }
+  el('bettorWizard').style.display = 'flex';
+  refreshWizPreview();
+}
+
+async function createBettor() {
+  const btn = el('wizCreate');
+  btn.disabled = true; btn.textContent = 'Vytvářím…';
+  try {
+    const b = await api('/api/bettors', {
+      method: 'POST',
+      body: JSON.stringify({
+        params: wizParams(),
+        name: el('wizName').value.trim() || null,
+        emoji: el('wizPreview').dataset.emoji || null,
+        start_balance: parseFloat(el('wizStart').value) || 1000,
+      }),
+    });
+    el('bettorWizard').style.display = 'none';
+    el('wizName').value = '';
+    toast(`Sázkař ${b.emoji} ${b.name} vytvořen.`);
+    loadBettors();
+  } catch (e) {
+    toast('Vytvoření se nepovedlo: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Vytvořit sázkaře';
+  }
+}
+
 async function loadBettors() {
   const box = el('bettorsContainer');
   box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
@@ -1333,9 +1467,11 @@ function renderBettors(bettors) {
         <div style="min-width:90px;">${sparklineSvg(b.equity)}</div>
         <div style="text-align:right;">
           <div style="font-size:18px; font-weight:700;" class="${profitClass}">${b.balance.toFixed(0)} Kč</div>
-          <div style="font-size:11.5px; color:var(--txt2);">${b.profit >= 0 ? '+' : ''}${b.profit.toFixed(0)} Kč · ROI ${b.roi}%</div>
+          <div style="font-size:11.5px; color:var(--txt2);">${b.profit >= 0 ? '+' : ''}${b.profit.toFixed(0)} Kč · ROI ${b.roi}%${b.deposited ? ` · vloženo ${b.deposited.toFixed(0)} Kč` : ''}</div>
         </div>
-        <button class="btn small bettor-toggle" data-id="${b.id}" style="margin-left:8px;">Detail ▾</button>
+        <button class="btn small bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋ Vklad</button>
+        <button class="btn small bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
+        <button class="btn small bettor-toggle" data-id="${b.id}" style="margin-left:4px;">Detail ▾</button>
       </div>
       <div style="display:flex; gap:18px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--txt2); flex-wrap:wrap;">
         <span>Umístěno: <strong style="color:var(--txt);">${b.placed}</strong></span>
@@ -1347,6 +1483,12 @@ function renderBettors(bettors) {
     </div>`;
   }).join('');
 
+  box.querySelectorAll('.bettor-deposit').forEach(btn => {
+    btn.addEventListener('click', (e) => { e.stopPropagation(); openDeposit(btn.dataset.id, btn.dataset.name); });
+  });
+  box.querySelectorAll('.bettor-delete').forEach(btn => {
+    btn.addEventListener('click', (e) => { e.stopPropagation(); deleteBettor(btn.dataset.id, btn.dataset.name); });
+  });
   box.querySelectorAll('.bettor-toggle').forEach(btn => {
     btn.addEventListener('click', () => toggleBettorDetail(btn.dataset.id, btn));
   });
@@ -1404,8 +1546,22 @@ async function toggleBettorDetail(id, btn) {
   try {
     const data = await api(`/api/bettors/${id}`, { timeoutMs: 15000 });
     const bets = data.bets || [];
-    if (!bets.length) { box.innerHTML = '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>'; return; }
-    box.innerHTML = `<div class="table-wrap"><table>
+    const tx = (data.transactions || []).filter(t => t.type !== 'start');
+    const txHtml = tx.length ? `
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px; color:var(--txt3); margin-bottom:6px;">POHYBY NA BANKU</div>
+        ${tx.map(t => `<div style="font-size:12.5px; display:flex; gap:10px;">
+            <span class="muted">${new Date(t.ts * 1000).toLocaleString('cs-CZ')}</span>
+            <strong class="${t.amount > 0 ? 'pos' : 'bad'}">${t.amount > 0 ? '+' : ''}${fmt(t.amount)} Kč</strong>
+            <span class="muted">${t.note || (t.amount > 0 ? 'vklad' : 'výběr')}</span>
+          </div>`).join('')}
+      </div>` : '';
+    // pohyby na banku se ukážou i u sázkaře, co ještě nestihl vsadit
+    if (!bets.length) {
+      box.innerHTML = txHtml + '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>';
+      return;
+    }
+    box.innerHTML = txHtml + `<div class="table-wrap"><table>
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr>

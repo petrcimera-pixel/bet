@@ -229,6 +229,25 @@ tr:hover td { background: var(--panel-2); }
 }
 .pill.info:hover { border-color: var(--border); }
 .pill.clickable { cursor: pointer; }
+
+/* modální okna – průvodce sázkařem, vklad */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; padding: 20px; overflow-y: auto;
+}
+.modal {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto;
+}
+.wiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .wiz-grid { grid-template-columns: 1fr; } }
+.modal select, .modal input[type="number"], .modal input[type="text"] {
+  width: 100%; padding: 8px 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg-alt);
+  color: var(--txt); font-size: 13px; font-family: inherit;
+}
+.modal .field label { display: block; font-size: 12px; color: var(--txt2); margin-bottom: 5px; }
 /* krátké zvýraznění zápasu, na který se skočilo z pilulky s tipem dne */
 .match-card.flash { animation: card-flash 1.6s ease-out; }
 @keyframes card-flash {

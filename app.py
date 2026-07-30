@@ -1393,6 +1393,73 @@ def api_bettor_detail(bid):
     return jsonify(detail)
 
 
+@app.route("/api/bettors/options")
+@login_required
+def api_bettor_options():
+    """Číselníky pro průvodce vytvořením sázkaře."""
+    return jsonify({
+        "markets": [{"key": k, "label": v[0]} for k, v in virtual_bettors.MARKETS.items()],
+        "progressions": [{"key": k, "label": v} for k, v in virtual_bettors.PROGRESSIONS.items()],
+        "stake_modes": [{"key": k, "label": v} for k, v in virtual_bettors.STAKE_MODES.items()],
+        "defaults": virtual_bettors.default_params(),
+    })
+
+
+@app.route("/api/bettors/preview", methods=["POST"])
+@login_required
+def api_bettor_preview():
+    """Náhled jména a popisu pro zadané parametry – průvodce ho ukazuje živě."""
+    d = request.get_json(force=True) or {}
+    params = d.get("params") or {}
+    try:
+        taken = [b.get("name") for b in virtual_bettors.load_state().values()]
+        name, emoji = virtual_bettors.generate_name(params, taken=taken)
+        return jsonify({"name": name, "emoji": emoji,
+                        "tagline": virtual_bettors.describe_params(params)})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.route("/api/bettors", methods=["POST"])
+@login_required
+def api_bettor_create():
+    d = request.get_json(force=True) or {}
+    try:
+        b = virtual_bettors.add_bettor(
+            d.get("params") or {},
+            name=(d.get("name") or "").strip() or None,
+            emoji=(d.get("emoji") or "").strip() or None,
+            start_balance=float(d.get("start_balance") or 1000.0))
+        _persist_push_safe()
+        return jsonify(b)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.route("/api/bettors/<bid>", methods=["DELETE"])
+@login_required
+def api_bettor_delete(bid):
+    if not virtual_bettors.delete_bettor(bid):
+        return jsonify({"error": "not found"}), 404
+    _persist_push_safe()
+    return jsonify({"ok": True, "deleted": bid})
+
+
+@app.route("/api/bettors/<bid>/deposit", methods=["POST"])
+@login_required
+def api_bettor_deposit(bid):
+    d = request.get_json(force=True) or {}
+    try:
+        amount = float(d.get("amount"))
+    except (TypeError, ValueError):
+        return jsonify({"error": "Neplatná částka"}), 400
+    res = virtual_bettors.deposit(bid, amount, (d.get("note") or "").strip())
+    if not res:
+        return jsonify({"error": "Sázkař nenalezen nebo nulová částka"}), 404
+    _persist_push_safe()
+    return jsonify(res)
+
+
 @app.route("/api/bettors/run", methods=["POST"])
 def api_bettors_run():
     """Ruční spuštění kola sázení – obchází hodinový rozvrh (force=True),

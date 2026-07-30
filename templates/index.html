@@ -147,12 +147,13 @@
     <section id="page-bettors" class="page">
       <div class="page-head">
         <h1>Aréna sázkařů</h1>
-        <p class="lead">10 virtuálních sázkařů, každý s vlastní strategií a bankem 1000 Kč – sází na stejná reálná data, ať je vidět, co skutečně funguje.</p>
+        <p class="lead">Virtuální sázkaři, každý s vlastní strategií a vlastním bankem – sází na stejná reálná data, ať je vidět, co skutečně funguje.</p>
       </div>
 
       <div class="card" style="margin-bottom:16px;">
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
           <span style="font-size:13px; color:var(--txt2); flex:1;">Sázkaři sází automaticky podle rozvrhu z Nastavení (stejné hodiny jako auto-run agenta), klidně víckrát denně – ale nikdy dvakrát na stejný zápas a nikdy na zápas, který už začal nebo skončil. Tlačítko spustí kolo hned, mimo rozvrh.</span>
+          <button class="btn" id="newBettorBtn">➕ Nový sázkař</button>
           <button class="btn primary" id="runBettorsBtn">Spustit kolo teď</button>
         </div>
       </div>
@@ -453,6 +454,105 @@
 </div>
 
 <div id="toast"></div>
+
+<!-- Průvodce vytvořením sázkaře -->
+<div id="bettorWizard" class="modal-backdrop" style="display:none;">
+  <div class="modal">
+    <h3 style="margin:0 0 4px;">Nový sázkař</h3>
+    <p style="font-size:12.5px; color:var(--txt2); margin:0 0 16px;">
+      Nastav, jak má sázet. Jméno i popis se vygenerují podle povahy strategie.
+    </p>
+
+    <div class="wiz-grid">
+      <div class="field">
+        <label>Na co sází</label>
+        <select id="wizMarket"></select>
+      </div>
+      <div class="field">
+        <label>Minimální jistota (%)</label>
+        <input type="number" id="wizMinProb" min="1" max="99" step="1" value="60">
+      </div>
+      <div class="field">
+        <label>Kurz od</label>
+        <input type="number" id="wizMinOdds" min="1" step="0.05" value="1.2">
+      </div>
+      <div class="field">
+        <label>Kurz do</label>
+        <input type="number" id="wizMaxOdds" min="1" step="0.5" value="10">
+      </div>
+      <div class="field">
+        <label>Výše vkladu</label>
+        <select id="wizStakeMode"></select>
+      </div>
+      <div class="field" id="wizStakePctField">
+        <label>Vklad (% banku)</label>
+        <input type="number" id="wizStakePct" min="0.5" max="35" step="0.5" value="3">
+      </div>
+      <div class="field" id="wizKellyField" style="display:none;">
+        <label>Kelly frakce</label>
+        <input type="number" id="wizKelly" min="0.05" max="1" step="0.05" value="0.25">
+      </div>
+      <div class="field">
+        <label>Max sázek za kolo</label>
+        <input type="number" id="wizMaxBets" min="1" max="10" step="1" value="3">
+      </div>
+      <div class="field">
+        <label>Progrese vkladu</label>
+        <select id="wizProgression"></select>
+      </div>
+      <div class="field">
+        <label>Pauza po X prohrách <span class="muted">(0 = nikdy)</span></label>
+        <input type="number" id="wizPause" min="0" max="10" step="1" value="0">
+      </div>
+      <div class="field">
+        <label>Počáteční bank (Kč)</label>
+        <input type="number" id="wizStart" min="100" step="100" value="1000">
+      </div>
+      <div class="field" style="display:flex; align-items:center; gap:8px; align-self:end;">
+        <input type="checkbox" id="wizOnePerLeague" style="width:auto;">
+        <label style="margin:0;">Nejvýš 1 sázka na ligu</label>
+      </div>
+    </div>
+
+    <div class="card" style="margin:16px 0 0; background:var(--panel-2);">
+      <div style="font-size:12px; color:var(--txt3); margin-bottom:6px;">NÁHLED</div>
+      <div id="wizPreview" style="font-size:13px;">…</div>
+      <div class="toolbar-row" style="margin-top:10px;">
+        <input type="text" id="wizName" class="search-input" placeholder="Vlastní jméno (nepovinné – jinak se vygeneruje)">
+        <button class="btn small" id="wizReroll" title="Vygenerovat jiné jméno">🎲</button>
+      </div>
+    </div>
+
+    <div class="toolbar-row" style="margin-top:16px; justify-content:flex-end;">
+      <button class="btn" id="wizCancel">Zrušit</button>
+      <button class="btn primary" id="wizCreate">Vytvořit sázkaře</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vklad sázkaři -->
+<div id="depositModal" class="modal-backdrop" style="display:none;">
+  <div class="modal" style="max-width:420px;">
+    <h3 style="margin:0 0 4px;">Vklad sázkaři</h3>
+    <p style="font-size:12.5px; color:var(--txt2); margin:0 0 14px;" id="depositWho"></p>
+    <div class="field">
+      <label>Částka (Kč) <span class="muted">– záporná částka = výběr</span></label>
+      <input type="number" id="depositAmount" step="50" value="500">
+    </div>
+    <div class="field">
+      <label>Poznámka (nepovinná)</label>
+      <input type="text" id="depositNote" placeholder="např. Posila po sérii proher">
+    </div>
+    <p style="font-size:12px; color:var(--txt3); margin:10px 0 0;">
+      Vklad se připočte i k počátečnímu banku, aby se dodané peníze nepočítaly jako zisk.
+      Zapíše se do historie sázkaře.
+    </p>
+    <div class="toolbar-row" style="margin-top:16px; justify-content:flex-end;">
+      <button class="btn" id="depositCancel">Zrušit</button>
+      <button class="btn primary" id="depositConfirm">Vložit</button>
+    </div>
+  </div>
+</div>
 
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>

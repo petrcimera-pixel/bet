@@ -182,6 +182,115 @@ def _s_cautious(pool, b, bal):
     return [(best, round(bal * 0.01, 2))]
 
 
+# --- druhá desítka: trhy, progrese a pásma kurzů -----------------------------
+def _one_per_match(cands, limit):
+    """Nejvýš jedna sázka na zápas – jinak by sázkař vsadil na Over i Under
+    téhož zápasu a sám sobě si vyrušil výsledek."""
+    seen, out = set(), []
+    for c in cands:
+        if c["match_id"] in seen:
+            continue
+        seen.add(c["match_id"])
+        out.append(c)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _s_home(pool, b, bal):
+    """Domácí Dalibor – vždy na domácí, sází na výhodu domácího prostředí."""
+    c = sorted([x for x in pool if x["outcome"] == "home" and x["prob"] >= 0.40],
+               key=lambda x: -x["prob"])
+    return [(x, round(bal * 0.03, 2)) for x in _one_per_match(c, 4)]
+
+
+def _s_overs(pool, b, bal):
+    """Gólový Gustav – jen Over linie, věří, že se góly dávají."""
+    c = sorted([x for x in pool if x["outcome"].startswith("over") and x["prob"] >= 0.60],
+               key=lambda x: -x["prob"])
+    return [(x, round(bal * 0.04, 2)) for x in _one_per_match(c, 5)]
+
+
+def _s_unders(pool, b, bal):
+    """Betonový Bedřich – jen Under linie, věří na uzavřené zápasy."""
+    c = sorted([x for x in pool if x["outcome"].startswith("under") and x["prob"] >= 0.60],
+               key=lambda x: -x["prob"])
+    return [(x, round(bal * 0.04, 2)) for x in _one_per_match(c, 5)]
+
+
+def _fib_stake(streak, unit):
+    a, bb = 1, 1
+    for _ in range(min(streak, 10)):
+        a, bb = bb, a + bb
+    return unit * a
+
+
+def _s_fibonacci(pool, b, bal):
+    """Fibonacci Filip – po prohře posune vklad na další Fibonacciho číslo."""
+    c = sorted([x for x in pool if x["prob"] >= 0.60], key=lambda x: -x["prob"])
+    unit = bal * 0.02
+    stake = min(_fib_stake(b.get("loss_streak", 0), unit), bal * 0.25)
+    return [(x, round(stake, 2)) for x in _one_per_match(c, 2)]
+
+
+def _s_dalembert(pool, b, bal):
+    """D'Alembert Denisa – po prohře +1 jednotka, po výhře -1. Mírnější progrese."""
+    c = sorted([x for x in pool if x["prob"] >= 0.58], key=lambda x: -x["prob"])
+    unit = bal * 0.015
+    stake = min(unit * (1 + b.get("loss_streak", 0)), bal * 0.20)
+    return [(x, round(stake, 2)) for x in _one_per_match(c, 3)]
+
+
+def _s_paroli(pool, b, bal):
+    """Paroli Pavla – opak Martingalu: zvyšuje po VÝHŘE, po prohře zpět na základ.
+    Riskuje jen vyhrané peníze, ne dorovnávání ztrát."""
+    c = sorted([x for x in pool if x["prob"] >= 0.60], key=lambda x: -x["prob"])
+    unit = bal * 0.02
+    stake = min(unit * (2 ** min(b.get("win_streak", 0), 3)), bal * 0.20)
+    return [(x, round(stake, 2)) for x in _one_per_match(c, 3)]
+
+
+def _s_low_odds(pool, b, bal):
+    """Jistotář Jarda – jen kurzy do 1.5, hodně malých jistých výher."""
+    c = sorted([x for x in pool if x["odds"] <= 1.5 and x["prob"] >= 0.65],
+               key=lambda x: -x["prob"])
+    return [(x, round(bal * 0.06, 2)) for x in _one_per_match(c, 5)]
+
+
+def _s_high_odds(pool, b, bal):
+    """Riskér Radim – jen kurzy od 3.0 výš, malé vklady, čeká na trefu."""
+    c = sorted([x for x in pool if x["odds"] >= 3.0], key=lambda x: -x["prob"])
+    return [(x, round(bal * 0.01, 2)) for x in _one_per_match(c, 6)]
+
+
+def _s_calibrated(pool, b, bal):
+    """Kalibrovaný Karel – nevěří syrové jistotě modelu, ale opravené podle
+    skutečné historické úspěšnosti."""
+    from . import calibration
+    c = []
+    for x in pool:
+        cal = calibration.calibrate(x["prob"])
+        if cal >= 0.62 and cal * x["odds"] - 1 > 0:
+            c.append((cal, x))
+    c.sort(key=lambda t: -t[0])
+    return [(x, round(bal * 0.04, 2)) for x in _one_per_match([x for _, x in c], 4)]
+
+
+def _s_spread(pool, b, bal):
+    """Diverzifikátor Dita – hodně malých sázek, ale nejvýš jedna na ligu,
+    aby ji nepoložil jeden špatný den v jedné soutěži."""
+    c = sorted([x for x in pool if x["prob"] >= 0.58], key=lambda x: -x["prob"])
+    seen_lg, seen_m, out = set(), set(), []
+    for x in c:
+        if x["league"] in seen_lg or x["match_id"] in seen_m:
+            continue
+        seen_lg.add(x["league"]); seen_m.add(x["match_id"])
+        out.append((x, round(bal * 0.015, 2)))
+        if len(out) >= 8:
+            break
+    return out
+
+
 PROFILES = [
     {"id": "kelly", "name": "Kelly Kateřina", "emoji": "📐",
      "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
@@ -213,8 +322,292 @@ PROFILES = [
     {"id": "cautious", "name": "Opatrná Olga", "emoji": "🐢",
      "tagline": "Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.",
      "strategy": _s_cautious},
+    # --- druhá desítka ---
+    {"id": "home", "name": "Domácí Dalibor", "emoji": "🏠",
+     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
+     "strategy": _s_home},
+    {"id": "overs", "name": "Gólový Gustav", "emoji": "⚡",
+     "tagline": "Jen Over linie – věří, že góly padnou.",
+     "strategy": _s_overs},
+    {"id": "unders", "name": "Betonový Bedřich", "emoji": "🧱",
+     "tagline": "Jen Under linie – věří na uzavřené obranné zápasy.",
+     "strategy": _s_unders},
+    {"id": "fibonacci", "name": "Fibonacci Filip", "emoji": "🌀",
+     "tagline": "Po prohře posune vklad na další Fibonacciho číslo – mírnější než Martingale.",
+     "strategy": _s_fibonacci},
+    {"id": "dalembert", "name": "D'Alembert Denisa", "emoji": "⚖️",
+     "tagline": "Po prohře +1 jednotka, po výhře −1. Nejmírnější z progresivních systémů.",
+     "strategy": _s_dalembert},
+    {"id": "paroli", "name": "Paroli Pavla", "emoji": "🚀",
+     "tagline": "Opak Martingalu: zvyšuje po výhře, riskuje jen vyhrané peníze.",
+     "strategy": _s_paroli},
+    {"id": "lowodds", "name": "Jistotář Jarda", "emoji": "🔒",
+     "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
+     "strategy": _s_low_odds},
+    {"id": "highodds", "name": "Riskér Radim", "emoji": "💥",
+     "tagline": "Jen kurzy od 3.0 výš, drobné vklady – čeká na jednu velkou trefu.",
+     "strategy": _s_high_odds},
+    {"id": "calibrated", "name": "Kalibrovaný Karel", "emoji": "🎚️",
+     "tagline": "Nevěří syrové jistotě modelu, ale opravené podle skutečné úspěšnosti.",
+     "strategy": _s_calibrated},
+    {"id": "spread", "name": "Diverzifikátor Dita", "emoji": "🕸️",
+     "tagline": "Hodně malých sázek, ale nejvýš jedna na ligu – rozloží riziko.",
+     "strategy": _s_spread},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
+
+
+# ---------------------------------------------------------------------------
+# Vlastní sázkaři – strategie poskládaná z parametrů z průvodce
+# ---------------------------------------------------------------------------
+MARKETS = {
+    "any":    ("cokoliv", lambda c: True),
+    "winner": ("jen vítěz zápasu (1X2)", lambda c: c["market"] == "winner"),
+    "home":   ("jen domácí", lambda c: c["outcome"] == "home"),
+    "away":   ("jen hosté", lambda c: c["outcome"] == "away"),
+    "over":   ("jen Over linie", lambda c: c["outcome"].startswith("over")),
+    "under":  ("jen Under linie", lambda c: c["outcome"].startswith("under")),
+}
+PROGRESSIONS = {
+    "none":       "plochý vklad",
+    "martingale": "po prohře dvojnásobek",
+    "fibonacci":  "po prohře další Fibonacciho číslo",
+    "dalembert":  "po prohře +1 jednotka",
+    "paroli":     "po výhře dvojnásobek",
+}
+STAKE_MODES = {"flat": "pevné % banku", "kelly": "Kelly kritérium"}
+
+
+def default_params() -> dict:
+    return {"min_prob": 0.60, "min_odds": 1.20, "max_odds": 10.0,
+            "market": "any", "stake_mode": "flat", "stake_pct": 0.03,
+            "kelly_fraction": 0.25, "max_bets": 3, "progression": "none",
+            "one_per_league": False, "pause_after_losses": 0}
+
+
+def normalize_params(params: dict) -> dict:
+    """Očistí parametry z průvodce – neznámé nebo nesmyslné hodnoty spadnou na
+    výchozí. Bez toho by prázdný formulář vyrobil sázkaře s trhem "" a prázdnou
+    progresí, který by se pak choval nepředvídatelně."""
+    d = default_params()
+    p = {**d, **(params or {})}
+
+    def num(key, lo, hi):
+        try:
+            return max(lo, min(hi, float(p.get(key))))
+        except (TypeError, ValueError):
+            return d[key]
+
+    out = {
+        "market": p.get("market") if p.get("market") in MARKETS else d["market"],
+        "progression": p.get("progression") if p.get("progression") in PROGRESSIONS else d["progression"],
+        "stake_mode": p.get("stake_mode") if p.get("stake_mode") in STAKE_MODES else d["stake_mode"],
+        "min_prob": num("min_prob", 0.01, 0.99),
+        "min_odds": num("min_odds", 1.01, 100.0),
+        "max_odds": num("max_odds", 1.01, 1000.0),
+        "stake_pct": num("stake_pct", 0.001, DAILY_STAKE_CAP_PCT),
+        "kelly_fraction": num("kelly_fraction", 0.01, 1.0),
+        "max_bets": int(num("max_bets", 1, 20)),
+        "pause_after_losses": int(num("pause_after_losses", 0, 20)),
+        "one_per_league": bool(p.get("one_per_league")),
+    }
+    if out["max_odds"] < out["min_odds"]:
+        out["max_odds"] = out["min_odds"]
+    return out
+
+
+def _progression_multiplier(params, b):
+    prog = params.get("progression", "none")
+    losses = b.get("loss_streak", 0)
+    wins = b.get("win_streak", 0)
+    if prog == "martingale":
+        return 2 ** min(losses, 5)
+    if prog == "fibonacci":
+        a, bb = 1, 1
+        for _ in range(min(losses, 10)):
+            a, bb = bb, a + bb
+        return a
+    if prog == "dalembert":
+        return 1 + losses
+    if prog == "paroli":
+        return 2 ** min(wins, 3)
+    return 1
+
+
+def _s_custom(pool, b, bal):
+    """Strategie vlastního sázkaře – řídí se parametry z průvodce, ne kódem."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    ok = MARKETS.get(params.get("market", "any"), MARKETS["any"])[1]
+    cands = [c for c in pool
+             if c["prob"] >= float(params["min_prob"])
+             and float(params["min_odds"]) <= c["odds"] <= float(params["max_odds"])
+             and ok(c)]
+    cands.sort(key=lambda c: -c["prob"])
+
+    mult = _progression_multiplier(params, b)
+    out, seen_m, seen_lg = [], set(), set()
+    for c in cands:
+        if c["match_id"] in seen_m:
+            continue
+        if params.get("one_per_league") and c["league"] in seen_lg:
+            continue
+        if params.get("stake_mode") == "kelly":
+            stake = _kelly_stake(c["prob"], c["odds"], bal, float(params.get("kelly_fraction", 0.25)),
+                                 cap_pct=0.25, confidence_scale=_conf_scale(c))
+        else:
+            stake = bal * float(params.get("stake_pct", 0.03))
+        stake = round(min(stake * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+        if stake < 1:
+            continue
+        seen_m.add(c["match_id"]); seen_lg.add(c["league"])
+        out.append((c, stake))
+        if len(out) >= int(params.get("max_bets", 3)):
+            break
+    return out
+
+
+def describe_params(params: dict) -> str:
+    """Lidský popis strategie – ať sázkař z průvodce má stejně srozumitelnou
+    charakteristiku jako ti vestavění."""
+    p = normalize_params(params)
+    bits = [f"jistota od {round(p['min_prob'] * 100)} %",
+            f"kurz {p['min_odds']}–{p['max_odds']}"]
+    if p.get("market") != "any":
+        bits.append(MARKETS.get(p["market"], ("?", None))[0])
+    bits.append(f"{round(p['stake_pct'] * 100, 1)} % banku"
+                if p.get("stake_mode") == "flat"
+                else f"Kelly {round(float(p.get('kelly_fraction', 0.25)) * 100)} %")
+    if p.get("progression") != "none":
+        bits.append(PROGRESSIONS.get(p["progression"], p["progression"]))
+    n = int(p["max_bets"])
+    bits.append(f"max {n} " + ("sázka" if n == 1 else "sázky" if n < 5 else "sázek"))
+    if p.get("one_per_league"):
+        bits.append("nejvýš 1 na ligu")
+    if p.get("pause_after_losses"):
+        bits.append(f"pauza po {p['pause_after_losses']} prohrách")
+    return ", ".join(bits).capitalize() + "."
+
+
+# Jméno se generuje z povahy strategie, ať sedí k tomu, co sázkař dělá.
+# Přídavné jméno je ve dvou rodech, aby nevznikaly zrůdnosti typu
+# "Počtářský Pavla" – jména jsou proto rozdělená podle rodu.
+_NAME_BY_TRAIT = {
+    "martingale": ("Dvojnásobný", "Dvojnásobná", "📈"),
+    "fibonacci":  ("Spirálový", "Spirálová", "🌀"),
+    "dalembert":  ("Vyvážený", "Vyvážená", "⚖️"),
+    "paroli":     ("Rozjetý", "Rozjetá", "🚀"),
+    "over":       ("Ofenzivní", "Ofenzivní", "⚡"),
+    "under":      ("Obranný", "Obranná", "🧱"),
+    "home":       ("Domácký", "Domácká", "🏠"),
+    "away":       ("Cestovní", "Cestovní", "✈️"),
+    "winner":     ("Vítězný", "Vítězná", "🏆"),
+    "kelly":      ("Počtářský", "Počtářská", "📐"),
+    "safe":       ("Opatrný", "Opatrná", "🐢"),
+    "risky":      ("Riskantní", "Riskantní", "💥"),
+    "steady":     ("Klidný", "Klidná", "🎯"),
+}
+_MALE = ["Adam", "Bohuš", "Cyril", "David", "Emil", "Filip", "Gustav", "Hynek",
+         "Ivan", "Jakub", "Karel", "Lubor", "Marek", "Norbert", "Oldřich",
+         "Petr", "Radim", "Slavoj", "Tomáš", "Viktor", "Zdeněk"]
+_FEMALE = ["Alena", "Blanka", "Cecílie", "Denisa", "Eliška", "Františka", "Gita",
+           "Hana", "Iva", "Jitka", "Klára", "Lenka", "Magda", "Nela", "Olga",
+           "Pavla", "Renata", "Simona", "Tereza", "Vlasta", "Zuzana"]
+
+
+def generate_name(params: dict, taken=()) -> tuple:
+    """(jméno, emoji) odvozené z povahy strategie – "Ofenzivní Gustav" apod.
+    Aliterace (stejné počáteční písmeno) se použije, když je volná."""
+    p = normalize_params(params)
+    if p.get("progression") != "none":
+        trait = p["progression"]
+    elif p.get("market") in ("over", "under", "home", "away", "winner"):
+        trait = p["market"]
+    elif p.get("stake_mode") == "kelly":
+        trait = "kelly"
+    elif p.get("min_prob", 0) >= 0.75:
+        trait = "safe"
+    elif p.get("min_odds", 0) >= 3.0 or p.get("stake_pct", 0) >= 0.08:
+        trait = "risky"
+    else:
+        trait = "steady"
+    masc, fem, emoji = _NAME_BY_TRAIT.get(trait, ("Nový", "Nová", "🎲"))
+    taken = set(taken)
+    male = random.choice([True, False])
+    for use_male in ([male, not male] if True else []):
+        adj = masc if use_male else fem
+        names = _MALE if use_male else _FEMALE
+        letter = adj[0].upper()
+        ordered = [n for n in names if n.startswith(letter)] + [n for n in names if not n.startswith(letter)]
+        for first in ordered:
+            name = f"{adj} {first}"
+            if name not in taken:
+                return name, emoji
+    return f"{masc} {uuid.uuid4().hex[:4]}", emoji
+
+
+def add_bettor(params: dict, name: str = None, emoji: str = None,
+               start_balance: float = 1000.0) -> dict:
+    st = load_state()
+    params = normalize_params(params)
+    if not name:
+        name, gen_emoji = generate_name(params, taken=[v.get("name") for v in st.values()])
+        emoji = emoji or gen_emoji
+    bid = "cust_" + uuid.uuid4().hex[:8]
+    st[bid] = {
+        "name": name, "emoji": emoji or "🎲", "tagline": describe_params(params),
+        "balance": float(start_balance), "start_balance": float(start_balance),
+        "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
+        "win_streak": 0, "custom": True, "params": params,
+        "transactions": [{"ts": int(time.time()), "type": "start",
+                          "amount": float(start_balance), "note": "Počáteční vklad"}],
+    }
+    save_state(st)
+    return {"id": bid, **st[bid]}
+
+
+def delete_bettor(bid: str) -> bool:
+    st = load_state()
+    if bid not in st:
+        return False
+    del st[bid]
+    save_state(st)
+    _deleted_ids().add(bid)
+    return True
+
+
+def _deleted_ids() -> set:
+    """Smazaní vestavění sázkaři se nesmí při dalším startu vrátit."""
+    d = storage.load("bettors_deleted.json", {"ids": []}) or {"ids": []}
+    ids = set(d.get("ids") or [])
+
+    class _S(set):
+        def add(self, x):
+            super().add(x)
+            storage.save("bettors_deleted.json", {"ids": sorted(self)})
+    return _S(ids)
+
+
+def deposit(bid: str, amount: float, note: str = "") -> dict:
+    """Vklad peněz sázkaři. Zapíše se do historie transakcí a zvýší bank i
+    start_balance – jinak by se dodané peníze počítaly jako zisk."""
+    st = load_state()
+    b = st.get(bid)
+    if not b:
+        return None
+    amount = round(float(amount), 2)
+    if amount == 0:
+        return None
+    b["balance"] = round(b["balance"] + amount, 2)
+    b["start_balance"] = round(b.get("start_balance", 0) + amount, 2)
+    b.setdefault("transactions", []).insert(0, {
+        "ts": int(time.time()),
+        "type": "deposit" if amount > 0 else "withdraw",
+        "amount": amount, "note": note or "",
+    })
+    save_state(st)
+    return {"id": bid, "balance": b["balance"], "start_balance": b["start_balance"]}
 
 
 # ---------------------------------------------------------------------------
@@ -235,15 +628,25 @@ def load_state():
     if st is None:
         st = _default_state()
         storage.save(FILE, st)
-    # doplní chybějící sázkaře (kdyby se PROFILES v budoucnu rozšířily)
+    # doplní chybějící vestavěné sázkaře (když PROFILES přibydou), ale NE ty,
+    # které uživatel smazal – jinak by se po restartu vraceli
+    deleted = set((storage.load("bettors_deleted.json", {}) or {}).get("ids") or [])
     changed = False
     for p in PROFILES:
-        if p["id"] not in st:
+        if p["id"] not in st and p["id"] not in deleted:
             st[p["id"]] = _default_state()[p["id"]]
             changed = True
     if changed:
         storage.save(FILE, st)
     return st
+
+
+def _strategy_for(bid, b):
+    """Vestavěný sázkař má strategii v kódu, vlastní ji skládá z parametrů."""
+    if b.get("custom"):
+        return _s_custom
+    prof = _BY_ID.get(bid)
+    return prof["strategy"] if prof else None
 
 
 def save_state(st):
@@ -309,8 +712,12 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
     pool = _build_pool(predictions)
     placed_total = {}
 
-    for prof in PROFILES:
-        b = st[prof["id"]]
+    # projít VŠECHNY sázkaře ve stavu (vestavěné i vlastní), ne jen PROFILES
+    for bid in list(st.keys()):
+        b = st[bid]
+        strategy = _strategy_for(bid, b)
+        if strategy is None:
+            continue
         if b.get("last_run_date") != today_str:
             b["last_run_date"] = today_str
             b["ran_hours"] = []
@@ -332,7 +739,7 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
         bettor_pool = [c for c in pool if c["match_id"] not in already]
 
         try:
-            decisions = prof["strategy"](bettor_pool, b, b["balance"]) if bettor_pool else []
+            decisions = strategy(bettor_pool, b, b["balance"]) if bettor_pool else []
         except Exception:
             decisions = []
         placed = 0
@@ -364,7 +771,7 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
             placed += 1
         if current_hour is not None and current_hour not in b.get("ran_hours", []):
             b.setdefault("ran_hours", []).append(current_hour)
-        placed_total[prof["id"]] = placed
+        placed_total[bid] = placed
     save_state(st)
     return placed_total
 
@@ -400,6 +807,7 @@ def settle_all(results: dict) -> int:
     n = 0
     for bid, b in st.items():
         streak = b.get("loss_streak", 0)
+        wins = b.get("win_streak", 0)      # série výher – pro Paroli (opak Martingalu)
         for bet in b["bets"]:
             if bet["status"] != "open":
                 continue
@@ -414,17 +822,20 @@ def settle_all(results: dict) -> int:
                 bet["pnl"] = round(payout - bet["stake"], 2)
                 b["balance"] = round(b["balance"] + payout, 2)
                 streak = 0
+                wins += 1
             elif r == "void":
                 bet["pnl"] = 0.0
                 b["balance"] = round(b["balance"] + bet["stake"], 2)
             else:
                 bet["pnl"] = round(-bet["stake"], 2)
                 streak += 1
+                wins = 0
             bet["status"] = r
             bet["settled_ts"] = int(time.time())
             n += 1
             _record_ml_feedback(bid, bet, r)
         b["loss_streak"] = streak
+        b["win_streak"] = wins
     if n:
         save_state(st)
     return n
@@ -464,6 +875,9 @@ def _bettor_stats(bid, b):
         equity.append(cum)
     return {
         "id": bid, "name": b["name"], "emoji": b["emoji"], "tagline": b["tagline"],
+        "custom": bool(b.get("custom")),
+        "deposited": round(sum(t["amount"] for t in (b.get("transactions") or [])
+                               if t.get("type") in ("deposit", "withdraw")), 2),
         "balance": b["balance"], "start_balance": b["start_balance"],
         # Realizovaný zisk z VYHODNOCENÝCH sázek. balance - start_balance by
         # počítalo i vklady zamrzlé v otevřených sázkách jako by byly prohrané,
@@ -496,6 +910,8 @@ def bettor_detail(bid: str) -> dict:
         return {}
     stats = _bettor_stats(bid, b)
     stats["bets"] = b["bets"][:50]
+    stats["transactions"] = (b.get("transactions") or [])[:50]
+    stats["params"] = b.get("params")
     return stats
 
 
