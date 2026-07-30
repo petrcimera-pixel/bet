@@ -315,15 +315,16 @@ function renderRecentBets(bets) {
   const box = el('recentBets');
   if (!bets.length) { box.innerHTML = `<div class="empty-state">Agent zatím nevsadil žádný tip</div>`; return; }
   box.innerHTML = `<div class="table-wrap"><table>
-    <thead><tr><th>Zápas</th><th>Kdy</th><th>Tip</th><th>Kurz</th><th>Status</th><th>P&L</th><th></th></tr></thead>
+    <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Sázka</th><th>P&L</th><th></th></tr></thead>
     <tbody>${bets.slice(0, 12).map((b, i) => {
       const hasWhy = (b.why && b.why.length) || b.outcome === 'acca';
-      const when = `${fmtDateShort(b.match_date)} ${b.match_time || ''}`.trim() || '—';
+      const when = fmtWhen(b.match_date, b.match_time) || '—';
       const whyId = `betWhy${i}`;
       return `
       <tr>
         <td>${b.match || '—'}</td>
         <td class="muted">${when}</td>
+        <td>${matchStateHtml(b.match_date, b.match_time, b.status)}</td>
         <td>${b.label || '?'}</td>
         <td>${b.odds || 0}×</td>
         <td><span class="badge ${b.status}">${(b.status || 'open').toUpperCase()}</span></td>
@@ -334,7 +335,7 @@ function renderRecentBets(bets) {
       </tr>
       ${hasWhy ? `
       <tr id="${whyId}" class="bet-why-row" style="display:none;">
-        <td colspan="7" style="background:var(--panel-2);">
+        <td colspan="8" style="background:var(--panel-2);">
           ${b.outcome === 'acca'
             ? `<div style="font-size:12.5px; color:var(--txt2);"><strong>AKO tiket – nohy:</strong><ul style="margin:6px 0 0; padding-left:18px;">
                 ${(b.legs || []).map(l => `<li>${l.match}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
@@ -533,15 +534,53 @@ async function loadLeagues() {
       return;
     }
     const apif = d.apifootball || {};
+    const withOddsLeagues = d.leagues.filter(l => l.with_odds).length;
     sum.innerHTML = `
-      <div class="pill-row" style="margin-bottom:12px;">
+      <div class="pill-row" style="margin-bottom:10px;">
         <span class="pill">${d.total_leagues} soutěží</span>
         <span class="pill">${d.total_matches} zápasů</span>
-        <span class="pill">${d.total_with_odds} s reálnými kurzy</span>
+        <span class="pill">${d.total_with_odds} zápasů s kurzy</span>
+        <span class="pill" title="Na soutěžích bez kurzů agent nesází">${withOddsLeagues} soutěží s kurzy</span>
         <span class="pill">okno ${d.days} dní</span>
         ${apif.enabled ? `<span class="pill">+ doplňkové ligy (${apif.window_from} – ${apif.window_to})</span>` : ''}
+      </div>
+      <div class="toolbar-row" style="margin-bottom:12px;">
+        <input type="text" id="leagueFilter" class="search-input" placeholder="Filtrovat soutěž nebo zemi…">
+        <button class="btn small" id="leagueOnlyOdds">Jen s kurzy</button>
       </div>`;
-    const rows = d.leagues.map(l => {
+    STATE.leaguesData = d.leagues;
+    el('leagueFilter')?.addEventListener('input', renderLeagueRows);
+    el('leagueOnlyOdds')?.addEventListener('click', (ev) => {
+      _leagueOnlyOdds = !_leagueOnlyOdds;
+      ev.target.classList.toggle('primary', _leagueOnlyOdds);
+      renderLeagueRows();
+    });
+    renderLeagueRows();
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = `<div class="empty-state">Načtení soutěží selhalo: ${e.message}</div>`;
+  }
+}
+
+// Filtr i řazení jsou čistě klientské – data už máme, není proč chodit na server.
+let _leagueOnlyOdds = false;
+let _leagueSort = { key: 'matches', dir: -1 };
+
+function renderLeagueRows() {
+  const box = el('leaguesList');
+  const q = _fold(el('leagueFilter')?.value || '');
+  let list = (STATE.leaguesData || []).filter(l =>
+    (!_leagueOnlyOdds || l.with_odds > 0) &&
+    (!q || _fold(l.league).includes(q) || _fold(l.country || '').includes(q)));
+  const k = _leagueSort.key, dir = _leagueSort.dir;
+  list = [...list].sort((a, b) => {
+    const va = a[k], vb = b[k];
+    if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * dir;
+    return String(va ?? '').localeCompare(String(vb ?? ''), 'cs') * dir;
+  });
+  const arrow = key => _leagueSort.key === key ? (_leagueSort.dir < 0 ? ' ▾' : ' ▴') : '';
+  {
+    const rows = list.map(l => {
       // ligy z doplňkového zdroje nemají kurzy, takže na nich agent nesází
       const odds = l.with_odds
         ? `<span class="badge real">${l.with_odds}</span>`
@@ -560,15 +599,31 @@ async function loadLeagues() {
     }).join('');
     box.className = '';
     box.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr><th>Soutěž</th><th>Země</th><th>Zápasů</th><th>S kurzy</th><th>Kdy</th><th></th></tr></thead>
-      <tbody>${rows}</tbody></table></div>`;
+      <thead><tr>
+        <th class="lg-sort" data-key="league">Soutěž${arrow('league')}</th>
+        <th class="lg-sort" data-key="country">Země${arrow('country')}</th>
+        <th class="lg-sort" data-key="matches">Zápasů${arrow('matches')}</th>
+        <th class="lg-sort" data-key="with_odds">S kurzy${arrow('with_odds')}</th>
+        <th class="lg-sort" data-key="next_date">Kdy${arrow('next_date')}</th>
+        <th></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" class="muted">Nic neodpovídá filtru</td></tr>'}</tbody></table></div>`;
     box.querySelectorAll('.league-row').forEach(tr => {
       tr.addEventListener('click', () => openLeagueMatches(tr.dataset.league, tr.dataset.country));
     });
-  } catch (e) {
-    box.className = '';
-    box.innerHTML = `<div class="empty-state">Načtení soutěží selhalo: ${e.message}</div>`;
+    box.querySelectorAll('.lg-sort').forEach(th => {
+      th.style.cursor = 'pointer';
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        _leagueSort = { key, dir: _leagueSort.key === key ? -_leagueSort.dir : -1 };
+        renderLeagueRows();
+      });
+    });
   }
+}
+
+/** Text bez diakritiky – ať "plzen" najde "Plzeň" i ve filtru soutěží. */
+function _fold(s) {
+  return String(s ?? '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
 }
 
 /** Názvy soutěží chodí ze zdrojů dat, takže do atributu jen escapované. */
@@ -587,7 +642,7 @@ async function openLeagueMatches(league, country) {
       + `&country=${encodeURIComponent(country || '')}&sport=${STATE.sport}`, { timeoutMs: 120000 });
     const rows = (d.matches || []).map(m => `
       <tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
-        <td>${fmtDateShort(m.date)} ${m.time || ''}</td>
+        <td>${fmtWhen(m.date, m.time)}</td>
         <td><strong>${m.home}</strong> – ${m.away}</td>
         <td>${m.has_odds ? '<span class="badge real">kurzy</span>'
               : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává'}">jen model</span>`}</td>
@@ -639,7 +694,7 @@ function renderSearchResults(d, box) {
       ? '<span class="badge real">kurzy</span>'
       : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
     return `<tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
-      <td>${fmtDateShort(m.date)} ${m.time || ''}</td>
+      <td>${fmtWhen(m.date, m.time)}</td>
       <td><strong>${m.home}</strong> – ${m.away}</td>
       <td class="muted">${m.flag || ''} ${m.league}</td>
       <td>${badge}</td>
@@ -730,7 +785,7 @@ function renderAnalysis(d, box) {
   box.innerHTML = `
     <div class="card">
       <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
-      <p class="lead">${m.flag || ''} ${m.league} · ${fmtDateShort(m.date)} ${m.time || ''}</p>
+      <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
       ${probRow}
       <p style="margin-top:10px;">
         Očekávané skóre <strong>${d.exp_goals ? `${d.exp_goals.home} : ${d.exp_goals.away}` : '—'}</strong>
@@ -899,6 +954,46 @@ function fmtDateShort(dateStr) {
   return `${d}.${m}.`;
 }
 
+// ---------------------------------------------------------------------------
+// Čas zápasu
+// ---------------------------------------------------------------------------
+// Zdroje (ESPN i API-Football) dávají čas výkopu v UTC a appka ho dřív
+// vypisovala tak, jak přišel – u nás to znamenalo každý zápas o 2 h vedle
+// (zápas s výkopem v 10:00 se tvářil, že začíná v 08:00).
+function matchDateTime(dateStr, timeStr) {
+  if (!dateStr) return null;
+  const d = new Date(`${dateStr}T${(timeStr || '00:00')}:00Z`);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+/** "30.07. 19:30" v místním čase (může přepadnout i přes půlnoc). */
+function fmtWhen(dateStr, timeStr) {
+  const d = matchDateTime(dateStr, timeStr);
+  if (!d) return `${fmtDateShort(dateStr)} ${timeStr || ''}`.trim();
+  const p = n => String(n).padStart(2, '0');
+  return `${p(d.getDate())}.${p(d.getMonth() + 1)}. ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+const LIVE_WINDOW_MIN = 150;   // ~2.5 h od výkopu, než se zápas počítá za dohraný
+
+/** Stav ZÁPASU (ne sázky) odvozený z času výkopu – aby "OPEN" neznamenalo
+ *  zároveň "je to za tři dny" i "dohrálo se a čeká na vyhodnocení". */
+function matchStateHtml(dateStr, timeStr, betStatus) {
+  if (betStatus && betStatus !== 'open') return '<span class="muted">dohráno</span>';
+  const d = matchDateTime(dateStr, timeStr);
+  if (!d) return '<span class="muted">—</span>';
+  const min = (Date.now() - d.getTime()) / 60000;
+  if (min < 0) {
+    const h = Math.round(-min / 60);
+    if (-min < 60) return `<span class="muted">za ${Math.round(-min)} min</span>`;
+    if (h < 24) return `<span class="muted">za ${h} h</span>`;
+    const dni = Math.round(h / 24);
+    return `<span class="muted">za ${dni} ${dni === 1 ? 'den' : dni < 5 ? 'dny' : 'dní'}</span>`;
+  }
+  if (min < LIVE_WINDOW_MIN) return '<span class="badge live-pill">🔴 hraje se</span>';
+  return '<span class="badge model">čeká na výsledek</span>';
+}
+
 function matchCardHtml(m, bet) {
   // POZOR: m.result je naplněné i u právě hraných zápasů (ESPN vrací průběžné
   // skóre a goals_model ho propíše do result), takže "má skóre" != "dohráno" –
@@ -912,7 +1007,7 @@ function matchCardHtml(m, bet) {
   // U živých zápasů je ESPN shortDetail (m.status) aktuální minuta/půle
   // ("45'", "HT", "2nd Half") – užitečnější než jen "ŽIVĚ".
   const liveDetail = m.live && m.status ? `<span class="live-min">${m.status}</span>` : '';
-  const startLabel = `${fmtDateShort(m.date)} ${m.time || ''}`.trim();
+  const startLabel = fmtWhen(m.date, m.time);
   const best = m.best_value || {};
   const hasPick = best.outcome && m.odds_source === 'real';
 
@@ -950,14 +1045,14 @@ function matchCardHtml(m, bet) {
           <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
         </div>
         <div class="pick-col">
-          ${hasPick ? `
+          ${finished ? '' : hasPick ? `
             <div class="pick-badge">
               <span class="pl">${best.label || '?'}</span>
               <span class="pv">${(best.odds || 0).toFixed(2)}</span>
             </div>
             <span class="badge ${best.is_value ? 'real' : 'model'}">${Math.round((best.prob || 0) * 100)}%</span>
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
-          ${(!_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
+          ${(!finished && !_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
         </div>
       </div>
@@ -982,6 +1077,13 @@ async function loadBankroll() {
     const s = data.stats;
     setText('bStart', `${fmt(s.start_balance)} ${s.currency || 'Kč'}`);
     setText('bCurrent', `${fmt(s.balance)} ${s.currency || 'Kč'}`);
+    // stejné rozlišení jako na dashboardu: zůstatek není ztráta, dokud jsou
+    // peníze jen zamrzlé v otevřených sázkách
+    setText('bOpenStake', s.open_stake
+      ? `${fmt(s.open_stake)} ${s.currency || 'Kč'} v otevřených sázkách` : 'žádné otevřené sázky');
+    setText('bProfit', `${fmt(s.profit)} ${s.currency || 'Kč'}`);
+    el('bProfit').className = 'value ' + (s.profit >= 0 ? 'pos' : 'bad');
+    setText('bProfitHint', `z ${s.settled_count || 0} vyhodnocených`);
     setText('bRoi', s.roi !== null && s.roi !== undefined ? pct(s.roi) : '—');
     setText('bWinRate', s.win_rate !== null ? pct(s.win_rate) : '—');
     if (s.equity && s.equity.length > 1) drawEquity(s.equity);
@@ -1013,10 +1115,12 @@ function drawEquity(equity) {
 
 function renderBetsTable(bets) {
   const tbody = el('betsTable');
-  if (!bets.length) { tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Zatím žádné sázky</td></tr>`; return; }
+  if (!bets.length) { tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Zatím žádné sázky</td></tr>`; return; }
   tbody.innerHTML = bets.map(b => `
     <tr>
       <td>${b.match || '—'}</td>
+      <td class="muted">${fmtWhen(b.match_date, b.match_time)}</td>
+      <td>${matchStateHtml(b.match_date, b.match_time, b.status)}</td>
       <td>${b.label || '?'}</td>
       <td>${fmt(b.stake || 0)} Kč</td>
       <td>${b.odds || 0}×</td>
@@ -1258,11 +1362,12 @@ async function toggleBettorDetail(id, btn) {
     const bets = data.bets || [];
     if (!bets.length) { box.innerHTML = '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>'; return; }
     box.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr><th>Zápas</th><th>Kdy</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Status</th><th>P&L</th></tr></thead>
+      <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr>
           <td>${bt.match}</td>
-          <td class="muted">${fmtDateShort(bt.match_date)} ${bt.match_time || ''}</td>
+          <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
+          <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status)}</td>
           <td>${bt.label}</td>
           <td>${bt.odds}×</td>
           <td>${fmt(bt.stake)} Kč</td>

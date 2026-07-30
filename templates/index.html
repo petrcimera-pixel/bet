@@ -175,7 +175,8 @@
 
       <div class="grid-stats">
         <div class="stat-tile"><div class="label">Počáteční bank</div><div class="value" id="bStart">—</div></div>
-        <div class="stat-tile"><div class="label">Aktuální zůstatek</div><div class="value" id="bCurrent">—</div></div>
+        <div class="stat-tile"><div class="label">Aktuální zůstatek</div><div class="value" id="bCurrent">—</div><div class="hint" id="bOpenStake"></div></div>
+        <div class="stat-tile"><div class="label">Realizovaný zisk</div><div class="value" id="bProfit">—</div><div class="hint" id="bProfitHint"></div></div>
         <div class="stat-tile"><div class="label">ROI</div><div class="value" id="bRoi">—</div></div>
         <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="bWinRate">—</div></div>
       </div>
@@ -189,7 +190,7 @@
         <h3>Historie sázek</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Zápas</th><th>Tip</th><th>Vklad</th><th>Kurz</th><th>Status</th><th>P&L</th></tr></thead>
+            <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Vklad</th><th>Kurz</th><th>Sázka</th><th>P&L</th></tr></thead>
             <tbody id="betsTable"></tbody>
           </table>
         </div>
