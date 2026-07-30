@@ -250,6 +250,21 @@
       </div>
 
       <div class="card">
+        <h3>Doplňkové ligy (API-Football)</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          ESPN nevede některé evropské ligy vůbec – českou, polskou, slovenskou, ukrajinskou,
+          chorvatskou ani srbskou. Bezplatný klíč z <strong>api-football.com</strong> je doplní.
+          Ve free tarifu jdou stáhnout jen rozpisy a výsledky, ne kurzy, takže tyhle zápasy
+          budou mít jen odhad modelu (badge „MODEL") a agent na ně sázet nebude.
+        </p>
+        <div id="apifStatus" style="font-size:13px; margin-bottom:10px;"></div>
+        <div class="toolbar-row">
+          <input type="password" id="apifKey" class="search-input" placeholder="API klíč z api-football.com">
+          <button class="btn" id="apifSaveBtn">Uložit</button>
+        </div>
+      </div>
+
+      <div class="card">
         <h3>Diagnostika</h3>
         <div id="diagInfo" class="muted" style="font-size:12.5px; line-height:1.8;"></div>
       </div>
@@ -346,6 +361,23 @@
           tipy) a spočítanou korekční křivkou opravuje pravděpodobnost, podle které se pak vybírají
           tutovky. Stav (aktivní/čeká na data, kolik vzorků) je vidět v Nastavení → Diagnostika,
           graf srovnání modelu se skutečností na stránce Sázkaři.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🌍 Které ligy appka vidí</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
+          Hlavní zdroj je ESPN, který vede 220 fotbalových soutěží zdarma a jako jediný dodává
+          i reálné kurzy. Některé evropské ligy v něm ale nejsou vůbec – <strong>česká, polská,
+          slovenská, ukrajinská, chorvatská ani srbská</strong>. České týmy se proto objeví jen
+          přes evropské poháry.
+        </p>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          Doplnit je jde bezplatným klíčem z api-football.com (Nastavení → Doplňkové ligy).
+          Ve free tarifu z něj jdou stáhnout rozpisy a výsledky, ale ne kurzy, takže tyhle zápasy
+          budou mít jen odhad modelu s badge „MODEL“ – agent na ně sázet nebude, protože appka
+          bez reálného kurzu žádnou sázku nedoporučuje. Model se z jejich výsledků ale učí
+          normálně, takže ratingy těch týmů porostou.
         </p>
       </div>
 

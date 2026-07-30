@@ -114,6 +114,7 @@ function bindEvents() {
   el('saveBankrollBtn')?.addEventListener('click', saveBankrollSettings);
   el('runBettorsBtn')?.addEventListener('click', runBettorsRound);
   el('retrainMlBtn')?.addEventListener('click', retrainMlModel);
+  el('apifSaveBtn')?.addEventListener('click', saveApifKey);
   document.querySelectorAll('#sportStrip .pill[data-sport]').forEach(p => {
     p.addEventListener('click', () => {
       document.querySelectorAll('#sportStrip .pill').forEach(x => x.classList.remove('active'));
@@ -897,8 +898,39 @@ function renderBetsTable(bets) {
 // ---------------------------------------------------------------------------
 // SETTINGS
 // ---------------------------------------------------------------------------
+async function loadApifStatus() {
+  const box = el('apifStatus');
+  if (!box) return;
+  try {
+    const s = await api('/api/apifootball/status');
+    box.innerHTML = s.enabled
+      ? `<span class="badge real">aktivní</span> Dnes využito <strong>${s.used_today}/${s.budget}</strong> dotazů (limit se obnoví o půlnoci UTC).`
+      : '<span class="badge model">nezapojeno</span> Bez klíče jede appka jen na ESPN.';
+  } catch (e) {
+    box.innerHTML = '<span class="muted">Stav se nepodařilo načíst.</span>';
+  }
+}
+
+async function saveApifKey() {
+  const inp = el('apifKey');
+  const btn = el('apifSaveBtn');
+  btn.disabled = true; btn.textContent = 'Ukládám…';
+  try {
+    await api('/api/apifootball/key', { method: 'POST', body: JSON.stringify({ key: inp.value.trim() }) });
+    inp.value = '';
+    await loadApifStatus();
+    // keše zápasů se na serveru pročistily, ať se doplněné ligy projeví hned
+    if (STATE.page === 'matches') loadMatches();
+  } catch (e) {
+    alert('Uložení selhalo: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Uložit';
+  }
+}
+
 async function loadSettings() {
   renderNotifStatus();
+  loadApifStatus();
   try {
     const data = await api('/api/agent');
     const c = data.settings;

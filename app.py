@@ -50,6 +50,7 @@ from engine import agent
 from engine import virtual_bettors
 from engine import calibration
 from engine import persist
+from engine import apifootball
 from engine import backtester
 from engine import explainer
 
@@ -573,6 +574,27 @@ def api_odds_key():
     odds_api.set_key(d.get("key", ""))
     _PRED_CACHE.clear()
     return jsonify({"enabled": odds_api.has_key()})
+
+
+@app.route("/api/apifootball/status")
+@login_required
+def api_apifootball_status():
+    return jsonify(apifootball.usage_status())
+
+
+@app.route("/api/apifootball/key", methods=["POST"])
+@login_required
+def api_apifootball_key():
+    d = request.get_json(force=True)
+    apifootball.set_key(d.get("key", ""))
+    _PRED_CACHE.clear()
+    # Keše zápasů drží starý (jen ESPN) obsah – bez pročištění by se doplněné
+    # ligy objevily až za 12 h.
+    try:
+        storage.clear_match_caches()
+    except Exception:
+        pass
+    return jsonify(apifootball.usage_status())
 
 
 @app.route("/api/kelly")

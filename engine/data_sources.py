@@ -14,6 +14,7 @@ Výsledky se kešují do data/cache_<datum>.json.
 
 import re
 import time
+import unicodedata
 import datetime as _dt
 from concurrent.futures import ThreadPoolExecutor
 
@@ -248,9 +249,76 @@ def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "socc
     if not matches and sport == "soccer":
         matches = _demo(start)
 
+    # Doplňkový zdroj pro ligy, které ESPN vůbec nevede (česká, polská,
+    # slovenská…). Přidávají se JEN zápasy, které v ESPN datech nejsou –
+    # ESPN zůstává primární, protože jako jediný nese i kurzy.
+    if sport == "soccer":
+        try:
+            matches += _extra_from_apifootball(matches, start, end, sport)
+        except Exception:
+            pass   # doplněk nesmí nikdy shodit hlavní zdroj
+
     matches.sort(key=lambda m: (m.get("date", ""), m.get("time", "")))
     storage.save(cache_name, matches)
     return matches
+
+
+_NAME_NOISE = {"fc", "cf", "sc", "afc", "ac", "sk", "fk", "club", "cd", "sv",
+               "us", "if", "bk", "cska", "1", "04", "05", "09", "1899", "1900"}
+
+
+def _name_tokens(s: str) -> set:
+    """Slova názvu týmu bez diakritiky a bez klubových zkratek.
+
+    Porovnávat celé názvy nejde – zdroje píšou tentýž klub jinak
+    ("Sparta Prague" vs "AC Sparta Praha"), takže by dedup neodchytil
+    pohárové zápasy, které mají oba zdroje, a ty by se zdvojily."""
+    s = unicodedata.normalize("NFKD", (s or "").lower())
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    words = re.findall(r"[a-z0-9]+", s)
+    return {w for w in words if w not in _NAME_NOISE and len(w) >= 3}
+
+
+def _tok_match(x: str, y: str) -> bool:
+    """Shoda slova napříč jazykovými variantami ("praha"/"prague",
+    "munchen"/"munich"). Prefix stačí krátký, protože _same_team níž vyžaduje
+    shodu VŠECH slov, ne jen jednoho."""
+    return x == y or x[:3] == y[:3]
+
+
+def _same_team(a: str, b: str) -> bool:
+    ta, tb = _name_tokens(a), _name_tokens(b)
+    if not ta or not tb:
+        return False
+    # Jednoslovný název proti víceslovnému neuznávej – "Racing Club" se po
+    # odstranění klubových zkratek smrskne na "racing" a sedlo by mu i
+    # "Racing Louisville". Falešná shoda je horší než duplicita: zahodila by
+    # skutečný zápas, kdežto duplicita je jen kosmetická vada.
+    if min(len(ta), len(tb)) == 1 and len(ta) != len(tb):
+        return False
+    # Každé slovo kratšího názvu musí mít protějšek. Pouhý průnik nestačí:
+    # "Sparta Prague" a "Slavia Prague" sdílí město, ale jsou to jiné kluby.
+    short, long_ = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    return all(any(_tok_match(x, y) for y in long_) for x in short)
+
+
+def _extra_from_apifootball(existing: list, start: str, end: str, sport: str) -> list:
+    from . import apifootball
+    if not apifootball.has_key():
+        return []
+    # index podle dne, ať se každý kandidát neporovnává s celým seznamem
+    by_day = {}
+    for m in existing:
+        by_day.setdefault(m.get("date", ""), []).append(m)
+
+    out = []
+    for m in apifootball.fetch_range(start, end, sport):
+        same_day = by_day.get(m.get("date", ""), [])
+        dup = any(_same_team(m.get("home"), e.get("home"))
+                  and _same_team(m.get("away"), e.get("away")) for e in same_day)
+        if not dup:
+            out.append(m)
+    return out
 
 
 def fetch_day(date_str: str, use_cache: bool = True, sport: str = "soccer") -> list:
@@ -428,6 +496,14 @@ def fetch_league_scores(sport: str, slug: str, date_str: str) -> list:
     požadovaný den: ESPN řadí zápasy podle data v USA, takže zápas začínající
     krátce po půlnoci UTC se pod svým vlastním UTC dnem nenajde a jeho sázky
     by nešlo nikdy vyhodnotit (viz komentář v _from_espn)."""
+    # Zápasy z doplňkového zdroje mají v slugu prefix, podle kterého se pozná,
+    # že je nemá smysl hledat na ESPN – ten je vůbec nevede.
+    if str(slug).startswith("apif:"):
+        try:
+            from . import apifootball
+            return apifootball.fetch_league_scores(sport, slug, date_str)
+        except Exception:
+            return []
     try:
         lo = add_days(date_str, -1).replace("-", "")
         hi = add_days(date_str, 1).replace("-", "")

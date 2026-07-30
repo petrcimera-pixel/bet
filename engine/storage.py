@@ -90,6 +90,21 @@ def is_cache_stale(name: str, ttl_hours: int = 12) -> bool:
     return time.time() - mtime > ttl_hours * 3600
 
 
+def clear_match_caches() -> int:
+    """Zahodí keše rozpisů zápasů. Volá se, když se změní zdroj dat – jinak by
+    se nově dostupné ligy objevily až po vypršení 12h TTL."""
+    n = 0
+    for pat in ("cache_*.json", "apif_*.json"):
+        for f in glob.glob(os.path.join(_DIR, pat)):
+            try:
+                os.remove(f)
+                n += 1
+            except OSError:
+                pass
+    _CACHE.clear()
+    return n
+
+
 def cleanup_old_caches(max_age_days: int = 14) -> int:
     """Smaže cache soubory starší než max_age_days. Volá se při startu."""
     import time
