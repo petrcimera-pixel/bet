@@ -27,6 +27,24 @@ DAY_TTL = 6 * 3600        # rozpis jednoho dne se drží 6 h (šetří kvótu)
 DAILY_BUDGET = 80         # strop dotazů za den – rezerva pod free limitem 100
 _STATE_FILE = "apifootball_usage.json"
 
+# Bezplatný tarif pouští jen úzké okno kolem dneška – API na jiné datum
+# odpoví chybou "Free plans do not have access to this date". Dotaz mimo
+# rozsah je tedy jen vyplýtvaná kvóta, proto se rovnou přeskočí.
+FREE_DAYS_BACK = 1
+FREE_DAYS_FWD = 1
+
+
+def allowed_window():
+    """(od, do) – rozsah dat, na který má tarif nárok."""
+    today = _dt.date.today()
+    return ((today - _dt.timedelta(days=FREE_DAYS_BACK)).isoformat(),
+            (today + _dt.timedelta(days=FREE_DAYS_FWD)).isoformat())
+
+
+def _in_window(date_str: str) -> bool:
+    lo, hi = allowed_window()
+    return lo <= date_str <= hi
+
 # Stavy zápasu podle API-Football
 _LIVE = {"1H", "HT", "2H", "ET", "BT", "P", "INT", "LIVE", "SUSP"}
 _DONE = {"FT", "AET", "PEN"}
@@ -68,9 +86,10 @@ def _bump_usage() -> None:
 def usage_status() -> dict:
     st = _usage()
     used = st.get("used", 0)
+    lo, hi = allowed_window()
     return {"enabled": has_key(), "used_today": used,
             "budget": DAILY_BUDGET, "remaining": max(0, DAILY_BUDGET - used),
-            "date": st.get("date")}
+            "date": st.get("date"), "window_from": lo, "window_to": hi}
 
 
 def _budget_left() -> bool:
@@ -84,19 +103,30 @@ def _get(path: str, params: dict):
     key = get_key()
     if not key or not _budget_left():
         return None
-    try:
-        r = requests.get(f"{BASE}/{path}", params=params, timeout=TIMEOUT,
-                         headers={"x-apisports-key": key})
-        _bump_usage()
+    # Spojení na tenhle host občas spadne na SSL EOF ještě před odpovědí –
+    # takový pokus se nezapočítává do kvóty, takže se vyplatí zopakovat.
+    for attempt in range(3):
+        try:
+            r = requests.get(f"{BASE}/{path}", params=params, timeout=TIMEOUT,
+                             headers={"x-apisports-key": key})
+        except Exception:
+            time.sleep(1.0 + attempt)
+            continue
         if r.status_code != 200:
             return None
-        d = r.json()
-        # API vrací chyby v těle s HTTP 200 (např. vyčerpaná kvóta, špatný klíč)
+        try:
+            d = r.json()
+        except Exception:
+            return None
+        # API vrací chyby v těle s HTTP 200 (vyčerpaná kvóta, špatný klíč,
+        # nebo datum mimo rozsah bezplatného tarifu). Takové dotazy si
+        # API-Football do kvóty NEpočítá, takže je nesmíme počítat ani my –
+        # jinak si vlastní strop zbytečně vyčerpáme na neúspěšných dotazech.
         if d.get("errors"):
             return None
+        _bump_usage()
         return d.get("response") or []
-    except Exception:
-        return None
+    return None
 
 
 def _to_match(fx: dict, sport: str = "soccer") -> dict:
@@ -146,7 +176,7 @@ def _to_match(fx: dict, sport: str = "soccer") -> dict:
 
 def fetch_day(date_str: str, sport: str = "soccer") -> list:
     """Všechny zápasy daného dne napříč VŠEMI ligami – jeden dotaz."""
-    if not has_key():
+    if not has_key() or not _in_window(date_str):
         return []
     cache_name = f"apif_{sport}_{date_str}.json"
     cached = storage.load(cache_name, None)
@@ -166,9 +196,10 @@ def fetch_range(start: str, end: str, sport: str = "soccer") -> list:
     jeden dotaz na den – proto je strop kvóty důležitý."""
     if not has_key():
         return []
+    lo, hi = allowed_window()
+    d, last = max(start, lo), min(end, hi)   # ořež na to, na co má tarif nárok
     out = []
-    d = start
-    while d <= end:
+    while d <= last:
         out.extend(fetch_day(d, sport))
         d = (_dt.date.fromisoformat(d) + _dt.timedelta(days=1)).isoformat()
     return out

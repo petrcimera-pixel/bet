@@ -7,3 +7,5 @@ data/odds_cache_*.json
 data/agent_feedback.jsonl
 .claude/
 data/config.json
+data/apif_*.json
+data/apifootball_usage.json

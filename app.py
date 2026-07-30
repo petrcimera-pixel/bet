@@ -287,6 +287,14 @@ SEARCH_DAYS = 14          # jak daleko dopředu hledat zápasy týmu
 ODDS_HORIZON_DAYS = 4     # za tímhle horizontem ESPN kurzy prakticky nedává
 
 
+def _fold(s: str) -> str:
+    """Text bez diakritiky pro porovnávání – bez toho by "karvina" nenašlo
+    "Karviná" ani "plzen" tým "Plzeň", což je u českých týmů zásadní."""
+    import unicodedata
+    s = unicodedata.normalize("NFKD", (s or "").lower())
+    return "".join(c for c in s if not unicodedata.combining(c))
+
+
 def _search_window(sport: str):
     """Zápasy od dneška na SEARCH_DAYS dopředu. Jeden ESPN dotaz na ligu pro
     celý rozsah (ne per den), takže je to stejně drahé jako běžný denní fetch
@@ -299,7 +307,7 @@ def _search_window(sport: str):
 @login_required
 def api_search():
     """Vyhledání budoucích zápasů podle názvu týmu."""
-    q = (request.args.get("q") or "").strip().lower()
+    q = _fold((request.args.get("q") or "").strip())
     sport = request.args.get("sport", "soccer")
     if len(q) < 2:
         return jsonify({"query": q, "teams": [], "matches": [], "error": "Zadej aspoň 2 znaky"})
@@ -318,9 +326,9 @@ def api_search():
             continue
         home, away = m.get("home", ""), m.get("away", "")
         side = None
-        if q in home.lower():
+        if q in _fold(home):
             side = home
-        elif q in away.lower():
+        elif q in _fold(away):
             side = away
         if not side:
             continue

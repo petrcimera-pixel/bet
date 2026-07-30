@@ -6,8 +6,13 @@ Primární zdroj: veřejné ESPN API (BEZ registrace, bez klíče) – pokrývá
 desítky lig napříč světadíly. Pro každou ligu se stáhne rozpis na daný den;
 dotazy běží paralelně.
 
-Fallback: TheSportsDB (veřejný klíč "3") a nakonec vestavěný demo dataset,
-aby aplikace fungovala vždy.
+Doplněk: API-Football (volitelný klíč) pro ligy, které ESPN vůbec nevede.
+Fallback: TheSportsDB (veřejný klíč "3").
+
+Vymyšlená data se nepoužívají za žádných okolností – když zdroje selžou,
+vrátí se prázdno. Dřív tu byl demo dataset s fiktivními zápasy (včetně celé
+neexistující české ligy), který se při výpadku ESPN dostal do appky jako by
+šlo o skutečné zápasy.
 
 Výsledky se kešují do data/cache_<datum>.json.
 """
@@ -244,10 +249,17 @@ def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "socc
             return cached
 
     matches = _from_espn(start, end, sport)
+    # Přišlo-li to ze záložního zdroje, výsledek se NEKEŠUJE – jinak by jedno
+    # selhání ESPN zamklo na 12 h neúplný den. Vymyšlená data se nepoužívají
+    # vůbec: appka radši neukáže nic, než aby si zápas vymyslela (dřív tu byl
+    # demo dataset, který takhle do appky dostal neexistující zápasy včetně
+    # celé fiktivní české ligy).
+    from_fallback = False
     if not matches and sport == "soccer":
         matches = _from_thesportsdb(start)
-    if not matches and sport == "soccer":
-        matches = _demo(start)
+        from_fallback = bool(matches)
+    if not matches:
+        return []      # prázdno se nekešuje, další dotaz zkusí ESPN znovu
 
     # Doplňkový zdroj pro ligy, které ESPN vůbec nevede (česká, polská,
     # slovenská…). Přidávají se JEN zápasy, které v ESPN datech nejsou –
@@ -259,7 +271,8 @@ def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "socc
             pass   # doplněk nesmí nikdy shodit hlavní zdroj
 
     matches.sort(key=lambda m: (m.get("date", ""), m.get("time", "")))
-    storage.save(cache_name, matches)
+    if not from_fallback:
+        storage.save(cache_name, matches)
     return matches
 
 
@@ -633,42 +646,6 @@ def _from_thesportsdb(date_str: str) -> list:
 # ---------------------------------------------------------------------------
 # Demo dataset – offline režim
 # ---------------------------------------------------------------------------
-_DEMO_LEAGUES = {
-    ("English Premier League", "England"): [
-        ("Manchester City", "Arsenal"), ("Liverpool", "Chelsea"),
-        ("Tottenham", "Manchester United"), ("Newcastle", "Aston Villa"),
-        ("Brighton", "West Ham")],
-    ("Spanish La Liga", "Spain"): [
-        ("Real Madrid", "Sevilla"), ("Barcelona", "Real Betis"),
-        ("Atletico Madrid", "Villarreal"), ("Real Sociedad", "Valencia")],
-    ("Italian Serie A", "Italy"): [
-        ("Inter", "Juventus"), ("AC Milan", "Napoli"),
-        ("Roma", "Lazio"), ("Atalanta", "Fiorentina")],
-    ("German Bundesliga", "Germany"): [
-        ("Bayern Munich", "Borussia Dortmund"), ("RB Leipzig", "Bayer Leverkusen"),
-        ("Eintracht Frankfurt", "VfB Stuttgart")],
-    ("French Ligue 1", "France"): [
-        ("Paris SG", "Marseille"), ("Monaco", "Lille"), ("Lyon", "Nice")],
-    ("Czech First League", "Czech Republic"): [
-        ("Slavia Praha", "Sparta Praha"), ("Viktoria Plzen", "Banik Ostrava"),
-        ("Slovan Liberec", "Sigma Olomouc")],
-}
-
-
-def _demo(date_str: str) -> list:
-    out = []
-    for (league, country), games in _DEMO_LEAGUES.items():
-        for i, (home, away) in enumerate(games):
-            out.append({
-                "id": f"demo-{league}-{i}-{date_str}",
-                "league": league, "country": country,
-                "home": home, "away": away,
-                "date": date_str, "time": f"{15 + (i % 6):02d}:00",
-                "home_score": None, "away_score": None, "status": "",
-            })
-    return out
-
-
 def today_str() -> str:
     return _dt.date.today().isoformat()
 
