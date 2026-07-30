@@ -345,6 +345,8 @@ def prune_stale(today: str = None) -> int:
                       "corner_result", "dc_result"):
                 if t.get(k) is None:
                     t[k] = "expired"
+            # settled_at musí být vyplněné i tady – statistiky podle něj řadí
+            t["settled_at"] = t.get("settled_at") or datetime.datetime.now().isoformat(timespec="seconds")
             t["expired_at"] = today
             n += 1
     if n:
@@ -366,6 +368,7 @@ def void_tips(match_ids) -> int:
                       "corner_result", "dc_result"):
                 if t.get(k) is None:
                     t[k] = "void"
+            t["settled_at"] = t.get("settled_at") or datetime.datetime.now().isoformat(timespec="seconds")
             t["voided_at"] = datetime.date.today().isoformat()
             n += 1
     if n:
@@ -440,7 +443,7 @@ def stats(sport: str = None) -> dict:
     corner_unverif = sum(1 for t in settled if t.get("corner_result") == "unverifiable")
 
     # ROI křivka value sázek (kumulativní, 1 jednotka na sázku)
-    val_sorted = sorted(val_tips, key=lambda t: t.get("settled_at", ""))
+    val_sorted = sorted(val_tips, key=lambda t: t.get("settled_at") or "")
     roi_curve = []
     cumul = 0.0
     for t in val_sorted:
@@ -449,7 +452,7 @@ def stats(sport: str = None) -> dict:
             roi_curve.append(round(cumul, 2))
 
     # Pick accuracy křivka (kumulativní % úspěšnosti)
-    pick_sorted = sorted(settled, key=lambda t: t.get("settled_at", ""))
+    pick_sorted = sorted(settled, key=lambda t: t.get("settled_at") or "")
     acc_curve = []
     w = 0
     for i, t in enumerate(pick_sorted, 1):

@@ -382,9 +382,9 @@
         "odds": 4.4,
         "prob": 0.4713,
         "stake": 36.4,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -36.4,
+        "settled_ts": 1785439399,
         "ml_features": {
           "attack_home": 1.0,
           "defense_home": 1.0,
@@ -1908,7 +1908,7 @@
       }
     ],
     "last_run_date": "2026-07-30",
-    "loss_streak": 4,
+    "loss_streak": 5,
     "ran_hours": []
   },
   "quarter": {
@@ -3168,9 +3168,9 @@
         "odds": 4.7,
         "prob": 0.4713,
         "stake": 22.56,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -22.56,
+        "settled_ts": 1785439399,
         "ml_features": {
           "attack_home": 1.0,
           "defense_home": 1.0,
@@ -3784,7 +3784,7 @@
       }
     ],
     "last_run_date": "2026-07-30",
-    "loss_streak": 3,
+    "loss_streak": 4,
     "ran_hours": []
   },
   "favorite": {
