@@ -1269,6 +1269,52 @@ function renderBetsTable(bets) {
 // ---------------------------------------------------------------------------
 // SETTINGS
 // ---------------------------------------------------------------------------
+async function loadServerInfo() {
+  const box = el('serverInfo');
+  if (!box) return;
+  try {
+    const d = await api('/api/server/info');
+    const rows = (d.addresses || []).map(a => `
+      <div class="srv-row">
+        <code class="srv-url">${a.url}</code>
+        <button class="btn small srv-copy" data-url="${escAttr(a.url)}">Kopírovat</button>
+        ${a.recommended ? '<span class="badge real">doporučeno</span>'
+                        : '<span class="muted" style="font-size:11.5px;">jiné síťové rozhraní</span>'}
+      </div>`).join('');
+    box.className = '';
+    box.innerHTML = `
+      ${d.lan_ready ? '' : `<div class="badge model" style="margin-bottom:10px;">
+         Server teď naslouchá jen lokálně (${d.bind_host}) – zvenčí se nepřipojíš.
+         Na serveru ho spouštěj přes <code>deployun_server.bat</code>, který nastaví HOST=0.0.0.0.
+       </div>`}
+      <div class="srv-row">
+        <code class="srv-url">${d.local_url}</code>
+        <button class="btn small srv-copy" data-url="${escAttr(d.local_url)}">Kopírovat</button>
+        <span class="muted" style="font-size:11.5px;">jen z tohoto počítače</span>
+      </div>
+      ${rows || '<div class="muted">Žádná síťová adresa nenalezena.</div>'}
+      <div class="muted" style="font-size:11.5px; margin-top:10px; line-height:1.7;">
+        Počítač: <strong>${d.hostname}</strong> · port <strong>${d.port}</strong> ·
+        přihlášení stejné jako sem.<br>
+        Adresy mimo 192.168.x.x často patří virtuálním adaptérům (WSL, Hyper-V) –
+        na ty se zvenčí nepřipojíš. Aby se adresa po restartu neměnila, nastav
+        serveru v routeru rezervaci IP.
+      </div>`;
+    box.querySelectorAll('.srv-copy').forEach(b => {
+      b.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(b.dataset.url);
+          const t = b.textContent; b.textContent = 'Zkopírováno';
+          setTimeout(() => { b.textContent = t; }, 1500);
+        } catch (e) { toast('Kopírování se nepovedlo – vyber adresu ručně.', 'err'); }
+      });
+    });
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="muted">Informace o serveru se nepodařilo načíst.</div>';
+  }
+}
+
 async function loadRatingsStatus() {
   const box = el('ratingsStatus');
   if (!box) return;
@@ -1375,6 +1421,7 @@ async function loadSettings() {
   renderNotifStatus();
   loadApifStatus();
   loadRatingsStatus();
+  loadServerInfo();
   try {
     const data = await api('/api/agent');
     const c = data.settings;

@@ -490,3 +490,11 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 .leg-res.won { color: var(--pos); }
 .leg-res.lost { color: var(--bad); }
 .leg-res.void { color: var(--warn); }
+
+/* vzdaleny pristup - seznam adres serveru */
+.srv-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.srv-url {
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 10px; font-size: 13px; font-family: ui-monospace, Consolas, monospace;
+  color: var(--txt); user-select: all;
+}

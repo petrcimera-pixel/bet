@@ -1425,6 +1425,49 @@ def api_model_benchmark():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/server/info")
+@login_required
+def api_server_info():
+    """Jak se k tomuhle serveru připojit odjinud v domácí síti."""
+    import socket
+    host = socket.gethostname()
+
+    # Adresa, kterou by pouzil odchozi provoz - to je ta spravna pro LAN.
+    # (Nic se neposila, jen se necha OS vybrat rozhrani.)
+    primary = None
+    try:
+        sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sk.settimeout(0.3)
+        sk.connect(("8.8.8.8", 80))
+        primary = sk.getsockname()[0]
+        sk.close()
+    except Exception:
+        pass
+
+    ips = []
+    try:
+        ips = [a for a in socket.gethostbyname_ex(host)[2] if not a.startswith("127.")]
+    except Exception:
+        pass
+    if primary and primary not in ips:
+        ips.insert(0, primary)
+    # primarni dopredu, zbytek za ni (casto jsou to virtualni adaptery
+    # typu WSL/Hyper-V, na ktere se zvenci nikdo nepripoji)
+    ips.sort(key=lambda a: (a != primary, not a.startswith("192.168."), a))
+
+    listening_all = _HOST in ("0.0.0.0", "::")
+    return jsonify({
+        "hostname": host,
+        "port": _PORT,
+        "bind_host": _HOST,
+        "lan_ready": listening_all,
+        "primary_ip": primary,
+        "addresses": [{"ip": ip, "url": f"http://{ip}:{_PORT}",
+                       "recommended": ip == primary} for ip in ips],
+        "local_url": f"http://localhost:{_PORT}",
+    })
+
+
 @app.route("/api/ratings/status")
 @login_required
 def api_ratings_status():
