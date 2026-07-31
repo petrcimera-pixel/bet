@@ -70,8 +70,27 @@ def network_profiles() -> list:
     return res
 
 
-def diagnose(bind_host: str, port: int) -> dict:
-    """Souhrn: co je v pořádku, co brání připojení a jak to spravit."""
+_CACHE = {}
+CACHE_TTL = 120
+
+
+def diagnose(bind_host: str, port: int, force: bool = False) -> dict:
+    """Souhrn: co je v pořádku, co brání připojení a jak to spravit.
+
+    Výsledek se cachuje – každé volání spouští tři PowerShelly a trvá
+    kolem šesti sekund, což by jinak zdrželo načtení Nastavení. Stav sítě
+    se navíc mění zřídka; po opravě si autofix() cache sám zahodí."""
+    import time as _t
+    key = (bind_host, port)
+    hit = _CACHE.get(key)
+    if hit and not force and _t.time() - hit[0] < CACHE_TTL:
+        return hit[1]
+    res = _diagnose_uncached(bind_host, port)
+    _CACHE[key] = (_t.time(), res)
+    return res
+
+
+def _diagnose_uncached(bind_host: str, port: int) -> dict:
     listening_all = bind_host in ("0.0.0.0", "::")
     fw = firewall_rule()
     profiles = network_profiles()
@@ -128,6 +147,7 @@ def autofix(port: int, set_private: bool = True) -> dict:
     to Windows odmítne a vrátíme to na rovinu, ne tiché selhání."""
     if os.name != "nt":
         return {"ok": False, "error": "Automatická oprava funguje jen na Windows."}
+    _CACHE.clear()   # po zásahu už uložený stav neplatí
     if not is_admin():
         return {"ok": False, "needs_admin": True,
                 "error": "Na změnu firewallu a profilu sítě jsou potřeba práva správce. "
