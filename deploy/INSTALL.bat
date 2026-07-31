@@ -170,6 +170,23 @@ REM ---- zapsat pripojovaci info ----
   echo      v routeru ^(rezervace podle MAC adresy^).
   echo.
   echo ----------------------------------------------------------
+  echo KDYZ SE Z JINEHO POCITACE NEPRIPOJIS:
+  echo.
+  echo 1^) V aplikaci otevri Nastaveni - sama napise, co brani
+  echo    pripojeni, a nabidne automatickou opravu.
+  echo 2^) Kdyz appka nejde ani zde, spust v prikazovem radku:
+  echo       netstat -ano ^| findstr :5000
+  echo    - nic nevypise ....... server nebezi, koukni do server.log
+  echo    - 127.0.0.1:5000 ..... spoustej ho pres deploy\run_server.bat
+  echo    - 0.0.0.0:5000 ....... server je OK, vina je firewall/profil site
+  echo 3^) Sit musi byt SOUKROMA. Na Verejne Windows zahodi i ping
+  echo    a pravidlo firewallu neplati. Nastaveni - Sit a internet -
+  echo    vlastnosti site - Soukroma.
+  echo 4^) Oba pocitace musi byt na stejne siti. Pozor na hostovskou
+  echo    sit - ta mezi zarizenimi spojeni obvykle nepusti vubec.
+  echo.
+  echo Podrobneji v deploy\README.md
+  echo ----------------------------------------------------------
   echo Sprava sluzby ^(spustit jako spravce^):
   echo   Zastavit:  deploy\STOP.bat
   echo   Spustit:   deploy\START.bat

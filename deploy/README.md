@@ -72,9 +72,37 @@ na routeru směrem ven.
 ## Když se něco pokazí
 
 **Nejde se připojit z jiného počítače**
-- zkus další adresu z `PRIPOJENI.txt`
-- ověř, že jsou oba počítače na stejné síti a ta je označená jako *Privátní*
-- na serveru zkus `http://localhost:5000` — když nejede ani to, podívej se do `server.log`
+
+Nejdřív si v aplikaci otevři **Nastavení** — když něco brání připojení, appka to
+sama pozná a napíše co (naslouchání jen lokálně, chybějící pravidlo firewallu,
+veřejný profil sítě) i s tlačítkem na automatickou opravu.
+
+Když k aplikaci nemáš přístup ani ze serveru, jdi na server a spusť tohle
+v příkazovém řádku — dvě odpovědi rozhodnou, kde chyba je:
+
+```
+ipconfig | findstr IPv4
+netstat -ano | findstr :5000
+```
+
+| Co uvidíš | Co to znamená | Co s tím |
+|---|---|---|
+| `netstat` nevypíše nic | Server neběží — chyba není v síti | Podívej se do `server.log`, ručně zkus `deploy\START.bat` jako správce |
+| `netstat` vypíše `127.0.0.1:5000` | Server běží, ale poslouchá jen sám sobě | Spouštěj ho přes `deploy\run_server.bat` (nastaví `HOST=0.0.0.0`), ne přímo `python app.py` |
+| `netstat` vypíše `0.0.0.0:5000` | Server je v pořádku, brání firewall nebo profil sítě | Přeinstaluj novým EXE — profil sítě přepne na Soukromou sám |
+| `ipconfig` ukáže jinou IP než čekáš | Router adresu změnil | Použij tu novou; ať se to neopakuje, nastav v routeru rezervaci podle MAC |
+
+Nejčastější příčina je **síť označená jako Veřejná**. Windows na ní zahodí
+příchozí spojení i ping a pravidlo firewallu pro soukromý profil se vůbec
+neuplatní — server je nedostupný a nic to nedá najevo. Instalátor to od téhle
+verze přepíná sám; ručně: *Nastavení → Síť a internet → Wi-Fi → vlastnosti
+sítě → Soukromá*.
+
+Zbylé možnosti, když sedí všechno výše:
+
+- Ověř ze svého počítače, že server vůbec odpovídá: `Test-NetConnection 192.168.50.47 -Port 5000` v PowerShellu. `TcpTestSucceeded : True` znamená, že chyba je jinde než v síti.
+- Oba počítače musí být na **stejné síti** — pozor na oddělené SSID pro 2,4 a 5 GHz a hlavně na **hostovskou síť**, která má obvykle zapnutou izolaci klientů a spojení mezi zařízeními nepustí vůbec.
+- Zkus další adresu z `PRIPOJENI.txt` — adresy `172.x` patří většinou virtuálním adaptérům (WSL, Hyper-V, Docker) a zvenčí na ně nedosáhneš.
 
 **Server po restartu nenaběhl**
 - Plánovač úloh → úloha `KurzAnalytik` → zkontroluj poslední výsledek
