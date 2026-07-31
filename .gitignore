@@ -9,3 +9,4 @@ data/agent_feedback.jsonl
 data/config.json
 data/apif_*.json
 data/apifootball_usage.json
+data/*.tmp

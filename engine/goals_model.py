@@ -104,6 +104,36 @@ def sport_lines(sport: str, slug: str = "", league: str = ""):
     return [round(center + (start + i) * step, 1) for i in range(n)]
 
 
+# ---------------------------------------------------------------------------
+# České popisky trhů
+# ---------------------------------------------------------------------------
+def cz_num(x) -> str:
+    """Číslo s desetinnou čárkou, jak se píše česky (4.5 -> "4,5")."""
+    try:
+        f = float(x)
+    except (TypeError, ValueError):
+        return str(x)
+    return (f"{f:.10g}").replace(".", ",")
+
+
+def cz_unit(unit: str, n) -> str:
+    """Správný tvar jednotky po čísle. Po desetinném čísle je v češtině
+    2. pád množného čísla ("4,5 gólu"), po celém čísle se skloňuje podle něj."""
+    base = "gól" if (unit or "").startswith("gól") else "bod"
+    try:
+        f = float(n)
+    except (TypeError, ValueError):
+        return base + "ů"
+    if f != int(f):
+        return base + "u"          # 4,5 gólu / 220,5 bodu
+    i = int(f)
+    if i == 1:
+        return base                # 1 gól
+    if 2 <= i <= 4:
+        return base + "y"          # 3 góly
+    return base + "ů"              # 5 gólů
+
+
 def league_goals(league: str):
     low = (league or "").lower()
     for key, vals in LEAGUE_GOALS.items():
@@ -556,16 +586,20 @@ def predict_match(m: dict) -> dict:
         po = line_fn(line)
         over_odds = totals["over"] if (totals and totals.get("line") == line) else None
         under_odds = totals["under"] if (totals and totals.get("line") == line) else None
-        over = dict(_priced(po, over_odds, rating_confidence), label=f"Over {line}", name=f"Více než {line} {unit}")
-        under = dict(_priced(1 - po, under_odds, rating_confidence), label=f"Under {line}", name=f"Méně než {line} {unit}")
+        over = dict(_priced(po, over_odds, rating_confidence),
+                    label=f"Více {cz_num(line)}",
+                    name=f"Více než {cz_num(line)} {cz_unit(unit, line)}")
+        under = dict(_priced(1 - po, under_odds, rating_confidence),
+                     label=f"Méně {cz_num(line)}",
+                     name=f"Méně než {cz_num(line)} {cz_unit(unit, line)}")
         goal_lines.append({"line": line, "over": over, "under": under})
         bets[f"over{line}"] = over
         bets[f"under{line}"] = under
 
     if not cfg.get("two_way"):
         btts_p = _btts_prob(grid)
-        bets["btts_yes"] = dict(_priced(btts_p, None), label="BTTS Ano", name="Oba týmy dají gól")
-        bets["btts_no"] = dict(_priced(1 - btts_p, None), label="BTTS Ne", name="Aspoň jeden tým nedá gól")
+        bets["btts_yes"] = dict(_priced(btts_p, None), label="Oba dají gól", name="Oba týmy dají gól")
+        bets["btts_no"] = dict(_priced(1 - btts_p, None), label="Nedají oba", name="Aspoň jeden tým nedá gól")
 
     # Handicap – další trh s REÁLNÝMI kurzy, který ESPN dává (pointSpread).
     # Pravděpodobnost jde spočítat přímo ze scoreline gridu, takže model umí
@@ -580,9 +614,11 @@ def predict_match(m: dict) -> dict:
             p_side = _spread_prob(grid, side, float(line))
             key = f"ah_{side}_{line}"
             team = m["home"] if side == "home" else m["away"]
-            sign = f"+{line}" if float(line) > 0 else str(line)
+            # znaménko se musí doplnit ručně – cz_num() ho z čísla nevyčte
+            sign = ("+" if float(line) > 0 else "") + cz_num(line)
             bets[key] = dict(_priced(p_side, sd.get("odds"), rating_confidence),
-                             label=f"AH {sign}", name=f"{team} s handicapem {sign}")
+                             label=f"Hendikep {sign}",
+                             name=f"{team} s hendikepem {sign}")
 
     pick = max(keys, key=lambda k: probs[k])
     confidence = round(max(probs.values()) * 100)

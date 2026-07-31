@@ -69,7 +69,9 @@ def save_tips(predictions: list) -> int:
             # "name" je jen v p["bets"], ne v goal_lines – dohledáme ho odtud, jinak poskládáme
             bet_name = p.get("bets", {}).get(f"{side}{best_line['line']}", {}).get("name", "")
             unit = p.get("unit", "gólů")
-            name = bet_name or f"{'Více' if side == 'over' else 'Méně'} než {best_line['line']} {unit}"
+            from .goals_model import cz_num, cz_unit
+            name = bet_name or (f"{'Více' if side == 'over' else 'Méně'} než "
+                                f"{cz_num(best_line['line'])} {cz_unit(unit, best_line['line'])}")
             gp = {
                 "line": best_line["line"],
                 "side": side,
@@ -89,7 +91,8 @@ def save_tips(predictions: list) -> int:
             best_cline = max(corner_lines, key=lambda g: max(g["over"]["prob"], g["under"]["prob"]))
             cside = "over" if best_cline["over"]["prob"] >= best_cline["under"]["prob"] else "under"
             csel = best_cline[cside]
-            cname = f"{'Více' if cside == 'over' else 'Méně'} než {best_cline['line']} rohů"
+            from .goals_model import cz_num
+            cname = f"{'Více' if cside == 'over' else 'Méně'} než {cz_num(best_cline['line'])} rohů"
             cp = {
                 "line": best_cline["line"],
                 "side": cside,
