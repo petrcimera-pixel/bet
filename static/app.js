@@ -1504,6 +1504,7 @@ async function loadBettors() {
       api('/api/bettors', { timeoutMs: 20000 }),
       api('/api/bettors/calibration', { timeoutMs: 15000 }).catch(() => ({ buckets: [] })),
     ]);
+    _bettorGroups = data.groups || _bettorGroups;
     renderBettors(data.bettors || []);
     drawCalibrationChart(calib.buckets || []);
   } catch (e) {
@@ -1526,11 +1527,38 @@ function sparklineSvg(equity) {
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${path}" stroke="${color}" stroke-width="1.6" fill="none"/></svg>`;
 }
 
+let _bettorGroups = null;
+
 function renderBettors(bettors) {
   const box = el('bettorsContainer');
   if (!bettors.length) { box.innerHTML = '<div class="empty-state">Žádní sázkaři</div>'; return; }
+  // Sázkaři se dělí podle typu tiketu – porovnávat akumulátor s jednotlivou
+  // sázkou nedává smysl, takže má každá kategorie vlastní žebříček.
+  const groups = _bettorGroups || { single: { label: 'Jednotlivé sázky', emoji: '1️⃣' } };
+  const order = ['single', 'acca', 'combo'];
+  const byGroup = {};
+  bettors.forEach(b => { (byGroup[b.group || 'single'] ||= []).push(b); });
+  box.innerHTML = order.filter(g => byGroup[g]?.length).map(g => {
+    const info = groups[g] || { label: g, emoji: '' };
+    const list = byGroup[g];
+    const profit = list.reduce((a, x) => a + (x.profit || 0), 0);
+    const open = list.reduce((a, x) => a + (x.open_stake || 0), 0);
+    return `
+      <div class="group-head">
+        <h3 style="margin:0;">${info.emoji || ''} ${info.label} <span class="muted">(${list.length})</span></h3>
+        ${info.desc ? `<p style="font-size:12px; color:var(--txt2); margin:4px 0 0;">${info.desc}</p>` : ''}
+        <div class="pill-row" style="margin:8px 0 0;">
+          <span class="pill info">zisk ${profit >= 0 ? '+' : ''}${fmt(profit)} Kč</span>
+          <span class="pill info">ve hře ${fmt(open)} Kč</span>
+        </div>
+      </div>
+      ${renderBettorCards(list)}`;
+  }).join('');
+  wireBettorCards(box);
+}
 
-  box.innerHTML = bettors.map(b => {
+function renderBettorCards(bettors) {
+  return bettors.map(b => {
     const profitClass = b.profit >= 0 ? 'pos' : 'bad';
     const rankBadge = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : `#${b.rank}`;
     return `
@@ -1560,7 +1588,9 @@ function renderBettors(bettors) {
       <div id="bettorDetail-${b.id}" style="display:none; margin-top:12px;"></div>
     </div>`;
   }).join('');
+}
 
+function wireBettorCards(box) {
   box.querySelectorAll('.bettor-deposit').forEach(btn => {
     btn.addEventListener('click', (e) => { e.stopPropagation(); openDeposit(btn.dataset.id, btn.dataset.name); });
   });
@@ -1642,8 +1672,8 @@ async function toggleBettorDetail(id, btn) {
     box.innerHTML = txHtml + `<div class="table-wrap"><table>
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
-        <tr>
-          <td>${bt.match}</td>
+        <tr${bt.legs ? ' class="ticket-row"' : ''}>
+          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match}</td>
           <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
           <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status, bt.result)}</td>
           <td>${bt.label}</td>
@@ -1653,7 +1683,16 @@ async function toggleBettorDetail(id, btn) {
           <td class="${bt.status === 'open' ? 'muted' : bt.pnl > 0 ? 'pos' : 'bad'}">
             ${bt.status === 'open' ? '—' : `${bt.pnl > 0 ? '+' : ''}${fmt(bt.pnl)} Kč`}
           </td>
-        </tr>`).join('')}</tbody>
+        </tr>
+        ${bt.legs ? `<tr class="ticket-legs"><td colspan="8">
+          ${bt.legs.map(l => `<div class="leg">
+              <span class="leg-res ${l.result || ''}">${l.result === 'won' ? '✓' : l.result === 'lost' ? '✕' : l.result === 'void' ? '∅' : '·'}</span>
+              <strong>${l.label}</strong>
+              <span class="muted">${l.match}</span>
+              <span class="muted">${l.odds}×</span>
+              ${l.score ? `<span class="muted">${l.score.home}:${l.score.away}</span>` : ''}
+            </div>`).join('')}
+        </td></tr>` : ''}`).join('')}</tbody>
     </table></div>`;
   } catch (e) {
     box.innerHTML = `<div class="empty-state" style="padding:14px 0;">Chyba: ${e.message}</div>`;

@@ -250,6 +250,51 @@ def _over_prob(grid: dict, line: float) -> float:
     return sum(p for (i, j), p in grid.items() if i + j > line)
 
 
+def _outcome_hits(outcome: str, i: int, j: int) -> bool:
+    """Splňuje skóre i:j daný trh? Slouží ke společné pravděpodobnosti kombinací."""
+    total = i + j
+    if outcome == "home":
+        return i > j
+    if outcome == "away":
+        return j > i
+    if outcome == "draw":
+        return i == j
+    if outcome == "btts_yes":
+        return i > 0 and j > 0
+    if outcome == "btts_no":
+        return not (i > 0 and j > 0)
+    if outcome.startswith("over"):
+        return total > float(outcome[4:])
+    if outcome.startswith("under"):
+        return total < float(outcome[5:])
+    if outcome.startswith("ah_"):
+        try:
+            _, side, line = outcome.split("_", 2)
+            adj = (i + float(line)) - j if side == "home" else (j + float(line)) - i
+            return adj > 0
+        except (TypeError, ValueError):
+            return False
+    return False
+
+
+def combo_probability(exp_goals: dict, outcomes) -> float:
+    """Společná pravděpodobnost více trhů TÉHOŽ zápasu.
+
+    Násobit jednotlivé pravděpodobnosti tady NELZE – trhy jednoho zápasu jsou
+    silně korelované ("výhra domácích" a "Over 2.5" spolu souvisí), takže by
+    součin dal úplně jiné číslo než realita. Počítá se proto přímo ze
+    scoreline gridu: sečtou se pravděpodobnosti všech skóre, která splňují
+    VŠECHNY zvolené trhy najednou."""
+    if not exp_goals or exp_goals.get("home") is None:
+        return 0.0
+    grid = _score_grid(max(0.05, float(exp_goals["home"])), max(0.05, float(exp_goals["away"])))
+    p = 0.0
+    for (i, j), q in grid.items():
+        if all(_outcome_hits(o, i, j) for o in outcomes):
+            p += q
+    return p
+
+
 def _spread_prob(grid: dict, side: str, line: float) -> float:
     """Pravděpodobnost pokrytí handicapu. Přesná shoda (celočíselná linie)
     znamená vrácení vkladu, takže se do pravděpodobnosti výhry nepočítá."""

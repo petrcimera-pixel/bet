@@ -474,3 +474,19 @@ tr.row-ok { background: var(--accent-glow); }
 
 .login-card .foot { text-align: center; color: var(--txt3); font-size: 11px; margin-top: 22px;
   padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* nadpis skupiny sázkařů (jednotlivé / tikety / kombinace) */
+.group-head {
+  margin: 22px 0 12px; padding: 12px 14px;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.group-head:first-child { margin-top: 0; }
+
+/* nohy tiketu (akumulátor / kombinace) v detailu sázkaře */
+tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
+.leg { display: flex; gap: 10px; align-items: center; font-size: 12px; padding: 2px 0 2px 18px; }
+.leg-res { width: 14px; text-align: center; color: var(--txt3); }
+.leg-res.won { color: var(--pos); }
+.leg-res.lost { color: var(--bad); }
+.leg-res.void { color: var(--warn); }

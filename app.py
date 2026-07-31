@@ -1381,8 +1381,9 @@ def api_agent_run():
 # ---------------------------------------------------------------------------
 @app.route("/api/bettors")
 def api_bettors():
-    """Žebříček 10 virtuálních sázkařů seřazený podle zisku."""
-    return jsonify({"bettors": virtual_bettors.leaderboard()})
+    """Žebříček virtuálních sázkařů seřazený podle zisku, s definicí skupin."""
+    return jsonify({"bettors": virtual_bettors.leaderboard(),
+                    "groups": virtual_bettors.GROUPS})
 
 
 @app.route("/api/bettors/<bid>")

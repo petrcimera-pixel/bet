@@ -291,68 +291,376 @@ def _s_spread(pool, b, bal):
     return out
 
 
+# ---------------------------------------------------------------------------
+# Skupiny sázkařů podle typu tiketu
+# ---------------------------------------------------------------------------
+GROUPS = {
+    "single": {"label": "Jednotlivé sázky", "emoji": "1️⃣",
+               "desc": "Jeden tip = jeden tiket. Základní srovnání strategií."},
+    "acca":   {"label": "Více sázek na tiketu", "emoji": "🎫",
+               "desc": "Akumulátor z několika ZÁPASŮ – musí vyjít všechny, kurzy se násobí."},
+    "combo":  {"label": "Kombinované zápasy", "emoji": "🔗",
+               "desc": "Několik trhů JEDNOHO zápasu na jednom tiketu (jako kombi u sázkovek). "
+                       "Pravděpodobnost se počítá společně ze skóre gridu, ne součinem – "
+                       "trhy jednoho zápasu spolu souvisí."},
+}
+
+
+def _legs_payload(legs):
+    return [{"match_id": c["match_id"], "match": c["match"], "league": c.get("league", ""),
+             "outcome": c["outcome"], "label": c["label"], "name": c["name"],
+             "odds": round(float(c["odds"]), 2), "prob": round(float(c["prob"]), 4),
+             "date": c.get("date", ""), "time": c.get("time", ""),
+             "sport": c.get("sport", "soccer"), "slug": c.get("slug", ""),
+             "result": None} for c in legs]
+
+
+def _ticket(legs, kind):
+    """Tiket z více výběrů. Kurz je součin (tak ho počítají i sázkovky), ale
+    pravděpodobnost se u kombinace jednoho zápasu MUSÍ počítat společně –
+    trhy téhož zápasu jsou korelované a součin by dal úplně jiné číslo."""
+    odds = 1.0
+    for c in legs:
+        odds *= float(c["odds"])
+    if kind == "combo":
+        from . import goals_model
+        prob = goals_model.combo_probability(legs[0].get("exp_goals"),
+                                             [c["outcome"] for c in legs])
+    else:
+        prob = 1.0
+        for c in legs:
+            prob *= float(c["prob"])
+    return {"kind": kind, "legs": legs, "odds": odds, "prob": prob,
+            "match_id": "", "match": None}
+
+
+# --- třetí desítka: akumulátory přes víc zápasů ------------------------------
+def _acca_pick(pool, n, key, filt=None, one_per_league=False):
+    """Vybere n výběrů z RŮZNÝCH zápasů pro akumulátor."""
+    cands = sorted([c for c in pool if (filt is None or filt(c))], key=key)
+    seen_m, seen_lg, legs = set(), set(), []
+    for c in cands:
+        if c["match_id"] in seen_m or (one_per_league and c["league"] in seen_lg):
+            continue
+        seen_m.add(c["match_id"]); seen_lg.add(c["league"])
+        legs.append(c)
+        if len(legs) >= n:
+            break
+    return legs if len(legs) == n else []
+
+
+def _s_acca_duo(pool, b, bal):
+    """Dvojka Dušan – dvě nejjistější, malý kurz, ale musí vyjít obě."""
+    legs = _acca_pick(pool, 2, lambda c: -c["prob"], lambda c: c["prob"] >= 0.70)
+    return [(_ticket(legs, "acca"), round(bal * 0.04, 2))] if legs else []
+
+
+def _s_acca_trio(pool, b, bal):
+    """Trojka Tomáš – klasická trojka z tutovek."""
+    legs = _acca_pick(pool, 3, lambda c: -c["prob"], lambda c: c["prob"] >= 0.65)
+    return [(_ticket(legs, "acca"), round(bal * 0.03, 2))] if legs else []
+
+
+def _s_acca_penta(pool, b, bal):
+    """Pětka Pepa – pět tipů, malý vklad, velký kurz."""
+    legs = _acca_pick(pool, 5, lambda c: -c["prob"], lambda c: c["prob"] >= 0.60)
+    return [(_ticket(legs, "acca"), round(bal * 0.015, 2))] if legs else []
+
+
+def _s_acca_jackpot(pool, b, bal):
+    """Jackpot Jindra – osm tipů, drobný vklad, sní o velké výhře."""
+    legs = _acca_pick(pool, 8, lambda c: -c["prob"], lambda c: c["prob"] >= 0.55)
+    return [(_ticket(legs, "acca"), round(bal * 0.008, 2))] if legs else []
+
+
+def _s_acca_value(pool, b, bal):
+    """Hodnotový Hubert – trojka poskládaná z nejlepších náskoků, ne z jistot."""
+    legs = _acca_pick(pool, 3, lambda c: -c["edge"], lambda c: c["edge"] >= 0.03)
+    return [(_ticket(legs, "acca"), round(bal * 0.025, 2))] if legs else []
+
+
+def _s_acca_spread(pool, b, bal):
+    """Rozložený Rosťa – čtyřka, ale každý tip z jiné ligy."""
+    legs = _acca_pick(pool, 4, lambda c: -c["prob"], lambda c: c["prob"] >= 0.62,
+                      one_per_league=True)
+    return [(_ticket(legs, "acca"), round(bal * 0.02, 2))] if legs else []
+
+
+def _s_acca_overs(pool, b, bal):
+    """Gólová Gabriela – trojka jen z Over linií."""
+    legs = _acca_pick(pool, 3, lambda c: -c["prob"],
+                      lambda c: c["outcome"].startswith("over") and c["prob"] >= 0.62)
+    return [(_ticket(legs, "acca"), round(bal * 0.03, 2))] if legs else []
+
+
+def _s_acca_favs(pool, b, bal):
+    """Favoritová Františka – trojka jen z vítězů zápasu."""
+    legs = _acca_pick(pool, 3, lambda c: -c["prob"],
+                      lambda c: c["market"] == "winner" and c["prob"] >= 0.55)
+    return [(_ticket(legs, "acca"), round(bal * 0.03, 2))] if legs else []
+
+
+def _s_acca_double(pool, b, bal):
+    """Dvojitý Drahoš – dvě dvojky místo jedné čtyřky, rozloží riziko."""
+    cands = sorted([c for c in pool if c["prob"] >= 0.68], key=lambda c: -c["prob"])
+    picked, seen, out = [], set(), []
+    for c in cands:
+        if c["match_id"] in seen:
+            continue
+        seen.add(c["match_id"]); picked.append(c)
+        if len(picked) >= 4:
+            break
+    for i in (0, 2):
+        if len(picked) >= i + 2:
+            out.append((_ticket(picked[i:i + 2], "acca"), round(bal * 0.02, 2)))
+    return out
+
+
+def _s_acca_progressive(pool, b, bal):
+    """Stoupavý Standa – po prohře přidá do tiketu jeden tip navíc."""
+    n = min(2 + b.get("loss_streak", 0), 6)
+    legs = _acca_pick(pool, n, lambda c: -c["prob"], lambda c: c["prob"] >= 0.60)
+    return [(_ticket(legs, "acca"), round(bal * 0.02, 2))] if legs else []
+
+
+# --- čtvrtá desítka: kombinace trhů v JEDNOM zápase --------------------------
+def _by_match(pool):
+    d = {}
+    for c in pool:
+        d.setdefault(c["match_id"], []).append(c)
+    return d
+
+
+def _combo_pick(pool, wanted, min_prob=0.0, limit=1, sort_key=None):
+    """Poskládá kombinaci z trhů TÉHOŽ zápasu. wanted = seznam funkcí, každá
+    vybere jednu nohu; kombinace vznikne jen když se najdou všechny."""
+    matches = _by_match(pool)
+    scored = []
+    for mid, cands in matches.items():
+        ranked = sorted(cands, key=lambda c: -c["prob"])
+        legs = []
+        for want in wanted:
+            # hledat jen mezi trhy, které v tiketu ještě nejsou – jinak by
+            # dva stejné filtry vybraly tutéž nohu a kombinace by nevznikla
+            taken = {id(x) for x in legs}
+            hit = next((c for c in ranked if id(c) not in taken and want(c)), None)
+            if not hit:
+                legs = []
+                break
+            legs.append(hit)
+        if not legs or not legs[0].get("exp_goals"):
+            continue
+        t = _ticket(legs, "combo")
+        if t["prob"] >= min_prob and t["odds"] > 1.05:
+            scored.append(t)
+    scored.sort(key=sort_key or (lambda t: -t["prob"]))
+    return scored[:limit]
+
+
+def _s_combo_win_over(pool, b, bal):
+    """Vítěz+Góly Vilém – favorit vyhraje A padne aspoň pár gólů."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] in ("home", "away") and c["prob"] >= 0.45,
+                            lambda c: c["outcome"].startswith("over")], min_prob=0.25, limit=2)
+    return [(t, round(bal * 0.025, 2)) for t in ts]
+
+
+def _s_combo_win_under(pool, b, bal):
+    """Uzavřený Uwe – favorit vyhraje, ale zápas bude opatrný."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] in ("home", "away") and c["prob"] >= 0.45,
+                            lambda c: c["outcome"].startswith("under")], min_prob=0.25, limit=2)
+    return [(t, round(bal * 0.025, 2)) for t in ts]
+
+
+def _s_combo_btts_over(pool, b, bal):
+    """Přestřelka Přemysl – remíza nepadne a góly ano.
+
+    Pozn.: "oba dají gól" (BTTS) by sedělo líp, jenže ESPN na tenhle trh
+    kurz nedává, takže se do nabídky vůbec nedostane."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] in ("home", "away"),
+                            lambda c: c["outcome"].startswith("over")],
+                     min_prob=0.25, limit=2, sort_key=lambda t: -t["odds"])
+    return [(t, round(bal * 0.025, 2)) for t in ts]
+
+
+def _s_combo_ah_over(pool, b, bal):
+    """Handicapový Hynek – handicap plus gólová linie."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"].startswith("ah_"),
+                            lambda c: c["outcome"].startswith("over")], min_prob=0.25, limit=2)
+    return [(t, round(bal * 0.025, 2)) for t in ts]
+
+
+def _s_combo_safe(pool, b, bal):
+    """Jistá Jiřina – jen kombinace, které i po spojení drží nad 60 %."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.70,
+                            lambda c: c["prob"] >= 0.62], min_prob=0.50, limit=3)
+    return [(t, round(bal * 0.03, 2)) for t in ts]
+
+
+def _s_combo_risky(pool, b, bal):
+    """Odvážný Otakar – kombinace s co nejvyšším kurzem, drobný vklad."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.30,
+                            lambda c: c["prob"] >= 0.30], min_prob=0.08,
+                     limit=3, sort_key=lambda t: -t["odds"])
+    return [(t, round(bal * 0.01, 2)) for t in ts]
+
+
+def _s_combo_value(pool, b, bal):
+    """Výhodný Vendelín – kombinace jen tehdy, když má i po spojení kladné EV."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.50, lambda c: c["prob"] >= 0.50],
+                     min_prob=0.20, limit=6, sort_key=lambda t: -(t["prob"] * t["odds"]))
+    ok = [t for t in ts if t["prob"] * t["odds"] - 1 > 0.05][:2]
+    return [(t, round(bal * 0.03, 2)) for t in ok]
+
+
+def _s_combo_triple(pool, b, bal):
+    """Trojkombinační Teodor – tři trhy jednoho zápasu naráz."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.55, lambda c: c["prob"] >= 0.45,
+                            lambda c: c["prob"] >= 0.35], min_prob=0.10, limit=1)
+    return [(t, round(bal * 0.02, 2)) for t in ts]
+
+
+def _s_combo_home_btts(pool, b, bal):
+    """Domácí Dominik – domácí vyhrají a k tomu pokryjí handicap."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] == "home",
+                            lambda c: c["outcome"].startswith("ah_home")],
+                     min_prob=0.20, limit=2)
+    return [(t, round(bal * 0.025, 2)) for t in ts]
+
+
+def _s_combo_calibrated(pool, b, bal):
+    """Kalibrovaná Kamila – kombinace posuzuje podle opravené pravděpodobnosti."""
+    from . import calibration
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.62, lambda c: c["prob"] >= 0.58],
+                     min_prob=0.25, limit=6)
+    ok = [t for t in ts if calibration.calibrate(t["prob"]) * t["odds"] - 1 > 0][:2]
+    return [(t, round(bal * 0.025, 2)) for t in ok]
+
+
 PROFILES = [
     {"id": "kelly", "name": "Kelly Kateřina", "emoji": "📐",
      "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
-     "strategy": _s_kelly},
+     "strategy": _s_kelly, "group": "single"},
     {"id": "quarter", "name": "Čtvrtinový Čeněk", "emoji": "🎯",
      "tagline": "Kvartový Kelly (25 %) – rozumný kompromis mezi růstem a rizikem.",
-     "strategy": _s_quarter_kelly},
+     "strategy": _s_quarter_kelly, "group": "single"},
     {"id": "conservative", "name": "Konzervativní Klára", "emoji": "🛡️",
      "tagline": "Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.",
-     "strategy": _s_conservative},
+     "strategy": _s_conservative, "group": "single"},
     {"id": "value", "name": "Value Hunter Viktor", "emoji": "🔍",
      "tagline": "Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.",
-     "strategy": _s_value_hunter},
+     "strategy": _s_value_hunter, "group": "single"},
     {"id": "favorite", "name": "Favorit Fanda", "emoji": "⭐",
      "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
-     "strategy": _s_favorite},
+     "strategy": _s_favorite, "group": "single"},
     {"id": "underdog", "name": "Outsider Olda", "emoji": "🎲",
      "tagline": "Honí nejvyšší kurz s aspoň 15% šancí – vysoké riziko, vysoký výnos.",
-     "strategy": _s_underdog},
+     "strategy": _s_underdog, "group": "single"},
     {"id": "martingale", "name": "Martingale Magda", "emoji": "📈",
      "tagline": "Po prohře zdvojnásobí vklad – klasický (rizikový) progresivní systém.",
-     "strategy": _s_martingale},
+     "strategy": _s_martingale, "group": "single"},
     {"id": "random", "name": "Náhodný Norbert", "emoji": "🎰",
      "tagline": "Kontrolní skupina: sází náhodně. Srovnávací základna pro ostatní strategie.",
-     "strategy": _s_random},
+     "strategy": _s_random, "group": "single"},
     {"id": "disciplined", "name": "Disciplinovaný Dan", "emoji": "📋",
      "tagline": "Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.",
-     "strategy": _s_disciplined},
+     "strategy": _s_disciplined, "group": "single"},
     {"id": "cautious", "name": "Opatrná Olga", "emoji": "🐢",
      "tagline": "Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.",
-     "strategy": _s_cautious},
+     "strategy": _s_cautious, "group": "single"},
     # --- druhá desítka ---
     {"id": "home", "name": "Domácí Dalibor", "emoji": "🏠",
      "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-     "strategy": _s_home},
+     "strategy": _s_home, "group": "single"},
     {"id": "overs", "name": "Gólový Gustav", "emoji": "⚡",
      "tagline": "Jen Over linie – věří, že góly padnou.",
-     "strategy": _s_overs},
+     "strategy": _s_overs, "group": "single"},
     {"id": "unders", "name": "Betonový Bedřich", "emoji": "🧱",
      "tagline": "Jen Under linie – věří na uzavřené obranné zápasy.",
-     "strategy": _s_unders},
+     "strategy": _s_unders, "group": "single"},
     {"id": "fibonacci", "name": "Fibonacci Filip", "emoji": "🌀",
      "tagline": "Po prohře posune vklad na další Fibonacciho číslo – mírnější než Martingale.",
-     "strategy": _s_fibonacci},
+     "strategy": _s_fibonacci, "group": "single"},
     {"id": "dalembert", "name": "D'Alembert Denisa", "emoji": "⚖️",
      "tagline": "Po prohře +1 jednotka, po výhře −1. Nejmírnější z progresivních systémů.",
-     "strategy": _s_dalembert},
+     "strategy": _s_dalembert, "group": "single"},
     {"id": "paroli", "name": "Paroli Pavla", "emoji": "🚀",
      "tagline": "Opak Martingalu: zvyšuje po výhře, riskuje jen vyhrané peníze.",
-     "strategy": _s_paroli},
+     "strategy": _s_paroli, "group": "single"},
     {"id": "lowodds", "name": "Jistotář Jarda", "emoji": "🔒",
      "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
-     "strategy": _s_low_odds},
+     "strategy": _s_low_odds, "group": "single"},
     {"id": "highodds", "name": "Riskér Radim", "emoji": "💥",
      "tagline": "Jen kurzy od 3.0 výš, drobné vklady – čeká na jednu velkou trefu.",
-     "strategy": _s_high_odds},
+     "strategy": _s_high_odds, "group": "single"},
     {"id": "calibrated", "name": "Kalibrovaný Karel", "emoji": "🎚️",
      "tagline": "Nevěří syrové jistotě modelu, ale opravené podle skutečné úspěšnosti.",
-     "strategy": _s_calibrated},
+     "strategy": _s_calibrated, "group": "single"},
     {"id": "spread", "name": "Diverzifikátor Dita", "emoji": "🕸️",
      "tagline": "Hodně malých sázek, ale nejvýš jedna na ligu – rozloží riziko.",
-     "strategy": _s_spread},
+     "strategy": _s_spread, "group": "single"},
+
+    # --- třetí desítka: akumulátory přes víc zápasů ---
+    {"id": "acca_duo", "name": "Dvojka Dušan", "emoji": "🎫",
+     "tagline": "Dvě nejjistější na jednom tiketu – musí vyjít obě.",
+     "strategy": _s_acca_duo, "group": "acca"},
+    {"id": "acca_trio", "name": "Trojka Tomáš", "emoji": "🎰",
+     "tagline": "Klasická trojka z tutovek.",
+     "strategy": _s_acca_trio, "group": "acca"},
+    {"id": "acca_penta", "name": "Pětka Pepa", "emoji": "🖐️",
+     "tagline": "Pět tipů, malý vklad, velký kurz.",
+     "strategy": _s_acca_penta, "group": "acca"},
+    {"id": "acca_jackpot", "name": "Jackpot Jindra", "emoji": "💰",
+     "tagline": "Osm tipů a drobný vklad – sní o velké výhře.",
+     "strategy": _s_acca_jackpot, "group": "acca"},
+    {"id": "acca_value", "name": "Hodnotový Hubert", "emoji": "🔍",
+     "tagline": "Trojka poskládaná z nejlepších náskoků, ne z jistot.",
+     "strategy": _s_acca_value, "group": "acca"},
+    {"id": "acca_spread", "name": "Rozložený Rosťa", "emoji": "🗺️",
+     "tagline": "Čtyřka, ale každý tip z jiné ligy.",
+     "strategy": _s_acca_spread, "group": "acca"},
+    {"id": "acca_overs", "name": "Gólová Gabriela", "emoji": "⚡",
+     "tagline": "Trojka jen z Over linií.",
+     "strategy": _s_acca_overs, "group": "acca"},
+    {"id": "acca_favs", "name": "Favoritová Františka", "emoji": "⭐",
+     "tagline": "Trojka jen z vítězů zápasu.",
+     "strategy": _s_acca_favs, "group": "acca"},
+    {"id": "acca_double", "name": "Dvojitý Drahoš", "emoji": "♊",
+     "tagline": "Dvě dvojky místo jedné čtyřky – rozloží riziko.",
+     "strategy": _s_acca_double, "group": "acca"},
+    {"id": "acca_progressive", "name": "Stoupavý Standa", "emoji": "📶",
+     "tagline": "Po prohře přidá do tiketu jeden tip navíc.",
+     "strategy": _s_acca_progressive, "group": "acca"},
+    # --- čtvrtá desítka: kombinace trhů v jednom zápase ---
+    {"id": "combo_win_over", "name": "Vítěz+Góly Vilém", "emoji": "🔗",
+     "tagline": "Favorit vyhraje A padne aspoň pár gólů.",
+     "strategy": _s_combo_win_over, "group": "combo"},
+    {"id": "combo_win_under", "name": "Uzavřený Uwe", "emoji": "🔒",
+     "tagline": "Favorit vyhraje, ale zápas bude opatrný.",
+     "strategy": _s_combo_win_under, "group": "combo"},
+    {"id": "combo_btts_over", "name": "Přestřelka Přemysl", "emoji": "🎇",
+     "tagline": "Oba dají gól a padne jich hodně.",
+     "strategy": _s_combo_btts_over, "group": "combo"},
+    {"id": "combo_ah_over", "name": "Handicapový Hynek", "emoji": "⚖️",
+     "tagline": "Handicap plus gólová linie na jednom tiketu.",
+     "strategy": _s_combo_ah_over, "group": "combo"},
+    {"id": "combo_safe", "name": "Jistá Jiřina", "emoji": "🛡️",
+     "tagline": "Jen kombinace, které i po spojení drží nad 60 %.",
+     "strategy": _s_combo_safe, "group": "combo"},
+    {"id": "combo_risky", "name": "Odvážný Otakar", "emoji": "💥",
+     "tagline": "Kombinace s co nejvyšším kurzem, drobný vklad.",
+     "strategy": _s_combo_risky, "group": "combo"},
+    {"id": "combo_value", "name": "Výhodný Vendelín", "emoji": "📈",
+     "tagline": "Kombinuje jen když má i po spojení kladné EV.",
+     "strategy": _s_combo_value, "group": "combo"},
+    {"id": "combo_triple", "name": "Trojkombinační Teodor", "emoji": "🧩",
+     "tagline": "Tři trhy jednoho zápasu naráz.",
+     "strategy": _s_combo_triple, "group": "combo"},
+    {"id": "combo_home_btts", "name": "Domácí Dominik", "emoji": "🏠",
+     "tagline": "Domácí vyhrají a oba týmy dají gól.",
+     "strategy": _s_combo_home_btts, "group": "combo"},
+    {"id": "combo_calibrated", "name": "Kalibrovaná Kamila", "emoji": "🎚️",
+     "tagline": "Kombinace posuzuje podle opravené pravděpodobnosti.",
+     "strategy": _s_combo_calibrated, "group": "combo"},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
 
@@ -559,7 +867,7 @@ def add_bettor(params: dict, name: str = None, emoji: str = None,
         "name": name, "emoji": emoji or "🎲", "tagline": describe_params(params),
         "balance": float(start_balance), "start_balance": float(start_balance),
         "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
-        "win_streak": 0, "custom": True, "params": params,
+        "win_streak": 0, "custom": True, "params": params, "group": "single",
         "transactions": [{"ts": int(time.time()), "type": "start",
                           "amount": float(start_balance), "note": "Počáteční vklad"}],
     }
@@ -617,6 +925,7 @@ def _default_state():
     return {
         p["id"]: {
             "name": p["name"], "emoji": p["emoji"], "tagline": p["tagline"],
+            "group": p.get("group", "single"),
             "balance": 1000.0, "start_balance": 1000.0,
             "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
         } for p in PROFILES
@@ -693,6 +1002,10 @@ def _build_pool(predictions):
                 "league": p.get("league", "Unknown"), "date": p.get("date", ""),
                 "time": p.get("time", ""), "sport": p.get("sport", "soccer"), "slug": p.get("slug", ""),
                 "ml_features": ml_features,
+                # potřeba pro kombinace v rámci zápasu – společná
+                # pravděpodobnost se počítá ze scoreline gridu, ne součinem
+                "exp_goals": eg if eg.get("home") is not None else None,
+                "two_way": bool(p.get("two_way")),
             })
     return pool
 
@@ -751,23 +1064,50 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
         # strategie nemůže bank definitivně dorazit jednou špatnou sázkou.
         single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", 1000.0) * 0.10 else 0.20
         for c, stake in decisions:
-            if c["match_id"] in used_matches:
+            legs = c.get("legs")
+            # zápasy, které tiket obsadí (u tiketu všechny jeho nohy)
+            ids = [l["match_id"] for l in legs] if legs else [c["match_id"]]
+            if any(i in used_matches for i in ids):
                 continue
             stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap), 2)
             if stake < 1 or stake > b["balance"]:
                 continue
-            bet = {
-                "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
-                "match_id": c["match_id"], "match": c["match"], "league": c["league"],
-                "match_date": c["date"], "match_time": c["time"], "sport": c["sport"], "slug": c["slug"],
-                "outcome": c["outcome"], "label": c["label"], "name": c["name"],
-                "odds": round(c["odds"], 2), "prob": round(c["prob"], 4),
-                "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
-                "ml_features": dict(c.get("ml_features") or {}, edge=c.get("edge", 0.0)),
-            }
+            if legs:
+                # Tiket z více výběrů: akumulátor (různé zápasy) nebo kombinace
+                # trhů jednoho zápasu. Nejbližší výkop rozhoduje, kdy se tiket
+                # začne vyhodnocovat.
+                dated = sorted((l.get("date", ""), l.get("time", "")) for l in legs if l.get("date"))
+                d0, t0 = dated[0] if dated else ("", "")
+                kind = c.get("kind", "acca")
+                title = (legs[0]["match"] if kind == "combo"
+                         else f"Tiket {len(legs)}× ({legs[0]['match'].split(' – ')[0]}…)")
+                bet = {
+                    "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
+                    "kind": kind, "match_id": "", "match": title,
+                    "league": legs[0].get("league", ""),
+                    "match_date": d0, "match_time": t0,
+                    "sport": legs[0].get("sport", "soccer"), "slug": legs[0].get("slug", ""),
+                    "outcome": kind, "label": f"{'KOMBI' if kind == 'combo' else 'AKO'} {len(legs)}",
+                    "name": " + ".join(l["name"] for l in legs),
+                    "odds": round(float(c["odds"]), 2), "prob": round(float(c["prob"]), 4),
+                    "legs": _legs_payload(legs),
+                    "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
+                    "ml_features": dict(legs[0].get("ml_features") or {}),
+                }
+            else:
+                bet = {
+                    "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
+                    "kind": "single",
+                    "match_id": c["match_id"], "match": c["match"], "league": c["league"],
+                    "match_date": c["date"], "match_time": c["time"], "sport": c["sport"], "slug": c["slug"],
+                    "outcome": c["outcome"], "label": c["label"], "name": c["name"],
+                    "odds": round(c["odds"], 2), "prob": round(c["prob"], 4),
+                    "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
+                    "ml_features": dict(c.get("ml_features") or {}, edge=c.get("edge", 0.0)),
+                }
             b["balance"] = round(b["balance"] - stake, 2)
             b["bets"].insert(0, bet)
-            used_matches.add(c["match_id"])
+            used_matches.update(ids)
             placed += 1
         if current_hour is not None and current_hour not in b.get("ran_hours", []):
             b.setdefault("ran_hours", []).append(current_hour)
@@ -804,6 +1144,40 @@ def void_matches(match_ids) -> int:
     return n
 
 
+def _settle_ticket(bet, results):
+    """Vyhodnotí tiket z více výběrů. Vrací 'won'/'lost'/'void', nebo None
+    když aspoň jedna noha ještě nemá výsledek – tiket pak zůstane otevřený.
+
+    Prohraná noha shazuje celý tiket hned, i kdyby zbytek ještě nebyl odehraný
+    (to dělají i sázkovky). Zrušená noha se počítá jako kurz 1.0, takže tiket
+    může pořád vyhrát, jen s nižším výnosem."""
+    legs = bet.get("legs") or []
+    pending = False
+    live_odds = 1.0
+    for leg in legs:
+        if leg.get("result") in ("won", "lost", "void"):
+            r = leg["result"]
+        else:
+            res = results.get(leg["match_id"])
+            r = eval_outcome(leg["outcome"], res["home"], res["away"]) if res else None
+            if r:
+                leg["result"] = r
+                leg["score"] = {"home": res["home"], "away": res["away"]}
+        if r == "lost":
+            return "lost"
+        if r is None:
+            pending = True
+        elif r == "won":
+            live_odds *= float(leg["odds"])
+    if pending:
+        return None
+    # všechny nohy vyřešené a žádná neprohrála
+    if live_odds <= 1.0:
+        return "void"          # všechny nohy zrušené
+    bet["odds"] = round(live_odds, 2)
+    return "won"
+
+
 def settle_all(results: dict) -> int:
     """results: {match_id: {'home':h,'away':a}} – stejná data jako settle pro
     reálné tipy/sázky (viz app.py _settle_recent)."""
@@ -817,12 +1191,18 @@ def settle_all(results: dict) -> int:
         for bet in b["bets"]:
             if bet["status"] != "open":
                 continue
-            res = results.get(bet["match_id"])
-            if not res:
-                continue
-            r = eval_outcome(bet["outcome"], res["home"], res["away"])
-            if not r:
-                continue
+            if bet.get("legs"):
+                r = _settle_ticket(bet, results)
+                if not r:
+                    continue          # aspoň jedna noha ještě nezná výsledek
+                res = None
+            else:
+                res = results.get(bet["match_id"])
+                if not res:
+                    continue
+                r = eval_outcome(bet["outcome"], res["home"], res["away"])
+                if not r:
+                    continue
             if r == "won":
                 payout = round(bet["stake"] * bet["odds"], 2)
                 bet["pnl"] = round(payout - bet["stake"], 2)
@@ -838,7 +1218,8 @@ def settle_all(results: dict) -> int:
                 wins = 0
             bet["status"] = r
             bet["settled_ts"] = int(time.time())
-            bet["result"] = {"home": res["home"], "away": res["away"]}
+            if res:
+                bet["result"] = {"home": res["home"], "away": res["away"]}
             n += 1
             _record_ml_feedback(bid, bet, r)
         b["loss_streak"] = streak
@@ -882,6 +1263,7 @@ def _bettor_stats(bid, b):
         equity.append(cum)
     return {
         "id": bid, "name": b["name"], "emoji": b["emoji"], "tagline": b["tagline"],
+        "group": b.get("group") or (_BY_ID.get(bid, {}) or {}).get("group", "single"),
         "custom": bool(b.get("custom")),
         "deposited": round(sum(t["amount"] for t in (b.get("transactions") or [])
                                if t.get("type") in ("deposit", "withdraw")), 2),
@@ -905,8 +1287,13 @@ def leaderboard() -> list:
     st = load_state()
     rows = [_bettor_stats(bid, b) for bid, b in st.items()]
     rows.sort(key=lambda r: r["profit"], reverse=True)
-    for i, r in enumerate(rows):
-        r["rank"] = i + 1
+    # pořadí se počítá v rámci skupiny – porovnávat akumulátor s jednotlivou
+    # sázkou nedává smysl, každá kategorie hraje jinou hru
+    per_group = {}
+    for r in rows:
+        g = r.get("group", "single")
+        per_group[g] = per_group.get(g, 0) + 1
+        r["rank"] = per_group[g]
     return rows
 
 
