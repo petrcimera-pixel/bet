@@ -601,6 +601,32 @@ def predict_match(m: dict) -> dict:
         bets["btts_yes"] = dict(_priced(btts_p, None), label="Oba dají gól", name="Oba týmy dají gól")
         bets["btts_no"] = dict(_priced(1 - btts_p, None), label="Nedají oba", name="Aspoň jeden tým nedá gól")
 
+    # Dvojtip a "remíza zpět" – nejsou to nové kurzy od sázkovky, ale PŘESNÝ
+    # přepočet z reálných kurzů na 1/X/2. Jsou to vzájemně se vylučující
+    # výsledky, takže se implikované pravděpodobnosti prostě sečtou; marže
+    # sázkovky se tím zachová. Stejně dvojtipy počítají i sázkovky samy.
+    if not cfg.get("two_way") and all(bets.get(k, {}).get("real") for k in ("home", "draw", "away")):
+        i1 = 1.0 / bets["home"]["odds"]
+        ix = 1.0 / bets["draw"]["odds"]
+        i2 = 1.0 / bets["away"]["odds"]
+        pr = probs
+        for key, parts, imp, nm in (
+            ("dc_1x", ("home", "draw"), i1 + ix, f'{m["home"]} nebo remíza'),
+            ("dc_12", ("home", "away"), i1 + i2, "Padne vítěz (bez remízy)"),
+            ("dc_x2", ("draw", "away"), ix + i2, f'Remíza nebo {m["away"]}'),
+        ):
+            bets[key] = dict(_priced(sum(pr[k] for k in parts), round(1.0 / imp, 3), rating_confidence),
+                             label={"dc_1x": "1X", "dc_12": "12", "dc_x2": "X2"}[key], name=nm)
+        # Remíza zpět: při remíze se vrací vklad, takže se cena odvozuje jen
+        # z poměru výhra/prohra (o = 1 + p_soupere / p_naseho).
+        for key, side, mine, theirs, nm in (
+            ("dnb_home", "home", i1, i2, f'{m["home"]} (remíza zpět)'),
+            ("dnb_away", "away", i2, i1, f'{m["away"]} (remíza zpět)'),
+        ):
+            cond = pr[side] / (pr["home"] + pr["away"]) if (pr["home"] + pr["away"]) > 0 else 0.0
+            bets[key] = dict(_priced(cond, round(1.0 + theirs / mine, 3), rating_confidence),
+                             label="1 rem. zpět" if side == "home" else "2 rem. zpět", name=nm)
+
     # Handicap – další trh s REÁLNÝMI kurzy, který ESPN dává (pointSpread).
     # Pravděpodobnost jde spočítat přímo ze scoreline gridu, takže model umí
     # ocenit i tenhle trh, ne jen 1X2 a gólové linie.

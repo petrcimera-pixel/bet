@@ -231,6 +231,18 @@ def eval_outcome(outcome, hs, as_):
         return "won" if total > float(outcome[4:]) else "lost"
     if outcome.startswith("under"):
         return "won" if total < float(outcome[5:]) else "lost"
+    # Dvojtip – pokrývá dva ze tří výsledků najednou
+    if outcome == "dc_1x":
+        return "won" if hs >= as_ else "lost"
+    if outcome == "dc_12":
+        return "won" if hs != as_ else "lost"
+    if outcome == "dc_x2":
+        return "won" if as_ >= hs else "lost"
+    # Remíza zpět – při remíze se vrací vklad
+    if outcome == "dnb_home":
+        return "void" if hs == as_ else ("won" if hs > as_ else "lost")
+    if outcome == "dnb_away":
+        return "void" if hs == as_ else ("won" if as_ > hs else "lost")
     # Handicap (asijský): "ah_home_-0.5" = k domácím se přičte -0.5 gólu.
     # Půlgólové linie nemůžou skončit remízou, takže se nikdy nevrací vklad.
     if outcome.startswith("ah_"):
