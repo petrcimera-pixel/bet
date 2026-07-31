@@ -498,3 +498,8 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
   padding: 6px 10px; font-size: 13px; font-family: ui-monospace, Consolas, monospace;
   color: var(--txt); user-select: all;
 }
+.srv-diag {
+  background: rgba(255,181,71,0.08); border: 1px solid var(--warn);
+  border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 12.5px;
+}
+.srv-diag.ok { background: var(--accent-glow); border-color: var(--accent-dim); }

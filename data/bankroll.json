@@ -1,9 +1,253 @@
 {
   "start_balance": 1000.0,
-  "balance": 481.05,
+  "balance": 453.65,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "eb5ab7f336",
+      "ts": 1785523080,
+      "match_id": "401887800",
+      "match": "Juventus – Nice",
+      "match_date": "2026-07-31",
+      "match_time": "16:00",
+      "league": "Club Friendly",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.59,
+      "prob": 0.7429,
+      "stake": 10.0,
+      "status": "won",
+      "pnl": 5.9,
+      "clv": null,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "club.friendly",
+      "ml_features": {
+        "edge": 0.0823,
+        "attack_home": 1.2391,
+        "defense_home": 0.6409,
+        "attack_away": 0.871,
+        "defense_away": 1.1289,
+        "exp_goals_home": 2.12,
+        "exp_goals_away": 0.61,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 74 % (model říká 71 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 2.12 : 0.61 gólů (celkem 2.73).",
+        "Nejpravděpodobnější výsledek 2:0 (15 %).",
+        "Juventus má výrazně silnější útočný rating.",
+        "Kurz 1.588 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "settled_ts": 1785524238,
+      "result": {
+        "home": 2,
+        "away": 0
+      }
+    },
+    {
+      "id": "478ef45dc8",
+      "ts": 1785516525,
+      "match_id": "401888679",
+      "match": "Club Olimpia – Rubio Ñú",
+      "match_date": "2026-08-02",
+      "match_time": "19:00",
+      "league": "Paraguayan Primera División",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.62,
+      "prob": 0.672,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0031,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "par.1",
+      "ml_features": {
+        "edge": 0.0416,
+        "attack_home": 1.2573,
+        "defense_home": 0.8631,
+        "attack_away": 0.4963,
+        "defense_away": 1.0087,
+        "exp_goals_home": 1.83,
+        "exp_goals_away": 0.6,
+        "rating_confidence": 0.775
+      },
+      "why": [
+        "Model dává 66% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 1.83 : 0.6 gólů (celkem 2.43).",
+        "Nejpravděpodobnější výsledek 1:0 (15 %).",
+        "Club Olimpia má výrazně silnější útočný rating.",
+        "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.625
+    },
+    {
+      "id": "58af4db2f8",
+      "ts": 1785516525,
+      "match_id": "401888842",
+      "match": "Real Madrid – Fiorentina",
+      "match_date": "2026-08-01",
+      "match_time": "16:00",
+      "league": "Club Friendly",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.57,
+      "prob": 0.8099,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0224,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "club.friendly",
+      "ml_features": {
+        "edge": 0.2415,
+        "attack_home": 1.2117,
+        "defense_home": 0.6549,
+        "attack_away": 0.6998,
+        "defense_away": 0.6818,
+        "exp_goals_home": 1.3,
+        "exp_goals_away": 0.58,
+        "rating_confidence": 0.85
+      },
+      "why": [
+        "Kalibrovaná jistota 81 % (model říká 88 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.3 : 0.58 gólů (celkem 1.88).",
+        "Nejpravděpodobnější výsledek 1:0 (18 %).",
+        "Real Madrid má výrazně silnější útočný rating.",
+        "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.606
+    },
+    {
+      "id": "3915d0a646",
+      "ts": 1785516525,
+      "match_id": "401861437",
+      "match": "Beijing Guoan – Zhejiang Professional FC",
+      "match_date": "2026-08-01",
+      "match_time": "11:35",
+      "league": "Chinese Super League",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.57,
+      "prob": 0.6821,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0006,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "chn.1",
+      "ml_features": {
+        "edge": 0.0284,
+        "attack_home": 1.3614,
+        "defense_home": 1.0119,
+        "attack_away": 0.9427,
+        "defense_away": 1.2881,
+        "exp_goals_home": 2.43,
+        "exp_goals_away": 1.06,
+        "rating_confidence": 0.825
+      },
+      "why": [
+        "Model dává 66% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 2.43 : 1.06 gólů (celkem 3.49).",
+        "Nejpravděpodobnější výsledek 2:1 (10 %).",
+        "Beijing Guoan má výrazně silnější útočný rating.",
+        "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.571
+    },
+    {
+      "id": "fc1352c2d1",
+      "ts": 1785516525,
+      "match_id": "401873907",
+      "match": "Bodo/Glimt – Lillestrom",
+      "match_date": "2026-07-31",
+      "match_time": "19:00",
+      "league": "Norwegian Eliteserien",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.24,
+      "prob": 0.6911,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0147,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "nor.1",
+      "ml_features": {
+        "edge": -0.1378,
+        "attack_home": 1.7187,
+        "defense_home": 0.5325,
+        "attack_away": 1.0837,
+        "defense_away": 0.8427,
+        "exp_goals_home": 2.22,
+        "exp_goals_away": 0.85,
+        "rating_confidence": 0.7
+      },
+      "why": [
+        "Model dává 67% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 2.22 : 0.85 gólů (celkem 3.07).",
+        "Nejpravděpodobnější výsledek 2:0 (11 %).",
+        "Bodo/Glimt má výrazně silnější útočný rating.",
+        "Kurz 1.235 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.222
+    },
+    {
+      "id": "862741f448",
+      "ts": 1785513412,
+      "match_id": "401861439",
+      "match": "Chengdu Rongcheng – Wuhan Three Towns",
+      "match_date": "2026-08-01",
+      "match_time": "12:00",
+      "league": "Chinese Super League",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.33,
+      "prob": 0.6916,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0023,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "chn.1",
+      "ml_features": {
+        "edge": -0.0778,
+        "attack_home": 1.7552,
+        "defense_home": 0.5835,
+        "attack_away": 0.9924,
+        "defense_away": 1.5046,
+        "exp_goals_home": 2.31,
+        "exp_goals_away": 0.93,
+        "rating_confidence": 0.375
+      },
+      "why": [
+        "Model dává 67% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 2.31 : 0.93 gólů (celkem 3.23).",
+        "Nejpravděpodobnější výsledek 2:0 (11 %).",
+        "Chengdu Rongcheng má výrazně silnější útočný rating.",
+        "Kurz 1.333 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.333
+    },
     {
       "id": "10a9632cf1",
       "ts": 1785506447,
@@ -58,7 +302,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0138,
+      "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -80,7 +324,7 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.69 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.667
+      "closing_odds": 1.69
     },
     {
       "id": "a055f8c528",
@@ -225,7 +469,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.0005,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -246,7 +490,8 @@
         "Očekávané skóre 86.44 : 77.44 gólů (celkem 163.87).",
         "New York Liberty má výrazně silnější útočný rating.",
         "Kurz 1.909 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.909
     },
     {
       "id": "eced575306",
@@ -263,7 +508,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.009,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -283,7 +528,8 @@
         "Model dává 91% šanci – nejjistější tip zápasu napříč trhy (góly O/U).",
         "Očekávané skóre 86.26 : 77.06 gólů (celkem 163.32).",
         "Kurz 1.909 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.893
     },
     {
       "id": "83965b5cee",
@@ -300,7 +546,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": -0.0023,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -321,7 +567,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.714 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.714
     },
     {
       "id": "88abc3dbb2",
@@ -493,7 +740,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.0152,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -514,7 +761,8 @@
         "Očekávané skóre 1.59 : 1.15 gólů (celkem 2.74).",
         "Nejpravděpodobnější výsledek 1:1 (13 %).",
         "Kurz 1.667 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.645
     },
     {
       "id": "b8011d58a2",
@@ -531,7 +779,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": -0.0102,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -552,7 +800,8 @@
         "Očekávané skóre 1.59 : 1.15 gólů (celkem 2.74).",
         "Nejpravděpodobnější výsledek 1:1 (13 %).",
         "Kurz 1.645 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.667
     },
     {
       "id": "36c4f697f5",
@@ -686,7 +935,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0138,
+      "clv": -0.014,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -708,7 +957,7 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.69 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.667
+      "closing_odds": 1.714
     },
     {
       "id": "10ffee12df",
@@ -725,7 +974,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": -0.0031,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -746,7 +995,8 @@
         "Očekávané skóre 1.57 : 1.1 gólů (celkem 2.67).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.625
     },
     {
       "id": "0143098c6c",
@@ -763,7 +1013,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.023,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -784,7 +1034,8 @@
         "Očekávané skóre 1.52 : 1.12 gólů (celkem 2.64).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.513 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.476
     },
     {
       "id": "b7f7d1c55e",
@@ -801,7 +1052,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": -0.0176,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -823,7 +1074,8 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Instituto (Córdoba) má výrazně silnější útočný rating.",
         "Kurz 1.556 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.588
     },
     {
       "id": "09c616c64d",
@@ -840,7 +1092,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.0154,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -861,7 +1113,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.645 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.625
     },
     {
       "id": "31546d5533",
@@ -1304,7 +1557,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0517,
+      "clv": -0.0642,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1326,7 +1579,7 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.556 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.645
+      "closing_odds": 1.667
     },
     {
       "id": "44da5d7731",
@@ -1341,8 +1594,8 @@
       "odds": 1.67,
       "prob": 0.6636,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 6.7,
       "clv": -0.0118,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1365,7 +1618,12 @@
         "Nejpravděpodobnější výsledek 1:1 (13 %).",
         "Kurz 1.667 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.69
+      "closing_odds": 1.69,
+      "settled_ts": 1785524238,
+      "result": {
+        "home": 0,
+        "away": 3
+      }
     },
     {
       "id": "0688f73872",
@@ -2182,7 +2440,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0087,
+      "clv": -0.0031,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -2204,7 +2462,7 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.606
+      "closing_odds": 1.625
     },
     {
       "id": "23a52bd0a3",
@@ -2527,7 +2785,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.002,
+      "clv": -0.0105,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -2540,7 +2798,7 @@
         "Unión (Santa Fe) má výrazně silnější útočný rating.",
         "Kurz 1.513 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.513
+      "closing_odds": 1.526
     },
     {
       "id": "82a5fb03d4",
@@ -2557,7 +2815,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0202,
+      "clv": 0.0087,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -2570,7 +2828,7 @@
         "Banfield má výrazně silnější útočný rating.",
         "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.588
+      "closing_odds": 1.606
     },
     {
       "id": "9407d2ee98",

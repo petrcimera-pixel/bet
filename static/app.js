@@ -1282,11 +1282,25 @@ async function loadServerInfo() {
                         : '<span class="muted" style="font-size:11.5px;">jiné síťové rozhraní</span>'}
       </div>`).join('');
     box.className = '';
-    box.innerHTML = `
-      ${d.lan_ready ? '' : `<div class="badge model" style="margin-bottom:10px;">
-         Server teď naslouchá jen lokálně (${d.bind_host}) – zvenčí se nepřipojíš.
-         Na serveru ho spouštěj přes <code>deployun_server.bat</code>, který nastaví HOST=0.0.0.0.
-       </div>`}
+    // Na připojení zvenčí musí sedět tři věci naráz (naslouchání na 0.0.0.0,
+    // firewall, soukromý profil sítě). Když jedna chybí, spojení mlčky
+    // nefunguje – proto se tu vypíše konkrétně, co brání a jak to spravit.
+    const dg = d.diagnostics || { ok: true, problems: [] };
+    const probs = dg.problems || [];
+    const diagHtml = probs.length ? `
+      <div class="srv-diag">
+        <div style="font-weight:600; margin-bottom:6px;">⚠️ Zvenčí se teď nepřipojíš – brání tomu:</div>
+        <ul style="margin:0 0 10px; padding-left:18px; line-height:1.7;">
+          ${probs.map(p => `<li>${p.text}<br><span class="muted">Řešení: ${p.fix}</span></li>`).join('')}
+        </ul>
+        ${dg.can_autofix ? `
+          <button class="btn small" id="fixNetBtn">Zkusit opravit automaticky</button>
+          ${dg.is_admin ? '' : '<span class="muted" style="font-size:11.5px; margin-left:8px;">vyžaduje spuštění jako správce</span>'}
+          <div id="fixNetResult" style="margin-top:8px;"></div>` : ''}
+      </div>`
+      : '<div class="srv-diag ok">✅ Síť je připravená – server je dostupný z ostatních zařízení.</div>';
+    box.className = '';
+    box.innerHTML = diagHtml + `
       <div class="srv-row">
         <code class="srv-url">${d.local_url}</code>
         <button class="btn small srv-copy" data-url="${escAttr(d.local_url)}">Kopírovat</button>
@@ -1300,6 +1314,24 @@ async function loadServerInfo() {
         na ty se zvenčí nepřipojíš. Aby se adresa po restartu neměnila, nastav
         serveru v routeru rezervaci IP.
       </div>`;
+    el('fixNetBtn')?.addEventListener('click', async (ev) => {
+      const btn = ev.currentTarget, out = el('fixNetResult');
+      btn.disabled = true; btn.textContent = 'Opravuji…';
+      try {
+        const r = await api('/api/server/fix-network', { method: 'POST', timeoutMs: 60000 });
+        if (r.ok) {
+          out.innerHTML = '<span class="pos">' + (r.done || []).join(' ') + '</span>';
+          toast('Síť opravena.');
+          setTimeout(loadServerInfo, 1200);
+        } else {
+          out.innerHTML = '<span class="bad">' + (r.error || (r.errors || []).join(' ')) + '</span>';
+        }
+      } catch (e) {
+        out.innerHTML = '<span class="bad">Oprava selhala: ' + e.message + '</span>';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Zkusit opravit automaticky';
+      }
+    });
     box.querySelectorAll('.srv-copy').forEach(b => {
       b.addEventListener('click', async () => {
         try {

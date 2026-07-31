@@ -51,6 +51,7 @@ from engine import calibration
 from engine import persist
 from engine import apifootball
 from engine import footballdata
+from engine import netdiag
 from engine import backtester
 
 # ML Learning (optional)
@@ -1456,7 +1457,12 @@ def api_server_info():
     ips.sort(key=lambda a: (a != primary, not a.startswith("192.168."), a))
 
     listening_all = _HOST in ("0.0.0.0", "::")
+    try:
+        diag = netdiag.diagnose(_HOST, _PORT)
+    except Exception as e:
+        diag = {"ok": True, "problems": [], "error": str(e)}
     return jsonify({
+        "diagnostics": diag,
         "hostname": host,
         "port": _PORT,
         "bind_host": _HOST,
@@ -1466,6 +1472,16 @@ def api_server_info():
                        "recommended": ip == primary} for ip in ips],
         "local_url": f"http://localhost:{_PORT}",
     })
+
+
+@app.route("/api/server/fix-network", methods=["POST"])
+@login_required
+def api_server_fix_network():
+    """Zkusi pustit port ve firewallu a prepnout sit na Soukromou."""
+    try:
+        return jsonify(netdiag.autofix(_PORT))
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 
 @app.route("/api/ratings/status")
