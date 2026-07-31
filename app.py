@@ -26,7 +26,7 @@ sys.path.insert(0, _HERE)
 # --- samoinstalace závislostí (stejný styl jako ostatní appky) -------------
 def _ensure():
     import importlib.util, subprocess
-    # numpy je potřeba nepodmíněně (backtester/explainer ho importují při startu)
+    # numpy je potřeba nepodmíněně (backtester ho importuje při startu)
     miss = [p for m, p in {"flask": "Flask", "requests": "requests",
                            "numpy": "numpy"}.items()
             if importlib.util.find_spec(m) is None]
@@ -42,7 +42,6 @@ from engine import storage
 from engine import data_sources as ds
 from engine import goals_model as pred
 from engine import bankroll
-from engine import accumulator as acc
 from engine import odds_api
 from engine import tips_db
 from engine import settings as app_settings
@@ -52,7 +51,6 @@ from engine import calibration
 from engine import persist
 from engine import apifootball
 from engine import backtester
-from engine import explainer
 
 # ML Learning (optional)
 try:
@@ -62,7 +60,6 @@ except ImportError:
     ML_AVAILABLE = False
 
 try:
-    from engine import monitoring
     MONITORING_AVAILABLE = True
 except ImportError:
     MONITORING_AVAILABLE = False
@@ -152,6 +149,17 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                     m["real_odds"] = {"provider": rb[0]["name"], "odds": rb[0]["odds"]}
     predictions = pred.predict_all(matches)
     _PRED_CACHE[key] = (_time.time(), predictions)
+
+    # CLV: u otevřených sázek si zapsat aktuální kurz trhu. Poslední hodnota
+    # před výkopem je "closing line" a porovnání s cenou, za kterou jsme
+    # vsadili, řekne dřív než zisk, jestli agent bere lepší cenu než trh.
+    try:
+        cur_odds = {p["id"]: {k: v.get("odds") for k, v in (p.get("bets") or {}).items()
+                              if v.get("real") and v.get("odds")}
+                    for p in predictions if p.get("result") is None}
+        bankroll.track_closing_odds(cur_odds)
+    except Exception:
+        pass
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
     try:
         tips_db.save_tips([p for p in predictions if p.get("result") is None])
@@ -504,19 +512,6 @@ def api_analysis(match_id):
     })
 
 
-@app.route("/api/tickets")
-def api_tickets():
-    # accumulator.py počítá s trhy (rohy, simulovaný "books" panel), co nový
-    # goals_model engine už neprodukuje, a s frontendem tuhle funkci
-    # nepoužívá – radši prázdný seznam než 500, kdyby na endpoint někdo sáhl.
-    date_str = request.args.get("date") or ds.today_str()
-    days = request.args.get("days", 1)
-    sport = request.args.get("sport", "soccer")
-    try:
-        predictions = _predictions_for(date_str, days=days, sport=sport)
-        return jsonify({"tickets": acc.build_tickets(predictions)})
-    except Exception:
-        return jsonify({"tickets": []})
 
 
 @app.route("/api/form")
@@ -628,23 +623,6 @@ def api_team():
     })
 
 
-@app.route("/api/alerts")
-def api_alerts():
-    # Stejný důvod jako u /api/tickets výše – accumulator.py cílí na starou
-    # (fake-books) strukturu predikce, novým frontendem se nevolá.
-    date_str = request.args.get("date") or ds.today_str()
-    days = request.args.get("days", 1)
-    sport = request.args.get("sport", "soccer")
-    try:
-        predictions = _predictions_for(date_str, days=days, sport=sport)
-        return jsonify({"alerts": acc.build_alerts(predictions)})
-    except Exception:
-        return jsonify({"alerts": []})
-
-
-# ---------------------------------------------------------------------------
-# API – bankroll
-# ---------------------------------------------------------------------------
 @app.route("/api/bankroll")
 def api_bankroll():
     return jsonify({"stats": bankroll.stats(), "bets": bankroll.state()["bets"][:50]})
@@ -1394,6 +1372,41 @@ def api_bettor_detail(bid):
     return jsonify(detail)
 
 
+@app.route("/api/ratings/backfill", methods=["POST"])
+@login_required
+def api_ratings_backfill():
+    """Dávkové natažení ratingů z odehrané historie."""
+    d = request.get_json(force=True) or {}
+    try:
+        days = int(d.get("days") or 60)
+    except (TypeError, ValueError):
+        days = 60
+    days = max(7, min(180, days))
+    sport = d.get("sport") or "soccer"
+    try:
+        res = pred.backfill_ratings(days_back=days, sport=sport)
+        _PRED_CACHE.clear()      # staré predikce vznikly z plochých ratingů
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/ratings/status")
+@login_required
+def api_ratings_status():
+    r = pred._ratings()
+    played = [v for v in r.values() if v.get("n", 0) > 0]
+    ns = sorted(v["n"] for v in played)
+    return jsonify({
+        "teams": len(r), "teams_with_history": len(played),
+        "median_games": ns[len(ns) // 2] if ns else 0,
+        "avg_games": round(sum(ns) / len(ns), 1) if ns else 0,
+        "max_games": ns[-1] if ns else 0,
+        "well_known": sum(1 for n in ns if n >= 10),
+    })
+
+
 @app.route("/api/bettors/options")
 @login_required
 def api_bettor_options():
@@ -1486,6 +1499,13 @@ def api_bettors_run():
         "total_staked": round(sum(d["staked"] for d in detail), 2),
         "eligible": len(board),
     })
+
+
+@app.route("/api/bettors/groups")
+@login_required
+def api_bettor_groups():
+    """Srovnání kategorií sázkařů – vyplácí se skládat tikety?"""
+    return jsonify(virtual_bettors.group_comparison())
 
 
 @app.route("/api/bettors/calibration")
@@ -2002,39 +2022,6 @@ def api_backtest_odds():
 
 # ============ EXPLAINABILITY API ============
 
-@app.route("/api/explain/<bet_id>", methods=["GET"])
-@login_required
-def api_explain_bet(bet_id):
-    """Get SHAP-style explanation for a bet."""
-    try:
-        # ModelExplainer čeká instanci MLLearner, ne modul
-        exp = explainer.ModelExplainer(ml_learner.get_learner() if ML_AVAILABLE else None)
-
-        # Find bet in bankroll
-        bets = bankroll.state()["bets"]
-        bet = next((b for b in bets if b["id"] == bet_id), None)
-
-        if not bet:
-            return jsonify({"error": "Bet not found", "success": False}), 404
-
-        # Generate explanation
-        explanation = exp.explain_prediction(
-            bet_id=bet_id,
-            features={
-                "odds": bet["odds"],
-                "prob": bet["prob"],
-                "stake": bet["stake"],
-                "league": bet.get("league"),
-                "prediction": bet["outcome"]
-            },
-            prediction_prob=bet["prob"],
-            odds=bet["odds"],
-            stake=bet["stake"]
-        )
-
-        return jsonify({"success": True, "explanation": explanation})
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
 
 
 @app.route("/api/feature-importance", methods=["GET"])
@@ -2085,47 +2072,8 @@ def api_analytics_summary():
 
 # ============ MONITORING API ============
 
-@app.route("/api/monitoring/summary", methods=["GET"])
-@login_required
-def api_monitoring_summary():
-    """Get monitoring and health summary."""
-    try:
-        if not MONITORING_AVAILABLE:
-            return jsonify({"success": False, "error": "Monitoring not available"}), 500
-
-        monitor = monitoring.PerformanceMonitor()
-        summary = monitor.get_summary()
-
-        return jsonify({
-            "success": True,
-            "monitoring": summary,
-        })
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
 
 
-@app.route("/api/monitoring/alerts", methods=["GET"])
-@login_required
-def api_monitoring_alerts():
-    """Get recent alerts."""
-    try:
-        if not MONITORING_AVAILABLE:
-            return jsonify({"success": False, "error": "Monitoring not available"}), 500
-
-        monitor = monitoring.PerformanceMonitor()
-        hours = int(request.args.get("hours", 24))
-        alerts = monitor.get_active_alerts(hours=hours)
-
-        return jsonify({
-            "success": True,
-            "alerts": alerts,
-            "count": len(alerts),
-        })
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
-
-
-# ============ BANKROLL STATISTICS API ============
 
 @app.route("/api/bankroll/summary", methods=["GET"])
 @login_required

@@ -91,7 +91,7 @@ function setupNav() {
       if (page === 'search') loadSearchPage();
       if (page === 'bettors') loadBettors();
       if (page === 'bankroll') loadBankroll();
-      if (page === 'learning') loadMlLearning();
+      if (page === 'learning') { loadMlLearning(); loadBacktest(); }
       if (page === 'settings') loadSettings();
     });
   });
@@ -118,6 +118,7 @@ function bindEvents() {
   el('runBettorsBtn')?.addEventListener('click', runBettorsRound);
   el('retrainMlBtn')?.addEventListener('click', retrainMlModel);
   el('apifSaveBtn')?.addEventListener('click', saveApifKey);
+  el('backfillBtn')?.addEventListener('click', runBackfill);
   el('newBettorBtn')?.addEventListener('click', openBettorWizard);
   el('wizCancel')?.addEventListener('click', () => { el('bettorWizard').style.display = 'none'; });
   el('wizCreate')?.addEventListener('click', createBettor);
@@ -1266,6 +1267,40 @@ function renderBetsTable(bets) {
 // ---------------------------------------------------------------------------
 // SETTINGS
 // ---------------------------------------------------------------------------
+async function loadRatingsStatus() {
+  const box = el('ratingsStatus');
+  if (!box) return;
+  try {
+    const r = await api('/api/ratings/status');
+    const weak = r.median_games < 5;
+    box.innerHTML = `
+      <span class="badge ${weak ? 'model' : 'real'}">${weak ? 'málo dat' : 'v pořádku'}</span>
+      Týmů s historií <strong>${r.teams_with_history}</strong> z ${r.teams} ·
+      medián <strong>${r.median_games}</strong> zápasů, průměr ${r.avg_games} ·
+      dobře známých (10+) <strong>${r.well_known}</strong>
+      ${weak ? '<div class="muted" style="margin-top:4px;">Pod ~5 zápasy na tým jsou predikce zploštělé k průměru a model nenajde value.</div>' : ''}`;
+  } catch (e) {
+    box.innerHTML = '<span class="muted">Stav ratingů se nepodařilo načíst.</span>';
+  }
+}
+
+async function runBackfill() {
+  const btn = el('backfillBtn');
+  const days = parseInt(el('backfillDays').value) || 60;
+  btn.disabled = true; btn.textContent = 'Stahuji historii… (i pár minut)';
+  try {
+    const d = await api('/api/ratings/backfill', {
+      method: 'POST', body: JSON.stringify({ days }), timeoutMs: 900000,
+    });
+    toast(`Zpracováno ${d.found} zápasů, započítáno ${d.applied}. Medián teď ${d.median_games} zápasů na tým.`);
+    loadRatingsStatus();
+  } catch (e) {
+    toast('Natažení historie selhalo: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Natáhnout historii';
+  }
+}
+
 async function loadApifStatus() {
   const box = el('apifStatus');
   if (!box) return;
@@ -1299,6 +1334,7 @@ async function saveApifKey() {
 async function loadSettings() {
   renderNotifStatus();
   loadApifStatus();
+  loadRatingsStatus();
   try {
     const data = await api('/api/agent');
     const c = data.settings;
@@ -1506,6 +1542,7 @@ async function loadBettors() {
     ]);
     _bettorGroups = data.groups || _bettorGroups;
     renderBettors(data.bettors || []);
+    loadGroupCompare();
     drawCalibrationChart(calib.buckets || []);
   } catch (e) {
     box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
@@ -1528,6 +1565,54 @@ function sparklineSvg(equity) {
 }
 
 let _bettorGroups = null;
+
+const GROUP_COLORS = { single: 'var(--accent)', acca: 'var(--blue)', combo: 'var(--warn)' };
+
+async function loadGroupCompare() {
+  const box = el('groupCompare');
+  if (!box) return;
+  try {
+    const d = await api('/api/bettors/groups', { timeoutMs: 20000 });
+    const gs = d.groups || [];
+    if (!gs.length) { box.className = ''; box.innerHTML = '<div class="empty-state">Zatím nic</div>'; return; }
+    const all = gs.flatMap(g => g.curve || [0]);
+    const lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+    const span = (hi - lo) || 1;
+    const W = 600, H = 130;
+    const path = g => (g.curve || []).map((v, i, a) => {
+      const x = a.length > 1 ? (i / (a.length - 1)) * W : 0;
+      const y = H - ((v - lo) / span) * H;
+      return `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(' ');
+    const zeroY = H - ((0 - lo) / span) * H;
+    box.className = '';
+    box.innerHTML = `
+      <div class="table-wrap">
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%; height:130px;">
+          <line x1="0" y1="${zeroY.toFixed(1)}" x2="${W}" y2="${zeroY.toFixed(1)}"
+                stroke="var(--border)" stroke-dasharray="4 4"/>
+          ${gs.map(g => `<path d="${path(g)}" fill="none" stroke="${GROUP_COLORS[g.group] || 'var(--txt2)'}" stroke-width="2"/>`).join('')}
+        </svg>
+      </div>
+      <div class="table-wrap" style="margin-top:10px;"><table>
+        <thead><tr><th>Kategorie</th><th>Sázkařů</th><th>Zisk</th><th>ROI</th><th>Win rate</th><th>Vyřešeno</th><th>Ve hře</th></tr></thead>
+        <tbody>${gs.map(g => `<tr>
+          <td><span style="color:${GROUP_COLORS[g.group] || 'inherit'};">●</span> ${g.emoji} ${g.label}</td>
+          <td>${g.bettors}</td>
+          <td class="${g.pnl >= 0 ? 'pos' : 'bad'}">${g.pnl >= 0 ? '+' : ''}${fmt(g.pnl)} Kč</td>
+          <td>${g.settled ? pct(g.roi) : '—'}</td>
+          <td>${g.win_rate != null ? pct(g.win_rate) : '—'}</td>
+          <td>${g.settled}</td>
+          <td class="muted">${fmt(g.open_stake)} Kč</td>
+        </tr>`).join('')}</tbody></table></div>
+      <p style="font-size:11.5px; color:var(--txt3); margin:10px 0 0;">
+        Kategorie s málo vyřešenými sázkami ještě nic neříká – křivka i ROI potřebují desítky tiketů.
+      </p>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = `<div class="empty-state">Srovnání se nepodařilo načíst: ${e.message}</div>`;
+  }
+}
 
 function renderBettors(bettors) {
   const box = el('bettorsContainer');
@@ -1856,6 +1941,39 @@ function renderMlFeatures(importance) {
       </div>
       <span style="width:45px; text-align:right; font-size:11.5px; color:var(--txt3);">${(val * 100).toFixed(1)}%</span>
     </div>`).join('');
+}
+
+async function loadBacktest() {
+  const box = el('backtestBox');
+  if (!box) return;
+  try {
+    const [best, worst, odds] = await Promise.all([
+      api('/api/backtest/best-leagues', { timeoutMs: 20000 }).catch(() => ({ results: {} })),
+      api('/api/backtest/worst-leagues', { timeoutMs: 20000 }).catch(() => ({ results: {} })),
+      api('/api/backtest/odds-ranges', { timeoutMs: 20000 }).catch(() => ({ results: {} })),
+    ]);
+    const rows = (obj, label) => Object.entries(obj.results || {})
+      .map(([k, v]) => `<tr>
+          <td>${k}</td>
+          <td class="${v.pnl >= 0 ? 'pos' : 'bad'}">${v.pnl >= 0 ? '+' : ''}${fmt(v.pnl)} Kč</td>
+          <td>${pct(v.roi)}</td>
+          <td>${pct(v.win_rate)}</td>
+          <td>${v.total_bets}</td>
+        </tr>`).join('') || `<tr><td colspan="5" class="muted">Zatím málo dat</td></tr>`;
+    const tbl = (title, obj) => `
+      <h4 style="margin:14px 0 6px; font-size:13px;">${title}</h4>
+      <div class="table-wrap"><table>
+        <thead><tr><th>${title.includes('kurz') ? 'Pásmo kurzu' : 'Liga'}</th><th>Zisk</th><th>ROI</th><th>Win rate</th><th>Sázek</th></tr></thead>
+        <tbody>${rows(obj)}</tbody></table></div>`;
+    box.className = '';
+    box.innerHTML = tbl('Nejlepší ligy', best) + tbl('Nejhorší ligy', worst)
+      + tbl('Podle pásma kurzu', odds)
+      + `<p style="font-size:11.5px; color:var(--txt3); margin:10px 0 0;">
+           Řádky s pár sázkami jsou šum – ROI potřebuje desítky vyhodnocených sázek.</p>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = `<div class="empty-state">Rozbor se nepodařilo načíst: ${e.message}</div>`;
+  }
 }
 
 async function retrainMlModel() {

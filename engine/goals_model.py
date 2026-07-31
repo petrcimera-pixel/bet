@@ -152,14 +152,36 @@ def rating_of(team: str) -> dict:
     return dict(get_rating(team, _ratings()))
 
 
+_APPLIED_FILE = "ratings_applied.json"
+
+
+def _applied_ids() -> set:
+    return set((storage.load(_APPLIED_FILE, {}) or {}).get("ids") or [])
+
+
+def _mark_applied(ids) -> None:
+    cur = _applied_ids() | set(ids)
+    # držet jen rozumné množství – starší zápasy se stejně znovu nestahují
+    storage.save(_APPLIED_FILE, {"ids": sorted(cur)[-20000:]})
+
+
 def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
-                        sport: str = "soccer", slug: str = "") -> None:
+                        sport: str = "soccer", slug: str = "",
+                        match_id: str = None) -> bool:
     """Po vyhodnoceném zápase posune attack/defense obou týmů směrem k tomu,
     co skutečně předvedly oproti očekávání – učení se zpomaluje s počtem
     odehraných zápasů (n).
 
     sport je nutný: bez něj by se nefotbalové skóre porovnávalo s fotbalovou
     baseline a rating by se po jediném zápase utrhl na strop."""
+    # Každý zápas smí rating ovlivnit jen jednou. Bez téhle pojistky by
+    # opakovaná kontrola výsledků (nebo dávkové natažení historie) tentýž
+    # výsledek započítala vícekrát a rating by se nafoukl.
+    if match_id is not None:
+        if str(match_id) in _applied_ids():
+            return False
+        _mark_applied([str(match_id)])
+
     ratings = _ratings()
     rh, ra = get_rating(home, ratings), get_rating(away, ratings)
 
@@ -198,6 +220,61 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     rh["n"] += 1
     ra["n"] += 1
     _save_ratings(ratings)
+    return True
+
+
+def backfill_ratings(days_back: int = 60, sport: str = "soccer",
+                      chunk_days: int = 10, progress=None) -> dict:
+    """Dožene ratingy z odehraných zápasů v minulosti.
+
+    Model se jinak učí jen z toho, co si sám vyhodnotí, takže po čerstvém
+    startu má většina týmů jediný odehraný zápas a predikce jsou nutně ploché.
+    ESPN ale historii dává zdarma – tahle dávka ji projde odzadu dopředu a
+    postupně z ní ratingy poskládá. Pořadí je chronologické, aby se učení
+    zpomalovalo se skutečně narůstající zkušeností, ne náhodně."""
+    today = ds.today_str()
+    start = ds.add_days(today, -abs(days_back))
+    matches, seen = [], set()
+
+    d = start
+    while d < today:
+        end = min(ds.add_days(d, chunk_days - 1), ds.add_days(today, -1))
+        try:
+            for m in ds.fetch_range(d, end, sport=sport):
+                if m.get("home_score") is None or m.get("away_score") is None:
+                    continue
+                if m.get("live") or str(m.get("id")) in seen:
+                    continue
+                seen.add(str(m["id"]))
+                matches.append(m)
+        except Exception:
+            pass
+        if progress:
+            progress(d, end, len(matches))
+        d = ds.add_days(end, 1)
+
+    matches.sort(key=lambda m: (m.get("date", ""), m.get("time", "")))
+    applied = skipped = 0
+    for m in matches:
+        try:
+            ok = update_from_result(m["home"], m["away"], m.get("league", ""),
+                                    m["home_score"], m["away_score"],
+                                    sport, m.get("slug", ""), match_id=m["id"])
+            applied += 1 if ok else 0
+            skipped += 0 if ok else 1
+        except Exception:
+            skipped += 1
+
+    ratings = _ratings()
+    played = [v for v in ratings.values() if v.get("n", 0) > 0]
+    ns = sorted(v["n"] for v in played)
+    return {
+        "found": len(matches), "applied": applied, "skipped": skipped,
+        "days_back": abs(days_back), "sport": sport,
+        "teams_with_history": len(played),
+        "median_games": ns[len(ns) // 2] if ns else 0,
+        "avg_games": round(sum(ns) / len(ns), 1) if ns else 0,
+    }
 
 
 def _clamp(v: float) -> float:

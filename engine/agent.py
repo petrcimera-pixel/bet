@@ -117,7 +117,7 @@ def _candidates(p, cfg):
             "odds": float(odds), "prob": float(prob),
             # kalibrovaná pravděpodobnost = model prob opravená podle skutečné
             # historické úspěšnosti (model je systematicky překalibrovaný)
-            "cal_prob": calibration.calibrate(float(prob)),
+            "cal_prob": calibration.calibrate(float(prob), outcome),
             "edge": b.get("edge", 0.0) or 0.0,
             "market": market, "real": True,
         })

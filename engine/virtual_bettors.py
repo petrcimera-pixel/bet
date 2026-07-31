@@ -269,7 +269,7 @@ def _s_calibrated(pool, b, bal):
     from . import calibration
     c = []
     for x in pool:
-        cal = calibration.calibrate(x["prob"])
+        cal = calibration.calibrate(x["prob"], x["outcome"])
         if cal >= 0.62 and cal * x["odds"] - 1 > 0:
             c.append((cal, x))
     c.sort(key=lambda t: -t[0])
@@ -1348,6 +1348,51 @@ def leading_strategy_insight() -> dict:
 # Kalibrace modelu – říká "75 % jistota" skutečně vyhrává ~75 % případů?
 # ---------------------------------------------------------------------------
 _CAL_BUCKETS = [(0.50, 0.60), (0.60, 0.70), (0.70, 0.80), (0.80, 0.90), (0.90, 1.01)]
+
+
+def group_comparison() -> dict:
+    """Vývoj banku po kategoriích – vyplácí se vůbec skládat tikety?
+
+    Jednotlivé sázky, akumulátory a kombinace hrají jinou hru, takže je
+    zajímavější jejich souhrnná křivka než pořadí jednotlivců."""
+    st = load_state()
+    out = {}
+    for bid, b in st.items():
+        g = b.get("group") or (_BY_ID.get(bid, {}) or {}).get("group", "single")
+        d = out.setdefault(g, {"group": g, "label": GROUPS.get(g, {}).get("label", g),
+                               "emoji": GROUPS.get(g, {}).get("emoji", ""),
+                               "bettors": 0, "start": 0.0, "balance": 0.0,
+                               "staked": 0.0, "pnl": 0.0, "settled": 0, "won": 0,
+                               "open_stake": 0.0, "_events": []})
+        d["bettors"] += 1
+        d["start"] += b.get("start_balance", 0.0)
+        d["balance"] += b.get("balance", 0.0)
+        for x in b.get("bets", []):
+            if x["status"] in ("won", "lost"):
+                d["staked"] += x["stake"]
+                d["pnl"] += x["pnl"]
+                d["settled"] += 1
+                d["won"] += 1 if x["status"] == "won" else 0
+                d["_events"].append((x.get("settled_ts") or x["ts"], x["pnl"]))
+            elif x["status"] == "open":
+                d["open_stake"] += x["stake"]
+
+    for d in out.values():
+        cum, curve = 0.0, [0.0]
+        for _, pnl in sorted(d.pop("_events")):
+            cum = round(cum + pnl, 2)
+            curve.append(cum)
+        # křivka se zkrátí na rozumný počet bodů, ať se dá vykreslit
+        if len(curve) > 60:
+            step = len(curve) / 60.0
+            curve = [curve[min(len(curve) - 1, int(i * step))] for i in range(60)] + [curve[-1]]
+        d["curve"] = curve
+        for k in ("start", "balance", "staked", "pnl", "open_stake"):
+            d[k] = round(d[k], 2)
+        d["roi"] = round(d["pnl"] / d["staked"] * 100, 1) if d["staked"] else 0.0
+        d["win_rate"] = round(d["won"] / d["settled"] * 100, 1) if d["settled"] else None
+    order = ["single", "acca", "combo"]
+    return {"groups": [out[g] for g in order if g in out]}
 
 
 def calibration_data() -> list:

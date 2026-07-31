@@ -160,6 +160,15 @@
       </div>
 
       <div class="card" style="margin-bottom:16px;">
+        <h3>Srovnání kategorií</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          Vyplácí se skládat tikety, nebo sázet po jedné? Křivka ukazuje vývoj
+          realizovaného zisku každé kategorie.
+        </p>
+        <div id="groupCompare" class="loading"><span class="spinner"></span></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
         <h3>Kalibrace modelu</h3>
         <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Když model řekne "75 % jistota", vyhrává napříč sázkami všech sázkařů skutečně ~75 % případů? Modrá čára = ideální kalibrace.</p>
         <div class="chart-wrap"><svg id="calibrationSVG" viewBox="0 0 700 260" class="chart"></svg></div>
@@ -221,6 +230,15 @@
       </div>
 
       <div class="card">
+        <h3>Kde agent vydělává a kde ztrácí</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          Rozbor už vyhodnocených sázek podle ligy a podle pásma kurzu – ukáže,
+          jestli ztráta pochází z konkrétní soutěže nebo z určitého typu kurzu.
+        </p>
+        <div id="backtestBox" class="loading"><span class="spinner"></span></div>
+      </div>
+
+      <div class="card">
         <h3>Feature importance</h3>
         <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Které vstupy model při rozhodování považuje za nejdůležitější.</p>
         <div id="mlFeatures" class="loading"><span class="spinner"></span></div>
@@ -271,6 +289,26 @@
         <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">Appka musí zůstat otevřená v prohlížeči (běží lokálně, žádný server push) – upozorní tě na nový tip dne a na vyhodnocené sázky.</p>
         <div id="notifStatus" style="font-size:13px; margin-bottom:10px;"></div>
         <button class="btn" id="notifEnableBtn">Povolit notifikace</button>
+      </div>
+
+      <div class="card">
+        <h3>Znalost týmů (ratingy)</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          Model se sám učí jen z toho, co si vyhodnotí, takže po čerstvém startu o týmech
+          skoro nic neví a predikce jsou ploché. Tímhle se doženou z odehrané historie,
+          kterou ESPN dává zdarma. Běží to i několik minut a jde to kdykoliv zopakovat –
+          každý zápas se započítá jen jednou.
+        </p>
+        <div id="ratingsStatus" style="font-size:13px; margin-bottom:10px;"></div>
+        <div class="toolbar-row">
+          <select id="backfillDays" style="max-width:200px;">
+            <option value="30">30 dní zpět</option>
+            <option value="60" selected>60 dní zpět</option>
+            <option value="120">120 dní zpět</option>
+            <option value="180">180 dní zpět</option>
+          </select>
+          <button class="btn" id="backfillBtn">Natáhnout historii</button>
+        </div>
       </div>
 
       <div class="card">

@@ -8,7 +8,6 @@ import time
 import uuid
 
 from . import storage
-from . import prediction
 
 # ML feedback logging (optional – jen pokud je ML dostupné)
 try:
@@ -69,6 +68,36 @@ def kelly_stake(prob: float, odds: float, balance: float, fraction: float,
     f = (prob * b - (1 - prob)) / b   # plný Kelly podíl banku
     f = max(0.0, f) * fraction * max(0.0, min(1.0, confidence_scale))
     return round(balance * f, 2)
+
+
+def track_closing_odds(match_odds: dict) -> int:
+    """Zapíše k otevřeným sázkám aktuální kurz trhu.
+
+    CLV (closing line value) = porovnání kurzu, za který jsme vsadili, proti
+    kurzu těsně před výkopem. Je to nejspolehlivější ukazatel, jestli sázkař
+    dlouhodobě bere lepší cenu než trh – a na rozdíl od zisku dává smysl už
+    po pár desítkách sázek, protože nezávisí na tom, jestli zrovna padl gól.
+
+    match_odds: {match_id: {outcome: odds}} z čerstvých predikcí.
+    """
+    if not match_odds:
+        return 0
+    st = state()
+    n = 0
+    for bet in st["bets"]:
+        if bet.get("status") != "open" or bet.get("outcome") == "acca":
+            continue
+        cur = (match_odds.get(bet.get("match_id")) or {}).get(bet.get("outcome"))
+        if not cur:
+            continue
+        # poslední viděný kurz před výkopem = "closing line"
+        if bet.get("closing_odds") != cur:
+            bet["closing_odds"] = round(float(cur), 3)
+            bet["clv"] = _clv(bet["odds"], cur)
+            n += 1
+    if n:
+        _save(st)
+    return n
 
 
 def _clv(odds, consensus_odds):
