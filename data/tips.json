@@ -10747,14 +10747,17 @@
       "dc_recommended": true,
       "is_sharp": false,
       "saved_at": "2026-07-29T20:46:37",
-      "result": null,
-      "actual": null,
-      "pick_result": null,
+      "result": {
+        "home": 1,
+        "away": 1
+      },
+      "actual": "draw",
+      "pick_result": "lost",
       "value_result": null,
-      "goal_result": null,
+      "goal_result": "won",
       "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "dc_result": "won",
+      "settled_at": "2026-07-31T22:09:09"
     },
     {
       "id": "401886550",

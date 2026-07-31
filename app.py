@@ -2333,7 +2333,13 @@ _start_background_threads()
 
 if __name__ == "__main__":
     _start_background_threads()
-    print(f"⚽ KurzAnalytik běží na  http://{_HOST}:{_PORT}")
+    # Windows konzole umí být v cp1250 a na emoji i diakritice spadne na
+    # UnicodeEncodeError - kvůli jednomu hlášce by se neuspustil celý server.
+    _msg = f"KurzAnalytik běží na  http://{_HOST}:{_PORT}"
+    try:
+        print("⚽ " + _msg)
+    except UnicodeEncodeError:
+        print(_msg.encode("ascii", "replace").decode("ascii"))
     if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
         threading.Timer(1.2, _open_browser).start()
     app.run(host=_HOST, port=_PORT, debug=False, threaded=True)

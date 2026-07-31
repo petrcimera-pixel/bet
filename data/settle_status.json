@@ -1,7 +1,7 @@
 {
-  "last_check": 1785527772,
-  "last_pass_duration_s": 0.8,
-  "results_found": 8,
+  "last_check": 1785528549,
+  "last_pass_duration_s": 2.3,
+  "results_found": 60,
   "more_pending": true,
   "total_targets": 70,
   "batch_size": 24
