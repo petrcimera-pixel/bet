@@ -60,8 +60,25 @@ if errorlevel 1 (
   exit /b 1
 )
 
-REM ---- firewall: pustit port 5000 v domaci siti ----
-echo [3/5] Otviram port 5000 pro domaci sit...
+REM ---- sit musi byt Soukroma, jinak pravidlo neplati ----
+REM Na "Verejne" siti Windows zahazuje i ping a pravidlo pro profil
+REM private/domain se vubec neuplatni - server je pak zvenci nedostupny
+REM a nijak to nedava najevo. Proto profil prepneme.
+echo [3/5] Kontroluji profil site a otviram port 5000...
+for /f %%p in ('powershell -NoProfile -Command ^
+  "(Get-NetConnectionProfile ^| Where-Object { $_.NetworkCategory -eq 'Public' } ^| Measure-Object).Count"') do set "PUBCNT=%%p"
+if not "%PUBCNT%"=="0" (
+  echo     Sit je oznacena jako Verejna - prepinam na Soukromou...
+  powershell -NoProfile -Command ^
+    "Get-NetConnectionProfile | Where-Object { $_.NetworkCategory -eq 'Public' } | Set-NetConnectionProfile -NetworkCategory Private" >nul 2>&1
+  if errorlevel 1 (
+    echo     [!] Prepnuti se nepodarilo. Nastaveni - Sit a internet -
+    echo         vlastnosti site - Soukroma. Bez toho se zvenci nepripojis.
+  ) else (
+    echo     Hotovo - sit je ted Soukroma.
+  )
+)
+
 netsh advfirewall firewall delete rule name="KurzAnalytik" >nul 2>&1
 netsh advfirewall firewall add rule name="KurzAnalytik" dir=in action=allow ^
   protocol=TCP localport=5000 profile=private,domain >nul
@@ -69,8 +86,12 @@ if errorlevel 1 (
   echo     [!] Pravidlo firewallu se nepodarilo pridat - server pujde
   echo         jen z tohoto pocitace. Muzes ho pridat rucne pozdeji.
 ) else (
-  echo     Hotovo (jen privatni/domenova sit, ne verejna).
+  echo     Port 5000 otevren (jen privatni/domenova sit, ne verejna).
 )
+REM ping ze sousedniho PC je prvni vec, kterou clovek zkousi - at nelze
+netsh advfirewall firewall delete rule name="KurzAnalytik ping" >nul 2>&1
+netsh advfirewall firewall add rule name="KurzAnalytik ping" dir=in action=allow ^
+  protocol=icmpv4:8,any profile=private,domain >nul 2>&1
 
 REM ---- sluzba pres Planovac uloh: nabehne po restartu i bez prihlaseni ----
 echo [4/5] Registruji sluzbu (nabehne po restartu PC)...
@@ -87,7 +108,23 @@ echo     Hotovo - uloha "KurzAnalytik" spusti server pri startu Windows.
 REM ---- prvni spusteni ----
 echo [5/5] Spoustim server...
 schtasks /Run /TN "KurzAnalytik" >nul 2>&1
-timeout /t 6 /nobreak >nul
+timeout /t 10 /nobreak >nul
+
+REM ---- overit, ze server opravdu bezi a naslouchá vsem adresam ----
+REM Bez tohodle by instalator hlasil "hotovo" i kdyz server spadl na
+REM chybejici zavislosti - a clovek pak hleda chybu v siti.
+set "LISTEN="
+for /f %%l in ('powershell -NoProfile -Command ^
+  "(Get-NetTCPConnection -LocalPort 5000 -State Listen -EA SilentlyContinue ^| Where-Object { $_.LocalAddress -eq '0.0.0.0' } ^| Measure-Object).Count"') do set "LISTEN=%%l"
+if "%LISTEN%"=="0" (
+  echo.
+  echo     [!] Server na portu 5000 nenaslouchá. Podivej se do
+  echo         "%APPDIR%\server.log" - bude tam duvod.
+  echo.
+  pause
+) else (
+  echo     Server bezi a naslouchá na vsech sitovych adresach.
+)
 
 REM ---- zjistit IP adresu v domaci siti ----
 REM Preferujeme 192.168.x.x - to ma domaci router skoro vzdy. Adresy jako

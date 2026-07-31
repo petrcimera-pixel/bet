@@ -140,6 +140,10 @@ def autofix(port: int, set_private: bool = True) -> dict:
         f"-Protocol TCP -LocalPort {int(port)} -Profile Private,Domain | Out-Null; 'OK'")
     if ok:
         done.append(f"Ve firewallu je puštěný port {port} (jen soukromá a doménová síť).")
+        # ping je první věc, kterou člověk při hledání chyby zkusí – ať nelže
+        _ps(f"Remove-NetFirewallRule -DisplayName '{RULE_NAME} ping' -ErrorAction SilentlyContinue; "
+            f"New-NetFirewallRule -DisplayName '{RULE_NAME} ping' -Direction Inbound -Action Allow "
+            "-Protocol ICMPv4 -IcmpType 8 -Profile Private,Domain | Out-Null; 'OK'")
     else:
         errors.append(f"Pravidlo firewallu se nepodařilo přidat: {out}")
 
