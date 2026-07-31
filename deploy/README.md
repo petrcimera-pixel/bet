@@ -57,6 +57,34 @@ naběhne po restartu, běží bez přihlášeného uživatele a nepotřebuje ote
 Proti klasické službě má tohle výhodu, že nepotřebuje nic doinstalovat (NSSM
 apod.) — vystačí si s tím, co ve Windows už je.
 
+## Vzdálená správa serveru (volitelné)
+
+Aby šlo aplikaci na serveru upravovat bez chození k němu, spusť tam jednou
+**`deploy\POVOLIT_SSH.bat`** jako správce. Zapne OpenSSH (je součástí Windows),
+uloží veřejný klíč vývojového počítače a otevře port 22 jen pro soukromou síť.
+
+Přihlášení jde **výhradně klíčem** — skript heslo jako způsob přihlášení vypne,
+takže ani při odhaleném portu se sem nikdo nedostane hádáním hesla. Privátní
+klíč zůstává na vývojovém PC a po síti se nikdy neposílá.
+
+Připojení z vývojového počítače (hostitel `kurzanalytik` je v `~/.ssh/config`):
+
+```
+ssh kurzanalytik
+```
+
+Vypnout zpět: `services.msc` → *OpenSSH SSH Server* → Zastavit, typ spuštění
+Zakázáno. Pravidlo firewallu odebereš přes
+`netsh advfirewall firewall delete rule name="KurzAnalytik SSH"`.
+
+**Když port 22 nenaskočí:**
+
+| Příčina | Jak ověřit na serveru |
+|---|---|
+| OpenSSH se nenainstaloval | `Get-WindowsCapability -Online -Name OpenSSH.Server*` → musí být `Installed` |
+| Služba neběží | `Get-Service sshd` → musí být `Running` |
+| Síť je Veřejná | `Get-NetConnectionProfile` → musí být `Private`, jinak pravidlo neplatí |
+
 ## Bezpečnost
 
 Aplikace je určená **do domácí sítě**, ne na internet:
