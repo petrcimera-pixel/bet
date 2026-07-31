@@ -1,6 +1,6 @@
 {
   "start_balance": 1000.0,
-  "balance": 453.65,
+  "balance": 497.75,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -181,8 +181,8 @@
       "odds": 1.24,
       "prob": 0.6911,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 2.4,
       "clv": 0.0147,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -206,7 +206,12 @@
         "Bodo/Glimt má výrazně silnější útočný rating.",
         "Kurz 1.235 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.222
+      "closing_odds": 1.222,
+      "settled_ts": 1785531268,
+      "result": {
+        "home": 4,
+        "away": 0
+      }
     },
     {
       "id": "862741f448",
@@ -223,7 +228,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0023,
+      "clv": -0.0155,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -246,7 +251,7 @@
         "Chengdu Rongcheng má výrazně silnější útočný rating.",
         "Kurz 1.333 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.333
+      "closing_odds": 1.351
     },
     {
       "id": "10a9632cf1",
@@ -702,7 +707,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": -0.0086,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -723,7 +728,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.5 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 1.513
     },
     {
       "id": "519f330eba",
@@ -1555,8 +1561,8 @@
       "odds": 1.56,
       "prob": 0.7183,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 5.6,
       "clv": -0.0642,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1579,7 +1585,12 @@
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.556 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.667
+      "closing_odds": 1.667,
+      "settled_ts": 1785531650,
+      "result": {
+        "home": 1,
+        "away": 1
+      }
     },
     {
       "id": "44da5d7731",
@@ -2633,8 +2644,8 @@
       "odds": 1.61,
       "prob": 0.6532,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 6.1,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -2656,7 +2667,12 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785531268,
+      "result": {
+        "home": 1,
+        "away": 1
+      }
     },
     {
       "id": "afd4b389b4",

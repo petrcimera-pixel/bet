@@ -5,6 +5,7 @@
 const STATE = { page: 'dashboard', sport: 'soccer', date: todayStr(), statusFilter: 'all', lastMatchesData: null, lastBetMap: {} };
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupTheme();
   setupNav();
   setupMobileMenu();
   buildDateStrip();
@@ -62,13 +63,13 @@ async function api(path, opts = {}) {
   }
 }
 
-function toast(msg, kind = 'ok') {
+function toast(msg, kind = 'ok', ms = 4000) {
   const box = el('toast');
   const item = document.createElement('div');
   item.className = `toast-item ${kind}`;
   item.textContent = msg;
   box.appendChild(item);
-  setTimeout(() => item.remove(), 4000);
+  setTimeout(() => item.remove(), ms);
 }
 
 // ---------------------------------------------------------------------------
@@ -1957,27 +1958,72 @@ const NOTIF_SEEN_BETS_KEY = 'kurzanalytik_notif_seen_bets';
 const NOTIF_LAST_TIP_KEY = 'kurzanalytik_notif_last_tip';
 const NOTIF_POLL_MS = 3 * 60 * 1000;
 
+/** Systemove notifikace prohlizec pousti jen v "zabezpecenem kontextu",
+ *  cili na HTTPS nebo na localhostu. Server v domaci siti bezi na http://
+ *  s IP adresou, takze je prohlizec zablokuje rovnou a povolit je NEJDE -
+ *  ani v nastaveni. Proto mame vlastni upozorneni primo v aplikaci. */
+function systemNotifMozne() {
+  return ('Notification' in window) && window.isSecureContext;
+}
+
 function renderNotifStatus() {
   const box = el('notifStatus');
   const btn = el('notifEnableBtn');
-  if (!box || !('Notification' in window)) { if (box) box.textContent = 'Tenhle prohlížeč notifikace nepodporuje.'; return; }
+  if (!box) return;
+
+  if (!('Notification' in window)) {
+    box.textContent = 'Tenhle prohlížeč notifikace nepodporuje.';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+
+  if (!window.isSecureContext) {
+    box.innerHTML = '<span class="badge won">V APLIKACI</span> ' +
+      'Upozornění se zobrazují přímo tady v okně.<br>' +
+      '<span class="muted">Systémové notifikace prohlížeč na adrese ' +
+      `<code>${location.protocol}//${location.host}</code> blokuje – ` +
+      'povoluje je jen na HTTPS nebo na <code>localhost</code>. ' +
+      'Povolit je v nastavení prohlížeče proto nejde.</span>';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+
   if (Notification.permission === 'granted') {
     box.innerHTML = '<span class="badge won">POVOLENO</span>';
     if (btn) { btn.textContent = 'Notifikace jsou zapnuté'; btn.disabled = true; }
   } else if (Notification.permission === 'denied') {
-    box.innerHTML = '<span class="badge lost">ZABLOKOVÁNO</span> – povol je v nastavení prohlížeče pro tuhle stránku.';
+    box.innerHTML = '<span class="badge lost">ZABLOKOVÁNO</span> – povol je v nastavení prohlížeče pro tuhle stránku. ' +
+      '<span class="muted">Do té doby se upozornění zobrazují v okně aplikace.</span>';
+    if (btn) btn.style.display = 'none';
   } else {
     box.innerHTML = '<span class="badge open">NEPOVOLENO</span>';
   }
 }
 
+/** Kolik upozorneni prislo, kdyz se uzivatel dival jinam. Pise se do
+ *  titulku karty, aby si toho vsiml i pri prepnute zalozce. */
+let _notifNeprectene = 0;
+const _titulekPuvodni = document.title;
+
+function oznacTitulek() {
+  document.title = _notifNeprectene ? `(${_notifNeprectene}) ${_titulekPuvodni}` : _titulekPuvodni;
+}
+
 function notify(title, body) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  try { new Notification(title, { body, icon: undefined }); } catch (e) { /* nic */ }
+  if (systemNotifMozne() && Notification.permission === 'granted') {
+    try { new Notification(title, { body, icon: undefined }); return; } catch (e) { /* spadneme do zalozni cesty */ }
+  }
+  // Zalozni cesta: upozorneni v okne aplikace
+  toast(`${title} – ${body}`, 'info', 12000);
+  if (document.visibilityState !== 'visible') {
+    _notifNeprectene++;
+    oznacTitulek();
+  }
 }
 
 async function pollForNotifications() {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  // Bez podminky na opravneni - kdyz systemove notifikace nejdou,
+  // notify() to zobrazi v okne aplikace.
 
   // Nový tip dne
   try {
@@ -2020,10 +2066,15 @@ function setupNotifications() {
       pollForNotifications();
     }
   });
-  if ('Notification' in window && Notification.permission === 'granted') {
-    pollForNotifications();
-  }
+  // Poll bezi vzdy - kdyz systemove notifikace nejdou, notify() to
+  // ukaze v okne aplikace, takze upozorneni nikdo neztrati.
+  pollForNotifications();
   setInterval(pollForNotifications, NOTIF_POLL_MS);
+
+  // po navratu do okna smazat pocitadlo v titulku
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') { _notifNeprectene = 0; oznacTitulek(); }
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -2115,4 +2166,44 @@ async function retrainMlModel() {
     btn.disabled = false;
     btn.textContent = 'Přetrénovat teď';
   }
+}
+
+/* ---------------------------------------------------------------- */
+/* Světlé / tmavé téma                                              */
+/* ---------------------------------------------------------------- */
+
+/** Volba se drží v localStorage, takže je per zařízení – na mobilu
+ *  můžeš mít světlé a na serveru tmavé. "auto" znamená řídit se
+ *  systémem; atribut se pak nesmí nastavit vůbec, aby platila
+ *  media query v CSS. */
+function applyTheme(mode) {
+  if (mode === 'light' || mode === 'dark') {
+    document.documentElement.dataset.theme = mode;
+  } else {
+    delete document.documentElement.dataset.theme;
+  }
+  document.querySelectorAll('#themePick button').forEach(b => {
+    b.classList.toggle('on', b.dataset.themeSet === mode);
+  });
+}
+
+function currentTheme() {
+  try {
+    const t = localStorage.getItem('theme');
+    return (t === 'light' || t === 'dark') ? t : 'auto';
+  } catch (e) { return 'auto'; }
+}
+
+function setupTheme() {
+  applyTheme(currentTheme());
+  document.querySelectorAll('#themePick button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.themeSet;
+      try {
+        if (mode === 'auto') localStorage.removeItem('theme');
+        else localStorage.setItem('theme', mode);
+      } catch (e) {}
+      applyTheme(mode);
+    });
+  });
 }

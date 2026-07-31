@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KurzAnalytik</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+    // Musi bezet drive, nez se stranka vykresli - jinak pri kazdem nacteni
+    // problikne tmave tema, nez by ho prepsal app.js.
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 </head>
 <body>
 
@@ -250,6 +258,19 @@
       <div class="page-head">
         <h1>Nastavení</h1>
         <p class="lead">Chování agenta a bankroll parametry</p>
+      </div>
+
+      <div class="card">
+        <h3>Vzhled</h3>
+        <div class="theme-pick" id="themePick">
+          <button data-theme-set="auto">Podle systému</button>
+          <button data-theme-set="light">Světlý</button>
+          <button data-theme-set="dark">Tmavý</button>
+        </div>
+        <p class="muted" style="margin:10px 0 0; font-size:12.5px;">
+          Volba se pamatuje v tomhle prohlížeči, takže na každém zařízení
+          může být jiná.
+        </p>
       </div>
 
       <div class="card">

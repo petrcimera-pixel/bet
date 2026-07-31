@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Přihlášení – KurzAnalytik</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+      // Stejne jako v index.html - bez tohohle by prihlasovaci stranka
+      // svitila tmave i pri zapnutem svetlem rezimu.
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
 </head>
 <body>
     <div class="login-shell">
