@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDashboard();
   setupNotifications();
   setupTeamSearch();
+  setupStatusBar();
   // Po návratu na kartu dohnat skóre hned, ne až za celý interval
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') refreshLiveMatches();
@@ -389,6 +390,77 @@ function renderSettleDetail(s) {
   box.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
 }
 
+// ---------------------------------------------------------------------------
+// Dolní stavová lišta – kdy naposled proběhla kontrola výsledků
+// ---------------------------------------------------------------------------
+const STATUSBAR_POLL_MS = 60 * 1000;
+const SETTLE_STALE_MIN = 30;   // od kdy je kontrola "dávno" (oranžová tečka)
+
+function agoText(ts) {
+  if (!ts) return null;
+  const min = Math.floor((Date.now() / 1000 - ts) / 60);
+  if (min < 1) return 'právě teď';
+  if (min < 60) return `před ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `před ${h} h`;
+  const d = Math.floor(h / 24);
+  return `před ${d} ${d === 1 ? 'dnem' : d < 5 ? 'dny' : 'dny'}`;
+}
+
+async function updateStatusBar() {
+  try {
+    const s = await api('/api/settle/status', { timeoutMs: 15000 });
+    const running = !!s.in_progress;
+    const min = s.last_check ? (Date.now() / 1000 - s.last_check) / 60 : null;
+    const dot = running ? 'running' : (min === null || min > SETTLE_STALE_MIN) ? 'stale' : '';
+    const when = s.last_check
+      ? `${fmtTime(s.last_check)} (${agoText(s.last_check)})`
+      : 'zatím neproběhla';
+    el('sbSettle').innerHTML = running
+      ? `<span class="sb-dot running"></span>Kontrola výsledků právě běží…`
+      : `<span class="sb-dot ${dot}"></span>Poslední kontrola výsledků: <strong>${when}</strong>`
+        + (s.last_pass_duration_s ? ` · trvala ${s.last_pass_duration_s} s` : '')
+        + (s.results_found != null ? ` · nalezeno ${s.results_found}` : '');
+
+    const pending = (s.open_tips || 0) + (s.open_bets || 0);
+    setText('sbPending', pending ? `· čeká ${pending} položek` : '· fronta prázdná');
+    if (s.last_error) {
+      el('sbPending').innerHTML = `· <span class="bad">chyba: ${s.last_error}</span>`;
+    }
+  } catch (e) {
+    el('sbSettle').innerHTML = '<span class="sb-dot stale"></span>Stav kontroly se nepodařilo načíst';
+  }
+  try {
+    const a = await api('/api/agent', { timeoutMs: 15000 });
+    const st = a.stats || {};
+    setText('sbAgent', `Agent: ${st.open || 0} otevřených · ${st.settled || 0} vyřešeno · ROI ${st.roi ?? '—'} %`);
+  } catch (e) { /* lišta nesmí kvůli tomuhle zmizet */ }
+}
+
+function setupStatusBar() {
+  el('sbCheckBtn')?.addEventListener('click', async () => {
+    const btn = el('sbCheckBtn');
+    btn.disabled = true; btn.textContent = 'Kontroluji…';
+    try {
+      const d = await api('/api/tips/settle', { method: 'POST', timeoutMs: 90000 });
+      toast(`Vyhodnoceno: ${d.settled || 0} tipů, ${d.settled_bets || 0} sázek.`);
+      if (STATE.page === 'dashboard') loadDashboard();
+    } catch (e) {
+      toast('Kontrola selhala: ' + e.message, 'err');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Zkontrolovat teď';
+      updateStatusBar();
+    }
+  });
+  updateStatusBar();
+  setInterval(() => {
+    if (document.visibilityState === 'visible') updateStatusBar();
+  }, STATUSBAR_POLL_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') updateStatusBar();
+  });
+}
+
 async function loadSettleStatus() {
   try {
     const s = await api('/api/settle/status');
@@ -415,6 +487,7 @@ async function settleNow() {
     const data = await api('/api/tips/settle', { method: 'POST', timeoutMs: 60000 });
     toast(`Vyhodnoceno: ${data.settled || 0} tipů, ${data.settled_bets || 0} sázek.`);
     loadDashboard();
+    updateStatusBar();
   } catch (e) {
     toast(`Vyhodnocení selhalo: ${e.message}`, 'err');
     loadSettleStatus();
