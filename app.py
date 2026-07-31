@@ -50,6 +50,7 @@ from engine import virtual_bettors
 from engine import calibration
 from engine import persist
 from engine import apifootball
+from engine import footballdata
 from engine import backtester
 
 # ML Learning (optional)
@@ -1388,6 +1389,38 @@ def api_ratings_backfill():
         _PRED_CACHE.clear()      # staré predikce vznikly z plochých ratingů
         _persist_push_safe()
         return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/ratings/backfill-archive", methods=["POST"])
+@login_required
+def api_ratings_backfill_archive():
+    """Hlubší natažení ratingů z archivu football-data.co.uk (roky zpět)."""
+    d = request.get_json(force=True) or {}
+    try:
+        seasons = int(d.get("seasons") or 3)
+    except (TypeError, ValueError):
+        seasons = 3
+    try:
+        res = footballdata.backfill_ratings(seasons=footballdata.seasons_back(max(1, min(8, seasons))))
+        _PRED_CACHE.clear()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/model/benchmark")
+@login_required
+def api_model_benchmark():
+    """Porovnání modelu se zavíracím kurzem Pinnacle (Brierovo skóre)."""
+    try:
+        limit = int(request.args.get("limit") or 1500)
+    except (TypeError, ValueError):
+        limit = 1500
+    try:
+        return jsonify(footballdata.benchmark(limit=max(200, min(8000, limit))))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

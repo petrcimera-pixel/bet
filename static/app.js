@@ -119,6 +119,8 @@ function bindEvents() {
   el('retrainMlBtn')?.addEventListener('click', retrainMlModel);
   el('apifSaveBtn')?.addEventListener('click', saveApifKey);
   el('backfillBtn')?.addEventListener('click', runBackfill);
+  el('backfillArchiveBtn')?.addEventListener('click', runBackfillArchive);
+  el('benchmarkBtn')?.addEventListener('click', runBenchmark);
   el('newBettorBtn')?.addEventListener('click', openBettorWizard);
   el('wizCancel')?.addEventListener('click', () => { el('bettorWizard').style.display = 'none'; });
   el('wizCreate')?.addEventListener('click', createBettor);
@@ -1298,6 +1300,44 @@ async function runBackfill() {
     toast('Natažení historie selhalo: ' + e.message, 'err');
   } finally {
     btn.disabled = false; btn.textContent = 'Natáhnout historii';
+  }
+}
+
+async function runBackfillArchive() {
+  const btn = el('backfillArchiveBtn');
+  btn.disabled = true; btn.textContent = 'Stahuji archiv…';
+  try {
+    const d = await api('/api/ratings/backfill-archive', {
+      method: 'POST', body: JSON.stringify({ seasons: 3 }), timeoutMs: 900000,
+    });
+    toast(`Archiv: ${d.found} zápasů, započítáno ${d.applied}. Medián teď ${d.median_games} zápasů na tým.`);
+    loadRatingsStatus();
+  } catch (e) {
+    toast('Natažení archivu selhalo: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Natáhnout archiv (roky)';
+  }
+}
+
+async function runBenchmark() {
+  const btn = el('benchmarkBtn');
+  const box = el('benchmarkResult');
+  btn.disabled = true; btn.textContent = 'Počítám…';
+  box.textContent = 'Porovnávám model se zavíracím kurzem na historických zápasech…';
+  try {
+    const d = await api('/api/model/benchmark?limit=1500', { timeoutMs: 600000 });
+    if (!d.matches) { box.textContent = 'Zatím není dost historie – nejdřív natáhni archiv.'; return; }
+    const better = d.model_beats_market;
+    box.innerHTML = `
+      <span class="badge ${better ? 'real' : 'model'}">${better ? 'model je lepší' : 'trh je lepší'}</span>
+      Na <strong>${d.matches}</strong> zápasech: model <strong>${d.brier_model}</strong>
+      vs zavírací kurz <strong>${d.brier_market}</strong>
+      (rozdíl ${d.diff > 0 ? '+' : ''}${d.diff})
+      <div class="muted" style="margin-top:4px;">${d.note}</div>`;
+  } catch (e) {
+    box.textContent = 'Porovnání selhalo: ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Porovnat s trhem';
   }
 }
 
