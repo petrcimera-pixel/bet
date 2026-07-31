@@ -11,7 +11,7 @@ echo.
 REM ---- musi bezet jako spravce (firewall + naplanovana uloha) ----
 net session >nul 2>&1
 if errorlevel 1 (
-  echo [!] Instalace potrebuje prava spravce.
+  echo [^!] Instalace potrebuje prava spravce.
   echo     Klikni na INSTALL.bat pravym tlacitkem - "Spustit jako spravce".
   echo.
   pause
@@ -28,7 +28,7 @@ echo.
 REM ---- Python ----
 where python >nul 2>&1
 if errorlevel 1 (
-  echo [!] Python nenalezen.
+  echo [^!] Python nenalezen.
   echo     Nainstaluj Python 3.10+ z https://www.python.org/downloads/
   echo     DULEZITE: pri instalaci zaskrtni "Add Python to PATH".
   echo.
@@ -44,7 +44,7 @@ echo [1/5] Pripravuji virtualni prostredi...
 if not exist "%APPDIR%\.venv" (
   python -m venv "%APPDIR%\.venv"
   if errorlevel 1 (
-    echo [!] Nepodarilo se vytvorit virtualni prostredi.
+    echo [^!] Nepodarilo se vytvorit virtualni prostredi.
     pause
     exit /b 1
   )
@@ -55,43 +55,16 @@ echo [2/5] Instaluji zavislosti (muze trvat par minut)...
 "%PY%" -m pip install --upgrade pip -q
 "%PY%" -m pip install -r "%APPDIR%\requirements.txt" -q
 if errorlevel 1 (
-  echo [!] Instalace zavislosti selhala.
+  echo [^!] Instalace zavislosti selhala.
   pause
   exit /b 1
 )
 
-REM ---- sit musi byt Soukroma, jinak pravidlo neplati ----
-REM Na "Verejne" siti Windows zahazuje i ping a pravidlo pro profil
-REM private/domain se vubec neuplatni - server je pak zvenci nedostupny
-REM a nijak to nedava najevo. Proto profil prepneme.
+REM ---- sit + firewall (vytazeno do netsetup.ps1) ----
+REM Slozitejsi PowerShell primo v batchi (zvlast uvnitr for /f) se musi
+REM escapovat a rozbije se na cizim stroji - proto samostatny skript.
 echo [3/5] Kontroluji profil site a otviram port 5000...
-for /f %%p in ('powershell -NoProfile -Command ^
-  "(Get-NetConnectionProfile ^| Where-Object { $_.NetworkCategory -eq 'Public' } ^| Measure-Object).Count"') do set "PUBCNT=%%p"
-if not "%PUBCNT%"=="0" (
-  echo     Sit je oznacena jako Verejna - prepinam na Soukromou...
-  powershell -NoProfile -Command ^
-    "Get-NetConnectionProfile | Where-Object { $_.NetworkCategory -eq 'Public' } | Set-NetConnectionProfile -NetworkCategory Private" >nul 2>&1
-  if errorlevel 1 (
-    echo     [!] Prepnuti se nepodarilo. Nastaveni - Sit a internet -
-    echo         vlastnosti site - Soukroma. Bez toho se zvenci nepripojis.
-  ) else (
-    echo     Hotovo - sit je ted Soukroma.
-  )
-)
-
-netsh advfirewall firewall delete rule name="KurzAnalytik" >nul 2>&1
-netsh advfirewall firewall add rule name="KurzAnalytik" dir=in action=allow ^
-  protocol=TCP localport=5000 profile=private,domain >nul
-if errorlevel 1 (
-  echo     [!] Pravidlo firewallu se nepodarilo pridat - server pujde
-  echo         jen z tohoto pocitace. Muzes ho pridat rucne pozdeji.
-) else (
-  echo     Port 5000 otevren (jen privatni/domenova sit, ne verejna).
-)
-REM ping ze sousedniho PC je prvni vec, kterou clovek zkousi - at nelze
-netsh advfirewall firewall delete rule name="KurzAnalytik ping" >nul 2>&1
-netsh advfirewall firewall add rule name="KurzAnalytik ping" dir=in action=allow ^
-  protocol=icmpv4:8,any profile=private,domain >nul 2>&1
+powershell -NoProfile -ExecutionPolicy Bypass -File "%APPDIR%\deploy\netsetup.ps1" -Port 5000
 
 REM ---- sluzba pres Planovac uloh: nabehne po restartu i bez prihlaseni ----
 echo [4/5] Registruji sluzbu (nabehne po restartu PC)...
@@ -99,7 +72,7 @@ schtasks /Delete /TN "KurzAnalytik" /F >nul 2>&1
 schtasks /Create /TN "KurzAnalytik" /SC ONSTART /RU "SYSTEM" /RL HIGHEST /F ^
   /TR "\"%APPDIR%\deploy\run_server.bat\"" >nul
 if errorlevel 1 (
-  echo     [!] Registrace ulohy selhala.
+  echo     [^!] Registrace ulohy selhala.
   pause
   exit /b 1
 )
@@ -108,22 +81,20 @@ echo     Hotovo - uloha "KurzAnalytik" spusti server pri startu Windows.
 REM ---- prvni spusteni ----
 echo [5/5] Spoustim server...
 schtasks /Run /TN "KurzAnalytik" >nul 2>&1
-timeout /t 10 /nobreak >nul
+REM timeout selze, kdyz je presmerovany vstup (vzdalene spusteni) - ping ne
+ping -n 11 127.0.0.1 >nul
 
 REM ---- overit, ze server opravdu bezi a naslouchá vsem adresam ----
 REM Bez tohodle by instalator hlasil "hotovo" i kdyz server spadl na
 REM chybejici zavislosti - a clovek pak hleda chybu v siti.
-set "LISTEN="
-for /f %%l in ('powershell -NoProfile -Command ^
-  "(Get-NetTCPConnection -LocalPort 5000 -State Listen -EA SilentlyContinue ^| Where-Object { $_.LocalAddress -eq '0.0.0.0' } ^| Measure-Object).Count"') do set "LISTEN=%%l"
-if "%LISTEN%"=="0" (
-  echo.
-  echo     [!] Server na portu 5000 nenaslouchá. Podivej se do
-  echo         "%APPDIR%\server.log" - bude tam duvod.
-  echo.
-  pause
-) else (
+for /f %%l in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%APPDIR%\deploy\netsetup.ps1" -Check') do set "SRVSTAV=%%l"
+if "%SRVSTAV%"=="OK" (
   echo     Server bezi a naslouchá na vsech sitovych adresach.
+) else (
+  echo.
+  echo     [^!] Server nenaslouchá jak ma ^(stav: %SRVSTAV%^).
+  echo         Duvod najdes v "%APPDIR%\server.log".
+  echo.
 )
 
 REM ---- zjistit IP adresu v domaci siti ----
