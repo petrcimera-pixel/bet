@@ -838,6 +838,7 @@ def settle_all(results: dict) -> int:
                 wins = 0
             bet["status"] = r
             bet["settled_ts"] = int(time.time())
+            bet["result"] = {"home": res["home"], "away": res["away"]}
             n += 1
             _record_ml_feedback(bid, bet, r)
         b["loss_streak"] = streak

@@ -335,7 +335,7 @@ function renderRecentBets(bets) {
       <tr>
         <td>${b.match || '—'}</td>
         <td class="muted">${when}</td>
-        <td>${matchStateHtml(b.match_date, b.match_time, b.status)}</td>
+        <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result)}</td>
         <td>${b.label || '?'}</td>
         <td>${b.odds || 0}×</td>
         <td><span class="badge ${b.status}">${(b.status || 'open').toUpperCase()}</span></td>
@@ -1032,8 +1032,13 @@ const LIVE_WINDOW_MIN = 150;   // ~2.5 h od výkopu, než se zápas počítá za
 
 /** Stav ZÁPASU (ne sázky) odvozený z času výkopu – aby "OPEN" neznamenalo
  *  zároveň "je to za tři dny" i "dohrálo se a čeká na vyhodnocení". */
-function matchStateHtml(dateStr, timeStr, betStatus) {
-  if (betStatus && betStatus !== 'open') return '<span class="muted">dohráno</span>';
+function matchStateHtml(dateStr, timeStr, betStatus, result) {
+  if (betStatus && betStatus !== 'open') {
+    // u vyhodnocené sázky je zajímavější skóre než slovo "dohráno"
+    return result && result.home != null
+      ? `<strong>${result.home} : ${result.away}</strong>`
+      : '<span class="muted">dohráno</span>';
+  }
   const d = matchDateTime(dateStr, timeStr);
   if (!d) return '<span class="muted">—</span>';
   const min = (Date.now() - d.getTime()) / 60000;
@@ -1174,7 +1179,7 @@ function renderBetsTable(bets) {
     <tr>
       <td>${b.match || '—'}</td>
       <td class="muted">${fmtWhen(b.match_date, b.match_time)}</td>
-      <td>${matchStateHtml(b.match_date, b.match_time, b.status)}</td>
+      <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result)}</td>
       <td>${b.label || '?'}</td>
       <td>${fmt(b.stake || 0)} Kč</td>
       <td>${b.odds || 0}×</td>
@@ -1567,7 +1572,7 @@ async function toggleBettorDetail(id, btn) {
         <tr>
           <td>${bt.match}</td>
           <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
-          <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status)}</td>
+          <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status, bt.result)}</td>
           <td>${bt.label}</td>
           <td>${bt.odds}×</td>
           <td>${fmt(bt.stake)} Kč</td>

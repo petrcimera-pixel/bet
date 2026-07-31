@@ -202,6 +202,19 @@ def eval_outcome(outcome, hs, as_):
         return "won" if total > float(outcome[4:]) else "lost"
     if outcome.startswith("under"):
         return "won" if total < float(outcome[5:]) else "lost"
+    # Handicap (asijský): "ah_home_-0.5" = k domácím se přičte -0.5 gólu.
+    # Půlgólové linie nemůžou skončit remízou, takže se nikdy nevrací vklad.
+    if outcome.startswith("ah_"):
+        try:
+            _, side, line = outcome.split("_", 2)
+            adj = (hs + float(line)) - as_ if side == "home" else (as_ + float(line)) - hs
+        except (ValueError, TypeError):
+            return None
+        if adj > 0:
+            return "won"
+        if adj < 0:
+            return "lost"
+        return "void"        # celé číslo a přesná shoda = vklad zpět
     return None
 
 
@@ -223,9 +236,10 @@ def auto_settle(results: dict, corner_results: dict = None) -> int:
             continue
         r = eval_outcome(bet["outcome"], res["home"], res["away"])
         if r:
-            to_settle.append((bet["id"], r))
-    for bet_id, result in to_settle:
-        settle_bet(bet_id, result)
+            # skóre se předává dál, aby ho sázka nesla i po vyhodnocení
+            to_settle.append((bet["id"], r, results.get(bet["match_id"])))
+    for bet_id, result, score in to_settle:
+        settle_bet(bet_id, result, score)
     return len(to_settle) + settle_accas(results)
 
 
@@ -281,7 +295,7 @@ def settle_accas(results: dict) -> int:
     return n
 
 
-def settle_bet(bet_id, result):
+def settle_bet(bet_id, result, score=None):
     """result: 'won' / 'lost' / 'void'."""
     st = state()
     for bet in st["bets"]:
@@ -297,6 +311,9 @@ def settle_bet(bet_id, result):
                 bet["pnl"] = round(-bet["stake"], 2)
             bet["status"] = result
             bet["settled_ts"] = int(time.time())
+            # výsledek zápasu k sázce, ať je v historii vidět, jak to dopadlo
+            if score and score.get("home") is not None:
+                bet["result"] = {"home": score["home"], "away": score["away"]}
             _save(st)
 
             # Update ML feedback with actual outcome

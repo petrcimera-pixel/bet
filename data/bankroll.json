@@ -1,6 +1,6 @@
 {
   "start_balance": 1000.0,
-  "balance": 563.7,
+  "balance": 675.65,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -17,8 +17,8 @@
       "odds": 1.57,
       "prob": 0.6609,
       "stake": 4.68,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 2.67,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -40,7 +40,8 @@
         "Očekávané skóre 1.68 : 1.2 gólů (celkem 2.88).",
         "Nejpravděpodobnější výsledek 1:1 (13 %).",
         "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785444122
     },
     {
       "id": "662f015250",
@@ -168,8 +169,8 @@
       "odds": 1.87,
       "prob": 0.9596,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -191,7 +192,8 @@
         "Očekávané skóre 86.38 : 77.22 gólů (celkem 163.6).",
         "New York Liberty má výrazně silnější útočný rating.",
         "Kurz 1.87 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471645
     },
     {
       "id": "c13bdb30f0",
@@ -206,8 +208,8 @@
       "odds": 1.89,
       "prob": 0.98,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 8.9,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -228,7 +230,8 @@
         "Kalibrovaná jistota 98 % (model říká 95 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
         "Očekávané skóre 86.39 : 77.08 gólů (celkem 163.47).",
         "Kurz 1.885 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471645
     },
     {
       "id": "b2002e940f",
@@ -510,8 +513,8 @@
       "odds": 1.53,
       "prob": 0.7404,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -533,7 +536,8 @@
         "Očekávané skóre 1.56 : 1.08 gólů (celkem 2.64).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.526 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471642
     },
     {
       "id": "2b1144b6ca",
@@ -547,8 +551,8 @@
       "odds": 3.86,
       "prob": 0.4232,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 28.6,
       "clv": null,
       "tag": "bet-agent",
       "legs": [
@@ -558,7 +562,7 @@
           "match_id": "401841455",
           "outcome": "over1.5",
           "prob": 0.7508,
-          "result": null,
+          "result": "won",
           "odds": 1.625,
           "date": "2026-07-30",
           "time": "22:00"
@@ -569,7 +573,7 @@
           "match_id": "401841451",
           "outcome": "over1.5",
           "prob": 0.7508,
-          "result": null,
+          "result": "won",
           "odds": 1.556,
           "date": "2026-07-30",
           "time": "22:00"
@@ -580,13 +584,14 @@
           "match_id": "401841459",
           "outcome": "over1.5",
           "prob": 0.7508,
-          "result": null,
+          "result": "won",
           "odds": 1.526,
           "date": "2026-07-31",
           "time": "00:15"
         }
       ],
-      "ticket_kind": "daily"
+      "ticket_kind": "daily",
+      "settled_ts": 1785471645
     },
     {
       "id": "02166816d2",
@@ -1324,8 +1329,8 @@
       "odds": 1.53,
       "prob": 0.6883,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 5.3,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1347,7 +1352,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.526 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471645
     },
     {
       "id": "3ee97aadcf",
@@ -1362,8 +1368,8 @@
       "odds": 1.56,
       "prob": 0.6883,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 5.6,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1385,7 +1391,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.556 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471642
     },
     {
       "id": "fe55bb2a49",
@@ -1400,8 +1407,8 @@
       "odds": 1.62,
       "prob": 0.6883,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 6.2,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1423,7 +1430,8 @@
         "Očekávané skóre 1.51 : 1.1 gólů (celkem 2.61).",
         "Nejpravděpodobnější výsledek 1:1 (14 %).",
         "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471642
     },
     {
       "id": "7d6b94e97e",
@@ -1513,8 +1521,8 @@
       "odds": 5.8,
       "prob": 0.6802,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "legs": [
@@ -1535,7 +1543,7 @@
           "match_id": "401857100",
           "outcome": "away",
           "prob": 0.8579,
-          "result": null,
+          "result": "lost",
           "odds": 2.4,
           "date": "2026-07-31",
           "time": "00:00"
@@ -1552,7 +1560,8 @@
           "time": "23:30"
         }
       ],
-      "ticket_kind": "daily"
+      "ticket_kind": "daily",
+      "settled_ts": 1785471645
     },
     {
       "id": "2582b369f3",
@@ -1567,8 +1576,8 @@
       "odds": 2.4,
       "prob": 0.8578,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1579,7 +1588,8 @@
         "Model dává 86% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
         "Connecticut Sun má výrazně silnější útočný rating.",
         "Kurz 2.4 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "settled_ts": 1785471645
     },
     {
       "id": "60712e7661",

@@ -530,8 +530,30 @@ def _espn_odds(competition):
     if over_odds and under_odds and line is not None:
         totals = {"line": float(line), "over": over_odds, "under": under_odds}
 
+    # Handicap (pointSpread) – jediný další trh, který ESPN zdarma dává.
+    # Linie bývají -0.5 / +0.5 / -1.5, tedy klasický asijský handicap.
+    spread = None
+    sp = o.get("pointSpread") or {}
+
+    def spick(side):
+        d = sp.get(side) or {}
+        cl, op = d.get("close") or {}, d.get("open") or {}
+        odds = _amer_to_dec(cl.get("odds")) or _amer_to_dec(op.get("odds"))
+        line = cl.get("line") or op.get("line")
+        try:
+            line = float(str(line).replace("+", ""))
+        except (TypeError, ValueError):
+            line = None
+        return odds, line
+
+    h_odds, h_line = spick("home")
+    a_odds, a_line = spick("away")
+    if h_odds and a_odds and h_line is not None and a_line is not None:
+        spread = {"home": {"odds": h_odds, "line": h_line},
+                  "away": {"odds": a_odds, "line": a_line}}
+
     return {"provider": provider, "odds": ro, "over_under": o.get("overUnder"),
-            "totals": totals}
+            "totals": totals, "spread": spread}
 
 
 def fetch_league_scores(sport: str, slug: str, date_str: str) -> list:

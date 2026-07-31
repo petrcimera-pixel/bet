@@ -250,6 +250,17 @@ def _over_prob(grid: dict, line: float) -> float:
     return sum(p for (i, j), p in grid.items() if i + j > line)
 
 
+def _spread_prob(grid: dict, side: str, line: float) -> float:
+    """Pravděpodobnost pokrytí handicapu. Přesná shoda (celočíselná linie)
+    znamená vrácení vkladu, takže se do pravděpodobnosti výhry nepočítá."""
+    p = 0.0
+    for (i, j), q in grid.items():
+        adj = (i + line) - j if side == "home" else (j + line) - i
+        if adj > 0:
+            p += q
+    return p
+
+
 def _btts_prob(grid: dict) -> float:
     return sum(p for (i, j), p in grid.items() if i > 0 and j > 0)
 
@@ -433,6 +444,23 @@ def predict_match(m: dict) -> dict:
         btts_p = _btts_prob(grid)
         bets["btts_yes"] = dict(_priced(btts_p, None), label="BTTS Ano", name="Oba týmy dají gól")
         bets["btts_no"] = dict(_priced(1 - btts_p, None), label="BTTS Ne", name="Aspoň jeden tým nedá gól")
+
+    # Handicap – další trh s REÁLNÝMI kurzy, který ESPN dává (pointSpread).
+    # Pravděpodobnost jde spočítat přímo ze scoreline gridu, takže model umí
+    # ocenit i tenhle trh, ne jen 1X2 a gólové linie.
+    spread = (m.get("real_odds") or {}).get("spread") or {}
+    if spread and not cfg.get("two_way"):
+        for side in ("home", "away"):
+            sd = spread.get(side) or {}
+            line = sd.get("line")
+            if line is None:
+                continue
+            p_side = _spread_prob(grid, side, float(line))
+            key = f"ah_{side}_{line}"
+            team = m["home"] if side == "home" else m["away"]
+            sign = f"+{line}" if float(line) > 0 else str(line)
+            bets[key] = dict(_priced(p_side, sd.get("odds"), rating_confidence),
+                             label=f"AH {sign}", name=f"{team} s handicapem {sign}")
 
     pick = max(keys, key=lambda k: probs[k])
     confidence = round(max(probs.values()) * 100)
