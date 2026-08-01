@@ -2331,7 +2331,34 @@ _boot_diag["module_import_at"] = int(_time.time())
 _start_background_threads()
 
 
+def _uz_bezi(host: str, port: int) -> bool:
+    """Odpovídá na tom portu jiná instance aplikace?
+
+    Na Windows si druhá instance dokáže port ukrást té první (Werkzeug
+    nastavuje SO_REUSEADDR a Windows to dovolí). Původní proces pak běží
+    dál, nikomu neodpovídá, ale POŘÁD ZAPISUJE do stejných datových
+    souborů – dvě instance se navzájem přepisují. Na serveru se to stalo,
+    když se vedle služby ručně spustil spustit.bat.
+    """
+    import socket as _s
+    cil = "127.0.0.1" if host in ("0.0.0.0", "::") else host
+    try:
+        with _s.create_connection((cil, int(port)), timeout=1.0):
+            return True
+    except OSError:
+        return False
+
+
 if __name__ == "__main__":
+    if _uz_bezi(_HOST, _PORT):
+        print(f"[!] Na portu {_PORT} uz nekdo naslouchá – aplikace zrejme bezi.")
+        print("    Druha instance by zapisovala do stejnych dat a prepisovala")
+        print("    tu prvni, proto koncim.")
+        print()
+        print("    Otevri http://localhost:%s" % _PORT)
+        print("    Sluzbu zastavis pres deploy\\STOP.bat (jako spravce).")
+        sys.exit(1)
+
     _start_background_threads()
     # Windows konzole umí být v cp1250 a na emoji i diakritice spadne na
     # UnicodeEncodeError - kvůli jednomu hlášce by se neuspustil celý server.
