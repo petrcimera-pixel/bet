@@ -426,7 +426,7 @@ async function updateStatusBar() {
         + (s.last_pass_duration_s ? ` · trvala ${s.last_pass_duration_s} s` : '')
         + (s.results_found != null ? ` · nalezeno ${s.results_found}` : '');
 
-    const pending = (s.open_tips || 0) + (s.open_bets || 0);
+    const pending = (s.open_tips || 0) + (s.open_bets || 0) + (s.open_vb_bets || 0);
     setText('sbPending', pending ? `· čeká ${pending} položek` : '· fronta prázdná');
     if (s.last_error) {
       el('sbPending').innerHTML = `· <span class="bad">chyba: ${s.last_error}</span>`;

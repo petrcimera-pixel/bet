@@ -816,6 +816,29 @@ def _run_bounded(fn, items, max_workers, deadline_s, collect):
     return len(not_done)
 
 
+def _pending_settle_counts():
+    """Kolik položek čeká na vyhodnocení – JEDNO místo pro všechny tři
+    spotřebitele (background smyčka, /api/settle/status, _settle_recent).
+    Dřív si to počítal každý zvlášť a virtuální sázkaři (aréna 41 profilů)
+    v tom počtu chyběli úplně: background smyčka se rozhodovala jen podle
+    reálného banku a tipů, takže když měli otevřenou sázku JEN sázkaři
+    (jejich zápas nešel přes žádný jiný tip/sázku), smyčka viděla total==0,
+    usnula a _settle_recent() se vůbec nezavolalo – sázka zůstala OPEN
+    navždy, dokud někdo neklikl ručně na 'Zkontrolovat výsledky'."""
+    today = ds.today_str()
+    open_tips = tips_db.open_tips_until(today)
+    open_bets = [b for b in bankroll.state()["bets"]
+                 if b["status"] == "open" and (b.get("match_date") or "") <= today]
+    vb_state = virtual_bettors.load_state()
+    open_vb_bets = [b for bettor in vb_state.values() for b in bettor["bets"]
+                    if b["status"] == "open" and (b.get("match_date") or "") <= today]
+    return {
+        "open_tips": len(open_tips), "open_bets": len(open_bets),
+        "open_vb_bets": len(open_vb_bets),
+        "total": len(open_tips) + len(open_bets) + len(open_vb_bets),
+    }
+
+
 def _settle_recent(allow_slugless_fallback=False):
     """Sdílená logika vyhodnocení: CÍLENÉ dotazy jen na ligy, kde něco čeká.
     Každý otevřený tip/sázka nese slug ligy → místo skenu všech 244 lig na den
@@ -949,6 +972,32 @@ def _settle_recent(allow_slugless_fallback=False):
             "matched_count": len(set(batch_tip_ids) & set(results.keys())),
             "n_stuck": n_stuck,
         })
+
+    # Zápasy z API-Football starší než bezplatné okno (allowed_window,
+    # typicky včerejšek..zítřek): API na ně natrvalo odpoví "mimo tarif",
+    # takže se NIKDY nevrátí výsledek – bez tohohle by čekaly ve frontě do
+    # nekonečna a při každém průchodu znovu zabíraly místo v dávce. ESPN
+    # tyhle ligy nevede vůbec (proto apifootball existuje), náhradní zdroj
+    # není. Uzavřou se jako void (vklad zpět), stejně jako zrušené zápasy.
+    try:
+        apif_floor = apifootball.allowed_window()[0]
+    except Exception:
+        apif_floor = None
+    if apif_floor:
+        for t in open_tips:
+            if (t.get("slug") or "").startswith("apif:") and t.get("date", "9999") < apif_floor:
+                voided.add(t["id"])
+        # POZOR: víceleg tikety (akumulátor/kombi) mají match_id == "" na
+        # top-level – přidat "" do voided by omylem voidlo VŠECHNY takové
+        # tikety, i ty co nejsou apif nebo nejsou staré. Proto jen single.
+        for b in open_bets:
+            if (b.get("slug") or "").startswith("apif:") and b.get("match_date", "9999") < apif_floor \
+                    and b.get("match_id"):
+                voided.add(b["match_id"])
+        for b in open_vb_bets:
+            if (b.get("slug") or "").startswith("apif:") and b.get("match_date", "9999") < apif_floor \
+                    and b.get("match_id"):
+                voided.add(b["match_id"])
 
     # Fallback pro záznamy bez slugu: celoplošný sken (všech 244 lig – drahé),
     # max 1 den za průchod, jen když cílená fronta je hotová, a navíc throttle
@@ -1181,14 +1230,12 @@ def api_boot_diag():
 @app.route("/api/settle/status")
 def api_settle_status():
     """Live stav automatické kontroly výsledků na pozadí + počty otevřených."""
-    today = ds.today_str()
-    open_tips = tips_db.open_tips_until(today)
-    open_bets = [b for b in bankroll.state()["bets"]
-                 if b["status"] == "open" and (b.get("match_date") or "") <= today]
+    counts = _pending_settle_counts()
     with _settle_lock:
         out = dict(_settle_status)
-    out["open_tips"] = len(open_tips)
-    out["open_bets"] = len(open_bets)
+    out["open_tips"] = counts["open_tips"]
+    out["open_bets"] = counts["open_bets"]
+    out["open_vb_bets"] = counts["open_vb_bets"]
     out["rss_mb"] = _rss_mb()
     if out.get("in_progress") and out.get("pass_started_at"):
         out["current_pass_elapsed_s"] = int(_time.time()) - out["pass_started_at"]
@@ -1777,16 +1824,15 @@ def _settle_in_background():
         _boot_diag["settle_loop_iter_at"] = int(_time.time())
         try:
             with _settle_lock:
-                # Počet VYHODNOTITELNÝCH položek (zápas do dneška) na začátku běhu
-                today = ds.today_str()
-                open_bets = [b for b in bankroll.state()["bets"]
-                            if b["status"] == "open" and b.get("match_id")
-                            and (b.get("match_date") or "") <= today]
-                open_tips = tips_db.open_tips_until(today)
-                total = len(open_bets) + len(open_tips)
+                # Počet VYHODNOTITELNÝCH položek (zápas do dneška) na začátku běhu –
+                # musí zahrnovat i sázky arény sázkařů, jinak smyčka usne, i když
+                # čeká jen ona (viz docstring _pending_settle_counts).
+                counts = _pending_settle_counts()
+                total = counts["total"]
                 _boot_diag["settle_loop_last_total"] = total
-                _boot_diag["settle_loop_last_open_bets"] = len(open_bets)
-                _boot_diag["settle_loop_last_open_tips"] = len(open_tips)
+                _boot_diag["settle_loop_last_open_bets"] = counts["open_bets"]
+                _boot_diag["settle_loop_last_open_tips"] = counts["open_tips"]
+                _boot_diag["settle_loop_last_open_vb_bets"] = counts["open_vb_bets"]
 
                 if total == 0:
                     # Nic k vyřešení – dále v cyklu
@@ -1812,6 +1858,11 @@ def _settle_in_background():
                 _settle_status["last_pass_duration_s"] = round(_time.time() - _pass_t0, 1)
             n_tips = tips_db.settle_tips(results, corner_results)
             n_bets = bankroll.auto_settle(results, corner_results)
+            # Bez tohohle se sázky arény 41 sázkařů z automatické smyčky
+            # NIKDY nevyhodnotí – settle_all se dřív volalo jen z ručních/API
+            # cest (autosettle, cron/settle, tips/settle), tahle hlavní
+            # background smyčka ho chybně vynechávala.
+            n_vb = virtual_bettors.settle_all(results)
             _PRED_CACHE.clear()
             _maybe_auto_retrain(n_tips + n_bets)
             if n_tips:
@@ -1821,14 +1872,14 @@ def _settle_in_background():
                     pass
 
             with _settle_lock:
-                _settle_status["settled_so_far"] += n_tips + n_bets
+                _settle_status["settled_so_far"] += n_tips + n_bets + n_vb
                 _settle_status["more_pending"] = more_pending
                 _settle_status["last_check"] = int(_time.time())
                 _settle_status["last_error"] = None   # úspěšný průchod smaže starou chybu
                 if not more_pending:
                     _settle_status["in_progress"] = False
 
-            if n_tips + n_bets == 0:
+            if n_tips + n_bets + n_vb == 0:
                 time.sleep(300)
             elif more_pending:
                 time.sleep(3)
@@ -1906,6 +1957,37 @@ def _run_auto_agent_if_due():
     except Exception as e:
         print(f"[auto-agent] Chyba: {e}")
         return {"ran": False, "reason": "error", "error": str(e)}
+
+
+def _slugless_fallback_loop():
+    """Dořeší staré tipy/sázky BEZ slugu ligy (typicky velmi staré záznamy
+    z doby předtím, než se slug začal ukládat) – bez tohohle byly jediná
+    cesta k jejich vyhodnocení ruční 'Zkontrolovat výsledky', protože hlavní
+    _settle_in_background smyčka fallback záměrně nepoužívá (viz docstring
+    _settle_recent: scan všech ~244 lig může trvat desítky minut a nesmí
+    blokovat tu rychlou smyčku). Tenhle thread běží ODDĚLENĚ a pomalu, takže
+    i drahý scan nikomu nevadí; _settle_recent má svůj vlastní throttle
+    (120s) a limit 1 den za průchod, takže i tady je to omezené."""
+    import time
+    time.sleep(120)   # ať naběhne až po ostatních background threadech
+    while True:
+        try:
+            today = ds.today_str()
+            has_slugless = (
+                any(not t.get("slug") for t in tips_db.open_tips_until(today))
+                or any(not b.get("slug") for b in bankroll.state()["bets"]
+                       if b["status"] == "open" and (b.get("match_date") or "") <= today)
+            )
+            if has_slugless:
+                results, corner_results, _ = _settle_recent(allow_slugless_fallback=True)
+                n_tips = tips_db.settle_tips(results, corner_results)
+                n_bets = bankroll.auto_settle(results, corner_results)
+                n_vb = virtual_bettors.settle_all(results)
+                if n_tips + n_bets + n_vb:
+                    _PRED_CACHE.clear()
+        except Exception as e:
+            print(f"[slugless_fallback] Chyba: {e}")
+        time.sleep(600)   # staré záznamy bez slugu jsou vzácné, spěch netlačí
 
 
 def _auto_agent_loop():
@@ -2310,6 +2392,7 @@ def _start_background_threads():
         threading.Thread(target=_prewarm, daemon=True).start()
         threading.Thread(target=_settle_in_background, daemon=True).start()
         threading.Thread(target=_auto_agent_loop, daemon=True).start()
+        threading.Thread(target=_slugless_fallback_loop, daemon=True).start()
         _boot_diag["start_bg_threads_completed_ok"] = True
     except Exception as e:
         # Nikdy nesmí shodit import modulu – ale ať je vidět CO selhalo

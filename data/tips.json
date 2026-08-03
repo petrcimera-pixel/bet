@@ -28378,12 +28378,13 @@
       "saved_at": "2026-07-30T11:53:22",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1534810",
@@ -30518,12 +30519,13 @@
       "saved_at": "2026-07-30T11:53:22",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1593515",
@@ -40003,12 +40005,13 @@
       "saved_at": "2026-07-30T11:53:22",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1495513",
@@ -55464,12 +55467,13 @@
       "saved_at": "2026-07-30T11:54:07",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1556527",
@@ -56306,12 +56310,13 @@
       "saved_at": "2026-07-30T11:54:07",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1534071",
@@ -56368,12 +56373,13 @@
       "saved_at": "2026-07-30T11:54:16",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1593526",
@@ -62993,12 +62999,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1602412",
@@ -74684,12 +74691,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1583527",
@@ -76560,12 +76568,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1598570",
@@ -77142,12 +77151,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1604732",
@@ -92146,12 +92156,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1583566",
@@ -98826,12 +98837,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1598579",
@@ -107649,12 +107661,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1546086",
@@ -109466,12 +109479,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1605309",
@@ -109528,12 +109542,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1607270",
@@ -110171,12 +110186,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1549985",
@@ -110233,12 +110249,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1549986",
@@ -110295,12 +110312,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1549987",
@@ -110357,12 +110375,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1551523",
@@ -110939,12 +110958,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1605308",
@@ -111391,12 +111411,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1583597",
@@ -111646,12 +111667,13 @@
       "saved_at": "2026-07-31T06:20:46",
       "result": null,
       "actual": null,
-      "pick_result": null,
-      "value_result": null,
-      "goal_result": null,
-      "corner_result": null,
-      "dc_result": null,
-      "settled_at": null
+      "pick_result": "void",
+      "value_result": "void",
+      "goal_result": "void",
+      "corner_result": "void",
+      "dc_result": "void",
+      "settled_at": "2026-08-03T16:59:51",
+      "voided_at": "2026-08-03"
     },
     {
       "id": "apif-1525749",
