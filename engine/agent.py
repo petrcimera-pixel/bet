@@ -366,11 +366,16 @@ def run(predictions: list) -> dict:
         if remaining_budget < MIN_STAKE:
             skipped_cap += 1
             continue
+        # Když strategie navrhla nenulovou sázku, natlačíme ji do rozsahu
+        # MIN..MAX Kč. Bez podlahy by na malém banku (200 Kč) a experience
+        # nováčka (×0.35) skoro každá sázka spadla pod MIN a agent by
+        # prakticky nesázel – přitom uživatel žádal "min 5, max 10 na tiket".
         stake = stake * skill
-        stake = round(min(stake, remaining_budget, MAX_STAKE_PER_TICKET), 2)
-        if stake < MIN_STAKE:
+        if stake < 0.5:
             skipped_cap += 1
             continue
+        stake = max(MIN_STAKE, min(stake, remaining_budget, MAX_STAKE_PER_TICKET))
+        stake = round(stake, 2)
 
         try:
             bet = bankroll.place_bet(p["id"], best["label"], best["outcome"],

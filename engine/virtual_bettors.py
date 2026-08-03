@@ -1283,13 +1283,18 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
             if any(i in used_matches for i in ids):
                 continue
             stake = stake * skill
-            # Tvrdý globální strop – nikdo nikdy nevsadí víc než MAX_STAKE_PER_TICKET
-            # na jeden tiket, ať strategie vypočte cokoliv.
-            stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET), 2)
-            # Nová podlaha: pod MIN_STAKE nemá cenu sázet (drobečky by jen
-            # dělaly hluk v historii). Když strategie vypočte méně, sázka
-            # se přeskočí, ať se sázkař radši šetří na lepší příležitost.
-            if stake < MIN_STAKE_PER_TICKET or stake > b["balance"]:
+            # Když strategie vůbec něco navrhla (nenulově), zaokrouhlí se to
+            # do rozsahu MIN..MAX Kč. Dřív jsme sázku pod MIN úplně přeskočili,
+            # jenže s malým bankem (200 Kč) + experience nováčka (×0.35) vyšlo
+            # skoro každé strategii pod 5 Kč a sázelo jen Kelly Kateřina.
+            # Uživatelův záměr byl "min 5, max 10 na tiket", ne "kdo netrefí
+            # svůj předepsaný výpočet, prostě nesází".
+            if stake < 0.5 or stake > b["balance"]:
+                continue
+            stake = max(MIN_STAKE_PER_TICKET,
+                        min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET))
+            stake = round(stake, 2)
+            if stake > b["balance"]:
                 continue
             if legs:
                 # Tiket z více výběrů: akumulátor (různé zápasy) nebo kombinace
