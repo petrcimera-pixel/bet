@@ -77,11 +77,12 @@ if errorlevel 1 (
   exit /b 1
 )
 echo     Hotovo - uloha "KurzAnalytik" spusti server pri startu Windows.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%APPDIR%\deploy\netsetup.ps1" -HardenTask
 
 REM ---- prvni spusteni ----
 echo [5/5] Spoustim server...
 schtasks /Run /TN "KurzAnalytik" >nul 2>&1
-REM timeout selze, kdyz je presmerovany vstup (vzdalene spusteni) - ping ne
+REM timeout selze, kdyz je presmerovany vstup (vzdalene spusteni) - ping ne
 ping -n 11 127.0.0.1 >nul
 
 REM ---- overit, ze server opravdu bezi a naslouchá vsem adresam ----

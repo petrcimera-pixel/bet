@@ -2452,4 +2452,23 @@ if __name__ == "__main__":
         print(_msg.encode("ascii", "replace").decode("ascii"))
     if _HOST == "127.0.0.1":   # prohlížeč otvíráme jen při lokálním běhu
         threading.Timer(1.2, _open_browser).start()
-    app.run(host=_HOST, port=_PORT, debug=False, threaded=True)
+
+    # Waitress je produkční WSGI server (na rozdíl od Flask app.run(), který
+    # sám při startu píše, že do produkce nepatří). Rozdíl na tomhle projektu:
+    # Flask dev server je jednovláknový event loop, který se pod zátěží
+    # (aréna 41 sázkařů + smyčka vyhodnocování + ruční prohlížení) občas
+    # zadrhne; waitress má thread pool a přeťatá spojení nikoho neshodí.
+    #
+    # Přepíná se env proměnnou USE_WAITRESS (deploy/run_server.bat ji nastavuje),
+    # bez ní zůstává dev server – ať se lokální vývoj přes spustit.bat chová
+    # jako dosud.
+    if os.environ.get("USE_WAITRESS", "").lower() in ("1", "true", "yes"):
+        try:
+            from waitress import serve
+            print("[boot] waitress WSGI server")
+            serve(app, host=_HOST, port=int(_PORT), threads=8, ident="KurzAnalytik")
+        except ImportError:
+            print("[boot] waitress neni nainstalovan, pouzivam dev server")
+            app.run(host=_HOST, port=_PORT, debug=False, threaded=True)
+    else:
+        app.run(host=_HOST, port=_PORT, debug=False, threaded=True)

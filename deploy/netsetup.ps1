@@ -4,16 +4,38 @@
 # `for /f ('...')`) znamena escapovat roury i zavorky a je to zdroj chyb,
 # ktere se projevi az na cizim pocitaci. Tady je to obycejny skript.
 #
-#   -Port    port aplikace
-#   -Check   jen overi, ze server naslouchá; nic nemeni
+#   -Port        port aplikace
+#   -Check       jen overi, ze server naslouchá; nic nemeni
+#   -HardenTask  doladi nastaveni jiz vytvorene ulohy KurzAnalytik
+#                (schtasks /Create nekterá nastaveni vubec neumi)
 
 param(
     [int]$Port = 5000,
-    [switch]$Check
+    [switch]$Check,
+    [switch]$HardenTask
 )
 
 $ErrorActionPreference = 'Stop'
 $RULE = 'KurzAnalytik'
+
+if ($HardenTask) {
+    # schtasks /Create neumi nastavit RestartCount ani AllowStartIfOnBatteries,
+    # jen New-ScheduledTaskSettingsSet to zvladne. Bez RestartCount se uloha
+    # po padu SAMOTNEHO PROCESU (ne restartu PC) uz sama neobnovi - jen pri
+    # dalsim startu Windows. Zaznamenano na serveru: opakovana neocekavana
+    # vypnuti (Kernel-Power 41) bez cisteho shutdownu.
+    try {
+        $s = New-ScheduledTaskSettingsSet `
+            -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+            -StartWhenAvailable -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) `
+            -ExecutionTimeLimit (New-TimeSpan -Days 0) -MultipleInstances IgnoreNew
+        Set-ScheduledTask -TaskName $RULE -Settings $s | Out-Null
+        Write-Output '    Uloha nastavena tak, aby se sama obnovila i po padu procesu.'
+    } catch {
+        Write-Output "    [!] Doladeni ulohy selhalo: $_"
+    }
+    exit 0
+}
 
 if ($Check) {
     $l = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue

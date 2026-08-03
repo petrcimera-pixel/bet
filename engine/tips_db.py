@@ -210,14 +210,19 @@ def save_tips(predictions: list) -> int:
 
 
 _MAX_TIPS = 12000   # strop velikosti tips.json – bez něj roste bez omezení
+_ARCHIVE_FILE = "tips_archive.json"
 
 
 def _prune(db: dict) -> int:
-    """Když tips.json přeroste strop, zahodí nejstarší VYHODNOCENÉ tipy (nikdy
-    otevřené – ty čekají na settle). Bez tohoto stropu soubor po měsících
-    nepřetržitého běhu naroste na desítky MB a KAŽDÝ request (settle/status,
-    dashboard, tips) ho musí znovu načíst a parsovat – na jednom gunicorn
-    workeru to appku dokáže úplně ucpat."""
+    """Když tips.json přeroste strop, přesune nejstarší VYHODNOCENÉ tipy do
+    archivu (nikdy otevřené – ty čekají na settle). Bez tohoto stropu soubor
+    po měsících nepřetržitého běhu naroste na desítky MB a KAŽDÝ request
+    (settle/status, dashboard, tips) ho musí znovu načíst a parsovat – na
+    jednom workeru to appku dokáže úplně ucpat.
+
+    Archiv (tips_archive.json) drží celou historii dál – appka do něj sama
+    nesahá, ale zůstává na disku pro pozdější rozbor, zpětný test na starých
+    datech nebo pro obnovu, kdyby aktivní soubor někdo omylem smazal."""
     tips = db["tips"]
     over = len(tips) - _MAX_TIPS
     if over <= 0:
@@ -225,11 +230,22 @@ def _prune(db: dict) -> int:
     settled = sorted(
         (i for i, t in enumerate(tips) if t.get("pick_result") is not None),
         key=lambda i: tips[i].get("settled_at") or "")
-    drop = set(settled[:over])
-    if not drop:
-        return 0   # samé otevřené tipy – nemáme co bezpečně zahodit
-    db["tips"] = [t for i, t in enumerate(tips) if i not in drop]
-    return len(drop)
+    drop_ix = set(settled[:over])
+    if not drop_ix:
+        return 0   # samé otevřené tipy – nemáme co bezpečně přesunout
+
+    to_archive = [t for i, t in enumerate(tips) if i in drop_ix]
+    try:
+        arch = storage.load(_ARCHIVE_FILE, {"tips": []})
+        arch["tips"].extend(to_archive)
+        storage.save(_ARCHIVE_FILE, arch)
+    except Exception:
+        # Kdyby archiv selhal (disk plný, nezapisovatelné), radši data v
+        # aktivním souboru NECHAT než tiše zahodit – strop se překročí, na
+        # dalším průchodu se to zkusí znovu.
+        return 0
+    db["tips"] = [t for i, t in enumerate(tips) if i not in drop_ix]
+    return len(drop_ix)
 
 
 # ---------------------------------------------------------------------------
