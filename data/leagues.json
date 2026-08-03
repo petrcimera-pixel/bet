@@ -1,5 +1,5 @@
 {
-  "ts": 1785014153,
+  "ts": 1785697058,
   "slugs": [
     [
       "fifa.world",
@@ -28,6 +28,10 @@
     [
       "esp.1",
       "Spain"
+    ],
+    [
+      "eng.charity",
+      "England"
     ],
     [
       "esp.super_cup",
@@ -135,10 +139,6 @@
     ],
     [
       "eng.w.promotion.relegation",
-      "England"
-    ],
-    [
-      "eng.charity",
       "England"
     ],
     [

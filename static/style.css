@@ -515,14 +515,6 @@ tr.row-ok { background: var(--accent-glow); }
 .login-card .foot { text-align: center; color: var(--txt3); font-size: 11px; margin-top: 22px;
   padding-top: 16px; border-top: 1px solid var(--border); }
 
-/* nadpis skupiny sázkařů (jednotlivé / tikety / kombinace) */
-.group-head {
-  margin: 22px 0 12px; padding: 12px 14px;
-  background: var(--bg-alt); border: 1px solid var(--border);
-  border-radius: 10px;
-}
-.group-head:first-child { margin-top: 0; }
-
 /* nohy tiketu (akumulátor / kombinace) v detailu sázkaře */
 tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 .leg { display: flex; gap: 10px; align-items: center; font-size: 12px; padding: 2px 0 2px 18px; }
@@ -543,3 +535,77 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
   border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 12.5px;
 }
 .srv-diag.ok { background: var(--accent-glow); border-color: var(--accent-dim); }
+
+/* ---------------------------------------------------------------------- */
+/* Aréna sázkařů                                                          */
+/* ---------------------------------------------------------------------- */
+/* Dřív to bylo 41 velkých karet pod sebou = přes 5000 px svisle a nešlo
+   nic porovnat. Teď se přepíná kategorie a v ní je seřaditelný žebříček. */
+
+.arena-tabs {
+  display: flex; gap: 0; width: fit-content; max-width: 100%;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  overflow: hidden; margin-bottom: 14px; flex-wrap: wrap;
+}
+.arena-tabs button {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 16px; background: transparent; color: var(--txt2);
+  border: none; border-right: 1px solid var(--border);
+  font-size: 13px; font-weight: 600; transition: background .12s, color .12s;
+}
+.arena-tabs button:last-child { border-right: none; }
+.arena-tabs button:hover { color: var(--txt); background: var(--panel-2); }
+.arena-tabs button.on { background: var(--accent-glow); color: var(--accent); }
+.arena-tabs .cnt {
+  font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 20px;
+  background: var(--panel-2); color: var(--txt3);
+}
+.arena-tabs button.on .cnt { background: var(--accent); color: var(--bg); }
+
+.arena-desc { font-size: 12.5px; color: var(--txt2); margin: 0 0 14px; max-width: 70ch; }
+
+/* žebříček */
+.arena-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.arena-table th {
+  text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--txt3); padding: 0 10px 8px;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.arena-table th.s { cursor: pointer; user-select: none; }
+.arena-table th.s:hover { color: var(--txt); }
+.arena-table th.on { color: var(--accent); }
+.arena-table th.num, .arena-table td.num { text-align: right; }
+
+.arena-table tbody tr.row { border-bottom: 1px solid var(--border); }
+.arena-table tbody tr.row:hover { background: var(--panel-2); }
+.arena-table td { padding: 9px 10px; vertical-align: middle; }
+
+.arena-rank { font-size: 13px; font-weight: 700; color: var(--txt3); width: 34px; text-align: center; }
+.arena-rank.medal { font-size: 17px; }
+
+.arena-who { display: flex; align-items: center; gap: 10px; min-width: 210px; }
+.arena-who .face { font-size: 20px; line-height: 1; }
+.arena-who .nm { font-weight: 600; }
+.arena-who .tg { font-size: 11.5px; color: var(--txt3); margin-top: 1px; }
+
+.arena-bal { font-weight: 700; font-size: 14px; white-space: nowrap; }
+.arena-sub { font-size: 11.5px; color: var(--txt3); white-space: nowrap; }
+
+/* mikro-pruh vytíženosti banku */
+.arena-open { display: flex; align-items: center; gap: 7px; justify-content: flex-end; }
+.arena-open .bar { width: 42px; height: 5px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.arena-open .bar i { display: block; height: 100%; background: var(--warn); }
+
+.arena-acts { display: flex; gap: 5px; justify-content: flex-end; white-space: nowrap; }
+.arena-acts .btn { padding: 5px 9px; font-size: 12px; }
+
+.arena-detail td { background: var(--bg-alt); padding: 0 14px 16px; }
+
+@media (max-width: 1100px) {
+  .arena-table .hide-md { display: none; }
+}
+@media (max-width: 720px) {
+  .arena-table .hide-sm { display: none; }
+  .arena-who { min-width: 0; }
+  .arena-who .tg { display: none; }
+}

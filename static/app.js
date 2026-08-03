@@ -1734,65 +1734,178 @@ async function loadGroupCompare() {
   }
 }
 
+/* Aréna: jedna kategorie naráz + seřaditelný žebříček.
+   Původní návrh vypisoval všech 41 sázkařů jako velké karty pod sebou –
+   stránka měla přes 5000 px a porovnat dva sázkaře šlo jen po paměti,
+   přitom celá stránka je právě o tom, kdo je lepší. */
+
+let _arenaAll = [];
+let _arenaGroup = 'single';
+let _arenaSort = { key: 'rank', dir: 1 };
+
+const ARENA_SLOUPCE = [
+  { key: 'rank',       label: '#' },
+  { key: 'name',       label: 'Sázkař' },
+  { key: null,         label: 'Vývoj',     cls: 'hide-sm' },
+  { key: 'balance',    label: 'Zůstatek',  num: true },
+  { key: 'profit',     label: 'Zisk',      num: true },
+  { key: 'roi',        label: 'ROI',       num: true },
+  { key: 'win_rate',   label: 'Úspěšnost', num: true, cls: 'hide-md' },
+  { key: 'settled',    label: 'Sázek',     num: true, cls: 'hide-md' },
+  { key: 'open_stake', label: 'Ve hře',    num: true, cls: 'hide-sm' },
+  { key: null,         label: '' },
+];
+
 function renderBettors(bettors) {
+  _arenaAll = bettors || [];
   const box = el('bettorsContainer');
-  if (!bettors.length) { box.innerHTML = '<div class="empty-state">Žádní sázkaři</div>'; return; }
-  // Sázkaři se dělí podle typu tiketu – porovnávat akumulátor s jednotlivou
-  // sázkou nedává smysl, takže má každá kategorie vlastní žebříček.
-  const groups = _bettorGroups || { single: { label: 'Jednotlivé sázky', emoji: '1️⃣' } };
+  if (!_arenaAll.length) { box.innerHTML = '<div class="empty-state">Žádní sázkaři</div>'; return; }
+
+  const groups = _bettorGroups || {};
   const order = ['single', 'acca', 'combo'];
-  const byGroup = {};
-  bettors.forEach(b => { (byGroup[b.group || 'single'] ||= []).push(b); });
-  box.innerHTML = order.filter(g => byGroup[g]?.length).map(g => {
-    const info = groups[g] || { label: g, emoji: '' };
-    const list = byGroup[g];
-    const profit = list.reduce((a, x) => a + (x.profit || 0), 0);
-    const open = list.reduce((a, x) => a + (x.open_stake || 0), 0);
-    return `
-      <div class="group-head">
-        <h3 style="margin:0;">${info.emoji || ''} ${info.label} <span class="muted">(${list.length})</span></h3>
-        ${info.desc ? `<p style="font-size:12px; color:var(--txt2); margin:4px 0 0;">${info.desc}</p>` : ''}
-        <div class="pill-row" style="margin:8px 0 0;">
-          <span class="pill info">zisk ${profit >= 0 ? '+' : ''}${fmt(profit)} Kč</span>
-          <span class="pill info">ve hře ${fmt(open)} Kč</span>
-        </div>
+  const pocty = {};
+  _arenaAll.forEach(b => { const g = b.group || 'single'; pocty[g] = (pocty[g] || 0) + 1; });
+  if (!pocty[_arenaGroup]) _arenaGroup = order.find(g => pocty[g]) || 'single';
+
+  box.className = '';
+  box.innerHTML = `
+    <div class="arena-tabs" id="arenaTabs">
+      ${order.filter(g => pocty[g]).map(g => {
+        const info = groups[g] || { label: g, emoji: '' };
+        return `<button data-group="${g}" class="${g === _arenaGroup ? 'on' : ''}">
+                  ${info.emoji || ''} ${info.label} <span class="cnt">${pocty[g]}</span>
+                </button>`;
+      }).join('')}
+    </div>
+    <div id="arenaBody"></div>`;
+
+  box.querySelectorAll('#arenaTabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      _arenaGroup = btn.dataset.group;
+      box.querySelectorAll('#arenaTabs button').forEach(b => b.classList.toggle('on', b === btn));
+      renderArenaBody();
+    });
+  });
+  renderArenaBody();
+}
+
+function renderArenaBody() {
+  const box = el('arenaBody');
+  if (!box) return;
+  const groups = _bettorGroups || {};
+  const info = groups[_arenaGroup] || {};
+  const list = _arenaAll.filter(b => (b.group || 'single') === _arenaGroup);
+
+  const zisk = list.reduce((a, x) => a + (x.profit || 0), 0);
+  const veHre = list.reduce((a, x) => a + (x.open_stake || 0), 0);
+  const vyresene = list.reduce((a, x) => a + (x.settled || 0), 0);
+  const vyhry = list.reduce((a, x) => a + (x.settled || 0) * ((x.win_rate || 0) / 100), 0);
+  const uspesnost = vyresene ? (vyhry / vyresene * 100) : null;
+  const nejlepsi = list.reduce((a, x) => (!a || (x.profit || 0) > (a.profit || 0)) ? x : a, null);
+  const vPlusu = list.filter(b => (b.profit || 0) > 0).length;
+
+  const razeno = [...list].sort((a, b) => {
+    const k = _arenaSort.key;
+    let va = a[k], vb = b[k];
+    if (typeof va === 'string') return _arenaSort.dir * va.localeCompare(vb, 'cs');
+    va = (va === null || va === undefined) ? -Infinity : va;
+    vb = (vb === null || vb === undefined) ? -Infinity : vb;
+    return _arenaSort.dir * (va - vb);
+  });
+
+  box.innerHTML = `
+    ${info.desc ? `<p class="arena-desc">${info.desc}</p>` : ''}
+
+    <div class="grid-stats">
+      <div class="stat-tile">
+        <div class="label">Zisk kategorie</div>
+        <div class="value ${zisk >= 0 ? 'pos' : 'bad'}">${zisk >= 0 ? '+' : ''}${fmt(zisk)} Kč</div>
+        <div class="hint">${vPlusu} z ${list.length} v plusu</div>
       </div>
-      ${renderBettorCards(list)}`;
-  }).join('');
+      <div class="stat-tile">
+        <div class="label">Ve hře</div>
+        <div class="value">${fmt(veHre)} Kč</div>
+        <div class="hint">otevřené sázky</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Úspěšnost</div>
+        <div class="value">${uspesnost !== null ? fmt(uspesnost) + '&nbsp;%' : '—'}</div>
+        <div class="hint">${vyresene} vyhodnocených</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Vede</div>
+        <div class="value" style="font-size:17px;">${nejlepsi ? nejlepsi.emoji + ' ' + nejlepsi.name : '—'}</div>
+        <div class="hint">${nejlepsi ? ((nejlepsi.profit >= 0 ? '+' : '') + fmt(nejlepsi.profit) + ' Kč') : ''}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table class="arena-table">
+          <thead><tr>${ARENA_SLOUPCE.map(c => `
+            <th class="${c.num ? 'num ' : ''}${c.cls || ''} ${c.key ? 's' : ''} ${c.key && c.key === _arenaSort.key ? 'on' : ''}"
+                ${c.key ? `data-sort="${c.key}"` : ''}>${c.label}${c.key && c.key === _arenaSort.key ? (_arenaSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}
+          </tr></thead>
+          <tbody>${razeno.map(b => arenaRadek(b, veHre)).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+
+  box.querySelectorAll('th.s').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.dataset.sort;
+      // pořadí a jméno se čtou odshora, čísla dávají smysl od největšího
+      if (_arenaSort.key === k) _arenaSort.dir *= -1;
+      else _arenaSort = { key: k, dir: (k === 'rank' || k === 'name') ? 1 : -1 };
+      renderArenaBody();
+    });
+  });
   wireBettorCards(box);
 }
 
-function renderBettorCards(bettors) {
-  return bettors.map(b => {
-    const profitClass = b.profit >= 0 ? 'pos' : 'bad';
-    const rankBadge = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : `#${b.rank}`;
-    return `
-    <div class="card" style="margin-bottom:12px;">
-      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
-        <div style="font-size:22px; min-width:36px; text-align:center;">${rankBadge}</div>
-        <div style="font-size:26px;">${b.emoji}</div>
-        <div style="flex:1; min-width:200px;">
-          <div style="font-weight:700; font-size:14.5px;">${b.name}</div>
-          <div style="font-size:12px; color:var(--txt2); margin-top:2px;">${b.tagline}</div>
+function arenaRadek(b, veHreCelkem) {
+  const medaile = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : null;
+  const tridaZisk = (b.profit || 0) >= 0 ? 'pos' : 'bad';
+  const podil = veHreCelkem > 0 ? Math.min(100, (b.open_stake || 0) / veHreCelkem * 100) : 0;
+  return `
+    <tr class="row">
+      <td class="arena-rank ${medaile ? 'medal' : ''}">${medaile || b.rank}</td>
+      <td>
+        <div class="arena-who">
+          <span class="face">${b.emoji}</span>
+          <span>
+            <div class="nm">${b.name}</div>
+            <div class="tg">${b.tagline}</div>
+          </span>
         </div>
-        <div style="min-width:90px;">${sparklineSvg(b.equity)}</div>
-        <div style="text-align:right;">
-          <div style="font-size:18px; font-weight:700;" class="${profitClass}">${b.balance.toFixed(0)} Kč</div>
-          <div style="font-size:11.5px; color:var(--txt2);">${b.profit >= 0 ? '+' : ''}${b.profit.toFixed(0)} Kč · ROI ${b.roi}%${b.deposited ? ` · vloženo ${b.deposited.toFixed(0)} Kč` : ''}</div>
+      </td>
+      <td class="hide-sm">${sparklineSvg(b.equity)}</td>
+      <td class="num">
+        <div class="arena-bal">${fmt(Math.round(b.balance))} Kč</div>
+        ${b.deposited ? `<div class="arena-sub">vloženo ${fmt(Math.round(b.deposited))}</div>` : ''}
+      </td>
+      <td class="num ${tridaZisk}" style="font-weight:600;">${(b.profit || 0) >= 0 ? '+' : ''}${fmt(Math.round(b.profit))}</td>
+      <td class="num ${tridaZisk}">${fmt(b.roi)}&nbsp;%</td>
+      <td class="num hide-md">${b.win_rate !== null ? fmt(b.win_rate) + '&nbsp;%' : '—'}</td>
+      <td class="num hide-md">${b.settled}<span class="arena-sub"> / ${b.placed}</span></td>
+      <td class="num hide-sm">
+        <div class="arena-open">
+          <span>${b.open_stake ? fmt(Math.round(b.open_stake)) : '—'}</span>
+          <span class="bar"><i style="width:${podil.toFixed(0)}%"></i></span>
         </div>
-        <button class="btn small bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋ Vklad</button>
-        <button class="btn small bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
-        <button class="btn small bettor-toggle" data-id="${b.id}" style="margin-left:4px;">Detail ▾</button>
-      </div>
-      <div style="display:flex; gap:18px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--txt2); flex-wrap:wrap;">
-        <span>Umístěno: <strong style="color:var(--txt);">${b.placed}</strong></span>
-        <span>Vyřešeno: <strong style="color:var(--txt);">${b.settled}</strong></span>
-        <span>Win rate: <strong style="color:var(--txt);">${b.win_rate !== null ? b.win_rate + '%' : '—'}</strong></span>
-        <span>Otevřené: <strong style="color:var(--txt);">${b.open_count}</strong>${b.open_stake ? ` <span class="muted">(${b.open_stake.toFixed(0)} Kč ve hře)</span>` : ''}</span>
-      </div>
-      <div id="bettorDetail-${b.id}" style="display:none; margin-top:12px;"></div>
-    </div>`;
-  }).join('');
+        ${b.open_count ? `<div class="arena-sub">${b.open_count} sázek</div>` : ''}
+      </td>
+      <td>
+        <div class="arena-acts">
+          <button class="btn small bettor-toggle" data-id="${b.id}" title="Detail sázkaře">Detail</button>
+          <button class="btn small bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋</button>
+          <button class="btn small bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
+        </div>
+      </td>
+    </tr>
+    <tr class="arena-detail"><td colspan="${ARENA_SLOUPCE.length}">
+      <div id="bettorDetail-${b.id}" style="display:none;"></div>
+    </td></tr>`;
 }
 
 function wireBettorCards(box) {
