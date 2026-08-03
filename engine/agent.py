@@ -33,6 +33,25 @@ except ImportError:
 TAG = "bet-agent"
 MIN_STAKE = 1.0   # podlaha pro Kelly sázku, ať nejsou směšně malé/nulové
 ML_VETO_PROB = 0.35   # model musí dávat aspoň tuto šanci na výhru, jinak tip přeskočíme
+MAX_STAKE_PER_TICKET = 10.0   # tvrdý globální strop – žádný tiket agenta nesmí přesáhnout
+EXPERIENCE_WINDOW = 30         # počet posledních vyhodnocených sázek pro výpočet dovednosti
+
+
+def _experience_scale() -> float:
+    """Váha dovedností a zkušeností agenta. Stejná myšlenka jako u sázkařů:
+    nový agent bez historie sází zlomek, ustálený ziskový plný Kelly, dlouhá
+    série proher ho stáhne. Počítá se z posledních EXPERIENCE_WINDOW sázek
+    s tagem 'bet-agent'."""
+    bets = [b for b in agent_bets() if b.get("status") in ("won", "lost")]
+    if not bets:
+        return 0.35
+    recent = sorted(bets, key=lambda b: b.get("settled_ts") or b.get("ts", 0))[-EXPERIENCE_WINDOW:]
+    staked = sum(b.get("stake", 0) for b in recent)
+    pnl = sum(b.get("pnl", 0) for b in recent)
+    roi = (pnl / staked) if staked else 0.0
+    experience = min(1.0, len(recent) / EXPERIENCE_WINDOW)
+    skill = max(0.5, min(1.5, 1.0 + roi))
+    return round(0.35 + 0.65 * experience * skill, 3)
 
 
 def _ml_veto(outcome, odds, prob, league, ml_features=None) -> bool:
@@ -177,7 +196,9 @@ def _build_ticket(pool, max_legs, min_total_odds, min_prob):
 def _place_tickets(ticket_pool, cfg, balance):
     """Denní AKO (2–3 tutovky) + páteční víkendový tiket (4–6 tipů)."""
     placed = []
-    stake = float(cfg.get("ticket_stake", 20.0))
+    # AKO tikety: stejný tvrdý strop 10 Kč jako u singlů – aby agent
+    # nemohl obejít MAX_STAKE_PER_TICKET přes vyšší 'ticket_stake' v Nastavení.
+    stake = min(float(cfg.get("ticket_stake", 20.0)), MAX_STAKE_PER_TICKET)
 
     def _legs_payload(legs):
         return [{"match": c["match"], "name": c["name"], "match_id": c["match_id"],
@@ -277,6 +298,8 @@ def run(predictions: list) -> dict:
     reference_balance = balance + staked_today
     daily_cap = reference_balance * max_daily_pct
     remaining_budget = max(0.0, daily_cap - staked_today)
+    # Váha dovednosti podle nedávné historie – nový/špatný agent tlumí sázky
+    skill = _experience_scale()
 
     placed = skipped_dup = skipped_soft = skipped_cap = skipped_ml = skipped_sim = 0
     no_funds = 0
@@ -343,7 +366,11 @@ def run(predictions: list) -> dict:
         if remaining_budget < MIN_STAKE:
             skipped_cap += 1
             continue
-        stake = round(min(stake, remaining_budget), 2)
+        stake = stake * skill
+        stake = round(min(stake, remaining_budget, MAX_STAKE_PER_TICKET), 2)
+        if stake < MIN_STAKE:
+            skipped_cap += 1
+            continue
 
         try:
             bet = bankroll.place_bet(p["id"], best["label"], best["outcome"],

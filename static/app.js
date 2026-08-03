@@ -1656,17 +1656,60 @@ async function loadBettors() {
   const box = el('bettorsContainer');
   box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
   try {
-    const [data, calib] = await Promise.all([
+    const [data, calib, ag] = await Promise.all([
       api('/api/bettors', { timeoutMs: 20000 }),
       api('/api/bettors/calibration', { timeoutMs: 15000 }).catch(() => ({ buckets: [] })),
+      api('/api/agent', { timeoutMs: 15000 }).catch(() => ({ settings: {} })),
     ]);
     _bettorGroups = data.groups || _bettorGroups;
+    STATE.agentCfg = ag.settings || {};
     renderBettors(data.bettors || []);
+    renderArenaHero(data.bettors || []);
     loadGroupCompare();
     drawCalibrationChart(calib.buckets || []);
   } catch (e) {
     box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
   }
+}
+
+function renderArenaHero(bettors) {
+  const box = el('arenaHeroKpis');
+  if (!box) return;
+  if (!bettors.length) {
+    box.innerHTML = '<span class="arena-hero-kpi"><b>—</b><em>Zatím žádní sázkaři</em></span>';
+    return;
+  }
+  const bank = bettors.reduce((a, b) => a + (b.balance || 0) + (b.open_stake || 0), 0);
+  const zisk = bettors.reduce((a, b) => a + (b.profit || 0), 0);
+  const vPlusu = bettors.filter(b => (b.profit || 0) > 0).length;
+  const settled = bettors.reduce((a, b) => a + (b.settled || 0), 0);
+  const nextRun = _nextRunLabel();
+  const zzTrida = zisk >= 0 ? 'pos' : 'bad';
+
+  box.innerHTML = `
+    <span class="arena-hero-kpi"><b>${bettors.length}</b><em>Sázkařů</em></span>
+    <span class="arena-hero-kpi"><b>${fmt(Math.round(bank))} Kč</b><em>Bank arény</em></span>
+    <span class="arena-hero-kpi"><b class="${zzTrida}">${zisk >= 0 ? '+' : ''}${fmt(Math.round(zisk))} Kč</b><em>Realizovaný zisk (${fmt(settled)} sázek)</em></span>
+    <span class="arena-hero-kpi"><b>${vPlusu} / ${bettors.length}</b><em>V plusu</em></span>
+    <span class="arena-hero-kpi"><b>${nextRun}</b><em>Další kolo</em></span>
+  `;
+}
+
+/** Kdy poběží další automatické kolo. Sázkaři jedou podle stejného
+ *  rozvrhu jako auto-agent (auto_run_hours v Nastavení), typicky
+ *  '8,12,16,20'. Když se hodinu propásne, dohoní se v další. */
+function _nextRunLabel() {
+  const cfg = STATE.agentCfg || {};
+  const hoursRaw = cfg.auto_run_hours || (cfg.auto_run ? '8,12,16,20' : '');
+  if (!cfg.auto_run) return 'ručně';
+  const hours = String(hoursRaw).split(',').map(x => parseInt(x.trim(), 10)).filter(x => x >= 0 && x <= 23);
+  if (!hours.length) return 'ručně';
+  const now = new Date();
+  const nowH = now.getHours(), nowM = now.getMinutes();
+  const upcoming = hours.filter(h => h > nowH || (h === nowH && nowM < 5));
+  const next = upcoming.length ? upcoming[0] : hours[0];
+  const zejtra = !upcoming.length;
+  return `${String(next).padStart(2, '0')}:00${zejtra ? ' zítra' : ''}`;
 }
 
 function sparklineSvg(equity) {

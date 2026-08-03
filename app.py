@@ -1413,6 +1413,26 @@ def api_bettors():
                     "groups": virtual_bettors.GROUPS})
 
 
+@app.route("/api/bettors/reset-all", methods=["POST"])
+@login_required
+def api_bettors_reset_all():
+    """Kompletně vynuluje historii všech sázkařů: smaže sázky, nastaví bank
+    znovu na výchozích 200 Kč. Sázkaři samotní (i vlastní) zůstávají."""
+    d = request.get_json(silent=True) or {}
+    start = float(d.get("start_balance") or virtual_bettors.DEFAULT_START_BALANCE)
+    return jsonify(virtual_bettors.reset_all(start))
+
+
+@app.route("/api/agent/reset", methods=["POST"])
+@login_required
+def api_agent_reset():
+    """Kompletně smaže historii bankrollu (i agentovské sázky), nastaví nový
+    počáteční bank. Používá se před 'čistým' během agenta od nuly."""
+    d = request.get_json(silent=True) or {}
+    start = float(d.get("start_balance") or 200.0)
+    return jsonify(bankroll.reset(start))
+
+
 @app.route("/api/bettors/<bid>")
 def api_bettor_detail(bid):
     detail = virtual_bettors.bettor_detail(bid)

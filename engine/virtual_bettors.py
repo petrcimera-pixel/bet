@@ -20,6 +20,36 @@ from .bankroll import eval_outcome
 
 FILE = "virtual_bettors.json"
 DAILY_STAKE_CAP_PCT = 0.35   # žádný sázkař nevsadí v jeden den víc než 35 % banku (i Martingale)
+DEFAULT_START_BALANCE = 200.0   # startovní bank každého sázkaře
+MAX_STAKE_PER_TICKET = 10.0     # nikdo nikdy nevsadí víc než tohle na jeden tiket
+EXPERIENCE_WINDOW = 20          # kolik posledních VYHODNOCENÝCH sázek se počítá do skóre zkušenosti
+
+
+def _experience_scale(bettor: dict) -> float:
+    """Kolik ze spočítané sázky si sázkař 'zaslouží' vsadit podle své
+    dovednosti a nasbírané zkušenosti. Novic bez historie sází zlomek,
+    stabilní ziskový sázkař plnou sázku, propadák se stahuje.
+
+    Vzorec:
+      experience = min(1, N_settled_recent / EXPERIENCE_WINDOW)
+      skill      = clamp(0.5, 1.5, 1 + ROI_recent/100)
+      scale      = 0.35 + 0.65 * experience * skill    -> rozsah cca 0.35..1.32
+
+    Prakticky: nový sázkař vsadí 35 % vypočtené sázky, po ~20 vyhodnocených
+    sázkách jde na 100 % (pokud si vede alespoň v nule), špatné výsledky
+    ho stáhnou zpět, dobré výsledky mírně nadhodnotí."""
+    bets = bettor.get("bets", [])
+    settled = [b for b in bets if b.get("status") in ("won", "lost")]
+    if not settled:
+        return 0.35
+    recent = sorted(settled, key=lambda b: b.get("settled_ts") or b.get("ts", 0))[-EXPERIENCE_WINDOW:]
+    n = len(recent)
+    experience = min(1.0, n / EXPERIENCE_WINDOW)
+    staked = sum(b.get("stake", 0) for b in recent)
+    pnl = sum(b.get("pnl", 0) for b in recent)
+    roi = (pnl / staked) if staked else 0.0
+    skill = max(0.5, min(1.5, 1.0 + roi))    # roi -50 % -> 0.5, +30 % -> 1.3
+    return round(0.35 + 0.65 * experience * skill, 3)
 
 
 def _kelly_stake(prob, odds, balance, fraction, floor_pct=0.0, cap_pct=1.0, confidence_scale=1.0):
@@ -133,7 +163,7 @@ def _s_martingale(pool, b, bal):
         return []
     best = max(pool, key=lambda c: c["prob"])
     streak = b.get("loss_streak", 0)
-    base = b.get("start_balance", 1000.0) * 0.02
+    base = b.get("start_balance", DEFAULT_START_BALANCE) * 0.02
     stake = min(base * (2 ** streak), bal * DAILY_STAKE_CAP_PCT)
     if stake < 1:
         return []
@@ -856,7 +886,7 @@ def generate_name(params: dict, taken=()) -> tuple:
 
 
 def add_bettor(params: dict, name: str = None, emoji: str = None,
-               start_balance: float = 1000.0) -> dict:
+               start_balance: float = DEFAULT_START_BALANCE) -> dict:
     st = load_state()
     params = normalize_params(params)
     if not name:
@@ -873,6 +903,29 @@ def add_bettor(params: dict, name: str = None, emoji: str = None,
     }
     save_state(st)
     return {"id": bid, **st[bid]}
+
+
+def reset_all(start_balance: float = DEFAULT_START_BALANCE) -> dict:
+    """Kompletně vynuluje historii sázek u VŠECH sázkařů (vestavěných
+    i vlastních) a nastaví jim nový počáteční bank. Sázkaři samotní
+    zůstávají – jen se jim smaže bankroll a všechny sázky, aby začali
+    znovu od nuly. Zkušenost (dovednost) tím pádem znovu naroste na plno
+    až po ~20 nových vyhodnocených sázkách."""
+    st = load_state()
+    n = 0
+    for bid, b in st.items():
+        b["balance"] = float(start_balance)
+        b["start_balance"] = float(start_balance)
+        b["bets"] = []
+        b["last_run_date"] = None
+        b["ran_hours"] = []
+        b["loss_streak"] = 0
+        b["win_streak"] = 0
+        b["transactions"] = [{"ts": int(time.time()), "type": "start",
+                              "amount": float(start_balance), "note": "Reset"}]
+        n += 1
+    save_state(st)
+    return {"reset": n, "start_balance": float(start_balance)}
 
 
 def delete_bettor(bid: str) -> bool:
@@ -926,7 +979,7 @@ def _default_state():
         p["id"]: {
             "name": p["name"], "emoji": p["emoji"], "tagline": p["tagline"],
             "group": p.get("group", "single"),
-            "balance": 1000.0, "start_balance": 1000.0,
+            "balance": DEFAULT_START_BALANCE, "start_balance": DEFAULT_START_BALANCE,
             "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
         } for p in PROFILES
     }
@@ -1062,14 +1115,20 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
         # (např. plný Kelly) sama spočítá. Pod 10 % startovního banku (vážná
         # série proher) se strop dál zpřísní na 5 %, ať i "agresivní"
         # strategie nemůže bank definitivně dorazit jednou špatnou sázkou.
-        single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", 1000.0) * 0.10 else 0.20
+        single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", DEFAULT_START_BALANCE) * 0.10 else 0.20
+        # Váha dovedností/zkušeností – nový sázkař sází zlomek, ustálený
+        # ziskový plnou sázku, propadák se stahuje. Viz _experience_scale.
+        skill = _experience_scale(b)
         for c, stake in decisions:
             legs = c.get("legs")
             # zápasy, které tiket obsadí (u tiketu všechny jeho nohy)
             ids = [l["match_id"] for l in legs] if legs else [c["match_id"]]
             if any(i in used_matches for i in ids):
                 continue
-            stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap), 2)
+            stake = stake * skill
+            # Tvrdý globální strop – nikdo nikdy nevsadí víc než MAX_STAKE_PER_TICKET
+            # na jeden tiket, ať strategie vypočte cokoliv.
+            stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET), 2)
             if stake < 1 or stake > b["balance"]:
                 continue
             if legs:

@@ -17,8 +17,8 @@ except ImportError:
     ML_AVAILABLE = False
 
 _DEFAULT = {
-    "start_balance": 1000.0,
-    "balance": 1000.0,
+    "start_balance": 200.0,
+    "balance": 200.0,
     "currency": "Kč",
     "kelly_fraction": 0.25,   # frakční Kelly (čtvrtinový) – konzervativní
     "bets": [],               # historie tipů
@@ -35,6 +35,18 @@ def state() -> dict:
 
 def _save(st):
     storage.save("bankroll.json", st)
+
+
+def reset(start_balance: float = 200.0) -> dict:
+    """Kompletní reset: smaže VŠECHNY sázky (agentovské i ruční) a nastaví
+    nový počáteční bank. Nezachovává historii – použití: začít znovu od
+    nuly, aby agent zapomněl minulou zkušenost i pořadí sázek."""
+    st = state()
+    st["start_balance"] = float(start_balance)
+    st["balance"] = float(start_balance)
+    st["bets"] = []
+    _save(st)
+    return {"start_balance": float(start_balance), "balance": float(start_balance)}
 
 
 def settings(start_balance=None, kelly_fraction=None, currency=None):
