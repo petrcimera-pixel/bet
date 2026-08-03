@@ -38,7 +38,9 @@ function fmt(num) {
 }
 function pct(num, digits = 1) {
   if (num === null || num === undefined || isNaN(num)) return '—';
-  return num.toFixed(digits) + '%';
+  // cs-CZ: desetinná čárka + tenké mezerování před % kvůli konzistenci s fmt()
+  return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits })
+    .format(num) + ' %';
 }
 function el(id) { return document.getElementById(id); }
 function setText(id, text) { const e = el(id); if (e) e.textContent = text; }
@@ -201,7 +203,7 @@ async function loadStrategyInsight() {
 
     const agentRoi = d.agent_stats?.roi;
     const agentLine = agentRoi !== null && agentRoi !== undefined
-      ? `Agent má zatím ROI ${agentRoi}% (${d.agent_stats.settled} vyřešeno).`
+      ? `Agent má zatím ROI ${pct(agentRoi)} (${d.agent_stats.settled} vyřešeno).`
       : 'Agent zatím nemá dost vyřešených sázek pro srovnání.';
 
     const applyBtn = d.agent_settings
@@ -216,8 +218,8 @@ async function loadStrategyInsight() {
           <div style="font-size:12px; color:var(--txt2);">${d.tagline}</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-weight:700; color:var(--pos);">ROI ${d.roi}%</div>
-          <div style="font-size:11.5px; color:var(--txt2);">${d.win_rate}% win rate · ${d.settled} vyřešeno</div>
+          <div style="font-weight:700; color:var(--pos);">ROI ${pct(d.roi)}</div>
+          <div style="font-size:11.5px; color:var(--txt2);">${pct(d.win_rate)} win rate · ${d.settled} vyřešeno</div>
         </div>
       </div>
       <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12.5px; color:var(--txt2);">${agentLine}</div>
@@ -314,12 +316,13 @@ async function loadAgentSummary() {
   try {
     const data = await api('/api/agent');
     const s = data.stats;
+    el('agentSummary').className = '';   // odstraň 'loading' padding, jinak se rozjede layout
     el('agentSummary').innerHTML = `
       <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
         <div style="display:flex; justify-content:space-between;"><span class="muted">Umístěno</span><span>${s.placed}</span></div>
-        <div style="display:flex; justify-content:space-between;"><span class="muted">Vyřešeno</span><span>${s.settled} (${s.accuracy !== null ? s.accuracy + '%' : '—'})</span></div>
+        <div style="display:flex; justify-content:space-between;"><span class="muted">Vyřešeno</span><span>${s.settled} (${s.accuracy !== null ? pct(s.accuracy) : '—'})</span></div>
         <div style="display:flex; justify-content:space-between;"><span class="muted">Zisk</span><span class="${s.profit >= 0 ? 'pos' : 'bad'}">${fmt(s.profit)} Kč</span></div>
-        <div style="display:flex; justify-content:space-between;"><span class="muted">ROI</span><span>${s.roi !== null ? s.roi + '%' : '—'}</span></div>
+        <div style="display:flex; justify-content:space-between;"><span class="muted">ROI</span><span>${s.roi !== null ? pct(s.roi) : '—'}</span></div>
       </div>`;
     renderRecentBets(data.bets || []);
   } catch (e) {
@@ -329,6 +332,7 @@ async function loadAgentSummary() {
 
 function renderRecentBets(bets) {
   const box = el('recentBets');
+  box.className = '';
   if (!bets.length) { box.innerHTML = `<div class="empty-state">Agent zatím nevsadil žádný tip</div>`; return; }
   box.innerHTML = `<div class="table-wrap"><table>
     <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Sázka</th><th>P&L</th><th></th></tr></thead>
@@ -437,7 +441,7 @@ async function updateStatusBar() {
   try {
     const a = await api('/api/agent', { timeoutMs: 15000 });
     const st = a.stats || {};
-    setText('sbAgent', `Agent: ${st.open || 0} otevřených · ${st.settled || 0} vyřešeno · ROI ${st.roi ?? '—'} %`);
+    setText('sbAgent', `Agent: ${st.open || 0} otevřených · ${st.settled || 0} vyřešeno · ROI ${st.roi != null ? pct(st.roi) : '—'}`);
   } catch (e) { /* lišta nesmí kvůli tomuhle zmizet */ }
 }
 
@@ -896,7 +900,7 @@ function renderAnalysis(d, box) {
     ${(d.top_scores || []).length ? `
     <div class="card">
       <h3>Nejpravděpodobnější výsledky</h3>
-      <div class="pill-row">${d.top_scores.map(s => `<span class="pill">${s.score} <span class="muted">${(s.prob * 100).toFixed(1)}%</span></span>`).join('')}</div>
+      <div class="pill-row">${d.top_scores.map(s => `<span class="pill">${s.score} <span class="muted">${pct(s.prob * 100)}</span></span>`).join('')}</div>
     </div>` : ''}`;
 }
 
@@ -1058,6 +1062,7 @@ function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
     ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(pass) })).filter(lg => lg.matches.length)
     : leaguesIn);
 
+  container.className = '';   // odstraní 'loading' padding po naplnění daty
   if (!leagues.length) {
     container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento filtr</div>';
     return;
@@ -2005,7 +2010,7 @@ function drawCalibrationChart(buckets) {
     const color = Math.abs(b.actual_win_rate - b.avg_predicted) <= 8 ? 'var(--pos)' : 'var(--warn)';
     return `
       <rect x="${(x + barW * 0.2).toFixed(1)}" y="${actualY.toFixed(1)}" width="${(barW * 0.6).toFixed(1)}" height="${barH.toFixed(1)}" fill="${color}" rx="2" opacity="0.85"/>
-      <text x="${(x + barW / 2).toFixed(1)}" y="${(actualY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="var(--txt)">${b.actual_win_rate}%</text>
+      <text x="${(x + barW / 2).toFixed(1)}" y="${(actualY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="var(--txt)">${pct(b.actual_win_rate)}</text>
       <text x="${(x + barW / 2).toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${b.range} (n=${b.n})</text>`;
   }).join('');
 
@@ -2272,6 +2277,7 @@ async function loadMlLearning() {
 
 function renderMlFeatures(importance) {
   const box = el('mlFeatures');
+  box.className = '';
   const entries = Object.entries(importance).sort((a, b) => b[1] - a[1]);
   if (!entries.length) { box.innerHTML = '<div class="empty-state">Model ještě není natrénovaný</div>'; return; }
   const max = entries[0][1] || 1;
@@ -2281,7 +2287,7 @@ function renderMlFeatures(importance) {
       <div style="flex:1; background:var(--panel-2); border-radius:4px; height:8px; overflow:hidden;">
         <div style="width:${Math.max(2, val / max * 100)}%; height:100%; background:var(--accent);"></div>
       </div>
-      <span style="width:45px; text-align:right; font-size:11.5px; color:var(--txt3);">${(val * 100).toFixed(1)}%</span>
+      <span style="width:55px; text-align:right; font-size:11.5px; color:var(--txt3);">${pct(val * 100)}</span>
     </div>`).join('');
 }
 

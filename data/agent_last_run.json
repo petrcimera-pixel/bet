@@ -1,7 +1,9 @@
 {
-  "ts": 1785776325,
-  "placed": 0,
-  "tickets": [],
-  "balance": 190.0,
+  "ts": 1785777717,
+  "placed": 5,
+  "tickets": [
+    "daily"
+  ],
+  "balance": 165.0,
   "mode": "manual"
 }

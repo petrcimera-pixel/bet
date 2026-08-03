@@ -952,7 +952,9 @@ def describe_params(params: dict) -> str:
             f"kurz {p['min_odds']}–{p['max_odds']}"]
     if p.get("market") != "any":
         bits.append(MARKETS.get(p["market"], ("?", None))[0])
-    bits.append(f"{round(p['stake_pct'] * 100, 1)} % banku"
+    # České formátování – desetinná čárka místo tečky
+    _pct = lambda x: f"{x:.1f}".replace(".", ",").rstrip("0").rstrip(",")
+    bits.append(f"{_pct(round(p['stake_pct'] * 100, 1))} % banku"
                 if p.get("stake_mode") == "flat"
                 else f"Kelly {round(float(p.get('kelly_fraction', 0.25)) * 100)} %")
     if p.get("progression") != "none":
