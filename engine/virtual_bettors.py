@@ -21,6 +21,7 @@ from .bankroll import eval_outcome
 FILE = "virtual_bettors.json"
 DAILY_STAKE_CAP_PCT = 0.35   # žádný sázkař nevsadí v jeden den víc než 35 % banku (i Martingale)
 DEFAULT_START_BALANCE = 200.0   # startovní bank každého sázkaře
+MIN_STAKE_PER_TICKET = 5.0      # jakmile výpočet vyjde pod 5 Kč, tiket se přeskočí
 MAX_STAKE_PER_TICKET = 10.0     # nikdo nikdy nevsadí víc než tohle na jeden tiket
 EXPERIENCE_WINDOW = 20          # kolik posledních VYHODNOCENÝCH sázek se počítá do skóre zkušenosti
 
@@ -453,6 +454,76 @@ def _s_acca_progressive(pool, b, bal):
     return [(_ticket(legs, "acca"), round(bal * 0.02, 2))] if legs else []
 
 
+# --- pět nových akumulátorových strategií (rozšíření kategorie na 15 členů)
+
+
+def _s_acca_short(pool, b, bal):
+    """Tříprocentní Trio – tři jistoty, ale kurz musí dohromady dát aspoň 3.0.
+    Kombinuje výběr podle jistoty s podmínkou minimálního potenciálního zisku."""
+    cands = sorted([c for c in pool if c["prob"] >= 0.65], key=lambda c: -c["prob"])
+    seen, legs = set(), []
+    for c in cands:
+        if c["match_id"] in seen:
+            continue
+        seen.add(c["match_id"]); legs.append(c)
+        if len(legs) >= 3:
+            break
+    if len(legs) < 3:
+        return []
+    total_odds = 1.0
+    for c in legs:
+        total_odds *= c["odds"]
+    if total_odds < 3.0:
+        return []   # tři skoro-jistoty za 1.5 dohromady se nevyplatí
+    return [(_ticket(legs, "acca"), round(bal * 0.03, 2))]
+
+
+def _s_acca_sport_mix(pool, b, bal):
+    """Sportovní Mix – čtyřka poskládaná z různých sportů (fotbal + basket + hokej…),
+    ať výsledek nezávisí na jediné soutěži."""
+    by_sport = {}
+    for c in sorted(pool, key=lambda c: -c["prob"]):
+        if c["prob"] < 0.60:
+            continue
+        by_sport.setdefault(c["sport"], []).append(c)
+    legs = []
+    for sp in by_sport:
+        legs.append(by_sport[sp][0])
+        if len(legs) >= 4:
+            break
+    if len(legs) < 3:
+        return []
+    return [(_ticket(legs, "acca"), round(bal * 0.02, 2))]
+
+
+def _s_acca_home_wins(pool, b, bal):
+    """Domácí Blok – akumulátor jen z výher domácích, čtyři zápasy."""
+    legs = _acca_pick(pool, 4, lambda c: -c["prob"],
+                      lambda c: c["outcome"] == "home" and c["prob"] >= 0.50,
+                      one_per_league=True)
+    return [(_ticket(legs, "acca"), round(bal * 0.02, 2))] if legs else []
+
+
+def _s_acca_underdogs(pool, b, bal):
+    """Underdog Aku – akumulátor z outsiderů s solidní šancí, malý vklad,
+    velký kurz. Kombinuje "riziková value" s tiketem."""
+    legs = _acca_pick(pool, 3,
+                      lambda c: -(c["prob"] * c["odds"]),
+                      lambda c: c["odds"] >= 2.2 and c["prob"] >= 0.35)
+    return [(_ticket(legs, "acca"), round(bal * 0.012, 2))] if legs else []
+
+
+def _s_acca_kelly_blend(pool, b, bal):
+    """Kelly Acca – trojka, ale vklad podle Kelly kritéria (na součin
+    pravděpodobností a kurzů). Konzervativnější než plochý vklad."""
+    legs = _acca_pick(pool, 3, lambda c: -c["prob"], lambda c: c["prob"] >= 0.62)
+    if not legs:
+        return []
+    t = _ticket(legs, "acca")
+    kelly = _kelly_stake(t["prob"], t["odds"], bal, fraction=0.30, cap_pct=0.05)
+    return [(t, kelly)] if kelly >= 1 else []
+
+
 # --- čtvrtá desítka: kombinace trhů v JEDNOM zápase --------------------------
 def _by_match(pool):
     d = {}
@@ -566,6 +637,54 @@ def _s_combo_calibrated(pool, b, bal):
     return [(t, round(bal * 0.025, 2)) for t in ok]
 
 
+# --- pět nových kombinačních strategií (rozšíření kategorie na 15 členů)
+
+
+def _s_combo_away_win(pool, b, bal):
+    """Hostující Hrdina – host vyhraje a k tomu Under (uzavřený venkovní zápas)."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] == "away" and c["prob"] >= 0.35,
+                            lambda c: c["outcome"].startswith("under") and c["prob"] >= 0.50],
+                     min_prob=0.15, limit=2)
+    return [(t, round(bal * 0.02, 2)) for t in ts]
+
+
+def _s_combo_draw_low(pool, b, bal):
+    """Nerozhodně Nikola – remíza plus Under (opatrné zápasy končí často 1:1, 0:0)."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] == "draw" and c["prob"] >= 0.22,
+                            lambda c: c["outcome"].startswith("under") and c["prob"] >= 0.55],
+                     min_prob=0.10, limit=2)
+    return [(t, round(bal * 0.02, 2)) for t in ts]
+
+
+def _s_combo_dc_over(pool, b, bal):
+    """Dvojtip Dorotka – dvojtip (1X, 12, X2) plus Over. Dvojtip
+    má vyšší jistotu, Over pak přidá hodnotu."""
+    ts = _combo_pick(pool, [lambda c: c["outcome"] in ("dc_1x", "dc_x2", "dc_12") and c["prob"] >= 0.65,
+                            lambda c: c["outcome"].startswith("over") and c["prob"] >= 0.55],
+                     min_prob=0.35, limit=2)
+    return [(t, round(bal * 0.03, 2)) for t in ts]
+
+
+def _s_combo_super_safe(pool, b, bal):
+    """Ultra Jistá Uršula – jen kombinace nad 75 % spojené pravděpodobnosti,
+    malý kurz, ale prakticky jistá výhra. Frustrujícně málo tiketů,
+    ale žádné velké ztráty."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.80, lambda c: c["prob"] >= 0.75],
+                     min_prob=0.70, limit=3)
+    return [(t, round(bal * 0.035, 2)) for t in ts]
+
+
+def _s_combo_quad(pool, b, bal):
+    """Čtyřkombinace Čestmír – čtyři trhy jednoho zápasu naráz.
+    Extrémně agresivní, drobný vklad."""
+    ts = _combo_pick(pool, [lambda c: c["prob"] >= 0.60,
+                            lambda c: c["prob"] >= 0.55,
+                            lambda c: c["prob"] >= 0.45,
+                            lambda c: c["prob"] >= 0.40],
+                     min_prob=0.08, limit=1)
+    return [(t, round(bal * 0.012, 2)) for t in ts]
+
+
 PROFILES = [
     {"id": "kelly", "name": "Kelly Kateřina", "emoji": "📐",
      "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
@@ -585,18 +704,14 @@ PROFILES = [
     {"id": "underdog", "name": "Outsider Olda", "emoji": "🎲",
      "tagline": "Honí nejvyšší kurz s aspoň 15% šancí – vysoké riziko, vysoký výnos.",
      "strategy": _s_underdog, "group": "single"},
-    {"id": "martingale", "name": "Martingale Magda", "emoji": "📈",
-     "tagline": "Po prohře zdvojnásobí vklad – klasický (rizikový) progresivní systém.",
-     "strategy": _s_martingale, "group": "single"},
-    {"id": "random", "name": "Náhodný Norbert", "emoji": "🎰",
-     "tagline": "Kontrolní skupina: sází náhodně. Srovnávací základna pro ostatní strategie.",
-     "strategy": _s_random, "group": "single"},
+    # Poznámka: dříve zde byli Martingale Magda, Náhodný Norbert (kontrolní
+    # skupina) a Opatrná Olga – vyřazeni v rámci zúžení skupiny 'single' na
+    # 15 členů. Progresivní systémy (martingale, fibonacci, D'Alembert) mají
+    # matematicky negativní očekávání a náhodný/přehnaně opatrný sázkař mají
+    # dlouhodobě nejnižší výsledky.
     {"id": "disciplined", "name": "Disciplinovaný Dan", "emoji": "📋",
      "tagline": "Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.",
      "strategy": _s_disciplined, "group": "single"},
-    {"id": "cautious", "name": "Opatrná Olga", "emoji": "🐢",
-     "tagline": "Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.",
-     "strategy": _s_cautious, "group": "single"},
     # --- druhá desítka ---
     {"id": "home", "name": "Domácí Dalibor", "emoji": "🏠",
      "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
@@ -607,21 +722,12 @@ PROFILES = [
     {"id": "unders", "name": "Betonový Bedřich", "emoji": "🧱",
      "tagline": "Jen Under linie – věří na uzavřené obranné zápasy.",
      "strategy": _s_unders, "group": "single"},
-    {"id": "fibonacci", "name": "Fibonacci Filip", "emoji": "🌀",
-     "tagline": "Po prohře posune vklad na další Fibonacciho číslo – mírnější než Martingale.",
-     "strategy": _s_fibonacci, "group": "single"},
-    {"id": "dalembert", "name": "D'Alembert Denisa", "emoji": "⚖️",
-     "tagline": "Po prohře +1 jednotka, po výhře −1. Nejmírnější z progresivních systémů.",
-     "strategy": _s_dalembert, "group": "single"},
     {"id": "paroli", "name": "Paroli Pavla", "emoji": "🚀",
      "tagline": "Opak Martingalu: zvyšuje po výhře, riskuje jen vyhrané peníze.",
      "strategy": _s_paroli, "group": "single"},
     {"id": "lowodds", "name": "Jistotář Jarda", "emoji": "🔒",
      "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
      "strategy": _s_low_odds, "group": "single"},
-    {"id": "highodds", "name": "Riskér Radim", "emoji": "💥",
-     "tagline": "Jen kurzy od 3.0 výš, drobné vklady – čeká na jednu velkou trefu.",
-     "strategy": _s_high_odds, "group": "single"},
     {"id": "calibrated", "name": "Kalibrovaný Karel", "emoji": "🎚️",
      "tagline": "Nevěří syrové jistotě modelu, ale opravené podle skutečné úspěšnosti.",
      "strategy": _s_calibrated, "group": "single"},
@@ -660,6 +766,22 @@ PROFILES = [
     {"id": "acca_progressive", "name": "Stoupavý Standa", "emoji": "📶",
      "tagline": "Po prohře přidá do tiketu jeden tip navíc.",
      "strategy": _s_acca_progressive, "group": "acca"},
+    # --- rozšíření kategorie 'acca' na 15 členů (5 nových strategií) ---
+    {"id": "acca_short", "name": "Tříprocentní Trio Tereza", "emoji": "🎯",
+     "tagline": "Trojka jistot, ale jen když součin kurzů je aspoň 3.0.",
+     "strategy": _s_acca_short, "group": "acca"},
+    {"id": "acca_sport_mix", "name": "Sportovní Mix Milan", "emoji": "🎽",
+     "tagline": "Čtyřka poskládaná z různých sportů, aby výsledek nezávisel na jedné soutěži.",
+     "strategy": _s_acca_sport_mix, "group": "acca"},
+    {"id": "acca_home_wins", "name": "Domácí Blok Božena", "emoji": "🏟️",
+     "tagline": "Čtyřka jen z výher domácích, každý zápas z jiné ligy.",
+     "strategy": _s_acca_home_wins, "group": "acca"},
+    {"id": "acca_underdogs", "name": "Underdog Aku Uršula", "emoji": "🚧",
+     "tagline": "Trojka outsiderů s vysokou hodnotou – drobný vklad, obří kurz.",
+     "strategy": _s_acca_underdogs, "group": "acca"},
+    {"id": "acca_kelly_blend", "name": "Kelly Acca Alena", "emoji": "🧮",
+     "tagline": "Trojka jistot s vkladem podle Kelly kritéria místo pevné částky.",
+     "strategy": _s_acca_kelly_blend, "group": "acca"},
     # --- čtvrtá desítka: kombinace trhů v jednom zápase ---
     {"id": "combo_win_over", "name": "Vítěz+Góly Vilém", "emoji": "🔗",
      "tagline": "Favorit vyhraje A padne aspoň pár gólů.",
@@ -691,6 +813,22 @@ PROFILES = [
     {"id": "combo_calibrated", "name": "Kalibrovaná Kamila", "emoji": "🎚️",
      "tagline": "Kombinace posuzuje podle opravené pravděpodobnosti.",
      "strategy": _s_combo_calibrated, "group": "combo"},
+    # --- rozšíření kategorie 'combo' na 15 členů (5 nových strategií) ---
+    {"id": "combo_away_win", "name": "Hostující Hrdina Hanuš", "emoji": "🛫",
+     "tagline": "Host vyhraje a k tomu Under – uzavřený venkovní zápas.",
+     "strategy": _s_combo_away_win, "group": "combo"},
+    {"id": "combo_draw_low", "name": "Nerozhodně Nikola", "emoji": "🤝",
+     "tagline": "Remíza plus Under – opatrné zápasy končí často 1:1 nebo 0:0.",
+     "strategy": _s_combo_draw_low, "group": "combo"},
+    {"id": "combo_dc_over", "name": "Dvojtip Dorotka", "emoji": "✌️",
+     "tagline": "Dvojtip (1X, 12, X2) plus Over – vyšší jistota, přidaná hodnota v gólech.",
+     "strategy": _s_combo_dc_over, "group": "combo"},
+    {"id": "combo_super_safe", "name": "Ultra Jistá Uršula", "emoji": "🔐",
+     "tagline": "Jen kombinace nad 75 % spojené pravděpodobnosti – málo tiketů, žádné velké ztráty.",
+     "strategy": _s_combo_super_safe, "group": "combo"},
+    {"id": "combo_quad", "name": "Čtyřkombinace Čestmír", "emoji": "🎲",
+     "tagline": "Čtyři trhy jednoho zápasu naráz – extrémně agresivní, drobný vklad.",
+     "strategy": _s_combo_quad, "group": "combo"},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
 
@@ -921,6 +1059,16 @@ def reset_all(start_balance: float = DEFAULT_START_BALANCE) -> dict:
         b["ran_hours"] = []
         b["loss_streak"] = 0
         b["win_streak"] = 0
+        # Aktualizovat skupinu/název/tagline z PROFILES – bez toho by se změny
+        # v definici profilu (třeba přiřazení do jiné kategorie) po resetu
+        # neprojevily. Vlastní sázkaři (custom=True) v PROFILES nejsou, takže
+        # se u nich zachová původní skupina.
+        prof = _BY_ID.get(bid)
+        if prof and not b.get("custom"):
+            b["group"] = prof.get("group", b.get("group", "single"))
+            b["name"] = prof["name"]
+            b["emoji"] = prof["emoji"]
+            b["tagline"] = prof["tagline"]
         b["transactions"] = [{"ts": int(time.time()), "type": "start",
                               "amount": float(start_balance), "note": "Reset"}]
         n += 1
@@ -997,6 +1145,15 @@ def load_state():
     for p in PROFILES:
         if p["id"] not in st and p["id"] not in deleted:
             st[p["id"]] = _default_state()[p["id"]]
+            changed = True
+    # Vyřazené vestavěné sázkaře (kteří už v PROFILES nejsou – např. slabé
+    # single strategie odebrané při zúžení skupiny na 15) taky odstranit ze
+    # stavu, aby se dál nezobrazovali. Vlastní sázkaři se nedotýkají.
+    profile_ids = {p["id"] for p in PROFILES}
+    for bid in list(st.keys()):
+        b = st[bid]
+        if not b.get("custom") and bid not in profile_ids:
+            del st[bid]
             changed = True
     if changed:
         storage.save(FILE, st)
@@ -1129,7 +1286,10 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
             # Tvrdý globální strop – nikdo nikdy nevsadí víc než MAX_STAKE_PER_TICKET
             # na jeden tiket, ať strategie vypočte cokoliv.
             stake = round(min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET), 2)
-            if stake < 1 or stake > b["balance"]:
+            # Nová podlaha: pod MIN_STAKE nemá cenu sázet (drobečky by jen
+            # dělaly hluk v historii). Když strategie vypočte méně, sázka
+            # se přeskočí, ať se sázkař radši šetří na lepší příležitost.
+            if stake < MIN_STAKE_PER_TICKET or stake > b["balance"]:
                 continue
             if legs:
                 # Tiket z více výběrů: akumulátor (různé zápasy) nebo kombinace

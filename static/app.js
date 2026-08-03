@@ -1787,6 +1787,7 @@ let _arenaGroup = 'single';
 let _arenaSort = { key: 'rank', dir: 1 };
 
 const ARENA_SLOUPCE = [
+  { key: null,         label: '',          cls: 'arena-caret' },
   { key: 'rank',       label: '#' },
   { key: 'name',       label: 'Sázkař' },
   { key: null,         label: 'Vývoj',     cls: 'hide-sm' },
@@ -1910,8 +1911,12 @@ function arenaRadek(b, veHreCelkem) {
   const medaile = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : null;
   const tridaZisk = (b.profit || 0) >= 0 ? 'pos' : 'bad';
   const podil = veHreCelkem > 0 ? Math.min(100, (b.open_stake || 0) / veHreCelkem * 100) : 0;
+  // Celý řádek je klikatelný – detail se rozbaluje kliknutím kamkoliv v něm.
+  // Dřív bylo tlačítko 'Detail' vzadu na řádku a na užších oknech se schovávalo
+  // za horizontální scroll, takže se k němu uživatel nedostal.
   return `
-    <tr class="row">
+    <tr class="row bettor-row" data-id="${b.id}">
+      <td class="arena-caret"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3l3 4 3-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></td>
       <td class="arena-rank ${medaile ? 'medal' : ''}">${medaile || b.rank}</td>
       <td>
         <div class="arena-who">
@@ -1938,11 +1943,10 @@ function arenaRadek(b, veHreCelkem) {
         </div>
         ${b.open_count ? `<div class="arena-sub">${b.open_count} sázek</div>` : ''}
       </td>
-      <td>
+      <td class="arena-acts-cell">
         <div class="arena-acts">
-          <button class="btn small bettor-toggle" data-id="${b.id}" title="Detail sázkaře">Detail</button>
-          <button class="btn small bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋</button>
-          <button class="btn small bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
+          <button class="btn small icon-only bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋</button>
+          <button class="btn small icon-only bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
         </div>
       </td>
     </tr>
@@ -1958,8 +1962,15 @@ function wireBettorCards(box) {
   box.querySelectorAll('.bettor-delete').forEach(btn => {
     btn.addEventListener('click', (e) => { e.stopPropagation(); deleteBettor(btn.dataset.id, btn.dataset.name); });
   });
-  box.querySelectorAll('.bettor-toggle').forEach(btn => {
-    btn.addEventListener('click', () => toggleBettorDetail(btn.dataset.id, btn));
+  // Celý řádek otevírá detail – kliknutí kdekoliv mimo akční tlačítka
+  // (Vklad / Smazat) rozbalí historii sázek. Dřív bylo tlačítko 'Detail'
+  // schované úplně vzadu za horizontálním scrollem a na menších oknech
+  // se k němu nedalo dostat.
+  box.querySelectorAll('tr.bettor-row').forEach(tr => {
+    tr.addEventListener('click', (e) => {
+      if (e.target.closest('.arena-acts')) return;   // klik na akční tlačítko nic nerozbaluje
+      toggleBettorDetail(tr.dataset.id, tr);
+    });
   });
 }
 
@@ -2005,11 +2016,16 @@ function drawCalibrationChart(buckets) {
     ${bars}`;
 }
 
-async function toggleBettorDetail(id, btn) {
+async function toggleBettorDetail(id, sourceEl) {
   const box = el(`bettorDetail-${id}`);
+  const row = sourceEl.closest('tr') || document.querySelector(`tr.bettor-row[data-id="${id}"]`);
   const opening = box.style.display === 'none';
-  if (!opening) { box.style.display = 'none'; btn.textContent = 'Detail ▾'; return; }
-  btn.textContent = 'Detail ▴';
+  if (!opening) {
+    box.style.display = 'none';
+    row?.classList.remove('open');
+    return;
+  }
+  row?.classList.add('open');
   box.style.display = 'block';
   box.innerHTML = '<div class="loading" style="padding:14px 0;"><span class="spinner"></span></div>';
   try {

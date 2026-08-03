@@ -674,3 +674,34 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 @media (max-width: 980px) {
   .arena-charts { grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------------------------- */
+/* Aréna – klikatelný řádek (rozbalení detailu)                           */
+/* ---------------------------------------------------------------------- */
+/* Dřív bylo tlačítko 'Detail' na konci řádku a na oknech pod ~1100 px
+   se schovávalo za horizontální scroll – uživatel se k němu nedostal.
+   Řádek je teď celý klikatelný, caret vpravo mění směr. */
+
+.arena-table tr.bettor-row { cursor: pointer; }
+.arena-table tr.bettor-row td.arena-caret {
+  width: 24px; padding-right: 0; color: var(--txt3);
+  transition: color .12s;
+}
+.arena-table tr.bettor-row td.arena-caret svg {
+  display: block; margin: 0 auto;
+  transition: transform .18s;
+  transform-origin: 50% 50%;
+}
+.arena-table tr.bettor-row:hover td.arena-caret { color: var(--txt); }
+/* SVG element ignoruje CSS transform s ohledem na svůj transform atribut,
+   proto rotujeme přes vnitřní <g>-podobný trick: <svg> jako div-like block. */
+.arena-table tr.bettor-row.open td.arena-caret svg {
+  transform: rotate(180deg);
+}
+.arena-table tr.bettor-row.open { background: var(--panel-2); }
+.arena-table tr.bettor-row.open td { border-bottom-color: transparent; }
+.arena-table th.arena-caret { width: 24px; padding: 0; }
+
+/* akční ikony vpravo – ať se malé pořád vejdou */
+.arena-table td.arena-acts-cell { padding-right: 6px; }
+.btn.small.icon-only { padding: 4px 6px; width: 26px; height: 26px; font-size: 13px; }

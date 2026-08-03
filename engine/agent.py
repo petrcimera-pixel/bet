@@ -31,7 +31,7 @@ except ImportError:
     _ML = False
 
 TAG = "bet-agent"
-MIN_STAKE = 1.0   # podlaha pro Kelly sázku, ať nejsou směšně malé/nulové
+MIN_STAKE = 5.0   # podlaha na tiket – pod tuhle částku se sázka přeskočí
 ML_VETO_PROB = 0.35   # model musí dávat aspoň tuto šanci na výhru, jinak tip přeskočíme
 MAX_STAKE_PER_TICKET = 10.0   # tvrdý globální strop – žádný tiket agenta nesmí přesáhnout
 EXPERIENCE_WINDOW = 30         # počet posledních vyhodnocených sázek pro výpočet dovednosti
