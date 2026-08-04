@@ -2068,12 +2068,42 @@ async function toggleBettorDetail(id, sourceEl) {
             <span class="muted">${t.note || (t.amount > 0 ? 'vklad' : 'výběr')}</span>
           </div>`).join('')}
       </div>` : '';
+    // Rozklad výkonu podle sportu / typu trhu / ligy – vidět, kde sázkař
+    // vydělává a kde tratí. Sport blacklist v run_all se opírá o totéž.
+    const bd = data.breakdown || {};
+    const bl = data.blacklisted_sports || [];
+    const perfTable = (rows, label) => {
+      if (!rows || !rows.length) return '';
+      return `
+        <div class="perf-block">
+          <div class="perf-title">${label}</div>
+          <div class="perf-rows">
+            ${rows.slice(0, 8).map(r => `
+              <div class="perf-row">
+                <span class="perf-key">${r.key}</span>
+                <span class="perf-nums">
+                  <span class="muted">${r.n}× · ${pct(r.win_rate)}</span>
+                  <strong class="${r.pnl >= 0 ? 'pos' : 'bad'}">${r.pnl >= 0 ? '+' : ''}${fmt(r.pnl)} Kč</strong>
+                  <span class="muted">${pct(r.roi)}</span>
+                </span>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    };
+    const breakdownHtml = (bd.sport?.length || bd.market?.length) ? `
+      <div class="perf-grid">
+        ${perfTable(bd.sport, 'Podle sportu')}
+        ${perfTable(bd.market, 'Podle typu trhu')}
+        ${perfTable(bd.league?.slice(0, 6), 'Top ligy')}
+      </div>
+      ${bl.length ? `<div class="perf-blacklist">🚫 Automaticky vyřazené sporty: <b>${bl.join(', ')}</b> — sázkař na ně po ≥15 sázkách má záporné ROI a přestal na ně sázet.</div>` : ''}
+    ` : '';
     // pohyby na banku se ukážou i u sázkaře, co ještě nestihl vsadit
     if (!bets.length) {
-      box.innerHTML = txHtml + '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>';
+      box.innerHTML = txHtml + breakdownHtml + '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>';
       return;
     }
-    box.innerHTML = txHtml + `<div class="table-wrap"><table>
+    box.innerHTML = txHtml + breakdownHtml + `<div class="table-wrap"><table>
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr${bt.legs ? ' class="ticket-row"' : ''}>

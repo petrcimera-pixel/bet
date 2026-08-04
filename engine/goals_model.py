@@ -572,6 +572,14 @@ def predict_match(m: dict) -> dict:
     labels = {"home": "1", "draw": "X", "away": "2"}
     for k in keys:
         bets[k] = dict(_priced(probs[k], real_odds.get(k), rating_confidence), label=labels[k], name=names[k])
+    # 2way varianta marže: home + away (žádná remíza). Stejný smysl –
+    # nad ~7-8 % je trh drahý a value hledat nemá cenu.
+    if cfg.get("two_way") and all(bets.get(k, {}).get("real") for k in ("home", "away")):
+        i1 = 1.0 / bets["home"]["odds"]
+        i2 = 1.0 / bets["away"]["odds"]
+        v = round(i1 + i2 - 1.0, 4)
+        bets["home"]["market_vig"] = v
+        bets["away"]["market_vig"] = v
 
     goal_lines = []
     totals = (m.get("real_odds") or {}).get("totals")
@@ -605,10 +613,18 @@ def predict_match(m: dict) -> dict:
     # přepočet z reálných kurzů na 1/X/2. Jsou to vzájemně se vylučující
     # výsledky, takže se implikované pravděpodobnosti prostě sečtou; marže
     # sázkovky se tím zachová. Stejně dvojtipy počítají i sázkovky samy.
+    winner_vig = None
     if not cfg.get("two_way") and all(bets.get(k, {}).get("real") for k in ("home", "draw", "away")):
         i1 = 1.0 / bets["home"]["odds"]
         ix = 1.0 / bets["draw"]["odds"]
         i2 = 1.0 / bets["away"]["odds"]
+        # Marže sázkovky = kolik "pře 100 %" zabaluje součet implikovaných
+        # pravděpodobností. Nad ~8 % se prakticky nedá najít systematická
+        # value – trh je moc drahý. Propagujeme to do každé nohy 1X2,
+        # aby si agent i sázkaři mohli filtrovat drahé trhy.
+        winner_vig = round(i1 + ix + i2 - 1.0, 4)
+        for k in ("home", "draw", "away"):
+            bets[k]["market_vig"] = winner_vig
         pr = probs
         for key, parts, imp, nm in (
             ("dc_1x", ("home", "draw"), i1 + ix, f'{m["home"]} nebo remíza'),
@@ -683,6 +699,7 @@ def predict_match(m: dict) -> dict:
         "goal_lines": goal_lines,
         "top_scores": top_scores,
         "odds_source": "real" if real_bets else "model",
+        "winner_vig": winner_vig,   # marže sázkovky na 1X2/2way trhu (None když chybí odds)
         "result": _result(m),
     }
 

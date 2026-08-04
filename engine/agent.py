@@ -130,6 +130,12 @@ def _candidates(p, cfg):
         odds, prob = b.get("odds"), b.get("prob")
         if not odds or not prob or not b.get("real"):
             return   # bez reálného kurzu sázkovky se nesází – jen "papírová" pravděpodobnost
+        # Odfiltrovat drahé trhy (vysoká marže sázkovky). Nad ~8 % marže
+        # se prakticky nedá najít systematická value – jen šum. Stejný
+        # limit používají i virtuální sázkaři (VIG_CAP v virtual_bettors.py).
+        vig = b.get("market_vig")
+        if vig is not None and vig > 0.08:
+            return
         out.append({
             "outcome": outcome, "label": b.get("label", "?"),
             "name": b.get("name", b.get("label", "?")),
@@ -138,6 +144,7 @@ def _candidates(p, cfg):
             # historické úspěšnosti (model je systematicky překalibrovaný)
             "cal_prob": calibration.calibrate(float(prob), outcome),
             "edge": b.get("edge", 0.0) or 0.0,
+            "market_vig": vig,
             "market": market, "real": True,
         })
 
@@ -153,10 +160,19 @@ def _candidates(p, cfg):
     return out
 
 
+MIN_CAL_EV = 1.02   # min. EV z KALIBROVANÉ pravděpodobnosti – ať se nesází nula-EV tipy
+
 def _best_tutovka(cands, min_prob, min_odds, only_real):
-    """Nejjistější tip zápasu podle KALIBROVANÉ pravděpodobnosti."""
+    """Nejjistější tip zápasu podle KALIBROVANÉ pravděpodobnosti.
+
+    Nově navíc gate: kalibrované EV = cal_prob * odds musí být aspoň
+    MIN_CAL_EV. Bez toho by šla vsadit "jistá" sázka na 82 % za kurz 1.20,
+    kde je kalibrovaná pravděpodobnost 78 % a EV = 0.94 (očekávaně ztrátové).
+    Historicky přesně takové sázky – vysoká jistota, nízký kurz – dělaly
+    Konzervativní Kláře 75 % win rate a mínusový bank."""
     ok = [c for c in cands
           if c.get("cal_prob", c["prob"]) >= min_prob and c["odds"] >= min_odds
+          and c.get("cal_prob", c["prob"]) * c["odds"] >= MIN_CAL_EV
           and not (only_real and not c["real"])]
     return max(ok, key=lambda c: c.get("cal_prob", c["prob"])) if ok else None
 

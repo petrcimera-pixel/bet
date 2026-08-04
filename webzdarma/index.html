@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KurzAnalytik — analýza sportovních kurzů</title>
+<meta name="description" content="Automatická analýza sportovních kurzů, virtuální sázkaři a strojové učení. Zdarma, česky, bez registrace.">
+<meta property="og:title" content="KurzAnalytik">
+<meta property="og:description" content="Automatická analýza sportovních kurzů, virtuální sázkaři, ML.">
+<meta name="theme-color" content="#0b0e14">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233ddc97'/%3E%3Ctext x='50%25' y='58%25' font-family='sans-serif' font-size='22' font-weight='800' text-anchor='middle' fill='%230b0e14'%3EK%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0b0e14; --panel: #151a25; --panel-2: #1b2130;
+    --border: #262d3d; --txt: #e8ecf4; --txt2: #8892a6;
+    --accent: #3ddc97; --accent-dim: #2a9d6f;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font); color: var(--txt); background: var(--bg);
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+    background-image:
+      radial-gradient(1200px 600px at 15% 10%, rgba(61,220,151,0.10), transparent 60%),
+      radial-gradient(1000px 500px at 90% 90%, rgba(91,140,255,0.08), transparent 60%);
+    background-attachment: fixed;
+  }
+  a { color: inherit; text-decoration: none; }
+  .shell { max-width: 960px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 60px; }
+  .logo {
+    width: 36px; height: 36px; border-radius: 8px; background: var(--accent);
+    color: var(--bg); font-weight: 800; font-size: 20px;
+    display: grid; place-items: center;
+  }
+  .brand { font-weight: 700; font-size: 17px; }
+  .brand small { color: var(--txt2); font-weight: 500; margin-left: 8px; font-size: 12px; }
+
+  .hero { margin-bottom: 40px; }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 48px); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 18px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p { font-size: 17px; color: var(--txt2); max-width: 60ch; margin-bottom: 28px; }
+
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px; border-radius: 10px; font-weight: 700;
+    font-size: 15px; border: 1px solid var(--border);
+    transition: transform .1s, background .15s;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn.primary {
+    background: var(--accent); color: var(--bg); border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(61,220,151,0.25);
+  }
+  .btn.primary:hover { background: var(--accent-dim); }
+  .btn.ghost { background: transparent; color: var(--txt); }
+  .btn.ghost:hover { background: var(--panel); }
+  .btn svg { width: 16px; height: 16px; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px; margin: 50px 0 40px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+  }
+  .card h3 { font-size: 14.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card h3 .ico { color: var(--accent); font-size: 18px; }
+  .card p { color: var(--txt2); font-size: 13.5px; }
+
+  .info {
+    margin-top: 40px; padding: 18px 22px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    font-size: 13.5px; color: var(--txt2);
+  }
+  .info b { color: var(--txt); font-weight: 600; }
+
+  footer {
+    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border);
+    text-align: center; font-size: 12.5px; color: var(--txt2);
+  }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div class="logo">K</div>
+    <div class="brand">KurzAnalytik<small>v3</small></div>
+  </header>
+
+  <section class="hero">
+    <h1>Analýza sportovních kurzů<br>bez emocí, <span class="accent">jen data</span>.</h1>
+    <p>
+      Automatické predikce z ESPN, 45 virtuálních sázkařů srovnávajících různé strategie,
+      izotonická kalibrace pravděpodobnosti a XGBoost, který se učí z výsledků.
+      Aplikace běží v prohlížeči a je zdarma.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="https://kurzanalytik.onrender.com/" target="_blank" rel="noopener">
+        Otevřít aplikaci
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn ghost" href="https://github.com/petrcimera-pixel/bet" target="_blank" rel="noopener">
+        Zdrojový kód
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.7 5.5.7 11.8c0 5 3.2 9.2 7.7 10.7.6.1.8-.2.8-.6v-2c-3.1.7-3.8-1.5-3.8-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.7.4-1.2.7-1.5-2.5-.3-5.2-1.2-5.2-5.5 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 1.1.9-.2 1.8-.4 2.8-.4s1.9.1 2.8.4c2.1-1.4 3-1.1 3-1.1.6 1.5.2 2.6.1 2.9.7.8 1.1 1.8 1.1 3 0 4.3-2.6 5.2-5.1 5.5.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6 4.5-1.5 7.7-5.8 7.7-10.7C23.3 5.5 18.3.5 12 .5z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <h3><span class="ico">▦</span> 45 sázkařů</h3>
+      <p>Každý s vlastní strategií — Kelly, value hunter, akumulátory, kombinace trhů. Srovnávají se na stejných reálných datech.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">◈</span> Dixon-Coles model</h3>
+      <p>Poissonova mřížka skóre s korekcí nízkých čísel a domácí výhodou. Ratingy týmů se učí bayesovsky.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">⚛</span> XGBoost + kalibrace</h3>
+      <p>Model se učí z výsledků agenta a arény. Izotonická kalibrace opravuje pravděpodobnosti podle skutečné úspěšnosti.</p>
+    </div>
+    <div class="card">
+      <h3><span class="ico">✓</span> Bez registrace</h3>
+      <p>Data z veřejného ESPN API. Žádné placené účty, žádné vaše osobní údaje. Vše běží zdarma.</p>
+    </div>
+  </div>
+
+  <div class="info">
+    <b>První načtení může trvat 15–30 sekund.</b> Aplikace běží na free tarifu Renderu,
+    který službu uspává po 15 minutách nečinnosti. Po prvním kliknutí naběhne a pak
+    už reaguje okamžitě.
+  </div>
+
+  <footer>
+    <p>© 2026 · Postaveno v Pythonu &amp; Flasku ·
+    <a href="https://kurzanalytik.onrender.com/" target="_blank" rel="noopener">kurzanalytik.onrender.com</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

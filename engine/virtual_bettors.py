@@ -1177,17 +1177,43 @@ def save_state(st):
 # ---------------------------------------------------------------------------
 # Kandidáti (jen trhy s reálnými kurzy ESPN – žádné fingované)
 # ---------------------------------------------------------------------------
+VIG_CAP = 0.08   # trhy s marží nad 8 % jsou moc drahé – ani perfektní model tam nenajde value
+LOSS_STREAK_COOLDOWN = 3   # po 3 prohrách v řadě si sázkař dá pauzu jedno kolo
+SPORT_ROI_MIN_BETS = 15    # kolik vyhodnocených sázek ve sportu je potřeba pro rozhodnutí
+
+def _blacklisted_sports(bettor: dict) -> set:
+    """Sporty, kde má sázkař po ≥15 sázkách záporné ROI. V dalších kolech je
+    přeskočí. Slouží k automatickému zúžení sázení tam, kde daná strategie
+    prokazatelně nefunguje – bez ručního zásahu."""
+    by_sport = {}
+    for bet in bettor.get("bets", []):
+        if bet.get("status") not in ("won", "lost"):
+            continue
+        s = bet.get("sport") or "?"
+        d = by_sport.setdefault(s, {"stake": 0.0, "pnl": 0.0, "n": 0})
+        d["stake"] += bet.get("stake", 0.0)
+        d["pnl"] += bet.get("pnl", 0.0)
+        d["n"] += 1
+    return {s for s, d in by_sport.items()
+            if d["n"] >= SPORT_ROI_MIN_BETS and d["stake"] > 0 and d["pnl"] / d["stake"] < 0}
+
 def _candidates_for(p):
     keys = ("home", "away") if p.get("two_way") else ("home", "draw", "away")
     out = []
     for k, bet in (p.get("bets") or {}).items():
         if not bet.get("real") or not bet.get("odds") or not bet.get("prob"):
             continue
+        # Filtr proti drahým trhům. Marže je vlastnost trhu (1X2 / totals / ...);
+        # pokud ji známe, přeskočíme kandidáta, kterého sázkovka moc "přebalila".
+        vig = bet.get("market_vig")
+        if vig is not None and vig > VIG_CAP:
+            continue
         out.append({
             "outcome": k, "label": bet.get("label", "?"), "name": bet.get("name", bet.get("label", "?")),
             "odds": float(bet["odds"]), "prob": float(bet["prob"]),
             "ev": bet.get("ev", 0.0) or 0.0, "edge": bet.get("edge", 0.0) or 0.0,
             "market": "winner" if k in keys else "goals",
+            "market_vig": vig,
         })
     return out
 
@@ -1258,10 +1284,22 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
         if not pool:
             continue
 
+        # Cooldown po sérii proher – dá pauzu jedno kolo, aby nespáchal víc
+        # škody než dobra. Pak se počítadlo resetne a zkusí to znovu.
+        if b.get("loss_streak", 0) >= LOSS_STREAK_COOLDOWN:
+            b["loss_streak"] = 0   # jedno kolo pauzy stačí – další už zase sází
+            continue
+
         # Nikdy dvakrát na stejný zápas – bez ohledu na to, kolikrát denně
         # sázkař běží, pool se mu vždy filtruje na zápasy, na které ještě nevsadil.
         already = {bet["match_id"] for bet in b["bets"]}
-        bettor_pool = [c for c in pool if c["match_id"] not in already]
+        # Sport blacklist – přeskočí sporty, kde má tenhle sázkař ≥15 sázek
+        # a záporné ROI. Automatická sebeobrana proti systematicky ztrátovým
+        # oblastem, bez ručního zásahu.
+        blacklisted = _blacklisted_sports(b)
+        bettor_pool = [c for c in pool
+                       if c["match_id"] not in already
+                       and c.get("sport") not in blacklisted]
 
         try:
             decisions = strategy(bettor_pool, b, b["balance"]) if bettor_pool else []
@@ -1523,6 +1561,41 @@ def leaderboard() -> list:
     return rows
 
 
+def _perf_breakdown(bets: list, key: str) -> list:
+    """Seskupí VYHODNOCENÉ sázky podle daného klíče (sport / league / kind /
+    outcome_market) a spočítá n, win_rate, staked, pnl, ROI. Vrátí seřazené
+    podle profitu sestupně – hned je vidět, kde sázkař vydělává a kde ne."""
+    by = {}
+    for x in bets:
+        if x.get("status") not in ("won", "lost"):
+            continue
+        k = x.get(key) or "?"
+        # sjednotit typ trhu (výhra vs góly vs handicap...)
+        if key == "outcome":
+            oc = x.get("outcome", "")
+            if oc in ("home", "draw", "away") or oc.startswith("dc_") or oc.startswith("dnb_"):
+                k = "vítěz"
+            elif oc.startswith("over") or oc.startswith("under"):
+                k = "góly"
+            elif oc.startswith("ah_"):
+                k = "handicap"
+            elif oc in ("acca", "combo"):
+                k = "tikety"
+            else:
+                k = "ostatní"
+        d = by.setdefault(k, {"key": k, "n": 0, "won": 0, "staked": 0.0, "pnl": 0.0})
+        d["n"] += 1
+        d["won"] += (1 if x["status"] == "won" else 0)
+        d["staked"] += x.get("stake", 0)
+        d["pnl"] += x.get("pnl", 0)
+    for d in by.values():
+        d["win_rate"] = round(d["won"] / d["n"] * 100, 1) if d["n"] else 0.0
+        d["roi"] = round(d["pnl"] / d["staked"] * 100, 1) if d["staked"] else 0.0
+        d["pnl"] = round(d["pnl"], 2)
+        d["staked"] = round(d["staked"], 2)
+    return sorted(by.values(), key=lambda x: -x["pnl"])
+
+
 def bettor_detail(bid: str) -> dict:
     st = load_state()
     b = st.get(bid)
@@ -1532,6 +1605,15 @@ def bettor_detail(bid: str) -> dict:
     stats["bets"] = b["bets"][:50]
     stats["transactions"] = (b.get("transactions") or [])[:50]
     stats["params"] = b.get("params")
+    # Rozklad úspěšnosti – aby uživatel viděl, ve kterých sportech / na jakých
+    # trzích sázkař vydělává a kde tratí. Automatický blacklist v run_all se
+    # opírá o stejná data.
+    stats["breakdown"] = {
+        "sport": _perf_breakdown(b.get("bets", []), "sport"),
+        "market": _perf_breakdown(b.get("bets", []), "outcome"),
+        "league": _perf_breakdown(b.get("bets", []), "league"),
+    }
+    stats["blacklisted_sports"] = sorted(_blacklisted_sports(b))
     return stats
 
 
