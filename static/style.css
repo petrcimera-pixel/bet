@@ -682,7 +682,8 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
    se schovávalo za horizontální scroll – uživatel se k němu nedostal.
    Řádek je teď celý klikatelný, caret vpravo mění směr. */
 
-.arena-table tr.bettor-row { cursor: pointer; }
+.arena-table tr.bettor-row { cursor: pointer; transition: background .12s; }
+.arena-table tr.bettor-row:hover { background: var(--panel-2); }
 .arena-table tr.bettor-row td.arena-caret {
   width: 24px; padding-right: 0; color: var(--txt3);
   transition: color .12s;

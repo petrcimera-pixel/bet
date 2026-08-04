@@ -72,7 +72,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0096,
+      "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -95,7 +95,7 @@
         "Cruzeiro má výrazně silnější útočný rating.",
         "Kurz 1.37 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.357
+      "closing_odds": 1.37
     },
     {
       "id": "7c2a949956",
