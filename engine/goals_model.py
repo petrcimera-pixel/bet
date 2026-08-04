@@ -526,6 +526,103 @@ def _half_time_probs(lam_h: float, lam_a: float) -> dict:
     }
 
 
+def _exact_total_probs(lam_total: float, buckets=(0, 1, 2, 3, 4, 5)) -> list:
+    """Přesný POČET gólů v zápase (ne skóre) – "2 góly", "3 góly"…, poslední
+    bucket je "6 a více". Marginální Poissonova distribuce ze součtu
+    intenzit obou týmů, stejná jako u nad/pod linií."""
+    out = []
+    cum = 0.0
+    for k in buckets:
+        p = _pois(k, lam_total)
+        cum += p
+        out.append({"goals": k, "prob": round(p, 4)})
+    out.append({"goals": f"{buckets[-1] + 1}+", "prob": round(max(0.0, 1 - cum), 4)})
+    return out
+
+
+def _exact_team_goals_probs(lam: float, buckets=(0, 1, 2, 3)) -> list:
+    """Přesný počet gólů JEDNOHO týmu – "0", "1", "2", "3", "4 a více"."""
+    out = []
+    cum = 0.0
+    for k in buckets:
+        p = _pois(k, lam)
+        cum += p
+        out.append({"goals": k, "prob": round(p, 4)})
+    out.append({"goals": f"{buckets[-1] + 1}+", "prob": round(max(0.0, 1 - cum), 4)})
+    return out
+
+
+def _odd_even_probs(grid: dict) -> dict:
+    """Sudý/lichý celkový počet gólů v zápase – přímý součet přes grid."""
+    odd = sum(p for (i, j), p in grid.items() if (i + j) % 2 == 1)
+    return {"even": round(1 - odd, 4), "odd": round(odd, 4)}
+
+
+def _winner_and_team_goals_probs(grid: dict, keys) -> dict:
+    """Kombinace 'výsledek zápasu' × 'góly konkrétního týmu nad/pod 1.5' –
+    šest kombinací (3 výsledky × over/under), počítané ze SPOLEČNÉHO gridu,
+    ne součinem dvou marginálních pravděpodobností (ty spolu korelují –
+    stejné pravidlo jako u kombi sázek arény)."""
+    line = 1.5
+    out = {}
+    for side, label in (("home", "domácí"), ("away", "hosté")):
+        idx = 0 if side == "home" else 1
+        for res_key in keys:
+            for ou, cond in (("over", lambda g: g > line), ("under", lambda g: g <= line)):
+                p = sum(prob for score, prob in grid.items()
+                        if _outcome_hits(res_key, score[0], score[1]) and cond(score[idx]))
+                out[f"{res_key}_{side}_{ou}"] = round(p, 4)
+    return out
+
+
+def _winner_and_total_probs(grid: dict, keys, lines=(2.5,)) -> dict:
+    """Kombinace 'výsledek zápasu' × 'celkový počet gólů nad/pod linii' –
+    ze společného gridu (koreluje – výhra favorita 3:0 často znamená i
+    Over, takže součin marginálů by podhodnotil pravděpodobnost)."""
+    out = {}
+    for line in lines:
+        for res_key in keys:
+            for ou, cond in (("over", lambda g: g > line), ("under", lambda g: g <= line)):
+                p = sum(prob for score, prob in grid.items()
+                        if _outcome_hits(res_key, score[0], score[1]) and cond(score[0] + score[1]))
+                # bez tečky v klíči (over2.5 -> over25) – ať jde bez
+                # bracket notace přečíst i z JS šablon v UI
+                out[f"{res_key}_{ou}{str(line).replace('.', '')}"] = round(p, 4)
+    return out
+
+
+def _winner_and_first_scorer_probs(grid: dict, keys, first: dict) -> dict:
+    """Kombinace 'výsledek zápasu' × 'kdo dá první gól'.
+
+    POZOR – jediný z rozšířených trhů, který NENÍ počítaný čistě ze
+    společného gridu. Scoreline grid zachycuje jen FINÁLNÍ skóre, ne
+    časové pořadí gólů, takže přesná společná pravděpodobnost by
+    vyžadovala samostatný model rozložení gólů v čase (mimo rozsah
+    aplikace). Místo toho se použije nezávislostní aproximace:
+    P(výsledek) × P(první gól dal tým X) – u zápasů, kde favorit skóruje
+    první a pak zápas kontroluje, to hodnotu mírně podhodnotí, ale je to
+    poctivější než tvrdit přesnost, kterou grid nemá."""
+    out = {}
+    p_first_total = max(1e-9, first.get("home", 0) + first.get("away", 0) + first.get("no_goals", 0))
+    for res_key in keys:
+        p_result = sum(prob for score, prob in grid.items() if _outcome_hits(res_key, score[0], score[1]))
+        for side in ("home", "away"):
+            out[f"{res_key}_{side}_first"] = round(p_result * (first.get(side, 0) / p_first_total), 4)
+    return out
+
+
+def _half_exact_goals_probs(lam_h1: float, buckets=(0, 1, 2, 3)) -> list:
+    """Přesný počet gólů v 1. poločase (ne over/under linie)."""
+    out = []
+    cum = 0.0
+    for k in buckets:
+        p = _pois(k, lam_h1)
+        cum += p
+        out.append({"goals": k, "prob": round(p, 4)})
+    out.append({"goals": f"{buckets[-1] + 1}+", "prob": round(max(0.0, 1 - cum), 4)})
+    return out
+
+
 def _normal_cdf(x: float) -> float:
     return 0.5 * (1 + math.erf(x / math.sqrt(2)))
 
@@ -718,6 +815,8 @@ def predict_match(m: dict) -> dict:
         # nikdy nesází (agent._candidates i virtual_bettors._candidates_for
         # berou jen bets s real=True). Slouží čistě k zobrazení v detailu
         # zápasu, ať je vidět, co model o zápase ví nad rámec sázkatelných trhů.
+        first_to_score = _first_to_score_probs(lam_h, lam_a, grid)
+        h1_lam = (lam_h + lam_a) * HALF_TIME_SHARE
         extra_markets = {
             "correct_score": _top_scores(grid, n=8),
             "margin": _margin_probs(grid),
@@ -725,8 +824,21 @@ def predict_match(m: dict) -> dict:
                 "home": _team_total_probs(lam_h),
                 "away": _team_total_probs(lam_a),
             },
-            "first_to_score": _first_to_score_probs(lam_h, lam_a, grid),
+            "first_to_score": first_to_score,
             "half_time": _half_time_probs(lam_h, lam_a),
+            # --- doplněno podle inspirace z běžné nabídky sázkovek ---
+            "exact_total_goals": _exact_total_probs(lam_h + lam_a),
+            "exact_team_goals": {
+                "home": _exact_team_goals_probs(lam_h),
+                "away": _exact_team_goals_probs(lam_a),
+            },
+            "odd_even": _odd_even_probs(grid),
+            "winner_and_team_goals": _winner_and_team_goals_probs(grid, keys),
+            "winner_and_total": _winner_and_total_probs(grid, keys),
+            "winner_and_first_scorer": _winner_and_first_scorer_probs(grid, keys, first_to_score),
+            "half_exact_goals": {
+                "first_half": _half_exact_goals_probs(h1_lam),
+            },
         }
 
     # Dvojtip a "remíza zpět" – nejsou to nové kurzy od sázkovky, ale PŘESNÝ

@@ -48,6 +48,14 @@ function czNum(num, digits = 1) {
   if (num === null || num === undefined || isNaN(num)) return '—';
   return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(num);
 }
+/** České skloňování "gól" po čísle: 0/5+ gólů, 1 gól, 2–4 góly.
+ *  Nečíselný vstup (např. "6+" bucket) vždy dá množné "gólů". */
+function czGoly(n) {
+  if (typeof n !== 'number') return `${n} gólů`;
+  if (n === 1) return '1 gól';
+  if (n >= 2 && n <= 4) return `${n} góly`;
+  return `${n} gólů`;
+}
 function el(id) { return document.getElementById(id); }
 function setText(id, text) { const e = el(id); if (e) e.textContent = text; }
 
@@ -986,6 +994,66 @@ function renderExtraMarkets(em, topScores, m) {
             <div class="perf-row"><span class="perf-key">Víc gólů v 2. půli</span><span class="perf-nums"><strong>${pct((ht.more_goals_half?.second || 0) * 100)}</strong></span></div>
             <div class="perf-row"><span class="perf-key">1. půle přes 0,5</span><span class="perf-nums"><strong>${pct((ht.first_half?.[0]?.over || 0) * 100)}</strong></span></div>
             <div class="perf-row"><span class="perf-key">2. půle přes 0,5</span><span class="perf-nums"><strong>${pct((ht.second_half?.[0]?.over || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+        <div class="perf-block">
+          <div class="perf-title">Přesný počet gólů v zápase</div>
+          <div class="perf-rows">
+            ${(em.exact_total_goals || []).map(x => `
+              <div class="perf-row"><span class="perf-key">${czGoly(x.goals)}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Sudý/lichý počet gólů</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">Sudý</span><span class="perf-nums"><strong>${pct((em.odd_even?.even || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Lichý</span><span class="perf-nums"><strong>${pct((em.odd_even?.odd || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Přesný počet gólů týmu</div>
+          <div class="perf-rows">
+            ${(em.exact_team_goals?.home || []).slice(0, 3).map(x => `
+              <div class="perf-row"><span class="perf-key">${m.home}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+            ${(em.exact_team_goals?.away || []).slice(0, 3).map(x => `
+              <div class="perf-row"><span class="perf-key">${m.away}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">1. poločas – přesný počet gólů</div>
+          <div class="perf-rows">
+            ${(em.half_exact_goals?.first_half || []).map(x => `
+              <div class="perf-row"><span class="perf-key">${czGoly(x.goals)}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="perf-grid" style="margin-top:12px;">
+        <div class="perf-block">
+          <div class="perf-title">Výsledek + počet gólů (přes 2,5)</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">${m.home} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.home_over25 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Remíza a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.draw_over25 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${m.away} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.away_over25 || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Výsledek + ${m.home} nad 1,5 gólu</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">${m.home} vyhraje a nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.home_home_over || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Remíza a ${m.home} nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.draw_home_over || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Výsledek + kdo dal první gól <span class="muted" title="Aproximace – grid nezachycuje časové pořadí gólů, spočítáno jako P(výsledek) × P(první gól)">ⓘ</span></div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">${m.home} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.home_home_first || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${m.away} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.away_away_first || 0) * 100)}</strong></span></div>
           </div>
         </div>
       </div>
