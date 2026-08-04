@@ -1651,13 +1651,30 @@ def api_bettors_run():
           "staked": virtual_bettors.staked_since(bid, int(t0))}
          for bid, n in (placed or {}).items() if n],
         key=lambda x: -x["count"])
+    total_placed = sum((placed or {}).values())
+    total_staked = round(sum(d["staked"] for d in detail), 2)
+    # Poznamenat, kdy naposledy kolo proběhlo – ať uživatel v UI vidí, jestli
+    # rozvrh vůbec běží, a nemusí čekat další automatické spuštění.
+    storage.save("bettors_last_run.json", {
+        "ts": int(t0), "trigger": "manual",
+        "total_placed": total_placed, "total_staked": total_staked,
+        "eligible": len(board),
+        "active": len([d for d in detail if d["count"]]),
+    })
     return jsonify({
         "placed": placed, "bettors": board,
         "detail": detail,
-        "total_placed": sum((placed or {}).values()),
-        "total_staked": round(sum(d["staked"] for d in detail), 2),
+        "total_placed": total_placed,
+        "total_staked": total_staked,
         "eligible": len(board),
     })
+
+
+@app.route("/api/bettors/status")
+@login_required
+def api_bettors_status():
+    """Kdy naposledy proběhlo kolo sázkařů a s jakým výsledkem."""
+    return jsonify(storage.load("bettors_last_run.json", None) or {})
 
 
 @app.route("/api/bettors/groups")
@@ -2047,6 +2064,14 @@ def _run_virtual_bettors_if_due():
 
         predictions = _predictions_for(today, days=4, sport="soccer")
         placed = virtual_bettors.run_all(predictions, today, current_hour=now.hour, allowed_hours=allowed_hours)
+        # Zápis do statusu – ať se ve stavové liště hned objeví, kdy poslední
+        # automatické kolo běželo (stejná struktura jako u ručního běhu).
+        storage.save("bettors_last_run.json", {
+            "ts": int(_time.time()), "trigger": "auto",
+            "total_placed": sum((placed or {}).values()),
+            "active": sum(1 for n in (placed or {}).values() if n),
+            "eligible": len(st),
+        })
         return {"ran": True, "placed": placed}
     except Exception as e:
         return {"ran": False, "reason": "error", "error": str(e)}

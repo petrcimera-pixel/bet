@@ -706,3 +706,17 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 /* akční ikony vpravo – ať se malé pořád vejdou */
 .arena-table td.arena-acts-cell { padding-right: 6px; }
 .btn.small.icon-only { padding: 4px 6px; width: 26px; height: 26px; font-size: 13px; }
+
+/* Sázkař bez sázek: ztlumit řádek + drobný odznak "bez sázek", aby uživatel
+   viděl, že aplikace funguje, jen strategie žádnou vhodnou příležitost
+   nenašla. Jinak by se dalo lehce interpretovat jako bug. */
+.arena-table tr.bettor-row.idle { opacity: 0.55; }
+.arena-table tr.bettor-row.idle:hover { opacity: 1; }
+.idle-badge {
+  display: inline-block; margin-left: 8px;
+  padding: 1px 7px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--panel-2); color: var(--txt3);
+  border: 1px solid var(--border);
+}

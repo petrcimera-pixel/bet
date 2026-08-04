@@ -210,42 +210,58 @@ def save_tips(predictions: list) -> int:
 
 
 _MAX_TIPS = 12000   # strop velikosti tips.json – bez něj roste bez omezení
+_MAX_AGE_DAYS = 45  # settled tipy starší než tohle se archivují, i když je pod stropem
 _ARCHIVE_FILE = "tips_archive.json"
 
 
 def _prune(db: dict) -> int:
-    """Když tips.json přeroste strop, přesune nejstarší VYHODNOCENÉ tipy do
-    archivu (nikdy otevřené – ty čekají na settle). Bez tohoto stropu soubor
-    po měsících nepřetržitého běhu naroste na desítky MB a KAŽDÝ request
-    (settle/status, dashboard, tips) ho musí znovu načíst a parsovat – na
-    jednom workeru to appku dokáže úplně ucpat.
+    """Archivuje VYHODNOCENÉ tipy podle dvou pravidel: starší než
+    _MAX_AGE_DAYS (drží aktivní soubor malý ať roste jakkoli), a při
+    překročení _MAX_TIPS ještě navíc nejstarší vyhodnocené (tvrdý strop).
+    Nikdy nediskvalifikuje otevřené tipy – ty čekají na settle.
+
+    Bez rotace tips.json po měsících nepřetržitého běhu naroste na desítky MB
+    a KAŽDÝ request (settle/status, dashboard, tips) ho musí znovu načíst
+    a parsovat – na jednom workeru to appku dokáže úplně ucpat.
 
     Archiv (tips_archive.json) drží celou historii dál – appka do něj sama
     nesahá, ale zůstává na disku pro pozdější rozbor, zpětný test na starých
     datech nebo pro obnovu, kdyby aktivní soubor někdo omylem smazal."""
+    import datetime as _dt
     tips = db["tips"]
-    over = len(tips) - _MAX_TIPS
-    if over <= 0:
-        return 0
-    settled = sorted(
-        (i for i, t in enumerate(tips) if t.get("pick_result") is not None),
-        key=lambda i: tips[i].get("settled_at") or "")
-    drop_ix = set(settled[:over])
-    if not drop_ix:
-        return 0   # samé otevřené tipy – nemáme co bezpečně přesunout
+    cutoff = (_dt.date.today() - _dt.timedelta(days=_MAX_AGE_DAYS)).isoformat()
 
-    to_archive = [t for i, t in enumerate(tips) if i in drop_ix]
+    # 1) vše settled a starší než cutoff (podle match_date)
+    old_ix = {
+        i for i, t in enumerate(tips)
+        if t.get("pick_result") is not None
+        and (t.get("match_date") or "") < cutoff
+    }
+
+    # 2) pokud jsme pořád nad stropem, doplnit nejstarší settled
+    over = len(tips) - len(old_ix) - _MAX_TIPS
+    if over > 0:
+        settled_rest = sorted(
+            (i for i, t in enumerate(tips)
+             if i not in old_ix and t.get("pick_result") is not None),
+            key=lambda i: tips[i].get("settled_at") or "")
+        old_ix.update(settled_rest[:over])
+
+    if not old_ix:
+        return 0
+
+    to_archive = [t for i, t in enumerate(tips) if i in old_ix]
     try:
         arch = storage.load(_ARCHIVE_FILE, {"tips": []})
         arch["tips"].extend(to_archive)
         storage.save(_ARCHIVE_FILE, arch)
     except Exception:
         # Kdyby archiv selhal (disk plný, nezapisovatelné), radši data v
-        # aktivním souboru NECHAT než tiše zahodit – strop se překročí, na
-        # dalším průchodu se to zkusí znovu.
+        # aktivním souboru NECHAT než tiše zahodit – na dalším průchodu se
+        # to zkusí znovu.
         return 0
-    db["tips"] = [t for i, t in enumerate(tips) if i not in drop_ix]
-    return len(drop_ix)
+    db["tips"] = [t for i, t in enumerate(tips) if i not in old_ix]
+    return len(old_ix)
 
 
 # ---------------------------------------------------------------------------

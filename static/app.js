@@ -1661,13 +1661,15 @@ async function loadBettors() {
   const box = el('bettorsContainer');
   box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
   try {
-    const [data, calib, ag] = await Promise.all([
+    const [data, calib, ag, lastRun] = await Promise.all([
       api('/api/bettors', { timeoutMs: 20000 }),
       api('/api/bettors/calibration', { timeoutMs: 15000 }).catch(() => ({ buckets: [] })),
       api('/api/agent', { timeoutMs: 15000 }).catch(() => ({ settings: {} })),
+      api('/api/bettors/status', { timeoutMs: 8000 }).catch(() => ({})),
     ]);
     _bettorGroups = data.groups || _bettorGroups;
     STATE.agentCfg = ag.settings || {};
+    STATE.bettorsLastRun = lastRun || {};
     renderBettors(data.bettors || []);
     renderArenaHero(data.bettors || []);
     loadGroupCompare();
@@ -1690,14 +1692,31 @@ function renderArenaHero(bettors) {
   const settled = bettors.reduce((a, b) => a + (b.settled || 0), 0);
   const nextRun = _nextRunLabel();
   const zzTrida = zisk >= 0 ? 'pos' : 'bad';
+  const last = _lastRunLabel();
 
   box.innerHTML = `
     <span class="arena-hero-kpi"><b>${bettors.length}</b><em>Sázkařů</em></span>
     <span class="arena-hero-kpi"><b>${fmt(Math.round(bank))} Kč</b><em>Bank arény</em></span>
     <span class="arena-hero-kpi"><b class="${zzTrida}">${zisk >= 0 ? '+' : ''}${fmt(Math.round(zisk))} Kč</b><em>Realizovaný zisk (${fmt(settled)} sázek)</em></span>
     <span class="arena-hero-kpi"><b>${vPlusu} / ${bettors.length}</b><em>V plusu</em></span>
+    <span class="arena-hero-kpi"><b>${last.value}</b><em>${last.label}</em></span>
     <span class="arena-hero-kpi"><b>${nextRun}</b><em>Další kolo</em></span>
   `;
+}
+
+/** Vrátí popis posledního kola – např. "12:04 · 33 tipů" nebo "zatím
+ *  neproběhlo", pokud ještě není záznam. Ať uživatel z prvního pohledu
+ *  vidí, že rozvrh se hýbe, a nemusí čekat na další automatické kolo. */
+function _lastRunLabel() {
+  const r = STATE.bettorsLastRun || {};
+  if (!r.ts) return { value: '—', label: 'Poslední kolo zatím neproběhlo' };
+  const d = new Date(r.ts * 1000);
+  const dnes = new Date();
+  const stejnyDen = d.toDateString() === dnes.toDateString();
+  const cas = d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+  const kdy = stejnyDen ? cas : d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' }) + ' ' + cas;
+  const detail = r.total_placed ? `${r.active || '?'} sázelo · ${r.total_placed} tipů` : 'nikdo nezasadil';
+  return { value: kdy, label: `Poslední kolo (${detail})` };
 }
 
 /** Kdy poběží další automatické kolo. Sázkaři jedou podle stejného
@@ -1916,18 +1935,21 @@ function arenaRadek(b, veHreCelkem) {
   const medaile = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : null;
   const tridaZisk = (b.profit || 0) >= 0 ? 'pos' : 'bad';
   const podil = veHreCelkem > 0 ? Math.min(100, (b.open_stake || 0) / veHreCelkem * 100) : 0;
+  // Sázkař bez jediné sázky = jeho strategie žádnou vhodnou příležitost
+  // nenašla. Bez indikátoru to vypadá, jako by aplikace nefungovala –
+  // hlavně u sázkařů se silnými filtry (Ultra Jistá, Čtyřkombinace),
+  // kteří občas nezasází celý den.
+  const nesazi = (b.placed || 0) === 0;
   // Celý řádek je klikatelný – detail se rozbaluje kliknutím kamkoliv v něm.
-  // Dřív bylo tlačítko 'Detail' vzadu na řádku a na užších oknech se schovávalo
-  // za horizontální scroll, takže se k němu uživatel nedostal.
   return `
-    <tr class="row bettor-row" data-id="${b.id}">
+    <tr class="row bettor-row ${nesazi ? 'idle' : ''}" data-id="${b.id}">
       <td class="arena-caret"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3l3 4 3-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></td>
       <td class="arena-rank ${medaile ? 'medal' : ''}">${medaile || b.rank}</td>
       <td>
         <div class="arena-who">
           <span class="face">${b.emoji}</span>
           <span>
-            <div class="nm">${b.name}</div>
+            <div class="nm">${b.name}${nesazi ? ' <span class="idle-badge" title="Strategie zatím nenašla vhodnou příležitost">bez sázek</span>' : ''}</div>
             <div class="tg">${b.tagline}</div>
           </span>
         </div>
