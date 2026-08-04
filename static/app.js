@@ -42,6 +42,12 @@ function pct(num, digits = 1) {
   return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits })
     .format(num) + ' %';
 }
+/** Číslo s českou desetinnou čárkou bez jednotky – pro místa jako "p.b.",
+ *  kde pct() by jednotku zdvojil. */
+function czNum(num, digits = 1) {
+  if (num === null || num === undefined || isNaN(num)) return '—';
+  return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(num);
+}
 function el(id) { return document.getElementById(id); }
 function setText(id, text) { const e = el(id); if (e) e.textContent = text; }
 
@@ -847,7 +853,7 @@ function renderAnalysis(d, box) {
       ${['home', 'draw', 'away'].filter(k => pr[k] != null).map(k => `
         <div class="stat-tile">
           <div class="label">${k === 'home' ? '1 · ' + m.home : k === 'draw' ? 'X · remíza' : '2 · ' + m.away}</div>
-          <div class="value">${Math.round(pr[k] * 100)}%</div>
+          <div class="value">${pct(pr[k] * 100, 0)}</div>
         </div>`).join('')}
     </div>` : '';
 
@@ -867,7 +873,7 @@ function renderAnalysis(d, box) {
       <p style="margin-top:10px;">
         <strong>${rec.name}</strong> — model ${Math.round((rec.prob || 0) * 100)} %,
         po kalibraci <strong>${Math.round((rec.cal_prob || 0) * 100)} %</strong>.
-        ${rec.edge != null ? `Náskok proti kurzu ${(rec.edge * 100).toFixed(1)} p.b.` : ''}
+        ${rec.edge != null ? `Náskok proti kurzu ${czNum(rec.edge * 100, 1)} p.b.` : ''}
       </p>
       <p class="muted">Prošlo prahy agenta (jistota ≥ ${Math.round(d.thresholds.min_prob * 100)} %, kurz ≥ ${d.thresholds.min_odds}) — tohle by agent reálně vsadil.</p>
     </div>` : `
@@ -880,9 +886,9 @@ function renderAnalysis(d, box) {
     <tr class="${c.passes ? 'row-ok' : ''}">
       <td><strong>${c.label || c.outcome}</strong></td>
       <td>${c.odds ? c.odds.toFixed(2) + '×' : '<span class="muted">—</span>'}</td>
-      <td>${Math.round((c.prob || 0) * 100)}%</td>
-      <td>${c.cal_prob != null ? Math.round(c.cal_prob * 100) + '%' : '—'}</td>
-      <td>${c.edge != null ? (c.edge * 100).toFixed(1) + ' p.b.' : '—'}</td>
+      <td>${pct((c.prob || 0) * 100, 0)}</td>
+      <td>${c.cal_prob != null ? pct(c.cal_prob * 100, 0) : '—'}</td>
+      <td>${c.edge != null ? czNum(c.edge * 100) + ' p.b.' : '—'}</td>
       <td>${c.passes ? '<span class="badge real">✓ tip</span>' : '<span class="muted">—</span>'}</td>
     </tr>`).join('');
 
@@ -896,8 +902,8 @@ function renderAnalysis(d, box) {
       <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
       ${probRow}
       <p style="margin-top:10px;">
-        Očekávané skóre <strong>${d.exp_goals ? `${d.exp_goals.home} : ${d.exp_goals.away}` : '—'}</strong>
-        (celkem ${d.exp_total ?? '—'})
+        Očekávané skóre <strong>${d.exp_goals ? `${czNum(d.exp_goals.home, 2)} : ${czNum(d.exp_goals.away, 2)}` : '—'}</strong>
+        (celkem ${d.exp_total != null ? czNum(d.exp_total, 2) : '—'})
       </p>
       ${coldWarn}
     </div>
@@ -2431,8 +2437,12 @@ async function loadMlLearning() {
     const s = await api('/api/learning/stats', { timeoutMs: 20000 });
     setText('mlStatus', ML_STATUS_CZ[s.model_status] || s.model_status || '—');
     setText('mlTotal', s.total_bets ?? 0);
+    // Číslo roste jen tak rychle, jak reálně končí zápasy – většina fronty
+    // čeká na budoucí utkání. Bez týhle poznámky vypadá stejné číslo
+    // napříč obnoveními jako zaseknuté, přitom je to legitimní stav.
+    setText('mlTotalHint', s.pending_settlement ? `${fmt(s.pending_settlement)} čeká na výsledek zápasu` : '');
     setText('mlAccuracy', s.model_accuracy ? pct(s.model_accuracy * 100) : '—');
-    setText('mlAuc', s.model_auc ? s.model_auc.toFixed(3) : '—');
+    setText('mlAuc', s.model_auc ? s.model_auc.toFixed(3).replace('.', ',') : '—');
     renderMlFeatures(s.feature_importance || {});
   } catch (e) {
     toast('Nepodařilo se načíst ML Learning.', 'err');
@@ -2499,7 +2509,7 @@ async function retrainMlModel() {
       setText('mlStatus', ML_STATUS_CZ[data.stats.model_status] || data.stats.model_status || '—');
       setText('mlTotal', data.stats.total_bets ?? 0);
       setText('mlAccuracy', data.stats.model_accuracy ? pct(data.stats.model_accuracy * 100) : '—');
-      setText('mlAuc', data.stats.model_auc ? data.stats.model_auc.toFixed(3) : '—');
+      setText('mlAuc', data.stats.model_auc ? data.stats.model_auc.toFixed(3).replace('.', ',') : '—');
       renderMlFeatures(data.stats.feature_importance || {});
     }
   } catch (e) {

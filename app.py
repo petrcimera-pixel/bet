@@ -465,6 +465,24 @@ def api_analysis(match_id):
 
     m = next((x for x in matches if str(x["id"]) == str(match_id)), None)
     if not m:
+        # ESPN feed se v čase mění (kvalifikační/playoff zápasy se dopisují
+        # postupně) a appka má dvě NEZÁVISLÉ cache s různým stářím – tuhle
+        # 14denní (_search_window) a kratší, obvykle čerstvější, pro
+        # /api/matches. Když je zrovna tahle starší, zápas v ní chybí, i
+        # když ho uživatel právě viděl na kartě zápasů. Krátký fallback
+        # dotaz (typicky čerstvější cache, případně vynucený refresh) to
+        # ve většině případů dožene, než appka prohlásí zápas za nenalezený.
+        try:
+            today = ds.today_str()
+            fallback = ds.fetch_range(today, ds.add_days(today, ODDS_HORIZON_DAYS + 3), sport=sport)
+            m = next((x for x in fallback if str(x["id"]) == str(match_id)), None)
+            if not m:
+                fallback = ds.fetch_range(today, ds.add_days(today, ODDS_HORIZON_DAYS + 3),
+                                          use_cache=False, sport=sport)
+                m = next((x for x in fallback if str(x["id"]) == str(match_id)), None)
+        except Exception:
+            pass
+    if not m:
         return jsonify({"error": "Zápas nenalezen"}), 404
 
     p = pred.predict_match(m)
@@ -2147,6 +2165,11 @@ def api_learning_stats():
     try:
         from engine import ml_learner
         stats = ml_learner.get_learning_stats()
+        # Kolik sázek/tipů ještě čeká na výsledek zápasu – bez tohohle čísla
+        # vypadá "Trénovacích vzorků" jako zaseklé, přitom drtivá většina
+        # fronty jsou sázky na BUDOUCÍ zápasy, které logicky nemůžou být
+        # vyhodnocené dřív, než zápas skončí.
+        stats["pending_settlement"] = _settle_status.get("total_pending", 0)
         return jsonify(stats)
     except Exception as e:
         return jsonify({"error": str(e), "status": "error"}), 500

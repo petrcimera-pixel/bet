@@ -249,14 +249,14 @@
 
       <div class="card" style="margin-bottom:16px;">
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-          <span style="font-size:13px; color:var(--txt2); flex:1;">Trénuje se na settled sázkách agenta i všech 10 sázkařů z arény (mnohem větší vzorek). Přetrénuje se i automaticky po každých pár nových vyhodnocených sázkách.</span>
+          <span style="font-size:13px; color:var(--txt2); flex:1;">Trénuje se na settled sázkách agenta i všech sázkařů z arény (mnohem větší vzorek). Přetrénuje se i automaticky po každých pár nových vyhodnocených sázkách.</span>
           <button class="btn primary" id="retrainMlBtn">Přetrénovat teď</button>
         </div>
       </div>
 
       <div class="grid-stats" id="mlStats">
         <div class="stat-tile"><div class="label">Stav</div><div class="value" id="mlStatus" style="font-size:16px;">—</div></div>
-        <div class="stat-tile"><div class="label">Trénovacích vzorků</div><div class="value" id="mlTotal">—</div></div>
+        <div class="stat-tile"><div class="label">Trénovacích vzorků</div><div class="value" id="mlTotal">—</div><div class="hint" id="mlTotalHint"></div></div>
         <div class="stat-tile"><div class="label">Přesnost</div><div class="value" id="mlAccuracy">—</div></div>
         <div class="stat-tile"><div class="label">AUC</div><div class="value" id="mlAuc">—</div></div>
       </div>

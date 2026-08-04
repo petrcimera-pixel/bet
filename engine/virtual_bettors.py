@@ -950,12 +950,10 @@ def describe_params(params: dict) -> str:
     charakteristiku jako ti vestavění."""
     p = normalize_params(params)
     bits = [f"jistota od {round(p['min_prob'] * 100)} %",
-            f"kurz {p['min_odds']}–{p['max_odds']}"]
+            f"kurz {cz_num(p['min_odds'])}–{cz_num(p['max_odds'])}"]
     if p.get("market") != "any":
         bits.append(MARKETS.get(p["market"], ("?", None))[0])
-    # České formátování – desetinná čárka místo tečky
-    _pct = lambda x: f"{x:.1f}".replace(".", ",").rstrip("0").rstrip(",")
-    bits.append(f"{_pct(round(p['stake_pct'] * 100, 1))} % banku"
+    bits.append(f"{cz_num(round(p['stake_pct'] * 100, 1))} % banku"
                 if p.get("stake_mode") == "flat"
                 else f"Kelly {round(float(p.get('kelly_fraction', 0.25)) * 100)} %")
     if p.get("progression") != "none":
