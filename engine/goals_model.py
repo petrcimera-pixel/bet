@@ -15,6 +15,7 @@ Zásadní změna oproti staré verzi (engine/prediction.py):
   • Jistota = přímo max(pravděpodobnost), ne entropická heuristika navíc.
 """
 
+import datetime
 import math
 
 from . import storage
@@ -175,7 +176,31 @@ def _save_ratings(r: dict) -> None:
 def get_rating(team: str, ratings: dict) -> dict:
     if team not in ratings:
         ratings[team] = {"a": 1.0, "d": 1.0, "n": 0}
-    return ratings[team]
+    r = ratings[team]
+    # Home/away specifické podklíče vedle celkového ratingu – doplní se i u
+    # týmů založených před touhle funkcí (starý ratings.json), ať se appka
+    # nezasekne na KeyError při čtení dat z minula.
+    r.setdefault("a_home", r["a"]); r.setdefault("d_home", r["d"]); r.setdefault("n_home", 0)
+    r.setdefault("a_away", r["a"]); r.setdefault("d_away", r["d"]); r.setdefault("n_away", 0)
+    return r
+
+
+HOME_AWAY_MIN_N = 8   # kolik domácích/venkovních zápasů je potřeba, než se specifický rating použije místo celkového
+
+
+def effective_ab(rating: dict, loc: str) -> tuple:
+    """Attack/defense pro KONKRÉTNÍ stranu (doma/venku), pokud už na ni tým
+    má dost vlastních zápasů – jinak fallback na celkový rating.
+
+    Důvod: tým může hrát doma výrazně jinak než venku (typicky silnější
+    doma), ale dokud nemá aspoň HOME_AWAY_MIN_N zápasů na tu konkrétní
+    stranu, je specifický odhad příliš zašuměný a celkový rating je
+    spolehlivější startovní bod."""
+    if loc == "home" and rating.get("n_home", 0) >= HOME_AWAY_MIN_N:
+        return rating["a_home"], rating["d_home"]
+    if loc == "away" and rating.get("n_away", 0) >= HOME_AWAY_MIN_N:
+        return rating["a_away"], rating["d_away"]
+    return rating["a"], rating["d"]
 
 
 def rating_of(team: str) -> dict:
@@ -195,9 +220,50 @@ def _mark_applied(ids) -> None:
     storage.save(_APPLIED_FILE, {"ids": sorted(cur)[-20000:]})
 
 
+_HISTORY_FILE = "team_history.json"
+_HISTORY_MAX_PER_TEAM = 20   # kolik posledních zápasů se drží na tým – forma a H2H víc nepotřebují
+
+
+def _team_history() -> dict:
+    return storage.load(_HISTORY_FILE, {})
+
+
+def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
+                          date: str, sport: str) -> None:
+    """Zapíše zápas do historie OBOU týmů – používá se pro formu (posledních
+    N výsledků) a head-to-head (vzájemné zápasy). Nezávislé na ratingech,
+    takže se dá číst i pro sporty/situace, kde by rating byl nespolehlivý."""
+    hist = _team_history()
+    entry_h = {"date": date, "opponent": away, "league": league, "sport": sport,
+               "loc": "home", "gf": hs, "ga": as_,
+               "result": "W" if hs > as_ else "L" if hs < as_ else "D"}
+    entry_a = {"date": date, "opponent": home, "league": league, "sport": sport,
+               "loc": "away", "gf": as_, "ga": hs,
+               "result": "W" if as_ > hs else "L" if as_ < hs else "D"}
+    for team, entry in ((home, entry_h), (away, entry_a)):
+        lst = hist.setdefault(team, [])
+        lst.append(entry)
+        lst.sort(key=lambda e: e.get("date", ""))
+        del lst[:-_HISTORY_MAX_PER_TEAM]   # jen posledních N, ať soubor neroste bez konce
+    storage.save(_HISTORY_FILE, hist)
+
+
+def team_form(team: str, n: int = 5) -> list:
+    """Posledních n výsledků týmu jako list 'W'/'D'/'L', nejnovější poslední."""
+    hist = _team_history().get(team, [])
+    return [e["result"] for e in hist[-n:]]
+
+
+def head_to_head(team_a: str, team_b: str, n: int = 5) -> list:
+    """Posledních n vzájemných zápasů mezi dvěma týmy, nejnovější první."""
+    hist = _team_history().get(team_a, [])
+    matches = [e for e in hist if e.get("opponent") == team_b]
+    return list(reversed(matches[-n:]))
+
+
 def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
                         sport: str = "soccer", slug: str = "",
-                        match_id: str = None) -> bool:
+                        match_id: str = None, date: str = None) -> bool:
     """Po vyhodnoceném zápase posune attack/defense obou týmů směrem k tomu,
     co skutečně předvedly oproti očekávání – učení se zpomaluje s počtem
     odehraných zápasů (n).
@@ -211,6 +277,12 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
         if str(match_id) in _applied_ids():
             return False
         _mark_applied([str(match_id)])
+
+    # Historie zápasů (forma, H2H) – nezávislá na ratingu, zapisuje se vždycky
+    # spolu s ním, ať zůstanou konzistentní. datum bez volajícím předaného
+    # data padá na dnešek – lepší přibližné pořadí než žádné.
+    _record_team_history(home, away, league, hs, as_,
+                         date or datetime.date.today().isoformat(), sport)
 
     ratings = _ratings()
     rh, ra = get_rating(home, ratings), get_rating(away, ratings)
@@ -246,6 +318,19 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     ra["d"] = _clamp(ra["d"] * (1 + alpha_h * (ratio_h - 1)))
     ra["a"] = _clamp(ra["a"] * (1 + alpha_a * (ratio_a - 1)))
     rh["d"] = _clamp(rh["d"] * (1 + alpha_a * (ratio_a - 1)))
+
+    # Home/away specifické páry – stejný vzorec, ale vlastní alpha (podle
+    # n_home/n_away, ne celkového n) a vlastní počítadlo. Domácí tým se učí
+    # jen na SVÝCH domácích zápasech, hostující tým jen na SVÝCH venkovních –
+    # jinak by týmy, co doma hrají silněji, tenhle rozdíl nikdy nezachytily.
+    alpha_h_home = max(0.06, 2.0 / (rh.get("n_home", 0) + 3.0))
+    alpha_a_away = max(0.06, 2.0 / (ra.get("n_away", 0) + 3.0))
+    rh["a_home"] = _clamp(rh.get("a_home", rh["a"]) * (1 + alpha_h_home * (ratio_h - 1)))
+    ra["d_away"] = _clamp(ra.get("d_away", ra["d"]) * (1 + alpha_h_home * (ratio_h - 1)))
+    ra["a_away"] = _clamp(ra.get("a_away", ra["a"]) * (1 + alpha_a_away * (ratio_a - 1)))
+    rh["d_home"] = _clamp(rh.get("d_home", rh["d"]) * (1 + alpha_a_away * (ratio_a - 1)))
+    rh["n_home"] = rh.get("n_home", 0) + 1
+    ra["n_away"] = ra.get("n_away", 0) + 1
 
     rh["n"] += 1
     ra["n"] += 1
@@ -289,7 +374,8 @@ def backfill_ratings(days_back: int = 60, sport: str = "soccer",
         try:
             ok = update_from_result(m["home"], m["away"], m.get("league", ""),
                                     m["home_score"], m["away_score"],
-                                    sport, m.get("slug", ""), match_id=m["id"])
+                                    sport, m.get("slug", ""), match_id=m["id"],
+                                    date=m.get("date"))
             applied += 1 if ok else 0
             skipped += 0 if ok else 1
         except Exception:
@@ -719,8 +805,13 @@ def predict_match(m: dict) -> dict:
     # týmů dohromady) – používá se k Bayesovskému zplošťování pravděpodobnosti
     # u nových/málo sledovaných týmů, aby model nebyl přehnaně sebejistý.
     rating_confidence = min(1.0, (rh["n"] + ra["n"]) / 40.0)
-    sh_a, sh_d = _shrink(rh["a"], rating_confidence), _shrink(rh["d"], rating_confidence)
-    sa_a, sa_d = _shrink(ra["a"], rating_confidence), _shrink(ra["d"], rating_confidence)
+    # Home/away specifický rating, pokud už na něj tým má dost vlastních
+    # zápasů (viz effective_ab) – jinak fallback na celkový a/d, stejně
+    # jako dřív.
+    rh_a, rh_d = effective_ab(rh, "home")
+    ra_a, ra_d = effective_ab(ra, "away")
+    sh_a, sh_d = _shrink(rh_a, rating_confidence), _shrink(rh_d, rating_confidence)
+    sa_a, sa_d = _shrink(ra_a, rating_confidence), _shrink(ra_d, rating_confidence)
 
     bets = {}
     top_scores = []

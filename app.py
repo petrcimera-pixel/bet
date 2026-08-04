@@ -525,6 +525,12 @@ def api_analysis(match_id):
         "top_scores": p.get("top_scores", [])[:5],
         "goal_lines": p.get("goal_lines", []),
         "extra_markets": p.get("extra_markets"),
+        # Forma a vzájemné zápasy – nezávislé na ratingu, odvozené z historie
+        # výsledků, kterou appka stejně stahuje. Prázdné listy, dokud appka
+        # daný tým vůbec nezaznamenala (nový tým bez historie).
+        "form_home": pred.team_form(p["home"]),
+        "form_away": pred.team_form(p["away"]),
+        "h2h": pred.head_to_head(p["home"], p["away"]),
         "has_odds": p.get("odds_source") == "real",
         "best_value": p.get("best_value"),
         "recommendation": _tip(best) if best else None,
@@ -1041,18 +1047,22 @@ def _settle_recent(allow_slugless_fallback=False):
     # Dřív se rating aktualizoval JEN přes ruční /api/result endpoint, takže
     # se model ve skutečnosti z automatického vyhodnocování nikdy neučil.
     id_to_teams = {t["id"]: (t.get("home"), t.get("away"), t.get("league", ""),
-                             t.get("sport", "soccer"), t.get("slug", ""))
+                             t.get("sport", "soccer"), t.get("slug", ""), t.get("date"))
                    for t in open_tips if t.get("home") and t.get("away")}
     for mid, r in results.items():
         info = id_to_teams.get(mid)
         if not info:
             continue
-        home, away, league, sport, slug = info
+        home, away, league, sport, slug, match_date = info
         try:
             # sport+slug jsou nutné – bez nich se nefotbalové skóre poměřuje
             # s fotbalovou baseline (resp. WNBA s průměrem NBA) a rating se
-            # učí proti úplně jinému očekávání, než jaké model předpovídá
-            pred.update_from_result(home, away, league, r["home"], r["away"], sport, slug)
+            # učí proti úplně jinému očekávání, než jaké model předpovídá.
+            # date (skutečné datum zápasu) jde do historie kvůli formě/H2H –
+            # bez něj by padalo na "dnes" a řadilo se podle DATA VYHODNOCENÍ,
+            # ne podle toho, kdy se zápas skutečně odehrál.
+            pred.update_from_result(home, away, league, r["home"], r["away"], sport, slug,
+                                    date=match_date)
         except Exception:
             pass
 

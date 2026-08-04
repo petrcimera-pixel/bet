@@ -763,3 +763,15 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 .tip-hero .tip-more-pick { font-weight: 600; white-space: nowrap; }
 .tip-hero .odds-chip.small { padding: 2px 8px; font-size: 11.5px; border-radius: 6px; }
 .tip-hero .conf-chip.small { font-size: 11px; }
+
+/* Forma týmu – V/R/P kroužky v detailu zápasu */
+.form-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.form-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--panel-2); color: var(--txt2);
+  font-size: 11px; font-weight: 700;
+  border: 1px solid var(--border);
+}
+.form-dot.pos { background: color-mix(in srgb, var(--pos) 18%, var(--panel-2)); color: var(--pos); border-color: color-mix(in srgb, var(--pos) 40%, var(--border)); }
+.form-dot.bad { background: color-mix(in srgb, var(--bad) 18%, var(--panel-2)); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }

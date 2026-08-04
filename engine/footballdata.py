@@ -150,7 +150,7 @@ def backfill_ratings(seasons=None, codes=None, progress=None) -> dict:
         try:
             ok = goals_model.update_from_result(
                 m["home"], m["away"], m["league"], m["home_score"], m["away_score"],
-                "soccer", m["slug"], match_id=m["id"])
+                "soccer", m["slug"], match_id=m["id"], date=m.get("date"))
             applied += 1 if ok else 0
             skipped += 0 if ok else 1
         except Exception:

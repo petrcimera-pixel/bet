@@ -1,0 +1,1922 @@
+{
+  "Bournemouth": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Genoa",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 10,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Genoa": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Bournemouth",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 10,
+      "result": "L"
+    }
+  ],
+  "Norwich": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Cambridge United",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Cambridge United": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Norwich",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Strasbourg": [
+    {
+      "date": "2026-08-04",
+      "opponent": "SV Elversberg",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
+    }
+  ],
+  "SV Elversberg": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Strasbourg",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Karlovac 1919": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Orijent 1919",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Orijent 1919": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Karlovac 1919",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Huesca": [
+    {
+      "date": "2026-08-04",
+      "opponent": "UD Logroñés",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "UD Logroñés": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Huesca",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Leganes": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Al-Rayyan SC",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Al-Rayyan SC": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Leganes",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Tenerife": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Tamaraceite",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Tamaraceite": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Tenerife",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Waltham Abbey": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Leyton Orient",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 7,
+      "result": "L"
+    }
+  ],
+  "Leyton Orient": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Waltham Abbey",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 7,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Grimsby": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Grimsby Borough",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Grimsby Borough": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Grimsby",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Atletico Atlas": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Sacachispas",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Sacachispas": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Atletico Atlas",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Berazategui": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Central Cordoba",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Central Cordoba": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Berazategui",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Claypole": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Juventud Unida",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Juventud Unida": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Claypole",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Deportivo Paraguayo": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Central Ballester",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Central Ballester": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Deportivo Paraguayo",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Estrella Del Sur": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Lujan",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Lujan": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Estrella Del Sur",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "El Porvenir": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Fénix",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Fénix": [
+    {
+      "date": "2026-08-04",
+      "opponent": "El Porvenir",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Centro Español": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Leones de Rosario",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Leones de Rosario": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Centro Español",
+      "league": "Primera C",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Atlético Tucumán Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Sarmiento Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Sarmiento Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Atlético Tucumán Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Banfield Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Tigre Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Tigre Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Banfield Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Gimnasia La Plata Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Aldosivi Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Aldosivi Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Gimnasia La Plata Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Godoy Cruz Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Racing Club Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Racing Club Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Godoy Cruz Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Gimnasia Mendoza 2": [
+    {
+      "date": "2026-08-04",
+      "opponent": "River Plate Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "River Plate Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Gimnasia Mendoza 2",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Huracán Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Belgrano Córdoba Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Belgrano Córdoba Res.": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Huracán Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Aarhus Black Vipers": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Brabrand",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Brabrand": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Aarhus Black Vipers",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Skjold Birkerød": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Allerød",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Allerød": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Skjold Birkerød",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Boldklubben FIX": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Frederikssund",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Frederikssund": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Boldklubben FIX",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Bredballe": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Middelfart",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Middelfart": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Bredballe",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "GVI": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Avarta",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Avarta": [
+    {
+      "date": "2026-08-04",
+      "opponent": "GVI",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Glamsbjerg": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Kolding IF",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 8,
+      "result": "L"
+    }
+  ],
+  "Kolding IF": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Glamsbjerg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 8,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Handelsstandens": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Roskilde",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    }
+  ],
+  "Roskilde": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Handelsstandens",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Holbæk B&I": [
+    {
+      "date": "2026-08-04",
+      "opponent": "AB Copenhagen",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "AB Copenhagen": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Holbæk B&I",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Køge Nord": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Vanløse",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Vanløse": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Køge Nord",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Maribo": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Skjold Sæby",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    }
+  ],
+  "Skjold Sæby": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Maribo",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Munkebo": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Morud",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Morud": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Munkebo",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Ringsted": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Frem",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Frem": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ringsted",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Rudersdal": [
+    {
+      "date": "2026-08-04",
+      "opponent": "HIK",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 5,
+      "result": "L"
+    }
+  ],
+  "HIK": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Rudersdal",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "SfB-Oure": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FC Fredericia",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    }
+  ],
+  "FC Fredericia": [
+    {
+      "date": "2026-08-04",
+      "opponent": "SfB-Oure",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Sydkysten": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ishøj",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Ishøj": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Sydkysten",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "tst Fodbold": [
+    {
+      "date": "2026-08-04",
+      "opponent": "VSK Århus",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "VSK Århus": [
+    {
+      "date": "2026-08-04",
+      "opponent": "tst Fodbold",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Vallensbæk": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FC Helsingor",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "FC Helsingor": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Vallensbæk",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Viby": [
+    {
+      "date": "2026-08-04",
+      "opponent": "ASA Aarhus",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "ASA Aarhus": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Viby",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Vigerslev": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Skovshoved",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Skovshoved": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Vigerslev",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Aabybro": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Thisted FC",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 9,
+      "result": "L"
+    }
+  ],
+  "Thisted FC": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Aabybro",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 9,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Brønshøj": [
+    {
+      "date": "2026-08-04",
+      "opponent": "HB Koge",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "HB Koge": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Brønshøj",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Holstebro": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Aalborg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Aalborg": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Holstebro",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Kolding B": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Næsby",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Næsby": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Kolding B",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "FA 2000": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Fremad Amager",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Fremad Amager": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FA 2000",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Lyseng": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Vejgaard B",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Vejgaard B": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Lyseng",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Nykobing FC": [
+    {
+      "date": "2026-08-04",
+      "opponent": "B 93",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "B 93": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Nykobing FC",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Ringkøbing": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Aarhus Fremad",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Aarhus Fremad": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ringkøbing",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "SV Babelsberg 03": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Altglienicke",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    }
+  ],
+  "Altglienicke": [
+    {
+      "date": "2026-08-04",
+      "opponent": "SV Babelsberg 03",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    }
+  ],
+  "Chemnitzer FC": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FSV Zwickau",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "FSV Zwickau": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Chemnitzer FC",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Hertha BSC II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Greifswalder FC",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Greifswalder FC": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Hertha BSC II",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "FC Carl Zeiss Jena": [
+    {
+      "date": "2026-08-04",
+      "opponent": "RSV Eintracht",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "RSV Eintracht": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FC Carl Zeiss Jena",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Magdeburg II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Luckenwalde",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Luckenwalde": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Magdeburg II",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "TSB Flensburg": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Rotenhof",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Rotenhof": [
+    {
+      "date": "2026-08-04",
+      "opponent": "TSB Flensburg",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Hohenwestedt": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Union Neumünster",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Union Neumünster": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Hohenwestedt",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Kaltenkirchen": [
+    {
+      "date": "2026-08-04",
+      "opponent": "SV Eichede",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "SV Eichede": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Kaltenkirchen",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "VfB Lübeck": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Phönix L. II",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Phönix L. II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "VfB Lübeck",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Nordmark Satrup": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Eckernförder SV",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Eckernförder SV": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Nordmark Satrup",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Oldenburger SV": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Lübeck II",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Lübeck II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Oldenburger SV",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "VfR Neumünster": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Kilia Kiel",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Kilia Kiel": [
+    {
+      "date": "2026-08-04",
+      "opponent": "VfR Neumünster",
+      "league": "Oberliga - Schleswig-Holstein",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Ararat II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Andranik",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Andranik": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ararat II",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Pyunik II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ararat-Armenia II",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Ararat-Armenia II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Pyunik II",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Noah II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Mika",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Mika": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Noah II",
+      "league": "First League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Hapoel Beer Sheva": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FK Crvena Zvezda",
+      "league": "UEFA Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "FK Crvena Zvezda": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Hapoel Beer Sheva",
+      "league": "UEFA Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Olympiakos Piraeus": [
+    {
+      "date": "2026-08-04",
+      "opponent": "NEC Nijmegen",
+      "league": "UEFA Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "NEC Nijmegen": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Olympiakos Piraeus",
+      "league": "UEFA Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Atert Bissen": [
+    {
+      "date": "2026-08-04",
+      "opponent": "F91 Dudelange",
+      "league": "National Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "F91 Dudelange": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Atert Bissen",
+      "league": "National Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "UNA Strassen": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Victoria Rosport",
+      "league": "National Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Victoria Rosport": [
+    {
+      "date": "2026-08-04",
+      "opponent": "UNA Strassen",
+      "league": "National Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Fortuna Hjørring W": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Midtjylland W",
+      "league": "Kvindeliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Midtjylland W": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Fortuna Hjørring W",
+      "league": "Kvindeliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Kattaqurgon": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Pakhtakor II",
+      "league": "Pro League A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Pakhtakor II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Kattaqurgon",
+      "league": "Pro League A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Ilves II": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Musa",
+      "league": "Kakkonen - Lohko B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Musa": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ilves II",
+      "league": "Kakkonen - Lohko B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "result": "L"
+    }
+  ],
+  "Auda": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Dinamo Tirana",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Dinamo Tirana": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Auda",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Jamus": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Rayon Sports",
+      "league": "CECAFA Club Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Rayon Sports": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Jamus",
+      "league": "CECAFA Club Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Montana": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Nesebar",
+      "league": "Second League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Nesebar": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Montana",
+      "league": "Second League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Ironi Kiryat Shmona": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Bnei Sakhnin",
+      "league": "Toto Cup Ligat Al",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Bnei Sakhnin": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ironi Kiryat Shmona",
+      "league": "Toto Cup Ligat Al",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Maccabi Haifa": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Ironi Tiberias",
+      "league": "Toto Cup Ligat Al",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Ironi Tiberias": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Maccabi Haifa",
+      "league": "Toto Cup Ligat Al",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "FC Politehnica Timisoara": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Chindia Targoviste",
+      "league": "Liga II",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Chindia Targoviste": [
+    {
+      "date": "2026-08-04",
+      "opponent": "FC Politehnica Timisoara",
+      "league": "Liga II",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Dinamo Makhachkala": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Krylia Sovetov",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Krylia Sovetov": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Dinamo Makhachkala",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Rodina Moskva": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Rubin",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Rubin": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Rodina Moskva",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    }
+  ],
+  "Lokomotiv": [
+    {
+      "date": "2026-08-04",
+      "opponent": "CSKA Moscow",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "CSKA Moscow": [
+    {
+      "date": "2026-08-04",
+      "opponent": "Lokomotiv",
+      "league": "Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ]
+}

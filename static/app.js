@@ -915,6 +915,7 @@ function renderAnalysis(d, box) {
       </p>
       ${coldWarn}
     </div>
+    ${renderFormAndH2H(d, m)}
     ${recCard}
     <div class="card">
       <h3>Všechny spočítané trhy</h3>
@@ -929,6 +930,50 @@ function renderAnalysis(d, box) {
 /** Rozšířené model-only odhady (přesný výsledek, marže, gólové trhy per
  *  tým, kdo dá první gól, poločasy). ESPN na ně kurzy nedává, takže se na
  *  ně NIKDY nesází – jen se zobrazí, ať je vidět, co model o zápase ví. */
+/** Forma obou týmů (posledních 5 výsledků jako V/R/P ikony) + tabulka
+ *  vzájemných zápasů. Odvozeno z historie výsledků, kterou appka stejně
+ *  stahuje pro rating – prázdné, dokud appka daný tým poprvé nezaznamená. */
+function renderFormAndH2H(d, m) {
+  const fh = d.form_home || [], fa = d.form_away || [], h2h = d.h2h || [];
+  if (!fh.length && !fa.length && !h2h.length) return '';
+
+  const formIcons = (form) => form.length
+    ? form.map(r => {
+        const cls = r === 'W' ? 'pos' : r === 'L' ? 'bad' : '';
+        const label = r === 'W' ? 'V' : r === 'L' ? 'P' : 'R';
+        return `<span class="form-dot ${cls}">${label}</span>`;
+      }).join('')
+    : '<span class="muted">zatím žádná zaznamenaná historie</span>';
+
+  const h2hRows = h2h.length ? h2h.map(g => {
+    const cls = g.result === 'W' ? 'pos' : g.result === 'L' ? 'bad' : '';
+    return `
+      <div class="perf-row">
+        <span class="perf-key muted">${(g.date || '').slice(0, 10)} · ${g.loc === 'home' ? m.home : m.away} doma</span>
+        <span class="perf-nums"><strong class="${cls}">${g.gf}:${g.ga}</strong></span>
+      </div>`;
+  }).join('') : '<div class="empty-state" style="padding:10px 0;">Zatím žádný zaznamenaný vzájemný zápas</div>';
+
+  return `
+    <div class="card">
+      <h3>Forma a vzájemné zápasy</h3>
+      <div class="perf-grid">
+        <div class="perf-block">
+          <div class="perf-title">Forma – ${m.home}</div>
+          <div class="form-row">${formIcons(fh)}</div>
+        </div>
+        <div class="perf-block">
+          <div class="perf-title">Forma – ${m.away}</div>
+          <div class="form-row">${formIcons(fa)}</div>
+        </div>
+        <div class="perf-block" style="grid-column: span 2;">
+          <div class="perf-title">Posledních ${h2h.length || 0} vzájemných zápasů</div>
+          <div class="perf-rows">${h2hRows}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderExtraMarkets(em, topScores, m) {
   if (!em) {
     // sport bez remízy (2way) nebo bez modelu – aspoň staré top_scores, když jsou
