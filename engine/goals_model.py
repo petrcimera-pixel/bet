@@ -422,6 +422,110 @@ def _top_scores(grid: dict, n=5):
     return [{"score": f"{i}:{j}", "prob": round(p, 4)} for (i, j), p in items]
 
 
+# ---------------------------------------------------------------------------
+# Rozšířené model-only trhy (ESPN na ně kurzy nedává, takže se na ně NIKDY
+# nesází – jen se zobrazují v detailu zápasu s odznakem "jen model", ať je
+# vidět, co model o zápase ví. Stejný princip jako u BTTS o pár řádků výš.)
+# ---------------------------------------------------------------------------
+def _margin_probs(grid: dict) -> dict:
+    """Pravděpodobnost gólového náskoku vítěze: remíza / 1 gól / 2 góly /
+    3+ gólů. Přímý součet přes scoreline grid podle rozdílu skóre."""
+    buckets = {"draw": 0.0, "margin_1": 0.0, "margin_2": 0.0, "margin_3plus": 0.0}
+    for (i, j), p in grid.items():
+        d = abs(i - j)
+        if d == 0:
+            buckets["draw"] += p
+        elif d == 1:
+            buckets["margin_1"] += p
+        elif d == 2:
+            buckets["margin_2"] += p
+        else:
+            buckets["margin_3plus"] += p
+    return {k: round(v, 4) for k, v in buckets.items()}
+
+
+def _team_total_probs(lam: float, lines=(0.5, 1.5, 2.5)) -> list:
+    """Over/under na počet gólů JEDNOHO týmu (ne celého zápasu) – marginální
+    Poissonova distribuce s intenzitou lam."""
+    out = []
+    for line in lines:
+        # P(góly > line) = 1 - P(góly <= floor(line)), Poisson CDF v celých číslech
+        k_max = int(math.floor(line))
+        cdf = sum(_pois(k, lam) for k in range(k_max + 1))
+        out.append({"line": line, "over": round(1 - cdf, 4), "under": round(cdf, 4)})
+    return out
+
+
+def _first_to_score_probs(lam_h: float, lam_a: float, grid: dict) -> dict:
+    """Kdo dá první gól. Aproximace jako Poissonův "race" – když góly obou
+    týmů přicházejí nezávislými Poissonovými procesy rozprostřenými rovnoměrně
+    přes zápas, pravděpodobnost, že domácí skóruje dřív, je úměrná poměru
+    jejich intenzit gólů. P(žádný gól) se vezme přímo ze scoreline gridu
+    (přesná hodnota P(0:0)), zbytek se rozdělí podle lam_h : lam_a."""
+    p_no_goals = grid.get((0, 0), 0.0)
+    total_lam = lam_h + lam_a
+    if total_lam <= 0:
+        return {"home": 0.0, "away": 0.0, "no_goals": round(p_no_goals, 4)}
+    p_rest = 1 - p_no_goals
+    return {
+        "home": round(p_rest * (lam_h / total_lam), 4),
+        "away": round(p_rest * (lam_a / total_lam), 4),
+        "no_goals": round(p_no_goals, 4),
+    }
+
+
+# Podíl gólů padajících v 1. poločase – empirický průměr napříč soutěžemi
+# (2. poločas bývá otevřenější, unavenější obrany, víc střídání/rizika).
+# Je to zjednodušující předpoklad stejný pro všechny zápasy, ne naučená
+# hodnota – přesnost poločasových odhadů je proto nižší než u trhů
+# počítaných přímo ze scoreline gridu celého zápasu.
+HALF_TIME_SHARE = 0.45
+
+
+def _half_time_probs(lam_h: float, lam_a: float) -> dict:
+    """Odhad gólů podle poločasu. Vrací over/under linie pro 1./2. poločas
+    a pravděpodobnost, ve kterém poločase padne víc gólů (číselná konvoluce
+    dvou nezávislých Poissonových součtů, ne uzavřený vzorec)."""
+    h1_lam = (lam_h + lam_a) * HALF_TIME_SHARE
+    h2_lam = (lam_h + lam_a) * (1 - HALF_TIME_SHARE)
+
+    def _over_lines(total_lam, lines=(0.5, 1.5)):
+        out = []
+        for line in lines:
+            k_max = int(math.floor(line))
+            cdf = sum(_pois(k, total_lam) for k in range(k_max + 1))
+            out.append({"line": line, "over": round(1 - cdf, 4), "under": round(cdf, 4)})
+        return out
+
+    # Která půle bude gólovější – diskrétní konvoluce přes rozumný rozsah,
+    # levné (max 12x12 kombinací), přesnější než uzavřený Skellamův vzorec
+    # pro čtenáře k ověření.
+    rng = range(0, 12)
+    p_h1_more = p_h2_more = p_equal = 0.0
+    for a in rng:
+        pa = _pois(a, h1_lam)
+        for b in rng:
+            pb = _pois(b, h2_lam)
+            q = pa * pb
+            if a > b:
+                p_h1_more += q
+            elif b > a:
+                p_h2_more += q
+            else:
+                p_equal += q
+
+    return {
+        "first_half": _over_lines(h1_lam),
+        "second_half": _over_lines(h2_lam),
+        "more_goals_half": {
+            "first": round(p_h1_more, 4),
+            "second": round(p_h2_more, 4),
+            "equal": round(p_equal, 4),
+        },
+        "assumption": f"{int(HALF_TIME_SHARE * 100)} % gólů v 1. poločase (empirický odhad, ne naučená hodnota)",
+    }
+
+
 def _normal_cdf(x: float) -> float:
     return 0.5 * (1 + math.erf(x / math.sqrt(2)))
 
@@ -604,10 +708,26 @@ def predict_match(m: dict) -> dict:
         bets[f"over{line}"] = over
         bets[f"under{line}"] = under
 
+    extra_markets = None
     if not cfg.get("two_way"):
         btts_p = _btts_prob(grid)
         bets["btts_yes"] = dict(_priced(btts_p, None), label="Oba dají gól", name="Oba týmy dají gól")
         bets["btts_no"] = dict(_priced(1 - btts_p, None), label="Nedají oba", name="Aspoň jeden tým nedá gól")
+
+        # Rozšířené model-only trhy – ESPN na ně kurzy nikdy nedává, takže se
+        # nikdy nesází (agent._candidates i virtual_bettors._candidates_for
+        # berou jen bets s real=True). Slouží čistě k zobrazení v detailu
+        # zápasu, ať je vidět, co model o zápase ví nad rámec sázkatelných trhů.
+        extra_markets = {
+            "correct_score": _top_scores(grid, n=8),
+            "margin": _margin_probs(grid),
+            "team_totals": {
+                "home": _team_total_probs(lam_h),
+                "away": _team_total_probs(lam_a),
+            },
+            "first_to_score": _first_to_score_probs(lam_h, lam_a, grid),
+            "half_time": _half_time_probs(lam_h, lam_a),
+        }
 
     # Dvojtip a "remíza zpět" – nejsou to nové kurzy od sázkovky, ale PŘESNÝ
     # přepočet z reálných kurzů na 1/X/2. Jsou to vzájemně se vylučující
@@ -698,6 +818,7 @@ def predict_match(m: dict) -> dict:
         "bets": bets,
         "goal_lines": goal_lines,
         "top_scores": top_scores,
+        "extra_markets": extra_markets,
         "odds_source": "real" if real_bets else "model",
         "winner_vig": winner_vig,   # marže sázkovky na 1X2/2way trhu (None když chybí odds)
         "result": _result(m),

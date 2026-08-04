@@ -17,6 +17,7 @@ import uuid
 
 from . import storage
 from .bankroll import eval_outcome
+from .goals_model import cz_num
 
 FILE = "virtual_bettors.json"
 DAILY_STAKE_CAP_PCT = 0.35   # žádný sázkař nevsadí v jeden den víc než 35 % banku (i Martingale)
@@ -1023,6 +1024,177 @@ def generate_name(params: dict, taken=()) -> tuple:
             if name not in taken:
                 return name, emoji
     return f"{masc} {uuid.uuid4().hex[:4]}", emoji
+
+
+# ---------------------------------------------------------------------------
+# Generátor sázkařů – hledá v NASBÍRANÉ HISTORII (napříč VŠEMI sázkaři),
+# jaké kombinace parametrů (rozsah kurzu, jistota, typ trhu) mají skutečně
+# nejlepší ROI, a z nich složí parametry pro nového sázkaře. Je to datově
+# řízené, ne inspirované nějakým vzorem – čerpá jen z toho, co appka sama
+# naměřila.
+# ---------------------------------------------------------------------------
+GEN_MIN_TOTAL_BETS = 40    # kolik vyhodnocených sázek napříč aparátem je potřeba, než má smysl něco počítat
+GEN_MIN_BUCKET_BETS = 8    # kolik sázek musí mít samotný segment (kurz/trh), než se bere vážně
+
+ODDS_BUCKETS = [
+    (1.01, 1.30, "1,01–1,30"), (1.30, 1.60, "1,30–1,60"), (1.60, 2.00, "1,60–2,00"),
+    (2.00, 3.00, "2,00–3,00"), (3.00, 100.0, "3,00+"),
+]
+PROB_BUCKETS = [
+    (0.0, 0.55, "pod 55 %"), (0.55, 0.65, "55–65 %"), (0.65, 0.75, "65–75 %"),
+    (0.75, 0.85, "75–85 %"), (0.85, 1.01, "nad 85 %"),
+]
+MARKET_OF = {
+    "winner": ("home", "away", "draw", "dc_1x", "dc_12", "dc_x2", "dnb_home", "dnb_away"),
+}
+
+
+def _all_settled_bets() -> list:
+    """Všechny vyhodnocené (won/lost) sázky napříč všemi sázkaři arény,
+    s doplněným 'market' polem (winner/goals/handicap/jiné)."""
+    st = load_state()
+    out = []
+    for b in st.values():
+        for bet in b.get("bets", []):
+            if bet.get("status") not in ("won", "lost") or bet.get("legs"):
+                continue   # tikety mají jinou dynamiku, počítat jen jednotlivé sázky
+            oc = bet.get("outcome", "")
+            if oc in MARKET_OF["winner"]:
+                market = "winner"
+            elif oc.startswith(("over", "under")):
+                market = "goals"
+            elif oc.startswith("ah_"):
+                market = "handicap"
+            else:
+                market = "jiné"
+            out.append({**bet, "market": market})
+    return out
+
+
+def _bucket_stats(bets: list, key_fn, buckets) -> list:
+    """Rozdělí sázky do binů (podle key_fn), spočítá n/win_rate/ROI pro
+    každý. Bez dost dat (< GEN_MIN_BUCKET_BETS) bin ignoruje – jinak by
+    generátor mohl postavit sázkaře na 3 náhodných výhrách."""
+    out = []
+    for lo, hi, label in buckets:
+        sub = [b for b in bets if lo <= key_fn(b) < hi]
+        if len(sub) < GEN_MIN_BUCKET_BETS:
+            continue
+        staked = sum(b.get("stake", 0) for b in sub)
+        pnl = sum(b.get("pnl", 0) for b in sub)
+        won = sum(1 for b in sub if b["status"] == "won")
+        out.append({
+            "range": (lo, hi), "label": label, "n": len(sub),
+            "win_rate": round(won / len(sub) * 100, 1),
+            "roi": round(pnl / staked * 100, 1) if staked else 0.0,
+        })
+    return out
+
+
+def analyze_best_params() -> dict:
+    """Najde nejvýnosnější rozsah kurzu, jistoty a typ trhu z NASBÍRANÉ
+    historie všech sázkařů. Vrací navržené parametry + odůvodnění (na jakých
+    datech to stojí), nebo available=False, když je dat zatím málo."""
+    bets = _all_settled_bets()
+    if len(bets) < GEN_MIN_TOTAL_BETS:
+        return {"available": False, "reason": "not_enough_data",
+                "have": len(bets), "need": GEN_MIN_TOTAL_BETS}
+
+    odds_stats = _bucket_stats(bets, lambda b: b.get("odds", 0), ODDS_BUCKETS)
+    prob_stats = _bucket_stats(bets, lambda b: b.get("prob", 0), PROB_BUCKETS)
+
+    market_stats = []
+    for mk in ("winner", "goals", "handicap"):
+        sub = [b for b in bets if b["market"] == mk]
+        if len(sub) < GEN_MIN_BUCKET_BETS:
+            continue
+        staked = sum(b.get("stake", 0) for b in sub)
+        pnl = sum(b.get("pnl", 0) for b in sub)
+        market_stats.append({
+            "market": mk, "n": len(sub),
+            "roi": round(pnl / staked * 100, 1) if staked else 0.0,
+        })
+
+    if not odds_stats or not prob_stats:
+        return {"available": False, "reason": "not_enough_bucket_data", "have": len(bets)}
+
+    best_odds = max(odds_stats, key=lambda x: x["roi"])
+    best_prob = max(prob_stats, key=lambda x: x["roi"])
+    best_market = max(market_stats, key=lambda x: x["roi"]) if market_stats else None
+
+    # Pokud je nejlepší ROI segment stejně pod nulou jako všechno ostatní,
+    # nemá smysl z toho vyrábět sázkaře – radši to appka řekne narovinu.
+    if best_odds["roi"] <= 0 and best_prob["roi"] <= 0:
+        return {"available": False, "reason": "no_profitable_segment",
+                "have": len(bets), "best_odds_roi": best_odds["roi"], "best_prob_roi": best_prob["roi"]}
+
+    params = default_params()
+    params["min_odds"] = round(best_odds["range"][0], 2)
+    params["max_odds"] = round(min(best_odds["range"][1], 100.0), 2)
+    params["min_prob"] = round(best_prob["range"][0], 2) if best_prob["range"][0] > 0 else 0.5
+    if best_market and best_market["market"] != "goals":
+        # market="any" pokrývá goals i winner i handicap; jediné omezitelné
+        # market filtry v custom systému jsou home/away/over/under/winner
+        if best_market["market"] == "winner":
+            params["market"] = "winner"
+    # Konzervativnější vklad než default (3 %) – generovaný sázkař staví na
+    # statisticky nejlepším segmentu, ale historie je vždycky menší vzorek
+    # než by chtěl klasický backtest, takže se sází opatrněji.
+    params["stake_pct"] = 0.025
+    params["max_bets"] = 3
+
+    return {
+        "available": True,
+        "params": normalize_params(params),
+        "evidence": {
+            "total_bets_analyzed": len(bets),
+            "best_odds_bucket": best_odds,
+            "best_prob_bucket": best_prob,
+            "best_market": best_market,
+            "all_odds_buckets": odds_stats,
+            "all_prob_buckets": prob_stats,
+            "all_markets": market_stats,
+        },
+    }
+
+
+def generate_optimal_bettor() -> dict:
+    """Vytvoří nového sázkaře s parametry odvozenými z analyze_best_params().
+    Jméno a tagline explicitně říkají, že vznikl z dat, ne z šablony."""
+    analysis = analyze_best_params()
+    if not analysis.get("available"):
+        return {"created": False, **analysis}
+
+    st = load_state()
+    ev = analysis["evidence"]
+    params = analysis["params"]
+
+    taken = [v.get("name") for v in st.values()]
+    _, emoji = generate_name(params, taken=taken)
+    emoji = "🧬"   # vlastní odznak pro AI-generované, ať je na první pohled odlišitelný
+
+    # Pořadové číslo, aby šlo mít víc generací a rozlišit je
+    gen_n = 1 + sum(1 for v in st.values() if str(v.get("name", "")).startswith("Analytik"))
+    name = f"Analytik {gen_n}"
+
+    MARKET_CZ = {"winner": "vítěz", "goals": "góly", "handicap": "handicap"}
+    tagline = (
+        f"Vygenerováno z {ev['total_bets_analyzed']} vyhodnocených sázek arény: "
+        f"kurzy {ev['best_odds_bucket']['label']} (ROI {cz_num(ev['best_odds_bucket']['roi'])} %), "
+        f"jistota {ev['best_prob_bucket']['label']} (ROI {cz_num(ev['best_prob_bucket']['roi'])} %)"
+        + (f", trh {MARKET_CZ.get(ev['best_market']['market'], ev['best_market']['market'])}"
+           if ev.get('best_market') else "") + "."
+    )
+
+    bettor = add_bettor(params, name=name, emoji=emoji, start_balance=DEFAULT_START_BALANCE)
+    bettor["bid"] = bettor.get("id")
+    st2 = load_state()
+    st2[bettor["id"]]["tagline"] = tagline
+    st2[bettor["id"]]["group"] = "single"
+    st2[bettor["id"]]["generated"] = True
+    save_state(st2)
+
+    return {"created": True, "bettor": bettor, "tagline": tagline, "evidence": ev, "params": params}
 
 
 def add_bettor(params: dict, name: str = None, emoji: str = None,

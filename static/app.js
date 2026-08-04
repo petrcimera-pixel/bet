@@ -114,7 +114,6 @@ function closeMobileMenu() {
 
 function bindEvents() {
   el('runAgentBtn')?.addEventListener('click', runAgent);
-  el('settleNowBtn')?.addEventListener('click', settleNow);
   el('refreshMatchesBtn')?.addEventListener('click', () => loadMatches(true));
   el('saveSettingsBtn')?.addEventListener('click', saveAgentSettings);
   el('saveBankrollBtn')?.addEventListener('click', saveBankrollSettings);
@@ -125,6 +124,7 @@ function bindEvents() {
   el('backfillArchiveBtn')?.addEventListener('click', runBackfillArchive);
   el('benchmarkBtn')?.addEventListener('click', runBenchmark);
   el('newBettorBtn')?.addEventListener('click', openBettorWizard);
+  el('generateBettorBtn')?.addEventListener('click', generateBettorFromData);
   el('wizCancel')?.addEventListener('click', () => { el('bettorWizard').style.display = 'none'; });
   el('wizCreate')?.addEventListener('click', createBettor);
   el('wizReroll')?.addEventListener('click', () => { el('wizName').value = ''; refreshWizPreview(); });
@@ -284,20 +284,34 @@ async function loadTipOfDay() {
     const data = await api('/api/dashboard', { timeoutMs: 90000 });
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
-    if (!data.tip) {
+    const tips = (data.tips && data.tips.length) ? data.tips : (data.tip ? [data.tip] : []);
+    if (!tips.length) {
       contentEl.innerHTML = `<div class="match" style="font-size:15px; color:var(--txt2); margin-top:8px;">
         Dnes žádná tutovka se skutečnými kurzy nesplňuje kritéria jistoty.</div>`;
       return;
     }
-    const t = data.tip;
+    // Nejjistější tip nahoře zůstává zvýrazněný (stejný vzhled jako dřív),
+    // zbytek (max 4 další) jde pod něj jako menší řádky – jeden zápas =
+    // jeden tip, ať to není jen kopie stejné jistoty pořád dokola.
+    const [top, ...rest] = tips;
     contentEl.innerHTML = `
-      <div class="match">${t.match}</div>
-      <div class="meta">${t.league || ''} · ${(t.date || '').slice(5)} ${t.time || ''}</div>
+      <div class="match">${top.match}</div>
+      <div class="meta">${top.league || ''} · ${(top.date || '').slice(5)} ${top.time || ''}</div>
       <div class="pick-line">
-        <span class="pick-name">${t.name}</span>
-        <span class="odds-chip">${t.odds.toFixed(2)}</span>
-        <span class="conf-chip">${Math.round(t.prob * 100)} % jistota</span>
-      </div>`;
+        <span class="pick-name">${top.name}</span>
+        <span class="odds-chip">${top.odds.toFixed(2)}</span>
+        <span class="conf-chip">${Math.round(top.prob * 100)} % jistota</span>
+      </div>
+      ${rest.length ? `
+        <div class="tip-more">
+          ${rest.map(t => `
+            <div class="tip-more-row">
+              <span class="tip-more-match">${t.match}</span>
+              <span class="tip-more-pick">${t.name}</span>
+              <span class="odds-chip small">${t.odds.toFixed(2)}</span>
+              <span class="conf-chip small">${Math.round(t.prob * 100)} %</span>
+            </div>`).join('')}
+        </div>` : ''}`;
   } catch (e) {
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
@@ -450,11 +464,9 @@ function setupStatusBar() {
     const btn = el('sbCheckBtn');
     btn.disabled = true; btn.textContent = 'Kontroluji…';
     try {
-      const d = await api('/api/tips/settle', { method: 'POST', timeoutMs: 90000 });
-      toast(`Vyhodnoceno: ${d.settled || 0} tipů, ${d.settled_bets || 0} sázek.`);
-      if (STATE.page === 'dashboard') loadDashboard();
+      await settleNow();
     } catch (e) {
-      toast('Kontrola selhala: ' + e.message, 'err');
+      // chyba i toast už řeší settleNow()
     } finally {
       btn.disabled = false; btn.textContent = 'Zkontrolovat teď';
       updateStatusBar();
@@ -484,25 +496,25 @@ async function loadSettleStatus() {
   } catch (e) { /* nic */ }
 }
 
+/** Jediné místo, které spouští kontrolu výsledků – volané tlačítkem ve
+ *  stavové liště (to je vidět na všech stránkách). Dřív existovalo druhé,
+ *  identické tlačítko přímo v Dashboard kartě; teď ta karta jen pasivně
+ *  ukazuje průběh (spinner, text), když se kontrola spustí odkudkoli. */
 async function settleNow() {
-  const btn = el('settleNowBtn');
   const spinner = el('settleSpinner');
-  btn.disabled = true;
-  btn.textContent = 'Kontroluji…';
-  spinner.style.display = 'inline-block';
+  if (spinner) spinner.style.display = 'inline-block';
   setText('settleText', 'Stahuji čerstvé výsledky z ESPN pro čekající ligy…');
   try {
-    const data = await api('/api/tips/settle', { method: 'POST', timeoutMs: 60000 });
+    const data = await api('/api/tips/settle', { method: 'POST', timeoutMs: 90000 });
     toast(`Vyhodnoceno: ${data.settled || 0} tipů, ${data.settled_bets || 0} sázek.`);
-    loadDashboard();
-    updateStatusBar();
+    if (STATE.page === 'dashboard') loadDashboard();
+    return data;
   } catch (e) {
     toast(`Vyhodnocení selhalo: ${e.message}`, 'err');
     loadSettleStatus();
+    throw e;
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Zkontrolovat výsledky';
-    spinner.style.display = 'none';
+    if (spinner) spinner.style.display = 'none';
   }
 }
 
@@ -897,11 +909,82 @@ function renderAnalysis(d, box) {
         <tbody>${cands || '<tr><td colspan="6" class="muted">Žádné trhy s reálnými kurzy</td></tr>'}</tbody>
       </table></div>
     </div>
-    ${(d.top_scores || []).length ? `
+    ${renderExtraMarkets(d.extra_markets, d.top_scores, m)}`;
+}
+
+/** Rozšířené model-only odhady (přesný výsledek, marže, gólové trhy per
+ *  tým, kdo dá první gól, poločasy). ESPN na ně kurzy nedává, takže se na
+ *  ně NIKDY nesází – jen se zobrazí, ať je vidět, co model o zápase ví. */
+function renderExtraMarkets(em, topScores, m) {
+  if (!em) {
+    // sport bez remízy (2way) nebo bez modelu – aspoň staré top_scores, když jsou
+    if (!(topScores || []).length) return '';
+    return `
+      <div class="card">
+        <h3>Nejpravděpodobnější výsledky <span class="badge model">jen model</span></h3>
+        <div class="pill-row">${topScores.map(s => `<span class="pill">${s.score} <span class="muted">${pct(s.prob * 100)}</span></span>`).join('')}</div>
+      </div>`;
+  }
+  const mg = em.margin || {};
+  const fts = em.first_to_score || {};
+  const ht = em.half_time || {};
+  const tt = em.team_totals || {};
+
+  const teamTotalRow = (label, lines) => (lines || []).map(l => `
+    <div class="perf-row">
+      <span class="perf-key">${label} přes ${String(l.line).replace('.', ',')}</span>
+      <span class="perf-nums"><strong>${pct(l.over * 100)}</strong></span>
+    </div>`).join('');
+
+  return `
     <div class="card">
-      <h3>Nejpravděpodobnější výsledky</h3>
-      <div class="pill-row">${d.top_scores.map(s => `<span class="pill">${s.score} <span class="muted">${pct(s.prob * 100)}</span></span>`).join('')}</div>
-    </div>` : ''}`;
+      <h3>Rozšířené odhady modelu <span class="badge model" title="ESPN na tyhle trhy kurzy nedává – nikdy se na ně nesází, jen ukazují, co model o zápase ví">jen model, nesázet</span></h3>
+
+      <div style="margin-bottom:14px;">
+        <div class="perf-title" style="margin-bottom:8px;">Nejpravděpodobnější výsledky</div>
+        <div class="pill-row">${(em.correct_score || []).slice(0, 6).map(s => `<span class="pill">${s.score} <span class="muted">${pct(s.prob * 100)}</span></span>`).join('')}</div>
+      </div>
+
+      <div class="perf-grid">
+        <div class="perf-block">
+          <div class="perf-title">Gólový náskok vítěze</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">Remíza</span><span class="perf-nums"><strong>${pct((mg.draw || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Rozdíl 1 gól</span><span class="perf-nums"><strong>${pct((mg.margin_1 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Rozdíl 2 góly</span><span class="perf-nums"><strong>${pct((mg.margin_2 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Rozdíl 3+ góly</span><span class="perf-nums"><strong>${pct((mg.margin_3plus || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Kdo dá první gól</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">${m.home}</span><span class="perf-nums"><strong>${pct((fts.home || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${m.away}</span><span class="perf-nums"><strong>${pct((fts.away || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Bez gólů</span><span class="perf-nums"><strong>${pct((fts.no_goals || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Góly týmu (přes linii)</div>
+          <div class="perf-rows">
+            ${teamTotalRow(m.home, tt.home)}
+            ${teamTotalRow(m.away, tt.away)}
+          </div>
+        </div>
+
+        <div class="perf-block">
+          <div class="perf-title">Poločasy <span class="muted" title="${ht.assumption || ''}">ⓘ</span></div>
+          <div class="perf-rows">
+            <div class="perf-row"><span class="perf-key">Víc gólů v 1. půli</span><span class="perf-nums"><strong>${pct((ht.more_goals_half?.first || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Víc gólů v 2. půli</span><span class="perf-nums"><strong>${pct((ht.more_goals_half?.second || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">1. půle přes 0,5</span><span class="perf-nums"><strong>${pct((ht.first_half?.[0]?.over || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">2. půle přes 0,5</span><span class="perf-nums"><strong>${pct((ht.second_half?.[0]?.over || 0) * 100)}</strong></span></div>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="font-size:11.5px; margin-top:4px;">${ht.assumption || ''}</p>
+    </div>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -2175,6 +2258,35 @@ async function runBettorsRound() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Spustit kolo teď';
+  }
+}
+
+/** Vygeneruje nového sázkaře z nasbírané historie – najde nejvýnosnější
+ *  segment (kurz/jistota/trh) napříč VŠEMI dosavadními sázkami arény.
+ *  Backend vrátí created=false s důvodem, když je dat zatím málo. */
+async function generateBettorFromData() {
+  const btn = el('generateBettorBtn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-width:2px;"></span> Analyzuji…';
+  try {
+    const data = await api('/api/bettors/generate', { method: 'POST', timeoutMs: 20000 });
+    if (!data.created) {
+      const msgs = {
+        not_enough_data: `Zatím málo dat – potřeba aspoň 40 vyhodnocených sázek, teď je jich ${data.have || 0}.`,
+        not_enough_bucket_data: `Data jsou moc rozptýlená napříč kurzy/jistotou, žádný segment nemá dost vzorku.`,
+        no_profitable_segment: `Ani nejlepší nalezený segment zatím není v plusu (ROI ${data.best_odds_roi ?? '?'} % / ${data.best_prob_roi ?? '?'} %) – radši nevytvářet ztrátového sázkaře.`,
+      };
+      toast(msgs[data.reason] || 'Zatím se nepodařilo najít ziskový segment.', 'info', 8000);
+      return;
+    }
+    toast(`Vytvořen sázkař „${data.bettor.name}" – ${data.tagline}`, 'ok', 8000);
+    loadBettors();
+  } catch (e) {
+    toast(`Generování selhalo: ${e.message}`, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
   }
 }
 

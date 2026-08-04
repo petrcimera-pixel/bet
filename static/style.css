@@ -750,3 +750,16 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
   font-size: 12.5px; color: var(--txt2);
 }
 .perf-blacklist b { color: var(--warn); }
+
+/* Další tipy dne (2.-5.) – menší řádky pod hlavním zvýrazněným tipem */
+.tip-hero .tip-more {
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tip-hero .tip-more-row {
+  display: flex; align-items: center; gap: 10px; font-size: 12.5px;
+}
+.tip-hero .tip-more-match { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--txt2); }
+.tip-hero .tip-more-pick { font-weight: 600; white-space: nowrap; }
+.tip-hero .odds-chip.small { padding: 2px 8px; font-size: 11.5px; border-radius: 6px; }
+.tip-hero .conf-chip.small { font-size: 11px; }

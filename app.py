@@ -506,6 +506,7 @@ def api_analysis(match_id):
         "rating_home": p.get("rating_home"), "rating_away": p.get("rating_away"),
         "top_scores": p.get("top_scores", [])[:5],
         "goal_lines": p.get("goal_lines", []),
+        "extra_markets": p.get("extra_markets"),
         "has_odds": p.get("odds_source") == "real",
         "best_value": p.get("best_value"),
         "recommendation": _tip(best) if best else None,
@@ -1278,27 +1279,33 @@ def api_dashboard():
     # SYNCHRONNĚ v rámci tohoto skutečného requestu (jednou za ~12 h, kdy
     # cache vyprší, bude odpověď pomalejší – to je lepší než nekonečný spinner).
     tip = None
+    tips = []
     warming = False
     try:
         preds = _predictions_for(today, days=1, sport="soccer")
-        best_p, best_c = None, None
+        # Jeden nejlepší tip PER ZÁPAS (ne víc tipů ze stejného utkání –
+        # to by jen nafukovalo seznam bez skutečné diverzity příležitostí),
+        # pak seřadit napříč zápasy a vzít top N.
+        per_match = []
         for p in preds:
             if p.get("result") is not None or p.get("live"):
                 continue
             cands = agent._candidates(p, cfg)
             c = agent._best_tutovka(cands, float(cfg.get("min_prob", 0.75)),
                                     float(cfg.get("min_odds", 1.20)), only_real=False)
-            if c and (best_c is None or c.get("cal_prob", c["prob"]) > best_c.get("cal_prob", best_c["prob"])):
-                best_p, best_c = p, c
-        if best_c:
-            tip = {
-                "match": f'{best_p["home"]} – {best_p["away"]}',
-                "league": best_p.get("league"),
-                "date": best_p.get("date"), "time": best_p.get("time"),
-                "name": best_c["name"], "label": best_c["label"],
-                "odds": best_c["odds"], "prob": best_c.get("cal_prob", best_c["prob"]),
-                "real": best_c["real"], "market": best_c["market"],
-            }
+            if c:
+                per_match.append((p, c))
+        per_match.sort(key=lambda pc: pc[1].get("cal_prob", pc[1]["prob"]), reverse=True)
+        for p, c in per_match[:5]:
+            tips.append({
+                "match": f'{p["home"]} – {p["away"]}',
+                "league": p.get("league"),
+                "date": p.get("date"), "time": p.get("time"),
+                "name": c["name"], "label": c["label"],
+                "odds": c["odds"], "prob": c.get("cal_prob", c["prob"]),
+                "real": c["real"], "market": c["market"],
+            })
+        tip = tips[0] if tips else None   # zpětná kompatibilita se starým polem "tip"
     except Exception:
         pass
 
@@ -1341,6 +1348,7 @@ def api_dashboard():
 
     return jsonify({
         "tip": tip,
+        "tips": tips,
         "warming": warming,
         "ticket": ticket,
         "yesterday": y_summary,
@@ -1421,6 +1429,25 @@ def api_bettors_reset_all():
     d = request.get_json(silent=True) or {}
     start = float(d.get("start_balance") or virtual_bettors.DEFAULT_START_BALANCE)
     return jsonify(virtual_bettors.reset_all(start))
+
+
+@app.route("/api/bettors/generate", methods=["POST"])
+@login_required
+def api_bettors_generate():
+    """Vygeneruje nového sázkaře z nasbírané historie – najde nejvýnosnější
+    rozsah kurzu/jistoty/trhu napříč VŠEMI dosavadními sázkami arény a
+    postaví z něj nového custom sázkaře. Vrací created=False s důvodem,
+    když je dat zatím málo nebo nic ziskového nenašel."""
+    result = virtual_bettors.generate_optimal_bettor()
+    return jsonify(result)
+
+
+@app.route("/api/bettors/generate/preview")
+@login_required
+def api_bettors_generate_preview():
+    """Jen analýza bez vytvoření sázkaře – ať si uživatel může prohlédnout,
+    co by se vygenerovalo, než na to klikne."""
+    return jsonify(virtual_bettors.analyze_best_params())
 
 
 @app.route("/api/agent/reset", methods=["POST"])

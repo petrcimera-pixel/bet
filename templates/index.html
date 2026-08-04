@@ -60,11 +60,15 @@
         <div class="stat-tile"><div class="label">Otevřené sázky</div><div class="value" id="stOpen">—</div><div class="hint">čeká na vyhodnocení</div></div>
       </div>
 
+      <!-- Čistě informační – akční tlačítko je jen jedno, dole ve stavové
+           liště (ta je vidět na všech stránkách, tahle karta jen na
+           Dashboardu). Dřív tu bylo druhé tlačítko volající identický
+           endpoint, jen matlo, kam kliknout. -->
       <div id="settleBar" class="card" style="display:none; margin-bottom:16px;">
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
           <span id="settleSpinner" class="spinner" style="width:16px;height:16px; display:none;"></span>
           <span id="settleText" style="flex:1; font-size:13px; color:var(--txt2);"></span>
-          <button class="btn small" id="settleNowBtn">Zkontrolovat výsledky</button>
+          <span class="muted" style="font-size:12px;">Kontrola dole ve stavové liště ↓</span>
         </div>
         <div id="settleDetail" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px; color:var(--txt3); line-height:1.7;"></div>
       </div>
@@ -170,6 +174,10 @@
           <button class="btn" id="newBettorBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
             Nový sázkař
+          </button>
+          <button class="btn" id="generateBettorBtn" title="Vytvoří sázkaře podle nejvýnosnějšího segmentu z nasbírané historie">
+            <span style="font-size:14px;">🧬</span>
+            Vygenerovat z dat
           </button>
           <button class="btn primary" id="runBettorsBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg>
