@@ -1,6 +1,6 @@
 {
   "start_balance": 200.0,
-  "balance": 144.55,
+  "balance": 139.55,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -191,7 +191,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.009,
+      "clv": -0.0006,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -214,7 +214,7 @@
         "Internacional de Bogotá má výrazně silnější útočný rating.",
         "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.556
+      "closing_odds": 1.571
     },
     {
       "id": "fe0e259c2d",

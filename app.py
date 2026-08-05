@@ -1385,6 +1385,47 @@ def api_dashboard():
     })
 
 
+def _attach_live_scores(bets: list) -> list:
+    """Doplní OTEVŘENÝM sázkám na zápasy, které už začaly, průběžné skóre.
+
+    bet["result"] appka plní až při vyhodnocení (settle_bet) – do té doby
+    je None, i když ESPN mezitím zápas odehrává a průběžné skóre má. Bez
+    tohohle by tabulka u živého zápasu ukazovala jen "hraje se" bez čísel,
+    přestože appka to skóre má k dispozici, jen v jiném místě (cache
+    predikcí, ne v uloženém bet objektu)."""
+    # jen zápasy, které mohly začít v posledních pár dnech – ať se
+    # nevolá _predictions_for pro dávno uzavřené sázky zbytečně
+    today = ds.today_str()
+    window_start = ds.add_days(today, -3)
+    candidates = [b for b in bets if b.get("status") == "open"
+                  and (b.get("match_date") or "9999") >= window_start
+                  and not b.get("legs")]   # tikety nemají jediný match_id
+    if not candidates:
+        return bets
+
+    by_sport = {}
+    for b in candidates:
+        by_sport.setdefault(b.get("sport", "soccer"), set()).add(str(b.get("match_id")))
+
+    live_map = {}   # match_id -> {"result":..., "live":...}
+    for sport, ids in by_sport.items():
+        try:
+            preds = _predictions_for(today, days=4, sport=sport)
+        except Exception:
+            continue
+        for p in preds:
+            if str(p.get("id")) in ids:
+                live_map[str(p["id"])] = {"result": p.get("result"), "live": bool(p.get("live"))}
+
+    out = []
+    for b in bets:
+        info = live_map.get(str(b.get("match_id")))
+        if info and info["result"]:
+            b = {**b, "live_result": info["result"], "live": info["live"]}
+        out.append(b)
+    return out
+
+
 @app.route("/api/agent")
 def api_agent():
     """Stav agenta: nastavení, statistiky výkonu a jeho sázky."""
@@ -1392,7 +1433,7 @@ def api_agent():
         "settings": app_settings.get_settings()["agent"],
         "stats": agent.agent_stats(),
         "league_stats": agent.league_stats(),
-        "bets": agent.agent_bets()[:60],
+        "bets": _attach_live_scores(agent.agent_bets()[:60]),
         "balance": bankroll.state()["balance"],
     })
 

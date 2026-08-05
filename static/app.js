@@ -372,7 +372,7 @@ function renderRecentBets(bets) {
       <tr>
         <td>${b.match || '—'}</td>
         <td class="muted">${when}</td>
-        <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result)}</td>
+        <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result, b.live_result, b.live)}</td>
         <td>${b.label || '?'}</td>
         <td>${b.odds || 0}×</td>
         <td><span class="badge ${b.status}">${(b.status || 'open').toUpperCase()}</span></td>
@@ -1316,12 +1316,20 @@ const LIVE_WINDOW_MIN = 150;   // ~2.5 h od výkopu, než se zápas počítá za
 
 /** Stav ZÁPASU (ne sázky) odvozený z času výkopu – aby "OPEN" neznamenalo
  *  zároveň "je to za tři dny" i "dohrálo se a čeká na vyhodnocení". */
-function matchStateHtml(dateStr, timeStr, betStatus, result) {
+function matchStateHtml(dateStr, timeStr, betStatus, result, liveResult, isLive) {
   if (betStatus && betStatus !== 'open') {
     // u vyhodnocené sázky je zajímavější skóre než slovo "dohráno"
     return result && result.home != null
       ? `<strong>${result.home} : ${result.away}</strong>`
       : '<span class="muted">dohráno</span>';
+  }
+  // Otevřená sázka na zápas, který už začal – appka uloží finální skóre
+  // až při vyhodnocení, ale průběžné skóre živého zápasu má appka
+  // k dispozici hned (liveResult z /api/agent), takže ho místo pouhého
+  // odznaku "hraje se" rovnou ukážeme.
+  if (liveResult && liveResult.home != null) {
+    const badge = isLive ? '<span class="badge live-pill">🔴</span> ' : '';
+    return `${badge}<strong>${liveResult.home} : ${liveResult.away}</strong>`;
   }
   const d = matchDateTime(dateStr, timeStr);
   if (!d) return '<span class="muted">—</span>';
