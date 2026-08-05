@@ -17,7 +17,7 @@ import uuid
 
 from . import storage
 from .bankroll import eval_outcome
-from .goals_model import cz_num
+from .goals_model import cz_num, team_form
 
 FILE = "virtual_bettors.json"
 DAILY_STAKE_CAP_PCT = 0.35   # žádný sázkař nevsadí v jeden den víc než 35 % banku (i Martingale)
@@ -131,6 +131,46 @@ def _s_value_hunter(pool, b, bal):
             continue
         by_match.add(c["match_id"])
         out.append((c, round(bal * 0.04, 2)))
+        if len(out) >= 3:
+            break
+    return out
+
+
+def _form_score(form: list) -> float:
+    """Poslední zápasy váží víc než starší – nejnovější výsledek má 2x váhu
+    nejstaršího z pětice. Vrací 0-1 (0 = samé prohry, 1 = samé výhry)."""
+    if not form:
+        return 0.5   # bez historie = neutrální, žádná výhoda ani nevýhoda
+    weights = [1.0 + 0.25 * i for i in range(len(form))]   # novější = vyšší váha
+    pts = {"W": 1.0, "D": 0.5, "L": 0.0}
+    return sum(pts[r] * w for r, w in zip(form, weights)) / sum(weights)
+
+
+def _s_form_rio(pool, b, bal):
+    """Forma Rio – sází na tým v citelně lepší formě než soupeř (rozdíl
+    formy aspoň 0.3 na škále 0-1), a jen když k tomu kurz dává aspoň
+    minimální edge. Forma sama o sobě nestačí – bez edge by to bylo jen
+    sázení na oblíbence, ne na příležitost."""
+    by_match = {}
+    for c in pool:
+        if c["outcome"] not in ("home", "away") or c["market"] != "winner":
+            continue
+        by_match.setdefault(c["match_id"], {})[c["outcome"]] = c
+
+    out = []
+    for mid, sides in by_match.items():
+        home, away = sides.get("home"), sides.get("away")
+        if not home or not away:
+            continue
+        fh = _form_score(home.get("form_home") or [])
+        fa = _form_score(away.get("form_away") or [])
+        diff = fh - fa
+        if abs(diff) < 0.3:
+            continue   # forma moc podobná, žádná jasná výhoda
+        better = home if diff > 0 else away
+        if better["edge"] < 0.03:
+            continue   # forma bez value je jen sázka na oblíbence
+        out.append((better, round(bal * 0.03, 2)))
         if len(out) >= 3:
             break
     return out
@@ -735,6 +775,9 @@ PROFILES = [
     {"id": "spread", "name": "Diverzifikátor Dita", "emoji": "🕸️",
      "tagline": "Hodně malých sázek, ale nejvýš jedna na ligu – rozloží riziko.",
      "strategy": _s_spread, "group": "single"},
+    {"id": "form_rio", "name": "Forma Rio", "emoji": "📶",
+     "tagline": "Sází na tým v citelně lepší formě (posledních 5 zápasů) než soupeř – ale jen když k tomu kurz dává i value.",
+     "strategy": _s_form_rio, "group": "single"},
 
     # --- třetí desítka: akumulátory přes víc zápasů ---
     {"id": "acca_duo", "name": "Dvojka Dušan", "emoji": "🎫",
@@ -1404,6 +1447,10 @@ def _build_pool(predictions):
             "exp_goals_home": eg.get("home"), "exp_goals_away": eg.get("away"),
             "rating_confidence": min(1.0, (rh.get("n", 0) + ra.get("n", 0)) / 40.0),
         }
+        # Forma obou týmů (posledních 5 výsledků) – pro strategie, které
+        # sází podle toho, kdo je "v ráži", ne jen podle ratingu.
+        form_h = team_form(p["home"])
+        form_a = team_form(p["away"])
         for c in _candidates_for(p):
             pool.append({
                 **c, "match_id": p["id"], "match": f'{p["home"]} – {p["away"]}',
@@ -1414,6 +1461,8 @@ def _build_pool(predictions):
                 # pravděpodobnost se počítá ze scoreline gridu, ne součinem
                 "exp_goals": eg if eg.get("home") is not None else None,
                 "two_way": bool(p.get("two_way")),
+                "home_team": p["home"], "away_team": p["away"],
+                "form_home": form_h, "form_away": form_a,
             })
     return pool
 

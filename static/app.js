@@ -108,7 +108,7 @@ function setupNav() {
       if (page === 'search') loadSearchPage();
       if (page === 'bettors') loadBettors();
       if (page === 'bankroll') loadBankroll();
-      if (page === 'learning') { loadMlLearning(); loadBacktest(); }
+      if (page === 'learning') { loadMlLearning(); loadBacktest(); loadAgentBreakdown(); }
       if (page === 'settings') loadSettings();
     });
   });
@@ -2544,6 +2544,43 @@ const ML_STATUS_CZ = {
   no_data: 'Čeká na data', not_trained: 'Netrénováno',
   trained: 'Natrénováno', error: 'Chyba',
 };
+
+async function loadAgentBreakdown() {
+  const box = el('agentBreakdownBox');
+  if (!box) return;
+  try {
+    const bd = await api('/api/agent/breakdown', { timeoutMs: 20000 });
+    box.className = '';
+    const table = (rows, label) => {
+      if (!rows || !rows.length) return '';
+      return `
+        <div class="perf-block">
+          <div class="perf-title">${label}</div>
+          <div class="perf-rows">
+            ${rows.slice(0, 6).map(r => `
+              <div class="perf-row">
+                <span class="perf-key">${r.key}</span>
+                <span class="perf-nums">
+                  <span class="muted">${r.n}× · ${pct(r.win_rate)}</span>
+                  <strong class="${r.pnl >= 0 ? 'pos' : 'bad'}">${r.pnl >= 0 ? '+' : ''}${fmt(r.pnl)} Kč</strong>
+                  <span class="muted">${pct(r.roi)}</span>
+                </span>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    };
+    const hasAny = (bd.sport?.length || bd.market?.length || bd.league?.length);
+    box.innerHTML = hasAny ? `
+      <div class="perf-grid">
+        ${table(bd.sport, 'Podle sportu')}
+        ${table(bd.market, 'Podle typu trhu')}
+        ${table(bd.league, 'Top ligy')}
+      </div>` : '<div class="empty-state" style="padding:10px 0;">Agent zatím nemá dost vyhodnocených sázek</div>';
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Rozklad se nepodařilo načíst</div>';
+  }
+}
 
 async function loadMlLearning() {
   try {

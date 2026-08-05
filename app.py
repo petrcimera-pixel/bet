@@ -1397,6 +1397,21 @@ def api_agent():
     })
 
 
+@app.route("/api/agent/breakdown")
+@login_required
+def api_agent_breakdown():
+    """Kde agent vydělává a kde ztrácí – podle sportu, typu trhu a ligy.
+    Stejný pohled, jaký má detail sázkaře v aréně, jen nad agentovými
+    sázkami. Bez tohohle šlo vidět jen souhrnný ROI/win rate, ne odkud
+    pramení."""
+    bets = agent.agent_bets()
+    return jsonify({
+        "sport": bankroll.breakdown(bets, "sport"),
+        "market": bankroll.breakdown(bets, "outcome"),
+        "league": bankroll.breakdown(bets, "league"),
+    })
+
+
 @app.route("/api/agent/settings", methods=["POST"])
 def api_agent_settings():
     d = request.get_json(force=True)

@@ -1,9 +1,88 @@
 {
   "start_balance": 200.0,
-  "balance": 139.5,
+  "balance": 144.55,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "67f8ed53e3",
+      "ts": 1785866448,
+      "match_id": "401863562",
+      "match": "FC Dallas – Querétaro",
+      "match_date": "2026-08-06",
+      "match_time": "00:30",
+      "league": "Leagues Cup",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.65,
+      "prob": 0.8738,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.003,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "concacaf.leagues.cup",
+      "ml_features": {
+        "edge": 0.2837,
+        "attack_home": 0.9713,
+        "defense_home": 0.4996,
+        "attack_away": 0.9687,
+        "defense_away": 0.8617,
+        "exp_goals_home": 1.27,
+        "exp_goals_away": 0.53,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Model dává 89% šanci – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.27 : 0.53 gólů (celkem 1.8).",
+        "Nejpravděpodobnější výsledek 1:0 (20 %).",
+        "Kurz 1.645 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.645
+    },
+    {
+      "id": "990fde1e03",
+      "ts": 1785866448,
+      "match_id": "401902957",
+      "match": "Paide Linnameeskond – Rapid Vienna",
+      "match_date": "2026-08-06",
+      "match_time": "16:00",
+      "league": "UEFA Conference League Qualifying",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.57,
+      "prob": 0.7372,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0377,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "uefa.europa.conf_qual",
+      "ml_features": {
+        "edge": 0.1982,
+        "attack_home": 1.209,
+        "defense_home": 0.5347,
+        "attack_away": 1.0169,
+        "defense_away": 0.5141,
+        "exp_goals_home": 1.29,
+        "exp_goals_away": 0.83,
+        "rating_confidence": 0.675
+      },
+      "why": [
+        "Kalibrovaná jistota 74 % (model říká 83 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.29 : 0.83 gólů (celkem 2.12).",
+        "Nejpravděpodobnější výsledek 1:1 (15 %).",
+        "Paide Linnameeskond má výrazně silnější útočný rating.",
+        "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.513
+    },
     {
       "id": "6f059fdddc",
       "ts": 1785818146,
@@ -27,7 +106,7 @@
           "match_id": "401903391",
           "outcome": "home",
           "prob": 0.8354,
-          "result": null,
+          "result": "won",
           "odds": 1.476,
           "date": "2026-08-04",
           "time": "21:00"
@@ -112,7 +191,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0006,
+      "clv": 0.009,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -135,7 +214,7 @@
         "Internacional de Bogotá má výrazně silnější útočný rating.",
         "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.571
+      "closing_odds": 1.556
     },
     {
       "id": "fe0e259c2d",
@@ -150,9 +229,9 @@
       "odds": 1.53,
       "prob": 0.6699,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
-      "clv": 0.0026,
+      "status": "won",
+      "pnl": 2.65,
+      "clv": 0.0866,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -175,7 +254,12 @@
         "Millonarios má výrazně silnější útočný rating.",
         "Kurz 1.526 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.526
+      "closing_odds": 1.408,
+      "settled_ts": 1785902738,
+      "result": {
+        "home": 2,
+        "away": 0
+      }
     },
     {
       "id": "013b2186c0",
@@ -190,9 +274,9 @@
       "odds": 1.48,
       "prob": 0.894,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
-      "clv": 0.0027,
+      "status": "won",
+      "pnl": 2.4,
+      "clv": 0.1984,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -215,7 +299,12 @@
         "Carabobo má výrazně silnější útočný rating.",
         "Kurz 1.476 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.476
+      "closing_odds": 1.235,
+      "settled_ts": 1785884421,
+      "result": {
+        "home": 2,
+        "away": 0
+      }
     },
     {
       "id": "74bfb34810",
@@ -232,7 +321,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": -0.0086,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -255,7 +344,7 @@
         "Rosario Central má výrazně silnější útočný rating.",
         "Kurz 1.5 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.5
+      "closing_odds": 1.513
     },
     {
       "id": "fcc303c1cc",
@@ -309,8 +398,8 @@
       "odds": 4.36,
       "prob": 0.4819,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "legs": [
@@ -342,13 +431,14 @@
           "match_id": "401863556",
           "outcome": "home",
           "prob": 0.7735,
-          "result": null,
+          "result": "lost",
           "odds": 1.769,
           "date": "2026-08-05",
           "time": "00:30"
         }
       ],
-      "ticket_kind": "daily"
+      "ticket_kind": "daily",
+      "settled_ts": 1785902738
     },
     {
       "id": "a515a0c14c",
@@ -365,7 +455,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0096,
+      "clv": 0.0232,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -388,7 +478,7 @@
         "Cruzeiro má výrazně silnější útočný rating.",
         "Kurz 1.37 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.357
+      "closing_odds": 1.339
     },
     {
       "id": "7c2a949956",
@@ -403,8 +493,8 @@
       "odds": 1.77,
       "prob": 0.8088,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -5.0,
       "clv": 0.0006,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -427,7 +517,12 @@
         "Nejpravděpodobnější výsledek 2:0 (11 %).",
         "Kurz 1.769 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.769
+      "closing_odds": 1.769,
+      "settled_ts": 1785902738,
+      "result": {
+        "home": 1,
+        "away": 2
+      }
     },
     {
       "id": "c03fb8b7bf",
@@ -534,7 +629,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": 0.1208,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -557,7 +652,7 @@
         "PAOK má výrazně silnější útočný rating.",
         "Kurz 1.8 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.8
+      "closing_odds": 1.606
     }
   ]
 }

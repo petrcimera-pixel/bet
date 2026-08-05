@@ -482,6 +482,44 @@ def _compute_monthly_pnl(bets: list) -> dict:
     return {k: round(v, 2) for k, v in sorted(monthly.items())}
 
 
+def breakdown(bets: list, key: str, tag: str = None) -> list:
+    """Seskupí VYHODNOCENÉ sázky podle daného klíče (sport / league /
+    outcome_market) a spočítá n, win_rate, staked, pnl, ROI. Vrátí seřazené
+    podle profitu sestupně. Stejná logika jako _perf_breakdown v aréně
+    sázkařů – tam se používá na virtuální sázkaře, tady na agenta, ať jde
+    obojí srovnat stejným pohledem."""
+    by = {}
+    for x in bets:
+        if x.get("status") not in ("won", "lost") or x.get("legs"):
+            continue   # AKO tikety kombinují víc zápasů/sportů, nemají jediný smysluplný sport/trh
+        if tag is not None and x.get("tag") != tag:
+            continue
+        k = x.get(key) or "?"
+        if key == "outcome":
+            oc = x.get("outcome", "")
+            if oc in ("home", "draw", "away") or oc.startswith("dc_") or oc.startswith("dnb_"):
+                k = "vítěz"
+            elif oc.startswith("over") or oc.startswith("under"):
+                k = "góly"
+            elif oc.startswith("ah_"):
+                k = "handicap"
+            elif oc == "acca":
+                k = "tikety"
+            else:
+                k = "ostatní"
+        d = by.setdefault(k, {"key": k, "n": 0, "won": 0, "staked": 0.0, "pnl": 0.0})
+        d["n"] += 1
+        d["won"] += (1 if x["status"] == "won" else 0)
+        d["staked"] += x.get("stake", 0)
+        d["pnl"] += x.get("pnl", 0)
+    for d in by.values():
+        d["win_rate"] = round(d["won"] / d["n"] * 100, 1) if d["n"] else 0.0
+        d["roi"] = round(d["pnl"] / d["staked"] * 100, 1) if d["staked"] else 0.0
+        d["pnl"] = round(d["pnl"], 2)
+        d["staked"] = round(d["staked"], 2)
+    return sorted(by.values(), key=lambda x: -x["pnl"])
+
+
 def _compute_by_league(bets: list) -> dict:
     """Groupuj výkon po ligách - wins, settled, pnl, win_rate, roi."""
     by_league = {}

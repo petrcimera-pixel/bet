@@ -264,10 +264,11 @@
       <div class="card">
         <h3>Kde agent vydělává a kde ztrácí</h3>
         <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
-          Rozbor už vyhodnocených sázek podle ligy a podle pásma kurzu – ukáže,
+          Rozbor už vyhodnocených sázek podle ligy, sportu, typu trhu a pásma kurzu – ukáže,
           jestli ztráta pochází z konkrétní soutěže nebo z určitého typu kurzu.
         </p>
-        <div id="backtestBox" class="loading"><span class="spinner"></span></div>
+        <div id="agentBreakdownBox" class="loading"><span class="spinner"></span></div>
+        <div id="backtestBox" class="loading" style="margin-top:14px;"><span class="spinner"></span></div>
       </div>
 
       <div class="card">
@@ -446,7 +447,7 @@
           </div>
           <div>
             <strong>🎲 Sázkaři</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 10 virtuálních sázkařů, každý s vlastním bankem 1000 Kč a jinou strategií (viz níže) – žebříček podle zisku, mini graf vývoje banku, detail historie sázek, a graf kalibrace modelu (viz níže). Slouží ke srovnání, která strategie sázení dlouhodobě funguje nejlíp.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 45 virtuálních sázkařů (15 v každé ze tří kategorií), každý s vlastním bankem 200 Kč a jinou strategií (viz níže), sázka omezená na 5–10 Kč na tiket – žebříček podle zisku v rámci kategorie, mini graf vývoje banku, rozklikávací detail historie a výkonu podle sportu/trhu/ligy, a graf kalibrace modelu. Tlačítko „🧬 Vygenerovat z dat“ postaví nového sázkaře podle statisticky nejvýnosnějšího segmentu (kurz/jistota/trh) z dosavadní historie celé arény.</p>
           </div>
           <div>
             <strong>💰 Bankroll</strong>
@@ -454,7 +455,7 @@
           </div>
           <div>
             <strong>🧠 ML Learning</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance a tlačítko pro ruční přetrénování.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance, tlačítko pro ruční přetrénování a rozklad, kde agent vydělává/ztrácí podle sportu, typu trhu, ligy a pásma kurzu. Počet trénovacích vzorků roste jen tak rychle, jak reálně končí zápasy – hint u čísla ukazuje, kolik toho ještě čeká na výsledek.</p>
           </div>
           <div>
             <strong>⚙ Nastavení</strong>
@@ -468,9 +469,12 @@
         <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
           Když je v Nastavení zapnutý "Auto-run", agent automaticky vsadí nejjistější tip každého
           zápasu, který splňuje prahy jistoty a kurzu – vždy jen na trhy s reálným kurzem sázkovky,
-          nikdy dvakrát na stejný zápas a nikdy na zápas, který už začal nebo skončil. Výše vkladu se
-          počítá <strong>Kelly kritériem</strong> (podíl banku úměrný matematické výhodě sázky) nebo
-          plochou částkou, podle nastavení. Denní strop hlídá, aby agent neprosázel celý bank najednou.
+          nikdy dvakrát na stejný zápas a nikdy na zápas, který už začal nebo skončil. Trhy s marží
+          sázkovky nad 8 % se rovnou přeskočí (tam se systematická value hledat nedá) a tip musí mít
+          i po kalibraci kladné EV (kalibrovaná jistota × kurz ≥ 1,02) – jistota sama o sobě nestačí,
+          když ji vykoupí moc nízký kurz. Výše vkladu se počítá <strong>Kelly kritériem</strong>
+          (podíl banku úměrný matematické výhodě sázky) nebo plochou částkou, podle nastavení, vždy
+          v rozsahu 5–10 Kč na tiket. Denní strop hlídá, aby agent neprosázel celý bank najednou.
         </p>
         <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:8px 0 0;">
           Sází podle rozvrhu (výchozí 8, 12, 16, 20 hodin) – <strong>víckrát denně</strong>, ne jen
@@ -536,10 +540,37 @@
           <li><strong>Remíza zpět</strong> – při remíze se vrací vklad</li>
         </ul>
         <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
-          Co naopak <strong>nejde</strong>: „oba dají gól“, přesné skóre, střelci, karty ani rohy –
-          na tyhle trhy ESPN kurz nedává. Rohy si appka umí načíst pro vyhodnocení, ale bez ceny
-          se na ně sázet nedá a vymýšlet si kurz zásadně nechceme. Stejně tak existuje jen
-          <em>jedna</em> gólová linie na zápas, i když model počítá i ostatní.
+          Co naopak <strong>nejde</strong>: střelci, karty ani rohy – appka na ně nemá vůbec žádná
+          data (ESPN je neposkytuje, ani na vstupu). Stejně tak existuje jen <em>jedna</em>
+          gólová linie na zápas u reálných kurzů, i když model počítá i ostatní.
+        </p>
+
+        <h3 style="margin-top:18px;">📐 Rozšířené odhady modelu (nesázatelné)</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
+          V detailu zápasu (Hledat → rozklik) appka navíc <strong>zobrazuje</strong> – ale nikdy
+          nesází – co model spočítá ze scoreline gridu nad rámec ESPN nabídky. Vždy s odznakem
+          „jen model, nesázet“, protože pro ně žádný reálný kurz neexistuje:
+        </p>
+        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0 0 10px; padding-left:20px;">
+          <li><strong>Oba dají gól</strong> (BTTS) a <strong>přesný výsledek</strong> (skóre jako 1:1, 2:0…)</li>
+          <li><strong>Gólový náskok vítěze</strong> – remíza / 1 gól / 2 góly / 3 a víc</li>
+          <li><strong>Kdo dá první gól</strong> – aproximace, grid nezachycuje časové pořadí gólů</li>
+          <li><strong>Přesný počet gólů</strong> v zápase i u jednoho týmu (ne jen nad/pod linii)</li>
+          <li><strong>Sudý/lichý</strong> celkový počet gólů</li>
+          <li><strong>Poločasy</strong> – nad/pod pro 1./2. poločas, která půle bude gólovější (na
+              zjednodušujícím předpokladu 45 % gólů v 1. poločase, méně přesné než ostatní trhy)</li>
+          <li><strong>Kombinace</strong> výsledek × góly týmu, výsledek × celkový počet gólů,
+              výsledek × kdo dal první gól – vždy ze společné mřížky, ne součinem samostatných
+              pravděpodobností (ty spolu korelují)</li>
+        </ul>
+
+        <h3 style="margin-top:18px;">📊 Forma a vzájemné zápasy</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 14px;">
+          Appka si vede historii posledních ~20 zápasů každého týmu (odděleně od ratingu). V detailu
+          zápasu se z ní ukazuje <strong>forma</strong> obou týmů (V/R/P za posledních 5 zápasů) a
+          tabulka <strong>posledních vzájemných zápasů</strong>. Ratingy navíc rozlišují, jak tým hraje
+          <strong>doma a jak venku</strong> – specifický rating se použije až po 8 zápasech na danou
+          stranu, do té doby appka vychází z celkového ratingu, ať odhad není zašuměný.
         </p>
 
         <h3 style="margin-top:18px;">🎲 Kategorie sázkařů</h3>
@@ -562,7 +593,14 @@
         </p>
 
         <h3 style="margin-top:18px;">Strategie sázkařů</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Sází podle stejného rozvrhu jako agent, víckrát denně, ale nikdy dvakrát na stejný zápas a jen na zápasy, které ještě nezačaly.</p>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">
+          Sází podle stejného rozvrhu jako agent, víckrát denně, ale nikdy dvakrát na stejný zápas
+          a jen na zápasy, které ještě nezačaly. Nový sázkař si troufne jen na zlomek vypočtené
+          sázky (podle nasbírané zkušenosti a dosavadního ROI), po sérii 3 proher v řadě si dá
+          pauzu na jedno kolo, a v konkrétním sportu přestane sázet, jakmile v něm po 15+ sázkách
+          skončí v mínusu. Přesné znění strategie má každý sázkař ve své tagline v aréně – tady je
+          jen pár příkladů z každé kategorie:
+        </p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Sázkař</th><th>Strategie</th></tr></thead>
@@ -573,10 +611,12 @@
               <tr><td>🔍 Value Hunter Viktor</td><td>Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.</td></tr>
               <tr><td>⭐ Favorit Fanda</td><td>Vždy vsadí na favorita zápasu, i bez ohledu na value.</td></tr>
               <tr><td>🎲 Outsider Olda</td><td>Honí nejvyšší kurz s aspoň 15% šancí – vysoké riziko, vysoký výnos.</td></tr>
-              <tr><td>📈 Martingale Magda</td><td>Po prohře zdvojnásobí vklad – klasický, rizikový progresivní systém.</td></tr>
-              <tr><td>🎰 Náhodný Norbert</td><td>Kontrolní skupina – sází čistě náhodně, srovnávací základna pro ostatní.</td></tr>
               <tr><td>📋 Disciplinovaný Dan</td><td>Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.</td></tr>
-              <tr><td>🐢 Opatrná Olga</td><td>Jen 1 % banku, jistota 85%+, po 2 prohrách v řadě si dá pauzu.</td></tr>
+              <tr><td>📶 Forma Rio</td><td>Sází na tým v citelně lepší formě (posledních 5 zápasů) než soupeř – ale jen když k tomu kurz dává i value.</td></tr>
+              <tr><td>🎫 Trojka Tomáš</td><td>Akumulátor – klasická trojka z tutovek napříč zápasy, kurzy se násobí.</td></tr>
+              <tr><td>💰 Jackpot Jindra</td><td>Akumulátor – osm tipů a drobný vklad, sní o velké výhře.</td></tr>
+              <tr><td>🔗 Vítěz+Góly Vilém</td><td>Kombinace – favorit vyhraje a padne aspoň pár gólů, ze společné mřížky.</td></tr>
+              <tr><td>🔐 Ultra Jistá Uršula</td><td>Kombinace – jen když je spojená pravděpodobnost nad 75 %, málo tiketů.</td></tr>
             </tbody>
           </table>
         </div>
