@@ -26,7 +26,8 @@ from . import storage
 # Soubory, které se zálohují (runtime stav – NE cache, ta se dopočítá)
 FILES = ["bankroll.json", "tips.json", "settings.json", "team_ratings.json",
          "calibration.json", "config.json", "learning_metrics.json",
-         "agent_last_run.json", "virtual_bettors.json"]
+         "agent_last_run.json", "virtual_bettors.json",
+         "team_history.json", "ratings_applied.json"]
 # JSONL soubory (řádkový formát, ne JSON) – zálohují se jako syrový text,
 # ne přes storage.load/save (ten by je parsoval jako JSON a spadl). Bez
 # tohoto se ML learner (engine/ml_learner.py) trénovací log ztrácel při

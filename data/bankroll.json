@@ -270,7 +270,7 @@
       "stake": 5.47,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0018,
+      "clv": -0.0118,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -293,7 +293,7 @@
         "Alebrijes de Oaxaca má výrazně silnější útočný rating.",
         "Kurz 1.667 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.667
+      "closing_odds": 1.69
     },
     {
       "id": "4f894e1ebd",
@@ -599,7 +599,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0025,
+      "clv": -0.0092,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -621,7 +621,7 @@
         "Nejpravděpodobnější výsledek 1:1 (15 %).",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.606
+      "closing_odds": 1.625
     },
     {
       "id": "2382f0634b",

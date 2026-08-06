@@ -102,7 +102,7 @@ def check_login():
     # Cron endpointy mají vlastní token-based auth (viz api_cron_settle,
     # api_cron_retrain) – běžná session zde nedává smysl, volá je externí
     # scheduler (GitHub Actions).
-    if request.path in ("/api/cron/settle", "/api/cron/retrain"):
+    if request.path in ("/api/cron/settle", "/api/cron/retrain", "/api/cron/restore-data"):
         return
 
     # Check if user is authenticated
@@ -1223,6 +1223,37 @@ def api_cron_retrain():
 
     _persist_push_safe()
     return jsonify(out)
+
+
+@app.route("/api/cron/restore-data", methods=["POST"])
+def api_cron_restore_data():
+    """Jednorázové nahrazení runtime dat (bankroll, ratingy, historie...)
+    obsahem poslaným v těle requestu a vynucené uložení do gistu (persist).
+
+    Stejný token-auth vzor jako ostatní /api/cron/* endpointy. Použití:
+    sjednocení dat mezi lokálním vývojovým během a produkcí na Renderu,
+    aniž by bylo potřeba sdílet GITHUB_TOKEN/GIST_ID gistu samotného –
+    stačí CRON_TOKEN, který appka i tak potřebuje pro settle/retrain.
+    Přijímá jen jména ze seznamu persist.FILES, ať nejde zapsat libovolnou
+    cestu na disku."""
+    expected = os.environ.get("CRON_TOKEN", "")
+    got = request.args.get("token") or request.headers.get("X-Cron-Token", "")
+    if not expected or got != expected:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    d = request.get_json(force=True) or {}
+    files = d.get("files") or {}
+    written, skipped = [], []
+    for name, content in files.items():
+        if name not in persist.FILES:
+            skipped.append(name)
+            continue
+        storage.save(name, content)
+        written.append(name)
+
+    _PRED_CACHE.clear()
+    pushed = persist.push(force=True)
+    return jsonify({"written": written, "skipped": skipped, "gist_pushed": pushed})
 
 
 @app.route("/api/tips/settle", methods=["POST"])

@@ -6372,9 +6372,9 @@
         "odds": 5.67,
         "prob": 0.5113,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046275,
         "ml_features": {
           "attack_home": 0.8245,
           "defense_home": 2.6,
@@ -6384,6 +6384,10 @@
           "exp_goals_away": 1.73,
           "rating_confidence": 0.225,
           "edge": 0.3349
+        },
+        "result": {
+          "home": 3,
+          "away": 0
         }
       },
       {
@@ -6695,7 +6699,7 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 1,
+    "loss_streak": 2,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -6732,9 +6736,9 @@
         "odds": 4.9,
         "prob": 0.3833,
         "stake": 8.24,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -8.24,
+        "settled_ts": 1786046275,
         "ml_features": {
           "attack_home": 0.8245,
           "defense_home": 2.6,
@@ -6744,6 +6748,10 @@
           "exp_goals_away": 1.73,
           "rating_confidence": 0.225,
           "edge": 0.1792
+        },
+        "result": {
+          "home": 3,
+          "away": 0
         }
       },
       {
@@ -8910,7 +8918,7 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 1,
+    "loss_streak": 2,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -9874,9 +9882,9 @@
         "odds": 6.5,
         "prob": 0.3833,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046275,
         "ml_features": {
           "attack_home": 0.8245,
           "defense_home": 2.6,
@@ -9886,6 +9894,10 @@
           "exp_goals_away": 1.73,
           "rating_confidence": 0.225,
           "edge": 0.2294
+        },
+        "result": {
+          "home": 3,
+          "away": 0
         }
       },
       {
@@ -10414,9 +10426,9 @@
         "odds": 14.0,
         "prob": 0.2056,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786047943,
         "ml_features": {
           "attack_home": 2.1921,
           "defense_home": 0.6917,
@@ -10426,6 +10438,10 @@
           "exp_goals_away": 1.17,
           "rating_confidence": 0.175,
           "edge": 0.1342
+        },
+        "result": {
+          "home": 2,
+          "away": 0
         }
       },
       {
@@ -10500,7 +10516,7 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 2,
+    "loss_streak": 4,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -11909,7 +11925,7 @@
     "name": "Domácí Dalibor",
     "emoji": "🏠",
     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-    "balance": 11.3,
+    "balance": 16.8,
     "start_balance": 200.0,
     "bets": [
       {
@@ -13574,9 +13590,9 @@
         "odds": 1.1,
         "prob": 0.6311,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.5,
+        "settled_ts": 1786047943,
         "ml_features": {
           "attack_home": 2.3487,
           "defense_home": 0.6878,
@@ -13586,6 +13602,10 @@
           "exp_goals_away": 1.15,
           "rating_confidence": 0.225,
           "edge": -0.278
+        },
+        "result": {
+          "home": 2,
+          "away": 0
         }
       },
       {
@@ -14004,7 +14024,7 @@
     "last_run_date": "2026-08-06",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -15175,9 +15195,9 @@
         "odds": 1.87,
         "prob": 0.6066,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046275,
         "ml_features": {
           "attack_home": 1.45,
           "defense_home": 0.8978,
@@ -15187,6 +15207,10 @@
           "exp_goals_away": 1.31,
           "rating_confidence": 0.225,
           "edge": 0.0718
+        },
+        "result": {
+          "home": 2,
+          "away": 0
         }
       },
       {
@@ -15647,7 +15671,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 3,
+    "loss_streak": 4,
     "win_streak": 0,
     "transactions": [
       {
@@ -18464,7 +18488,7 @@
     "name": "Jistotář Jarda",
     "emoji": "🔒",
     "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
-    "balance": 104.09,
+    "balance": 108.94,
     "start_balance": 200.0,
     "bets": [
       {
@@ -19210,9 +19234,9 @@
         "odds": 0.97,
         "prob": 0.8388,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": -0.15,
+        "settled_ts": 1786047943,
         "ml_features": {
           "attack_home": 2.3487,
           "defense_home": 0.6878,
@@ -19222,6 +19246,10 @@
           "exp_goals_away": 1.15,
           "rating_confidence": 0.225,
           "edge": -0.1953
+        },
+        "result": {
+          "home": 2,
+          "away": 0
         }
       },
       {
@@ -19982,7 +20010,7 @@
     "last_run_date": "2026-08-06",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -20087,9 +20115,9 @@
         "odds": 1.74,
         "prob": 0.8078,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046275,
         "ml_features": {
           "attack_home": 0.8245,
           "defense_home": 2.6,
@@ -20099,6 +20127,10 @@
           "exp_goals_away": 1.73,
           "rating_confidence": 0.225,
           "edge": 0.2334
+        },
+        "result": {
+          "home": 3,
+          "away": 0
         }
       },
       {
@@ -21487,7 +21519,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
