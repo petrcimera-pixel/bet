@@ -146,17 +146,28 @@ def backfill_ratings(seasons=None, codes=None, progress=None) -> dict:
 
     matches = fetch_all(seasons, codes, progress)
     applied = skipped = 0
+    # Dávkový mód (viz stejný pattern v goals_model.backfill_ratings) – bez
+    # něj by se při tisících zápasů (roky historie z football-data.co.uk)
+    # dělal load+save celého ratings/historie souboru při KAŽDÉM zápase.
+    batch_ratings = goals_model._ratings()
+    batch_history = goals_model._team_history()
+    batch_applied = goals_model._applied_ids()
     for m in matches:
         try:
             ok = goals_model.update_from_result(
                 m["home"], m["away"], m["league"], m["home_score"], m["away_score"],
-                "soccer", m["slug"], match_id=m["id"], date=m.get("date"))
+                "soccer", m["slug"], match_id=m["id"], date=m.get("date"),
+                _ratings_cache=batch_ratings, _history_cache=batch_history,
+                _applied_cache=batch_applied)
             applied += 1 if ok else 0
             skipped += 0 if ok else 1
         except Exception:
             skipped += 1
+    goals_model._save_ratings(batch_ratings)
+    goals_model.storage.save(goals_model._HISTORY_FILE, batch_history)
+    goals_model.storage.save(goals_model._APPLIED_FILE, {"ids": sorted(batch_applied)[-20000:]})
 
-    ratings = goals_model._ratings()
+    ratings = batch_ratings
     ns = sorted(v["n"] for v in ratings.values() if v.get("n", 0) > 0)
     return {
         "found": len(matches), "applied": applied, "skipped": skipped,

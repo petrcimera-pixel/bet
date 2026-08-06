@@ -229,11 +229,19 @@ def _team_history() -> dict:
 
 
 def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
-                          date: str, sport: str) -> None:
+                          date: str, sport: str, hist: dict = None) -> dict:
     """Zapíše zápas do historie OBOU týmů – používá se pro formu (posledních
     N výsledků) a head-to-head (vzájemné zápasy). Nezávislé na ratingech,
-    takže se dá číst i pro sporty/situace, kde by rating byl nespolehlivý."""
-    hist = _team_history()
+    takže se dá číst i pro sporty/situace, kde by rating byl nespolehlivý.
+
+    hist: když je předaný (dávkové zpracování, viz backfill_ratings), upraví
+    se v paměti a NEUKLOŽÍ se – volající uloží jednou po celé dávce. Bez
+    téhle možnosti by dávka se stovkami/tisíci zápasů dělala load+save
+    CELÉHO (rostoucího) souboru při každém jednom zápase – kvadraticky
+    pomalé, přesně to appku zpomalilo, když se poprvé pustil velký backfill."""
+    own_hist = hist is None
+    if own_hist:
+        hist = _team_history()
     entry_h = {"date": date, "opponent": away, "league": league, "sport": sport,
                "loc": "home", "gf": hs, "ga": as_,
                "result": "W" if hs > as_ else "L" if hs < as_ else "D"}
@@ -245,7 +253,9 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
         lst.append(entry)
         lst.sort(key=lambda e: e.get("date", ""))
         del lst[:-_HISTORY_MAX_PER_TEAM]   # jen posledních N, ať soubor neroste bez konce
-    storage.save(_HISTORY_FILE, hist)
+    if own_hist:
+        storage.save(_HISTORY_FILE, hist)
+    return hist
 
 
 def team_form(team: str, n: int = 5) -> list:
@@ -263,28 +273,44 @@ def head_to_head(team_a: str, team_b: str, n: int = 5) -> list:
 
 def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
                         sport: str = "soccer", slug: str = "",
-                        match_id: str = None, date: str = None) -> bool:
+                        match_id: str = None, date: str = None,
+                        _ratings_cache: dict = None, _history_cache: dict = None,
+                        _applied_cache: set = None) -> bool:
     """Po vyhodnoceném zápase posune attack/defense obou týmů směrem k tomu,
     co skutečně předvedly oproti očekávání – učení se zpomaluje s počtem
     odehraných zápasů (n).
 
     sport je nutný: bez něj by se nefotbalové skóre porovnávalo s fotbalovou
-    baseline a rating by se po jediném zápase utrhl na strop."""
+    baseline a rating by se po jediném zápase utrhl na strop.
+
+    _ratings_cache/_history_cache/_applied_cache: pro DÁVKOVÉ volání
+    (backfill_ratings) – když jsou předané, funkce je jen upraví v paměti a
+    NEUKLÁDÁ, volající uloží jednou po celé dávce. Bez toho by se při
+    stovkách/tisících zápasů v jedné dávce načítal a ukládal CELÝ soubor
+    (rostoucí s historií) při KAŽDÉM jednotlivém zápase – kvadraticky
+    pomalé. Normální provoz (settle loop po jednom zápase, ruční
+    /api/result) parametry nepředává, chová se jako dřív."""
     # Každý zápas smí rating ovlivnit jen jednou. Bez téhle pojistky by
     # opakovaná kontrola výsledků (nebo dávkové natažení historie) tentýž
     # výsledek započítala vícekrát a rating by se nafoukl.
     if match_id is not None:
-        if str(match_id) in _applied_ids():
+        own_applied = _applied_cache is None
+        applied = _applied_cache if _applied_cache is not None else _applied_ids()
+        if str(match_id) in applied:
             return False
-        _mark_applied([str(match_id)])
+        applied.add(str(match_id))
+        if own_applied:
+            _mark_applied([str(match_id)])
 
     # Historie zápasů (forma, H2H) – nezávislá na ratingu, zapisuje se vždycky
     # spolu s ním, ať zůstanou konzistentní. datum bez volajícím předaného
     # data padá na dnešek – lepší přibližné pořadí než žádné.
     _record_team_history(home, away, league, hs, as_,
-                         date or datetime.date.today().isoformat(), sport)
+                         date or datetime.date.today().isoformat(), sport,
+                         hist=_history_cache)
 
-    ratings = _ratings()
+    own_ratings = _ratings_cache is None
+    ratings = _ratings_cache if _ratings_cache is not None else _ratings()
     rh, ra = get_rating(home, ratings), get_rating(away, ratings)
 
     # Stejný vzorec jako v predikci (viz expected_scores) – jinak by se rating
@@ -334,7 +360,8 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
 
     rh["n"] += 1
     ra["n"] += 1
-    _save_ratings(ratings)
+    if own_ratings:
+        _save_ratings(ratings)
     return True
 
 
@@ -370,18 +397,31 @@ def backfill_ratings(days_back: int = 60, sport: str = "soccer",
 
     matches.sort(key=lambda m: (m.get("date", ""), m.get("time", "")))
     applied = skipped = 0
+    # Dávkový mód: ratings i historie se načtou JEDNOU, upravují se v paměti
+    # pro celou dávku, uloží se JEDNOU na konci. Bez toho by při tisících
+    # zápasů dělalo update_from_result load+save celého (rostoucího) souboru
+    # při KAŽDÉM jednotlivém zápase – kvadraticky pomalé, to appku poprvé
+    # zpomalilo na týdny místo minut.
+    batch_ratings = _ratings()
+    batch_history = _team_history()
+    batch_applied = _applied_ids()
     for m in matches:
         try:
             ok = update_from_result(m["home"], m["away"], m.get("league", ""),
                                     m["home_score"], m["away_score"],
                                     sport, m.get("slug", ""), match_id=m["id"],
-                                    date=m.get("date"))
+                                    date=m.get("date"),
+                                    _ratings_cache=batch_ratings, _history_cache=batch_history,
+                                    _applied_cache=batch_applied)
             applied += 1 if ok else 0
             skipped += 0 if ok else 1
         except Exception:
             skipped += 1
+    _save_ratings(batch_ratings)
+    storage.save(_HISTORY_FILE, batch_history)
+    storage.save(_APPLIED_FILE, {"ids": sorted(batch_applied)[-20000:]})
 
-    ratings = _ratings()
+    ratings = batch_ratings
     played = [v for v in ratings.values() if v.get("n", 0) > 0]
     ns = sorted(v["n"] for v in played)
     return {
