@@ -834,6 +834,48 @@ def _shrink(val: float, conf: float) -> float:
     return 1.0 + conf * (val - 1.0)
 
 
+# Odpočinek mezi zápasy – únava po nabitém programu (poháry, dohrávky)
+# stojí očekávané góly, delší pauza dá naopak malou vzpruhu. Hranice a
+# velikost efektu jsou konzervativní odhad (ne vyladěné z dat), tak jako
+# HOME_ADV_FACTOR – appka na to zatím nemá dost sledovaných případů, aby se
+# to dalo natrénovat samo.
+REST_FATIGUE_DAYS = 3     # <= tolik dní od posledního zápasu = únava
+REST_FATIGUE_PENALTY = 0.06
+REST_BONUS_DAYS = 7       # >= tolik dní volna = mírná vzpruha
+REST_BONUS = 0.03
+
+
+def _team_rest_days(team: str, match_date: str) -> int:
+    """Kolik dní uplynulo od posledního zaznamenaného zápasu týmu do tohoto
+    zápasu. None když chybí historie nebo datum – pak se nic neupravuje."""
+    if not match_date:
+        return None
+    hist = _team_history().get(team) or []
+    if not hist:
+        return None
+    last_date = hist[-1].get("date")
+    if not last_date:
+        return None
+    try:
+        d1 = datetime.date.fromisoformat(last_date)
+        d2 = datetime.date.fromisoformat(match_date)
+        return (d2 - d1).days
+    except (ValueError, TypeError):
+        return None
+
+
+def _rest_factor(days) -> float:
+    """Násobek očekávaných gólů týmu podle odpočinku. 1.0 = žádná úprava
+    (chybějící data, nebo odpočinek v normálním pásmu)."""
+    if days is None or days < 0:
+        return 1.0
+    if days <= REST_FATIGUE_DAYS:
+        return 1.0 - REST_FATIGUE_PENALTY
+    if days >= REST_BONUS_DAYS:
+        return 1.0 + REST_BONUS
+    return 1.0
+
+
 def predict_match(m: dict) -> dict:
     sport = m.get("sport", "soccer")
     cfg = ds.sport_cfg(sport)
@@ -852,6 +894,11 @@ def predict_match(m: dict) -> dict:
     ra_a, ra_d = effective_ab(ra, "away")
     sh_a, sh_d = _shrink(rh_a, rating_confidence), _shrink(rh_d, rating_confidence)
     sa_a, sa_d = _shrink(ra_a, rating_confidence), _shrink(ra_d, rating_confidence)
+
+    rest_days_home = _team_rest_days(m["home"], m.get("date"))
+    rest_days_away = _team_rest_days(m["away"], m.get("date"))
+    rest_home = _rest_factor(rest_days_home)
+    rest_away = _rest_factor(rest_days_away)
 
     bets = {}
     top_scores = []
@@ -874,6 +921,8 @@ def predict_match(m: dict) -> dict:
         slug = m.get("slug", "")
         lg_avg, lg_sd = sport_totals(sport, slug, m["league"])
         exp_h, exp_a = expected_scores(m["league"], sport, sh_a, sh_d, sa_a, sa_d, slug)
+        exp_h *= rest_home
+        exp_a *= rest_away
         raw_total = exp_h + exp_a
         # Pojistka: držet součet v pásmu ±2.5 směrodatné odchylky kolem
         # průměru soutěže (plus podlaha, ať linie nespadne k nule).
@@ -891,6 +940,8 @@ def predict_match(m: dict) -> dict:
     else:
         keys = ("home", "draw", "away")
         raw_h, raw_a = expected_scores(m["league"], sport, sh_a, sh_d, sa_a, sa_d)
+        raw_h *= rest_home
+        raw_a *= rest_away
         lam_h = max(0.25, min(4.8, raw_h))
         lam_a = max(0.25, min(4.8, raw_a))
         grid = _score_grid(lam_h, lam_a)
@@ -1053,6 +1104,7 @@ def predict_match(m: dict) -> dict:
         "time": m.get("time", ""), "date": m.get("date", ""),
         "status": m.get("status", ""), "live": m.get("live", False),
         "rating_home": rh, "rating_away": ra, "rating_confidence": round(rating_confidence, 3),
+        "rest_days": {"home": rest_days_home, "away": rest_days_away},
         "exp_goals": exp_goals, "exp_total": exp_total,
         "probs": {k: round(v, 4) for k, v in probs.items()},
         "pick": pick, "pick_label": labels[pick], "confidence": confidence,
