@@ -1,9 +1,465 @@
 {
   "start_balance": 200.0,
-  "balance": 139.55,
+  "balance": 102.05,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "4f894e1ebd",
+      "ts": 1786025449,
+      "match_id": "401885487",
+      "match": "FC Porto – Alverca",
+      "match_date": "2026-08-09",
+      "match_time": "17:00",
+      "league": "Portuguese Primeira Liga",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.53,
+      "prob": 0.8189,
+      "stake": 5.45,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": null,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "por.1",
+      "ml_features": {
+        "edge": 0.25,
+        "attack_home": 1.1344,
+        "defense_home": 0.5547,
+        "attack_away": 0.8188,
+        "defense_away": 0.6957,
+        "exp_goals_home": 1.22,
+        "exp_goals_away": 0.49,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 82 % (model říká 91 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.22 : 0.49 gólů (celkem 1.71).",
+        "Nejpravděpodobnější výsledek 1:0 (21 %).",
+        "FC Porto má výrazně silnější útočný rating.",
+        "Kurz 1.526 je reálný kurz sázkovky – ne odhad modelu."
+      ]
+    },
+    {
+      "id": "4b53ee1884",
+      "ts": 1785907981,
+      "match_id": "",
+      "match": "Jistota dne (3 tipy)",
+      "match_date": "2026-08-05",
+      "match_time": "22:00",
+      "outcome": "acca",
+      "label": "AKO 3",
+      "odds": 3.97,
+      "prob": 0.7033,
+      "stake": 10.0,
+      "status": "lost",
+      "pnl": -10.0,
+      "clv": null,
+      "tag": "bet-agent",
+      "legs": [
+        {
+          "match": "Wolverhampton Wanderers – Port Vale",
+          "name": "Méně než 3,5 gólu",
+          "match_id": "401880604",
+          "outcome": "under3.5",
+          "prob": 0.9216,
+          "result": null,
+          "odds": 1.606,
+          "date": "2026-08-07",
+          "time": "18:45"
+        },
+        {
+          "match": "Watford – Crawley Town",
+          "name": "Méně než 3,5 gólu",
+          "match_id": "401903532",
+          "outcome": "under3.5",
+          "prob": 0.8883,
+          "result": null,
+          "odds": 1.556,
+          "date": "2026-08-08",
+          "time": "14:00"
+        },
+        {
+          "match": "Nacional Potosí – The Strongest",
+          "name": "Méně než 3,5 gólu",
+          "match_id": "401873329",
+          "outcome": "under3.5",
+          "prob": 0.8591,
+          "result": "lost",
+          "odds": 1.588,
+          "date": "2026-08-05",
+          "time": "22:00"
+        }
+      ],
+      "ticket_kind": "daily",
+      "settled_ts": 1785988172
+    },
+    {
+      "id": "16ccabda0f",
+      "ts": 1785907981,
+      "match_id": "401878588",
+      "match": "Queen's Park – Raith Rovers",
+      "match_date": "2026-08-08",
+      "match_time": "14:00",
+      "league": "Scottish Championship",
+      "outcome": "under2.5",
+      "label": "Méně 2,5",
+      "odds": 1.74,
+      "prob": 0.6595,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0164,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "sco.2",
+      "ml_features": {
+        "edge": 0.189,
+        "attack_home": 0.7707,
+        "defense_home": 0.809,
+        "attack_away": 0.9675,
+        "defense_away": 0.6998,
+        "exp_goals_home": 0.82,
+        "exp_goals_away": 0.86,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 66 % (model říká 76 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.82 : 0.86 gólů (celkem 1.68).",
+        "Nejpravděpodobnější výsledek 0:0 (20 %).",
+        "Raith Rovers má výrazně silnější útočný rating.",
+        "Kurz 1.741 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.769
+    },
+    {
+      "id": "86d79f1028",
+      "ts": 1785907981,
+      "match_id": "401903532",
+      "match": "Watford – Crawley Town",
+      "match_date": "2026-08-08",
+      "match_time": "14:00",
+      "league": "English Carabao Cup",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.56,
+      "prob": 0.7828,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0286,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "eng.league_cup",
+      "ml_features": {
+        "edge": 0.2456,
+        "attack_home": 0.7922,
+        "defense_home": 1.1389,
+        "attack_away": 0.7253,
+        "defense_away": 0.7596,
+        "exp_goals_home": 0.91,
+        "exp_goals_away": 0.91,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 78 % (model říká 89 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.91 : 0.91 gólů (celkem 1.82).",
+        "Nejpravděpodobnější výsledek 0:0 (18 %).",
+        "Kurz 1.556 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.606
+    },
+    {
+      "id": "078d5b66c2",
+      "ts": 1785907981,
+      "match_id": "401881124",
+      "match": "Burton Albion – Blackburn Rovers",
+      "match_date": "2026-08-08",
+      "match_time": "14:00",
+      "league": "English Carabao Cup",
+      "outcome": "under2.5",
+      "label": "Méně 2,5",
+      "odds": 1.74,
+      "prob": 0.6517,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0164,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "eng.league_cup",
+      "ml_features": {
+        "edge": 0.1834,
+        "attack_home": 0.7983,
+        "defense_home": 0.7546,
+        "attack_away": 0.7734,
+        "defense_away": 0.7798,
+        "exp_goals_home": 1.01,
+        "exp_goals_away": 0.69,
+        "rating_confidence": 0.875
+      },
+      "why": [
+        "Kalibrovaná jistota 65 % (model říká 76 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.01 : 0.69 gólů (celkem 1.7).",
+        "Nejpravděpodobnější výsledek 0:0 (20 %).",
+        "Kurz 1.741 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.769
+    },
+    {
+      "id": "5aee8127ea",
+      "ts": 1785907981,
+      "match_id": "401877180",
+      "match": "FC Tokyo – Machida Zelvia",
+      "match_date": "2026-08-08",
+      "match_time": "10:00",
+      "league": "Japanese J.League",
+      "outcome": "under2.5",
+      "label": "Méně 2,5",
+      "odds": 1.57,
+      "prob": 0.6636,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0113,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "jpn.1",
+      "ml_features": {
+        "edge": 0.1297,
+        "attack_home": 0.7698,
+        "defense_home": 0.8939,
+        "attack_away": 0.9052,
+        "defense_away": 0.5892,
+        "exp_goals_home": 0.76,
+        "exp_goals_away": 0.91,
+        "rating_confidence": 0.9
+      },
+      "why": [
+        "Kalibrovaná jistota 66 % (model říká 77 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.76 : 0.91 gólů (celkem 1.67).",
+        "Nejpravděpodobnější výsledek 0:0 (21 %).",
+        "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.588
+    },
+    {
+      "id": "d3bcfa5b91",
+      "ts": 1785907981,
+      "match_id": "401880604",
+      "match": "Wolverhampton Wanderers – Port Vale",
+      "match_date": "2026-08-07",
+      "match_time": "18:45",
+      "league": "English Carabao Cup",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.61,
+      "prob": 0.8727,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0248,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "eng.league_cup",
+      "ml_features": {
+        "edge": 0.2989,
+        "attack_home": 0.6121,
+        "defense_home": 1.0259,
+        "attack_away": 0.6619,
+        "defense_away": 0.9187,
+        "exp_goals_home": 0.85,
+        "exp_goals_away": 0.75,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 87 % (model říká 92 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.85 : 0.75 gólů (celkem 1.6).",
+        "Nejpravděpodobnější výsledek 0:0 (22 %).",
+        "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.571
+    },
+    {
+      "id": "36f1dd66f3",
+      "ts": 1785907981,
+      "match_id": "401875993",
+      "match": "FC Emmen – Roda JC Kerkrade",
+      "match_date": "2026-08-07",
+      "match_time": "18:00",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.61,
+      "prob": 0.6656,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0025,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "ned.2",
+      "ml_features": {
+        "edge": 0.145,
+        "attack_home": 0.8805,
+        "defense_home": 1.2541,
+        "attack_away": 0.8626,
+        "defense_away": 0.9046,
+        "exp_goals_home": 1.28,
+        "exp_goals_away": 1.17,
+        "rating_confidence": 0.75
+      },
+      "why": [
+        "Kalibrovaná jistota 67 % (model říká 77 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.28 : 1.17 gólů (celkem 2.45).",
+        "Nejpravděpodobnější výsledek 1:1 (15 %).",
+        "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.606
+    },
+    {
+      "id": "2382f0634b",
+      "ts": 1785907981,
+      "match_id": "401903379",
+      "match": "Deportivo La Guaira – Metropolitanos",
+      "match_date": "2026-08-05",
+      "match_time": "22:30",
+      "league": "Venezuelan Primera División",
+      "outcome": "under2.5",
+      "label": "Méně 2,5",
+      "odds": 1.62,
+      "prob": 0.7463,
+      "stake": 5.0,
+      "status": "lost",
+      "pnl": -5.0,
+      "clv": 0.0087,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "ven.1",
+      "ml_features": {
+        "edge": 0.2099,
+        "attack_home": 0.9344,
+        "defense_home": 0.6156,
+        "attack_away": 0.8981,
+        "defense_away": 0.5845,
+        "exp_goals_home": 0.83,
+        "exp_goals_away": 0.61,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 75 % (model říká 83 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.83 : 0.61 gólů (celkem 1.43).",
+        "Nejpravděpodobnější výsledek 0:0 (25 %).",
+        "Kurz 1.625 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.606,
+      "settled_ts": 1785988172,
+      "result": {
+        "home": 1,
+        "away": 2
+      }
+    },
+    {
+      "id": "734cebc39a",
+      "ts": 1785907981,
+      "match_id": "401873329",
+      "match": "Nacional Potosí – The Strongest",
+      "match_date": "2026-08-05",
+      "match_time": "22:00",
+      "league": "Bolivian Liga Profesional",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.59,
+      "prob": 0.7704,
+      "stake": 5.0,
+      "status": "lost",
+      "pnl": -5.0,
+      "clv": 0.0219,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "bol.1",
+      "ml_features": {
+        "edge": 0.2294,
+        "attack_home": 0.8452,
+        "defense_home": 0.8841,
+        "attack_away": 0.9256,
+        "defense_away": 0.7236,
+        "exp_goals_home": 1.05,
+        "exp_goals_away": 0.94,
+        "rating_confidence": 0.775
+      },
+      "why": [
+        "Kalibrovaná jistota 77 % (model říká 86 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.05 : 0.94 gólů (celkem 1.99).",
+        "Nejpravděpodobnější výsledek 0:0 (15 %).",
+        "Kurz 1.588 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.556,
+      "settled_ts": 1785988172,
+      "result": {
+        "home": 2,
+        "away": 3
+      }
+    },
+    {
+      "id": "1aff6fc545",
+      "ts": 1785907981,
+      "match_id": "401875654",
+      "match": "NEC Nijmegen – Telstar",
+      "match_date": "2026-08-08",
+      "match_time": "14:30",
+      "league": "Dutch Eredivisie",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.69,
+      "prob": 0.7597,
+      "stake": 5.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.014,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "ned.1",
+      "ml_features": {
+        "edge": 0.243,
+        "attack_home": 0.788,
+        "defense_home": 0.4,
+        "attack_away": 1.0568,
+        "defense_away": 1.0312,
+        "exp_goals_home": 1.53,
+        "exp_goals_away": 0.59,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 76 % (model říká 83 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.53 : 0.59 gólů (celkem 2.12).",
+        "Nejpravděpodobnější výsledek 1:0 (17 %).",
+        "Telstar má výrazně silnější útočný rating.",
+        "Kurz 1.69 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.714
+    },
     {
       "id": "67f8ed53e3",
       "ts": 1785866448,
@@ -17,8 +473,8 @@
       "odds": 1.65,
       "prob": 0.8738,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 3.25,
       "clv": 0.003,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -41,7 +497,12 @@
         "Nejpravděpodobnější výsledek 1:0 (20 %).",
         "Kurz 1.645 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.645
+      "closing_odds": 1.645,
+      "settled_ts": 1785988186,
+      "result": {
+        "home": 2,
+        "away": 0
+      }
     },
     {
       "id": "990fde1e03",
@@ -58,7 +519,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0377,
+      "clv": 0.009,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -81,7 +542,7 @@
         "Paide Linnameeskond má výrazně silnější útočný rating.",
         "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.513
+      "closing_odds": 1.556
     },
     {
       "id": "6f059fdddc",
@@ -128,7 +589,7 @@
           "match_id": "401877882",
           "outcome": "home",
           "prob": 0.7127,
-          "result": null,
+          "result": "won",
           "odds": 1.571,
           "date": "2026-08-05",
           "time": "23:15"
@@ -151,7 +612,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0023,
+      "clv": -0.0199,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -174,7 +635,7 @@
         "Ceará má výrazně silnější útočný rating.",
         "Kurz 1.333 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.333
+      "closing_odds": 1.357
     },
     {
       "id": "e08c7bcd0f",
@@ -189,9 +650,9 @@
       "odds": 1.57,
       "prob": 0.7245,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
-      "clv": -0.0006,
+      "status": "won",
+      "pnl": 2.85,
+      "clv": 0.0637,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -214,7 +675,12 @@
         "Internacional de Bogotá má výrazně silnější útočný rating.",
         "Kurz 1.571 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.571
+      "closing_odds": 1.476,
+      "settled_ts": 1785988172,
+      "result": {
+        "home": 1,
+        "away": 0
+      }
     },
     {
       "id": "fe0e259c2d",
@@ -321,7 +787,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0086,
+      "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -344,7 +810,7 @@
         "Rosario Central má výrazně silnější útočný rating.",
         "Kurz 1.5 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.513
+      "closing_odds": 1.5
     },
     {
       "id": "fcc303c1cc",
@@ -453,9 +919,9 @@
       "odds": 1.37,
       "prob": 0.8089,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
-      "clv": 0.0232,
+      "status": "won",
+      "pnl": 1.85,
+      "clv": 0.0186,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -478,7 +944,12 @@
         "Cruzeiro má výrazně silnější útočný rating.",
         "Kurz 1.37 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.339
+      "closing_odds": 1.345,
+      "settled_ts": 1785988172,
+      "result": {
+        "home": 2,
+        "away": 0
+      }
     },
     {
       "id": "7c2a949956",
@@ -629,7 +1100,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.1208,
+      "clv": 0.1077,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -652,7 +1123,7 @@
         "PAOK má výrazně silnější útočný rating.",
         "Kurz 1.8 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.606
+      "closing_odds": 1.625
     }
   ]
 }

@@ -751,10 +751,14 @@ def api_settle():
     return jsonify({"bet": bet, "stats": bankroll.stats()})
 
 
-_SETTLE_BATCH_TARGETS = 24    # max liga-dnů (requestů) na jeden průchod settle –
-                              # drženo nízko: víc paralelních vláken/spojení = víc
-                              # paměti, na Render free tieru (512 MB) to shazovalo
-                              # proces ještě před dokončením PRVNÍHO průchodu
+_ON_RENDER = bool(os.environ.get("RENDER"))
+_SETTLE_BATCH_TARGETS = 24 if _ON_RENDER else 80
+                              # max liga-dnů (requestů) na jeden průchod settle –
+                              # na Renderu drženo nízko: víc paralelních vláken/
+                              # spojení = víc paměti, free tier (512 MB) to
+                              # shazovalo ještě před dokončením PRVNÍHO průchodu.
+                              # Mimo Render (domácí server, lokál) žádný takový
+                              # limit není, takže fronta se vyprazdňuje rychleji.
 
 # Globální stav kontroly výsledků na pozadí
 _settle_status = {
@@ -818,6 +822,14 @@ _boot_diag = {
 
 _last_settle_debug = {}
 _settle_batch_cursor = 0   # rotuje napříč voláními, ať se dávka nezasekne na stejné pomalé podmnožině
+
+# Kolik souběžných ESPN požadavků settle smyčka smí použít. Na Renderu free
+# tieru (512 MB RAM) vyšší počty appku shazovaly na nedostatek paměti (OOM) –
+# proto tam zůstává konzervativních 4. Mimo Render (domácí server, lokální
+# běh) žádný takový limit není, takže tam appka může jet stejně široce jako
+# _from_espn při počátečním stahování zápasů (15 vláken). _ON_RENDER se
+# definuje výš u _SETTLE_BATCH_TARGETS, obojí ze stejného důvodu.
+_SETTLE_MAX_WORKERS = 4 if _ON_RENDER else 15
 
 
 def _run_bounded(fn, items, max_workers, deadline_s, collect):
@@ -973,11 +985,12 @@ def _settle_recent(allow_slugless_fallback=False):
         def _grab_league(t):
             sport, slug, date_str = t
             return ds.fetch_league_scores(sport, slug, date_str)
-        # nízká paralelizace záměrně – víc vláken = víc paměti na síťová
-        # spojení, na Render free tieru (512 MB) vyšší počty appku shazovaly.
+        # Paralelizace omezená na Renderu (viz _SETTLE_MAX_WORKERS) – víc
+        # vláken = víc paměti na síťová spojení, na free tieru (512 MB)
+        # vyšší počty appku shazovaly. Mimo Render appka jede širším pruhem.
         # Tvrdý deadline 25s – jednotlivé ESPN requesty se na Renderu chovaly,
         # jako by visely déle než jejich vlastní timeout=8s naznačuje.
-        n_stuck = _run_bounded(_grab_league, batch, min(4, len(batch)), 25, _collect)
+        n_stuck = _run_bounded(_grab_league, batch, min(_SETTLE_MAX_WORKERS, len(batch)), 25, _collect)
         if n_stuck:
             remaining += n_stuck   # nedokončené cíle → další průchod je zkusí znovu
 
