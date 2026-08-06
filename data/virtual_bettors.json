@@ -2751,7 +2751,7 @@
     "name": "Čtvrtinový Čeněk",
     "emoji": "🎯",
     "tagline": "Kvartový Kelly (25 %) – rozumný kompromis mezi růstem a rizikem.",
-    "balance": 157.05,
+    "balance": 170.35,
     "start_balance": 200.0,
     "bets": [
       {
@@ -2771,9 +2771,9 @@
         "odds": 1.14,
         "prob": 0.9061,
         "stake": 6.34,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -6.34,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.535,
           "defense_home": 0.5675,
@@ -2783,6 +2783,10 @@
           "exp_goals_away": 0.91,
           "rating_confidence": 1.0,
           "edge": 0.0273
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -2802,9 +2806,9 @@
         "odds": 1.33,
         "prob": 0.8499,
         "stake": 10.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.3,
+        "settled_ts": 1786044820,
         "ml_features": {
           "attack_home": 1.1674,
           "defense_home": 0.6853,
@@ -2814,6 +2818,10 @@
           "exp_goals_away": 0.46,
           "rating_confidence": 1.0,
           "edge": 0.0974
+        },
+        "result": {
+          "home": 0,
+          "away": 0
         }
       },
       {
@@ -3269,9 +3277,9 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 0,
+    "loss_streak": 1,
     "ran_hours": [],
-    "win_streak": 3,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -3286,7 +3294,7 @@
     "name": "Konzervativní Klára",
     "emoji": "🛡️",
     "tagline": "Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.",
-    "balance": 59.3,
+    "balance": 64.0,
     "start_balance": 200.0,
     "bets": [
       {
@@ -3962,9 +3970,9 @@
         "odds": 2.05,
         "prob": 0.8741,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -3974,6 +3982,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.3863
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -4024,9 +4036,9 @@
         "odds": 0.94,
         "prob": 0.8871,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": -0.3,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -4036,6 +4048,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": -0.1723
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -4797,9 +4813,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -4809,6 +4825,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -4900,7 +4920,7 @@
     "name": "Value Hunter Viktor",
     "emoji": "🔍",
     "tagline": "Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.",
-    "balance": 28.0,
+    "balance": 38.0,
     "start_balance": 200.0,
     "bets": [
       {
@@ -5777,9 +5797,9 @@
         "odds": 2.0,
         "prob": 0.8088,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -5789,6 +5809,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": 0.3088
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -6138,9 +6162,9 @@
         "odds": 8.85,
         "prob": 0.5686,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -6150,6 +6174,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.4555
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -6667,7 +6695,7 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 0,
+    "loss_streak": 1,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -6684,7 +6712,7 @@
     "name": "Favorit Fanda",
     "emoji": "⭐",
     "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
-    "balance": 173.97,
+    "balance": 188.31,
     "start_balance": 200.0,
     "bets": [
       {
@@ -6735,9 +6763,9 @@
         "odds": 1.61,
         "prob": 0.7395,
         "stake": 8.24,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -8.24,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.535,
           "defense_home": 0.5675,
@@ -6747,6 +6775,10 @@
           "exp_goals_away": 0.91,
           "rating_confidence": 1.0,
           "edge": 0.1168
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -6766,9 +6798,9 @@
         "odds": 1.74,
         "prob": 0.5156,
         "stake": 8.24,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 6.1,
+        "settled_ts": 1786044820,
         "ml_features": {
           "attack_home": 1.299,
           "defense_home": 1.001,
@@ -6778,6 +6810,10 @@
           "exp_goals_away": 1.19,
           "rating_confidence": 0.375,
           "edge": -0.0588
+        },
+        "result": {
+          "home": 1,
+          "away": 0
         }
       },
       {
@@ -8874,9 +8910,9 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 0,
+    "loss_streak": 1,
     "ran_hours": [],
-    "win_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -9904,9 +9940,9 @@
         "odds": 9.5,
         "prob": 0.3944,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -9916,6 +9952,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.2892
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -9935,9 +9975,9 @@
         "odds": 11.0,
         "prob": 0.2408,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -9947,6 +9987,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": 0.1499
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -10456,7 +10500,7 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 0,
+    "loss_streak": 2,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -10473,7 +10517,7 @@
     "name": "Disciplinovaný Dan",
     "emoji": "📋",
     "tagline": "Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.",
-    "balance": 45.9,
+    "balance": 50.6,
     "start_balance": 200.0,
     "bets": [
       {
@@ -10710,9 +10754,9 @@
         "odds": 1.51,
         "prob": 0.9613,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -10722,6 +10766,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.3003
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -11183,9 +11231,9 @@
         "odds": 0.94,
         "prob": 0.8871,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": -0.3,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -11195,6 +11243,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": -0.1756
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -11750,9 +11802,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -11762,6 +11814,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -11836,9 +11892,9 @@
       }
     ],
     "last_run_date": "2026-08-06",
-    "loss_streak": 1,
+    "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1785776822,
@@ -11853,7 +11909,7 @@
     "name": "Domácí Dalibor",
     "emoji": "🏠",
     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-    "balance": 6.15,
+    "balance": 11.3,
     "start_balance": 200.0,
     "bets": [
       {
@@ -13118,9 +13174,9 @@
         "odds": 1.03,
         "prob": 0.6463,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.15,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -13130,6 +13186,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": -0.3218
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -13887,9 +13947,9 @@
         "odds": 1.8,
         "prob": 0.8054,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -13899,6 +13959,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.2498
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -13939,8 +14003,8 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1785776822,
@@ -15492,9 +15556,9 @@
         "odds": 1.83,
         "prob": 0.7645,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -15504,6 +15568,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.2189
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -15579,7 +15647,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 2,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -16414,9 +16482,9 @@
         "odds": 2.05,
         "prob": 0.7551,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -16426,6 +16494,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": 0.2673
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -16507,9 +16579,9 @@
         "odds": 1.65,
         "prob": 0.7717,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -16519,6 +16591,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.1638
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -17150,8 +17226,8 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 2,
+    "loss_streak": 2,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -17166,7 +17242,7 @@
     "name": "Paroli Pavla",
     "emoji": "🚀",
     "tagline": "Opak Martingalu: zvyšuje po výhře, riskuje jen vyhrané peníze.",
-    "balance": 73.96,
+    "balance": 83.36,
     "start_balance": 200.0,
     "bets": [
       {
@@ -17442,9 +17518,9 @@
         "odds": 2.2,
         "prob": 0.8741,
         "stake": 5.35,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.35,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -17454,6 +17530,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.4196
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -17671,9 +17751,9 @@
         "odds": 0.94,
         "prob": 0.8871,
         "stake": 10.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": -0.6,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -17683,6 +17763,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": -0.1723
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -18273,9 +18357,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -18285,6 +18369,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -18376,7 +18464,7 @@
     "name": "Jistotář Jarda",
     "emoji": "🔒",
     "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
-    "balance": 99.39,
+    "balance": 104.09,
     "start_balance": 200.0,
     "bets": [
       {
@@ -18889,9 +18977,9 @@
         "odds": 0.94,
         "prob": 0.8871,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": -0.3,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -18901,6 +18989,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": -0.1723
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -19798,9 +19890,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -19810,6 +19902,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -19886,7 +19982,7 @@
     "last_run_date": "2026-08-06",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 2,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1785776822,
@@ -19901,7 +19997,7 @@
     "name": "Kalibrovaný Karel",
     "emoji": "🎚️",
     "tagline": "Nevěří syrové jistotě modelu, ale opravené podle skutečné úspěšnosti.",
-    "balance": 97.2,
+    "balance": 107.2,
     "start_balance": 200.0,
     "bets": [
       {
@@ -20022,9 +20118,9 @@
         "odds": 2.0,
         "prob": 0.8088,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -20034,6 +20130,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": 0.3088
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -20488,9 +20588,9 @@
         "odds": 2.05,
         "prob": 0.8741,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -20500,6 +20600,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.3863
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -21257,9 +21361,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -21269,6 +21373,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -21379,8 +21487,8 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 2,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -22658,9 +22766,9 @@
         "odds": 1.19,
         "prob": 0.934,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -22670,6 +22778,10 @@
           "exp_goals_away": 0.89,
           "rating_confidence": 1.0,
           "edge": 0.0964
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       },
       {
@@ -22745,8 +22857,8 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 1,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -23603,9 +23715,9 @@
         "odds": 2.05,
         "prob": 0.7551,
         "stake": 5.33,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.33,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -23615,6 +23727,10 @@
           "exp_goals_away": 0.66,
           "rating_confidence": 0.925,
           "edge": 0.2673
+        },
+        "result": {
+          "home": 3,
+          "away": 1
         }
       },
       {
@@ -23696,9 +23812,9 @@
         "odds": 1.65,
         "prob": 0.7717,
         "stake": 5.75,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.75,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -23708,6 +23824,10 @@
           "exp_goals_away": 1.32,
           "rating_confidence": 0.8,
           "edge": 0.1638
+        },
+        "result": {
+          "home": 6,
+          "away": 0
         }
       },
       {
@@ -23989,7 +24109,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 3,
     "win_streak": 0,
     "custom": true,
     "params": {
@@ -24175,7 +24295,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -24194,9 +24318,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -25438,7 +25562,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -25564,7 +25688,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -25598,9 +25726,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -26966,13 +27094,17 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 0.9962,
           "defense_home": 0.5519,
@@ -27051,13 +27183,17 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.0427,
           "defense_home": 0.5672,
@@ -27071,7 +27207,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -27231,7 +27367,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -27295,9 +27435,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -29155,7 +29295,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "transactions": [
       {
@@ -29298,7 +29438,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903140",
@@ -29317,9 +29461,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.9078,
           "defense_home": 0.813,
@@ -29360,7 +29504,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -29469,9 +29617,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -31433,7 +31581,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -33139,7 +33287,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -33188,9 +33340,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -34948,7 +35100,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "transactions": [
       {
@@ -38152,7 +38304,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902961",
@@ -38171,9 +38327,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 2.1927,
           "defense_home": 0.5772,
@@ -38187,7 +38343,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "transactions": [
       {
@@ -40004,7 +40160,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902961",
@@ -40023,9 +40183,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -40109,7 +40269,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "transactions": [
       {
@@ -40297,7 +40457,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -40316,9 +40480,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -41560,7 +41724,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -41857,7 +42021,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -41876,9 +42044,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -41985,7 +42153,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42004,9 +42176,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -42113,7 +42285,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42132,9 +42308,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -42241,7 +42417,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42260,9 +42440,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -42369,7 +42549,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42388,9 +42572,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -42497,7 +42681,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42516,9 +42704,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -42625,7 +42813,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -42644,9 +42836,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -43025,7 +43217,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -43044,9 +43240,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -43153,7 +43349,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -43172,9 +43372,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -43281,7 +43481,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -43300,9 +43504,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -43475,7 +43679,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -43494,9 +43702,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -43603,7 +43811,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -43622,9 +43834,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -43638,7 +43850,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 12,
     "win_streak": 0,
     "transactions": [
       {
@@ -43687,7 +43899,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401903149",
@@ -43702,13 +43918,17 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2783,
           "defense_home": 0.4621,
@@ -43811,7 +44031,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401903149",
@@ -43826,13 +44050,17 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2783,
           "defense_home": 0.4621,
@@ -43997,7 +44225,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401903149",
@@ -44012,13 +44244,17 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2605,
           "defense_home": 0.5083,
@@ -45369,7 +45605,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401903149",
@@ -45384,13 +45624,17 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -45493,7 +45737,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401903149",
@@ -45508,13 +45756,17 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.2417,
           "defense_home": 0.5864,
@@ -46228,8 +46480,8 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 7,
+    "loss_streak": 5,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -49391,7 +49643,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -49410,9 +49666,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -49519,7 +49775,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -49538,9 +49798,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -49647,7 +49907,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -49666,9 +49930,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -49775,7 +50039,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -49794,9 +50062,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -49903,7 +50171,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -49922,9 +50194,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -50097,7 +50369,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -50116,9 +50392,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -50225,7 +50501,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -50244,9 +50524,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -50260,7 +50540,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 7,
     "win_streak": 0,
     "transactions": [
       {
@@ -50879,7 +51159,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -50898,9 +51182,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -51069,7 +51353,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -51088,9 +51376,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -51259,7 +51547,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -51278,9 +51570,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -51449,7 +51741,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -51468,9 +51764,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -51701,7 +51997,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -51720,9 +52020,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -51891,7 +52191,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -51910,9 +52214,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -52256,7 +52560,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 6,
     "win_streak": 0,
     "transactions": [
       {
@@ -52433,7 +52737,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -52452,9 +52760,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -52557,7 +52865,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -52576,9 +52888,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -52747,7 +53059,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -52766,9 +53082,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -53112,7 +53428,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -53665,7 +53981,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -53684,9 +54004,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -53789,7 +54109,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -53808,9 +54132,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -53913,7 +54237,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -53932,9 +54260,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -54677,7 +55005,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -54696,9 +55028,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -54805,7 +55137,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -54824,9 +55160,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -55170,7 +55506,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 5,
     "win_streak": 0,
     "transactions": [
       {
@@ -55240,7 +55576,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -55259,9 +55599,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.535,
           "defense_home": 0.5675,
@@ -55364,7 +55704,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -55383,9 +55727,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.535,
           "defense_home": 0.5675,
@@ -55488,7 +55832,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -55507,9 +55855,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4669,
           "defense_home": 0.5442,
@@ -55860,7 +56208,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -55879,9 +56231,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -55984,7 +56336,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56003,9 +56359,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56108,7 +56464,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56127,9 +56487,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56232,7 +56592,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56251,9 +56615,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56356,7 +56720,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56375,9 +56743,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56484,7 +56852,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56503,9 +56875,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56612,7 +56984,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56631,9 +57007,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56740,7 +57116,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56759,9 +57139,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -56938,7 +57318,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -56957,9 +57341,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -57070,7 +57454,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57089,9 +57477,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -57132,7 +57520,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57151,9 +57543,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -57264,7 +57656,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57283,9 +57679,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -57396,7 +57792,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57415,9 +57815,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4076,
           "defense_home": 0.5149,
@@ -57594,7 +57994,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57613,9 +58017,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -57722,7 +58126,11 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           },
           {
             "match_id": "401902942",
@@ -57741,9 +58149,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.5955,
           "defense_home": 0.5803,
@@ -57757,7 +58165,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 18,
     "win_streak": 0,
     "transactions": [
       {
@@ -59186,7 +59594,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -59205,9 +59617,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -59314,7 +59726,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -59333,9 +59749,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -59679,7 +60095,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -61753,7 +62169,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903140",
@@ -61791,9 +62211,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -63265,7 +63685,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "transactions": [
       {
@@ -63391,7 +63811,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401841493",
@@ -63425,9 +63849,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -64368,13 +64792,17 @@
             "time": "17:45",
             "sport": "soccer",
             "slug": "uefa.europa_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 0,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.0427,
           "defense_home": 0.5672,
@@ -64388,7 +64816,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -65527,7 +65955,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -65546,9 +65978,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -65655,7 +66087,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "uefa.europa.conf_qual",
-            "result": null
+            "result": "lost",
+            "score": {
+              "home": 6,
+              "away": 0
+            }
           },
           {
             "match_id": "401903123",
@@ -65674,9 +66110,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786046089,
         "ml_features": {
           "attack_home": 1.3496,
           "defense_home": 0.7026,
@@ -66366,7 +66802,7 @@
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -72191,9 +72627,9 @@
         "odds": 1.65,
         "prob": 0.7288,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786045478,
         "ml_features": {
           "attack_home": 1.4669,
           "defense_home": 0.5442,
@@ -72203,12 +72639,16 @@
           "exp_goals_away": 0.87,
           "rating_confidence": 1.0,
           "edge": 0.1209
+        },
+        "result": {
+          "home": 0,
+          "away": 1
         }
       }
     ],
     "last_run_date": "2026-08-06",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0
   },
   "cust_eae1a0c3": {

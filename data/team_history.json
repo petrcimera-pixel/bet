@@ -7289,26 +7289,6 @@
   ],
   "SK Brann": [
     {
-      "date": "2026-04-29",
-      "opponent": "Tromso",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 5,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-02",
-      "opponent": "Fredrikstad",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-16",
       "opponent": "KFUM Oslo",
       "league": "Norwegian Eliteserien",
@@ -7377,6 +7357,26 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rosenborg",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rosenborg",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
     },
     {
       "date": "2026-08-02",
@@ -7551,6 +7551,16 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Beitar Jerusalem",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Hajduk Split": [
@@ -7583,6 +7593,16 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Zalgiris Vilnius",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
     },
     {
       "date": "2026-08-06",
@@ -7837,26 +7857,6 @@
   ],
   "Malmö FF": [
     {
-      "date": "2026-05-03",
-      "opponent": "Mjällby AIF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-10",
-      "opponent": "BK Häcken",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-05-10",
       "opponent": "BK Häcken",
       "league": "Swedish Allsvenskan",
@@ -8017,6 +8017,26 @@
       "result": "W"
     },
     {
+      "date": "2026-08-02",
+      "opponent": "IF Brommapojkarna",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "IF Brommapojkarna",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
       "date": "2026-08-05",
       "opponent": "Vålerenga",
       "league": "UEFA Women's Champions League Qualifying",
@@ -8101,6 +8121,16 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Shelbourne",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Brondby": [
@@ -8170,16 +8200,6 @@
     }
   ],
   "Hammarby IF": [
-    {
-      "date": "2026-05-09",
-      "opponent": "IFK Göteborg",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
     {
       "date": "2026-05-17",
       "opponent": "Malmö FF",
@@ -8349,6 +8369,16 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Raków Czestochowa",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-08-06",
@@ -8877,6 +8907,16 @@
       "gf": 3,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Anderlecht",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Tromsø U19": [
@@ -19567,6 +19607,16 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Györi ETO FC",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Racing Union": [
@@ -19897,44 +19947,24 @@
   ],
   "Almagro": [
     {
-      "date": "2026-06-20",
-      "opponent": "Atlanta",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-07-04",
-      "opponent": "Atletico Rafaela",
+      "date": "2026-08-01",
+      "opponent": "Midland",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-07-12",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-07-27",
-      "opponent": "Atlanta",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
       "ga": 1,
-      "result": "W"
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Midland",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     },
     {
       "date": "2026-08-01",
@@ -20095,49 +20125,29 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
-    }
-  ],
-  "Gimnasia y Tiro (Salta)": [
-    {
-      "date": "2026-06-13",
-      "opponent": "Quilmes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
     },
     {
-      "date": "2026-06-21",
-      "opponent": "Deportivo Maipú",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-07-04",
-      "opponent": "Colegiales",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-07-12",
-      "opponent": "Patronato",
+      "date": "2026-08-05",
+      "opponent": "Gimnasia y Tiro (Salta)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     },
+    {
+      "date": "2026-08-05",
+      "opponent": "Gimnasia y Tiro (Salta)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Gimnasia y Tiro (Salta)": [
     {
       "date": "2026-07-26",
       "opponent": "Deportivo Maipú",
@@ -20156,6 +20166,46 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Temperley",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Temperley",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Almagro",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Almagro",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -20999,6 +21049,26 @@
       "result": "D"
     },
     {
+      "date": "2026-08-02",
+      "opponent": "Newell's Old Boys",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Newell's Old Boys",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
       "date": "2026-08-05",
       "opponent": "Estudiantes de La Plata",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -21032,6 +21102,26 @@
       "date": "2026-08-05",
       "opponent": "Estudiantes L.P.",
       "league": "Liga Profesional Argentina",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Estudiantes de La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Estudiantes de La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
@@ -21089,6 +21179,46 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Defensa y Justicia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Defensa y Justicia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Boca Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Boca Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-08-05",
@@ -21651,46 +21781,6 @@
   ],
   "Quilmes": [
     {
-      "date": "2026-04-05",
-      "opponent": "Deportivo Maipú",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-12",
-      "opponent": "Temperley",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 3,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-18",
-      "opponent": "Nueva Chicago",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-25",
-      "opponent": "San Martín (San Juan)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
       "date": "2026-05-04",
       "opponent": "Chacarita Juniors",
       "league": "Argentine Nacional B",
@@ -21811,6 +21901,26 @@
       "result": "D"
     },
     {
+      "date": "2026-08-01",
+      "opponent": "Patronato",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Patronato",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
       "date": "2026-08-05",
       "opponent": "Gimnasia y Esgrima (Jujuy)",
       "league": "Argentine Nacional B",
@@ -21849,42 +21959,10 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "Gimnasia y Esgrima (Jujuy)": [
-    {
-      "date": "2026-03-15",
-      "opponent": "Colegiales",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
     },
     {
-      "date": "2026-03-21",
-      "opponent": "Tristán Suárez",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-28",
-      "opponent": "Chaco For Ever",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-05",
-      "opponent": "Patronato",
+      "date": "2026-08-05",
+      "opponent": "Gimnasia y Esgrima (Jujuy)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
@@ -21892,6 +21970,18 @@
       "ga": 0,
       "result": "W"
     },
+    {
+      "date": "2026-08-05",
+      "opponent": "Gimnasia y Esgrima (Jujuy)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Gimnasia y Esgrima (Jujuy)": [
     {
       "date": "2026-04-12",
       "opponent": "Agropecuario",
@@ -22019,6 +22109,46 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Colegiales",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Colegiales",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Quilmes",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Quilmes",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
       "ga": 2,
       "result": "L"
     },
@@ -24845,8 +24975,138 @@
   ],
   "Cruzeiro": [
     {
-      "date": "2026-04-25",
-      "opponent": "Remo",
+      "date": "2026-05-03",
+      "opponent": "Atlético-MG",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-05-10",
+      "opponent": "Bahia",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-10",
+      "opponent": "Bahia",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-17",
+      "opponent": "Palmeiras",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-05-17",
+      "opponent": "Palmeiras",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-05-24",
+      "opponent": "Chapecoense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-24",
+      "opponent": "Chapecoense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-31",
+      "opponent": "Fluminense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-05-31",
+      "opponent": "Fluminense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-23",
+      "opponent": "Internacional",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-23",
+      "opponent": "Internacional",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-26",
+      "opponent": "Botafogo",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-26",
+      "opponent": "Botafogo",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Coritiba",
       "league": "Brazilian Serie A",
       "sport": "soccer",
       "loc": "away",
@@ -24855,144 +25115,14 @@
       "result": "W"
     },
     {
-      "date": "2026-05-03",
-      "opponent": "Atlético-MG",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-03",
-      "opponent": "Atlético-MG",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-10",
-      "opponent": "Bahia",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-10",
-      "opponent": "Bahia",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-17",
-      "opponent": "Palmeiras",
+      "date": "2026-07-31",
+      "opponent": "Coritiba",
       "league": "Brazilian Serie A",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-17",
-      "opponent": "Palmeiras",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-24",
-      "opponent": "Chapecoense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
+      "ga": 0,
       "result": "W"
-    },
-    {
-      "date": "2026-05-24",
-      "opponent": "Chapecoense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Fluminense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Fluminense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-07-23",
-      "opponent": "Internacional",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-07-23",
-      "opponent": "Internacional",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-07-26",
-      "opponent": "Botafogo",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-07-26",
-      "opponent": "Botafogo",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
     },
     {
       "date": "2026-07-31",
@@ -26177,46 +26307,6 @@
   ],
   "Richmond Kickers": [
     {
-      "date": "2026-06-20",
-      "opponent": "Fort Wayne",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-24",
-      "opponent": "Portland Hearts of Pine",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-24",
-      "opponent": "Portland Hearts of Pine",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-07-03",
-      "opponent": "Sarasota Paradise",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-07-03",
       "opponent": "Sarasota Paradise",
       "league": "USL League One",
@@ -26327,6 +26417,26 @@
       "result": "W"
     },
     {
+      "date": "2026-08-01",
+      "opponent": "AV Alta FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "AV Alta FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
       "date": "2026-08-05",
       "opponent": "New York Cosmos",
       "league": "USL League One",
@@ -26359,6 +26469,26 @@
     {
       "date": "2026-08-05",
       "opponent": "NY Cosmos",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "New York Cosmos",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "New York Cosmos",
       "league": "USL League One",
       "sport": "soccer",
       "loc": "home",
@@ -26379,26 +26509,6 @@
   ],
   "New York Cosmos": [
     {
-      "date": "2026-06-06",
-      "opponent": "Hartford Athletic",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-13",
-      "opponent": "One Knoxville",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-06-13",
       "opponent": "One Knoxville",
       "league": "USL League One",
@@ -26545,6 +26655,26 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Richmond Kickers",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Richmond Kickers",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
       "ga": 2,
       "result": "L"
     },
@@ -26581,26 +26711,6 @@
   ],
   "FC Naples": [
     {
-      "date": "2026-05-31",
-      "opponent": "Union Omaha",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-03",
-      "opponent": "Charlotte Independence",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 5,
-      "result": "L"
-    },
-    {
       "date": "2026-06-03",
       "opponent": "Charlotte Independence",
       "league": "USL League One",
@@ -26749,6 +26859,26 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "AV Alta FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "AV Alta FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     },
     {
       "date": "2026-08-05",
@@ -26783,46 +26913,6 @@
   ],
   "AV Alta FC": [
     {
-      "date": "2026-06-20",
-      "opponent": "Greenville Triumph",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-25",
-      "opponent": "Corpus Christi FC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-25",
-      "opponent": "Corpus Christi FC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-07-02",
-      "opponent": "Union Omaha",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-07-02",
       "opponent": "Union Omaha",
       "league": "USL League One",
@@ -26950,6 +27040,46 @@
       "loc": "away",
       "gf": 2,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Richmond Kickers",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Richmond Kickers",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "FC Naples",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "FC Naples",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
       "result": "L"
     },
     {
@@ -27385,26 +27515,6 @@
   ],
   "Fluminense": [
     {
-      "date": "2026-04-26",
-      "opponent": "Chapecoense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-26",
-      "opponent": "Chapecoense",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-03",
       "opponent": "Internacional",
       "league": "Brazilian Serie A",
@@ -27542,6 +27652,26 @@
       "loc": "away",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Bahia",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Bahia",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     },
     {
@@ -27801,26 +27931,6 @@
   ],
   "Palmeiras": [
     {
-      "date": "2026-04-26",
-      "opponent": "Red Bull Bragantino",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-26",
-      "opponent": "Red Bull Bragantino",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-05-02",
       "opponent": "Santos",
       "league": "Brazilian Serie A",
@@ -27959,6 +28069,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Vitória",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Vitória",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-07-30",
@@ -29065,6 +29195,26 @@
       "result": "W"
     },
     {
+      "date": "2026-08-01",
+      "opponent": "Racing Club",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Racing Club",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
       "date": "2026-08-06",
       "opponent": "Belgrano Cordoba",
       "league": "Liga Profesional Argentina",
@@ -29349,26 +29499,6 @@
   ],
   "Monterey Bay": [
     {
-      "date": "2026-06-07",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-07",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
       "date": "2026-06-11",
       "opponent": "Sporting JAX",
       "league": "USL Championship",
@@ -29506,6 +29636,26 @@
       "loc": "home",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Lexington",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Lexington",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
       "result": "L"
     },
     {
@@ -31141,26 +31291,6 @@
   ],
   "Sacramento Republic FC": [
     {
-      "date": "2026-05-24",
-      "opponent": "San Antonio FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Phoenix Rising FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-05-31",
       "opponent": "Phoenix Rising FC",
       "league": "USL Championship",
@@ -31308,6 +31438,26 @@
       "loc": "away",
       "gf": 3,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sporting JAX",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sporting JAX",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -31343,26 +31493,6 @@
   ],
   "El Paso Locomotive FC": [
     {
-      "date": "2026-05-31",
-      "opponent": "Lexington",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-07",
-      "opponent": "Colorado Springs Switchbacks FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "Colorado Springs Switchbacks FC",
       "league": "USL Cup",
@@ -31511,6 +31641,26 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Orange County SC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Orange County SC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -31563,6 +31713,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Argentinos Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Argentinos Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-08-01",
@@ -31891,26 +32061,6 @@
   ],
   "Las Vegas Lights FC": [
     {
-      "date": "2026-05-31",
-      "opponent": "FC Tulsa",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "FC Tulsa",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "Oakland Roots",
       "league": "USL Cup",
@@ -32049,6 +32199,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Phoenix Rising FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Phoenix Rising FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -32093,26 +32263,6 @@
   ],
   "Oakland Roots": [
     {
-      "date": "2026-06-07",
-      "opponent": "Las Vegas Lights FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-14",
-      "opponent": "Miami FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-06-14",
       "opponent": "Miami FC",
       "league": "USL Championship",
@@ -32240,6 +32390,26 @@
       "loc": "home",
       "gf": 1,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Pittsburgh Riverhounds",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Pittsburgh Riverhounds",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
       "result": "L"
     },
     {
@@ -36887,26 +37057,6 @@
   ],
   "Vitória": [
     {
-      "date": "2026-04-18",
-      "opponent": "Corinthians",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-26",
-      "opponent": "Athletico-PR",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Athletico-PR",
       "league": "Brazilian Serie A",
@@ -37054,6 +37204,26 @@
       "loc": "away",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Palmeiras",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Palmeiras",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
       "result": "L"
     },
     {
@@ -37415,26 +37585,6 @@
   ],
   "Coritiba": [
     {
-      "date": "2026-04-19",
-      "opponent": "Atlético-MG",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-19",
-      "opponent": "Atlético-MG",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Grêmio",
       "league": "Brazilian Serie A",
@@ -37593,6 +37743,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Cruzeiro",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Cruzeiro",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-07-31",
@@ -37903,26 +38073,6 @@
   ],
   "Bahia": [
     {
-      "date": "2026-04-19",
-      "opponent": "Flamengo",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-19",
-      "opponent": "Flamengo",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-04-25",
       "opponent": "Santos",
       "league": "Brazilian Serie A",
@@ -38080,6 +38230,26 @@
       "loc": "home",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Fluminense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Fluminense",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     },
     {
@@ -38311,26 +38481,6 @@
   ],
   "Athletico-PR": [
     {
-      "date": "2026-04-19",
-      "opponent": "Palmeiras",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-26",
-      "opponent": "Vitória",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Vitória",
       "league": "Brazilian Serie A",
@@ -38479,6 +38629,26 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Corinthians",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Corinthians",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-07-30",
@@ -38715,26 +38885,6 @@
   ],
   "Corinthians": [
     {
-      "date": "2026-04-18",
-      "opponent": "Vitória",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-18",
-      "opponent": "Vitória",
-      "league": "Brazilian Serie A",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Vasco da Gama",
       "league": "Brazilian Serie A",
@@ -38892,6 +39042,26 @@
       "loc": "away",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Athletico-PR",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Athletico-PR",
+      "league": "Brazilian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     },
     {
@@ -39671,6 +39841,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Belgrano (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Belgrano (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Guaraní": [
@@ -40209,26 +40399,6 @@
   ],
   "Orange County SC": [
     {
-      "date": "2026-05-24",
-      "opponent": "Oakland Roots",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-24",
-      "opponent": "Oakland Roots",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "AV Alta FC",
       "league": "USL Cup",
@@ -40386,6 +40556,26 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "El Paso Locomotive FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "El Paso Locomotive FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -40411,26 +40601,6 @@
   ],
   "Birmingham Legion FC": [
     {
-      "date": "2026-06-04",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-04",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
       "date": "2026-06-10",
       "opponent": "Corpus Christi FC",
       "league": "USL Cup",
@@ -40589,6 +40759,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rhode Island FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rhode Island FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-02",
@@ -40613,26 +40803,6 @@
   ],
   "Hartford Athletic": [
     {
-      "date": "2026-05-30",
-      "opponent": "New Mexico United",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-30",
-      "opponent": "New Mexico United",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-06-06",
       "opponent": "New York Cosmos",
       "league": "USL Cup",
@@ -40791,6 +40961,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Loudoun United FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Loudoun United FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-01",
@@ -40815,26 +41005,6 @@
   ],
   "Loudoun United FC": [
     {
-      "date": "2026-06-06",
-      "opponent": "Richmond Kickers",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-06",
-      "opponent": "Richmond Kickers",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-10",
       "opponent": "Greenville Triumph",
       "league": "USL Cup",
@@ -40991,6 +41161,26 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Hartford Athletic",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Hartford Athletic",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
       "ga": 0,
       "result": "W"
     },
@@ -41017,26 +41207,6 @@
   ],
   "Pittsburgh Riverhounds": [
     {
-      "date": "2026-06-06",
-      "opponent": "Charleston Battery",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-06",
-      "opponent": "Charleston Battery",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-06-13",
       "opponent": "Indy Eleven",
       "league": "USL Championship",
@@ -41195,6 +41365,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Oakland Roots",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Oakland Roots",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-02",
@@ -41219,26 +41409,6 @@
   ],
   "Rhode Island FC": [
     {
-      "date": "2026-05-23",
-      "opponent": "Brooklyn FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-23",
-      "opponent": "Brooklyn FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-30",
       "opponent": "Indy Eleven",
       "league": "USL Championship",
@@ -41397,6 +41567,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Birmingham Legion FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Birmingham Legion FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -41421,26 +41611,6 @@
   ],
   "Sporting JAX": [
     {
-      "date": "2026-05-31",
-      "opponent": "Brooklyn FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Brooklyn FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
       "date": "2026-06-06",
       "opponent": "Tampa Bay Rowdies",
       "league": "USL Cup",
@@ -41598,6 +41768,26 @@
       "loc": "away",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sacramento Republic FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sacramento Republic FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
       "result": "L"
     },
     {
@@ -41623,26 +41813,6 @@
   ],
   "Lexington": [
     {
-      "date": "2026-05-31",
-      "opponent": "El Paso Locomotive FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "El Paso Locomotive FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-06-06",
       "opponent": "Detroit City FC",
       "league": "USL Cup",
@@ -41801,6 +41971,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Monterey Bay",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Monterey Bay",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
     },
     {
       "date": "2026-08-01",
@@ -41825,26 +42015,6 @@
   ],
   "Corpus Christi FC": [
     {
-      "date": "2026-06-10",
-      "opponent": "Birmingham Legion FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-10",
-      "opponent": "Birmingham Legion FC",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-06-14",
       "opponent": "Richmond Kickers",
       "league": "USL League One",
@@ -42003,6 +42173,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Athletic Club Boise",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Athletic Club Boise",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -42027,26 +42217,6 @@
   ],
   "Westchester SC": [
     {
-      "date": "2026-06-14",
-      "opponent": "Greenville Triumph",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-14",
-      "opponent": "Greenville Triumph",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-19",
       "opponent": "Portland Hearts of Pine",
       "league": "USL League One",
@@ -42205,6 +42375,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Forward Madison FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Forward Madison FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -42229,26 +42419,6 @@
   ],
   "Charlotte Independence": [
     {
-      "date": "2026-06-10",
-      "opponent": "Union Omaha",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-10",
-      "opponent": "Union Omaha",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-13",
       "opponent": "FC Naples",
       "league": "USL League One",
@@ -42401,6 +42571,26 @@
     {
       "date": "2026-07-25",
       "opponent": "Richmond Kickers",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "One Knoxville",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "One Knoxville",
       "league": "USL League One",
       "sport": "soccer",
       "loc": "home",
@@ -42633,26 +42823,6 @@
   ],
   "Fort Wayne": [
     {
-      "date": "2026-06-07",
-      "opponent": "Union Omaha",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-07",
-      "opponent": "Union Omaha",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
       "date": "2026-06-10",
       "opponent": "Westchester SC",
       "league": "USL League One",
@@ -42810,6 +42980,26 @@
       "loc": "away",
       "gf": 1,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Union Omaha",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Union Omaha",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
       "result": "L"
     },
     {
@@ -43037,26 +43227,6 @@
   ],
   "Louisville City FC": [
     {
-      "date": "2026-05-30",
-      "opponent": "Tampa Bay Rowdies",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-30",
-      "opponent": "Tampa Bay Rowdies",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-06-04",
       "opponent": "Birmingham Legion FC",
       "league": "USL Championship",
@@ -43215,6 +43385,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Tampa Bay Rowdies",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Tampa Bay Rowdies",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 5,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -43239,26 +43429,6 @@
   ],
   "Brooklyn FC": [
     {
-      "date": "2026-05-23",
-      "opponent": "Rhode Island FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-23",
-      "opponent": "Rhode Island FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 4,
-      "result": "L"
-    },
-    {
       "date": "2026-05-31",
       "opponent": "Sporting JAX",
       "league": "USL Championship",
@@ -43416,6 +43586,26 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Charleston Battery",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Charleston Battery",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
       "result": "L"
     },
     {
@@ -43441,26 +43631,6 @@
   ],
   "Charleston Battery": [
     {
-      "date": "2026-06-06",
-      "opponent": "Pittsburgh Riverhounds",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-06",
-      "opponent": "Pittsburgh Riverhounds",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-06-11",
       "opponent": "Tampa Bay Rowdies",
       "league": "USL Championship",
@@ -43619,6 +43789,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Brooklyn FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Brooklyn FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-01",
@@ -43643,26 +43833,6 @@
   ],
   "San Antonio FC": [
     {
-      "date": "2026-05-24",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-24",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-27",
       "opponent": "Sporting JAX",
       "league": "USL Championship",
@@ -43820,6 +43990,26 @@
       "loc": "away",
       "gf": 1,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Indy Eleven",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Indy Eleven",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
       "result": "W"
     },
     {
@@ -43845,26 +44035,6 @@
   ],
   "New Mexico United": [
     {
-      "date": "2026-05-21",
-      "opponent": "Tampa Bay Rowdies",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-21",
-      "opponent": "Tampa Bay Rowdies",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
       "date": "2026-05-24",
       "opponent": "Charleston Battery",
       "league": "USL Championship",
@@ -44022,6 +44192,26 @@
       "loc": "away",
       "gf": 4,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Colorado Springs Switchbacks FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Colorado Springs Switchbacks FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -44047,26 +44237,6 @@
   ],
   "Phoenix Rising FC": [
     {
-      "date": "2026-05-31",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Sacramento Republic FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "New Mexico United",
       "league": "USL Cup",
@@ -44224,6 +44394,26 @@
       "loc": "home",
       "gf": 0,
       "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Las Vegas Lights FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Las Vegas Lights FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "result": "D"
     },
     {
@@ -44249,26 +44439,6 @@
   ],
   "Portland Hearts of Pine": [
     {
-      "date": "2026-06-04",
-      "opponent": "Corpus Christi FC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-04",
-      "opponent": "Corpus Christi FC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "Brooklyn FC",
       "league": "USL Cup",
@@ -44427,6 +44597,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Greenville Triumph",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Greenville Triumph",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
     },
     {
       "date": "2026-08-01",
@@ -44553,26 +44743,6 @@
   ],
   "One Knoxville": [
     {
-      "date": "2026-05-29",
-      "opponent": "Greenville Triumph",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-29",
-      "opponent": "Greenville Triumph",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-10",
       "opponent": "Chattanooga Red Wolves",
       "league": "USL Cup",
@@ -44730,6 +44900,26 @@
       "loc": "away",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Charlotte Independence",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Charlotte Independence",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
       "result": "L"
     },
     {
@@ -44949,26 +45139,6 @@
   ],
   "Greenville Triumph": [
     {
-      "date": "2026-06-14",
-      "opponent": "Westchester SC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-14",
-      "opponent": "Westchester SC",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 4,
-      "result": "L"
-    },
-    {
       "date": "2026-06-20",
       "opponent": "AV Alta FC",
       "league": "USL League One",
@@ -45127,6 +45297,26 @@
       "gf": 3,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Portland Hearts of Pine",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Portland Hearts of Pine",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
     },
     {
       "date": "2026-08-01",
@@ -45151,26 +45341,6 @@
   ],
   "Miami FC": [
     {
-      "date": "2026-05-23",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 3,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-23",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 3,
-      "result": "W"
-    },
-    {
       "date": "2026-05-30",
       "opponent": "Pittsburgh Riverhounds",
       "league": "USL Championship",
@@ -45329,6 +45499,26 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Detroit City FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Detroit City FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -45353,26 +45543,6 @@
   ],
   "Detroit City FC": [
     {
-      "date": "2026-05-30",
-      "opponent": "Charleston Battery",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-30",
-      "opponent": "Charleston Battery",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-06-06",
       "opponent": "Lexington",
       "league": "USL Cup",
@@ -45531,6 +45701,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Miami FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Miami FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -45555,26 +45745,6 @@
   ],
   "Union Omaha": [
     {
-      "date": "2026-05-31",
-      "opponent": "FC Naples",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "FC Naples",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "Fort Wayne",
       "league": "USL Cup",
@@ -45732,6 +45902,26 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Fort Wayne",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Fort Wayne",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -45757,46 +45947,6 @@
   ],
   "Forward Madison FC": [
     {
-      "date": "2026-06-06",
-      "opponent": "Indy Eleven",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-06",
-      "opponent": "Indy Eleven",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-14",
-      "opponent": "Athletic Club Boise",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 5,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-14",
-      "opponent": "Athletic Club Boise",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 5,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-06-18",
       "opponent": "Fort Wayne",
       "league": "USL League One",
@@ -45934,6 +46084,46 @@
       "loc": "home",
       "gf": 5,
       "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Chattanooga Red Wolves",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Chattanooga Red Wolves",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Westchester SC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Westchester SC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -45959,26 +46149,6 @@
   ],
   "Tampa Bay Rowdies": [
     {
-      "date": "2026-05-30",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-30",
-      "opponent": "Louisville City FC",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-06",
       "opponent": "Sporting JAX",
       "league": "USL Cup",
@@ -46136,6 +46306,26 @@
       "loc": "away",
       "gf": 3,
       "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Louisville City FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 4,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Louisville City FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 4,
       "result": "W"
     },
     {
@@ -46161,26 +46351,6 @@
   ],
   "Chattanooga Red Wolves": [
     {
-      "date": "2026-06-10",
-      "opponent": "One Knoxville",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-06-10",
-      "opponent": "One Knoxville",
-      "league": "USL Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
       "date": "2026-06-13",
       "opponent": "Portland Hearts of Pine",
       "league": "USL League One",
@@ -46339,6 +46509,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Forward Madison FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Forward Madison FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
     },
     {
       "date": "2026-07-30",
@@ -46959,26 +47149,6 @@
   ],
   "Degerfors IF": [
     {
-      "date": "2026-04-27",
-      "opponent": "Örgryte IS",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "Örgryte IS",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
       "date": "2026-05-02",
       "opponent": "BK Häcken",
       "league": "Swedish Allsvenskan",
@@ -47157,30 +47327,30 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "IFK Göteborg",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "IFK Göteborg",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "IK Sirius": [
     {
-      "date": "2026-04-27",
-      "opponent": "BK Häcken",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-05-02",
-      "opponent": "Kalmar FF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
       "date": "2026-05-02",
       "opponent": "Kalmar FF",
       "league": "Swedish Allsvenskan",
@@ -47348,6 +47518,26 @@
       "loc": "home",
       "gf": 4,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Halmstads BK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Halmstads BK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -47565,26 +47755,6 @@
   ],
   "Colorado Springs Switchbacks FC": [
     {
-      "date": "2026-05-31",
-      "opponent": "Oakland Roots",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-31",
-      "opponent": "Oakland Roots",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-06-07",
       "opponent": "El Paso Locomotive FC",
       "league": "USL Cup",
@@ -47743,6 +47913,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "New Mexico United",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "New Mexico United",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -47767,26 +47957,6 @@
   ],
   "Indy Eleven": [
     {
-      "date": "2026-05-23",
-      "opponent": "Lexington",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-23",
-      "opponent": "Lexington",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-30",
       "opponent": "Rhode Island FC",
       "league": "USL Championship",
@@ -47944,6 +48114,26 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Antonio FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Antonio FC",
+      "league": "USL Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
       "result": "L"
     },
     {
@@ -47968,26 +48158,6 @@
     }
   ],
   "AIK": [
-    {
-      "date": "2026-04-27",
-      "opponent": "Malmö FF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "Malmö FF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
     {
       "date": "2026-05-03",
       "opponent": "IF Elfsborg",
@@ -48167,29 +48337,29 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Örgryte IS",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Örgryte IS",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Halmstads BK": [
-    {
-      "date": "2026-04-27",
-      "opponent": "Mjällby AIF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "Mjällby AIF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
     {
       "date": "2026-05-04",
       "opponent": "IF Brommapojkarna",
@@ -48369,29 +48539,29 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "IK Sirius",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "IK Sirius",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Kalmar FF": [
-    {
-      "date": "2026-04-27",
-      "opponent": "IF Elfsborg",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "IF Elfsborg",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
     {
       "date": "2026-05-02",
       "opponent": "IK Sirius",
@@ -48571,29 +48741,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "BK Häcken",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "BK Häcken",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Västerås SK": [
-    {
-      "date": "2026-04-26",
-      "opponent": "IF Brommapojkarna",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-26",
-      "opponent": "IF Brommapojkarna",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
     {
       "date": "2026-05-03",
       "opponent": "Hammarby IF",
@@ -48773,29 +48943,29 @@
       "gf": 0,
       "ga": 6,
       "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Djurgården",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Djurgården",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
     }
   ],
   "Örgryte IS": [
-    {
-      "date": "2026-04-27",
-      "opponent": "Degerfors IF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "Degerfors IF",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
     {
       "date": "2026-05-03",
       "opponent": "GAIS",
@@ -48975,29 +49145,29 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "AIK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "AIK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "BK Häcken": [
-    {
-      "date": "2026-04-27",
-      "opponent": "IK Sirius",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-27",
-      "opponent": "IK Sirius",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
     {
       "date": "2026-05-02",
       "opponent": "Degerfors IF",
@@ -49177,30 +49347,30 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Kalmar FF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Kalmar FF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "IF Brommapojkarna": [
     {
-      "date": "2026-04-26",
-      "opponent": "Västerås SK",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-04",
-      "opponent": "Halmstads BK",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-04",
       "opponent": "Halmstads BK",
       "league": "Swedish Allsvenskan",
@@ -49369,6 +49539,26 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Malmö FF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Malmö FF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -49585,26 +49775,6 @@
   ],
   "IFK Göteborg": [
     {
-      "date": "2026-05-04",
-      "opponent": "Djurgården",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 6,
-      "result": "L"
-    },
-    {
-      "date": "2026-05-04",
-      "opponent": "Djurgården",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 6,
-      "result": "L"
-    },
-    {
       "date": "2026-05-09",
       "opponent": "Hammarby IF",
       "league": "Swedish Allsvenskan",
@@ -49763,6 +49933,26 @@
       "gf": 1,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Degerfors IF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Degerfors IF",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-02",
@@ -49989,26 +50179,6 @@
   ],
   "Djurgården": [
     {
-      "date": "2026-04-22",
-      "opponent": "IF Elfsborg",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-22",
-      "opponent": "IF Elfsborg",
-      "league": "Swedish Allsvenskan",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Hammarby IF",
       "league": "Swedish Allsvenskan",
@@ -50187,30 +50357,30 @@
       "gf": 6,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Västerås SK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Västerås SK",
+      "league": "Swedish Allsvenskan",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Athletic Club Boise": [
     {
-      "date": "2026-06-11",
-      "opponent": "Richmond Kickers",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-11",
-      "opponent": "Richmond Kickers",
-      "league": "USL League One",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-06-14",
       "opponent": "Forward Madison FC",
       "league": "USL League One",
@@ -50369,6 +50539,26 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Corpus Christi FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Corpus Christi FC",
+      "league": "USL League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -50451,6 +50641,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "River Plate",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "River Plate",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Sarmiento (Junín)": [
@@ -50493,6 +50703,26 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Independiente Rivadavia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Independiente Rivadavia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     },
     {
       "date": "2026-08-03",
@@ -50575,6 +50805,26 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Estudiantes de La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Estudiantes de La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Aldosivi": [
@@ -50616,6 +50866,26 @@
       "loc": "away",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Gimnasia La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Gimnasia La Plata",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
       "result": "L"
     },
     {
@@ -50699,6 +50969,26 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Central Córdoba (Santiago del Estero)": [
@@ -50741,6 +51031,46 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Atlético Tucumán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Atlético Tucumán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "San Lorenzo",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "San Lorenzo",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-04",
@@ -50823,6 +51153,26 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Tigre",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Tigre",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Gimnasia La Plata": [
@@ -50864,6 +51214,26 @@
       "loc": "home",
       "gf": 1,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Aldosivi",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Aldosivi",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
       "result": "W"
     },
     {
@@ -50929,6 +51299,46 @@
       "result": "W"
     },
     {
+      "date": "2026-07-30",
+      "opponent": "Talleres (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Talleres (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Independiente",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Independiente",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
       "date": "2026-08-03",
       "opponent": "Independiente",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -50988,6 +51398,46 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Platense",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Platense",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Lanús",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Lanús",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -51051,6 +51501,46 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Independiente Rivadavia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Independiente Rivadavia",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Atlético Tucumán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Atlético Tucumán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-08-04",
@@ -51133,6 +51623,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Estudiantes de Río Cuarto",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Estudiantes de Río Cuarto",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Platense": [
@@ -51177,6 +51687,46 @@
       "result": "L"
     },
     {
+      "date": "2026-07-30",
+      "opponent": "Instituto (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Instituto (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Talleres (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Talleres (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
       "date": "2026-08-03",
       "opponent": "Talleres (Córdoba)",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -51217,6 +51767,26 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Gimnasia (Mendoza)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Gimnasia (Mendoza)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-01",
@@ -51299,6 +51869,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Banfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Banfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Newell's Old Boys": [
@@ -51341,6 +51931,46 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Independiente",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Independiente",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Boca Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Boca Juniors",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     },
     {
       "date": "2026-08-02",
@@ -51405,6 +52035,46 @@
       "result": "L"
     },
     {
+      "date": "2026-07-30",
+      "opponent": "Vélez Sarsfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Vélez Sarsfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Platense",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Platense",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
       "date": "2026-08-03",
       "opponent": "Platense",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -51462,6 +52132,26 @@
       "league": "Argentine Liga Profesional de Fútbol",
       "sport": "soccer",
       "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rosario Central",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Rosario Central",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
       "gf": 0,
       "ga": 1,
       "result": "L"
@@ -51547,6 +52237,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Riestra",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Riestra",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Lanús": [
@@ -51569,6 +52279,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Instituto (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Instituto (Córdoba)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     },
     {
       "date": "2026-08-03",
@@ -51651,6 +52381,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Central Córdoba (Santiago del Estero)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Central Córdoba (Santiago del Estero)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Atlético Tucumán": [
@@ -51693,6 +52443,46 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Central Córdoba (Santiago del Estero)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Central Córdoba (Santiago del Estero)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Huracán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-04",
+      "opponent": "Huracán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     },
     {
       "date": "2026-08-04",
@@ -51757,6 +52547,46 @@
       "result": "W"
     },
     {
+      "date": "2026-07-30",
+      "opponent": "Huracán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-30",
+      "opponent": "Huracán",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Sarmiento (Junín)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Sarmiento (Junín)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
       "date": "2026-08-03",
       "opponent": "Sarmiento (Junín)",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -51819,6 +52649,46 @@
       "result": "W"
     },
     {
+      "date": "2026-07-31",
+      "opponent": "Newell's Old Boys",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-31",
+      "opponent": "Newell's Old Boys",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Vélez Sarsfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-03",
+      "opponent": "Vélez Sarsfield",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
       "date": "2026-08-03",
       "opponent": "Vélez Sarsfield",
       "league": "Argentine Liga Profesional de Fútbol",
@@ -51878,6 +52748,26 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Barracas Central",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Barracas Central",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
       "result": "L"
     },
     {
@@ -52717,26 +53607,6 @@
   ],
   "Deportivo Morón": [
     {
-      "date": "2026-03-01",
-      "opponent": "Central Norte",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-03-14",
-      "opponent": "Chaco For Ever",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
       "date": "2026-03-21",
       "opponent": "Acassuso",
       "league": "Argentine Nacional B",
@@ -52915,29 +53785,29 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
-    }
-  ],
-  "Almirante Brown": [
-    {
-      "date": "2026-03-01",
-      "opponent": "Estudiantes (Buenos Aires)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
     },
     {
-      "date": "2026-03-14",
-      "opponent": "Racing (Córdoba)",
+      "date": "2026-08-02",
+      "opponent": "Chaco For Ever",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
-      "gf": 1,
+      "gf": 0,
       "ga": 2,
       "result": "L"
     },
+    {
+      "date": "2026-08-02",
+      "opponent": "Chaco For Ever",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Almirante Brown": [
     {
       "date": "2026-03-21",
       "opponent": "Ciudad de Bolívar",
@@ -53117,29 +53987,29 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "San Telmo": [
-    {
-      "date": "2026-02-22",
-      "opponent": "Chaco For Ever",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
     },
     {
-      "date": "2026-03-01",
-      "opponent": "Acassuso",
+      "date": "2026-08-02",
+      "opponent": "Racing (Córdoba)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
       "gf": 2,
-      "ga": 3,
-      "result": "L"
+      "ga": 0,
+      "result": "W"
     },
+    {
+      "date": "2026-08-02",
+      "opponent": "Racing (Córdoba)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "San Telmo": [
     {
       "date": "2026-03-14",
       "opponent": "San Miguel",
@@ -53319,29 +54189,29 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "Deportivo Madryn": [
-    {
-      "date": "2026-02-14",
-      "opponent": "Colón (Santa Fe)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
     },
     {
-      "date": "2026-02-21",
-      "opponent": "Deportivo Morón",
+      "date": "2026-08-02",
+      "opponent": "San Miguel",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
-      "ga": 1,
-      "result": "D"
+      "ga": 0,
+      "result": "W"
     },
+    {
+      "date": "2026-08-02",
+      "opponent": "San Miguel",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Deportivo Madryn": [
     {
       "date": "2026-03-01",
       "opponent": "Godoy Cruz Antonio Tomba",
@@ -53521,29 +54391,29 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "Chacarita Juniors": [
+    },
     {
-      "date": "2026-02-22",
-      "opponent": "Gimnasia y Esgrima (Jujuy)",
+      "date": "2026-08-02",
+      "opponent": "All Boys",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 3,
-      "ga": 1,
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
-      "date": "2026-03-01",
-      "opponent": "Güemes",
+      "date": "2026-08-02",
+      "opponent": "All Boys",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Chacarita Juniors": [
     {
       "date": "2026-03-15",
       "opponent": "Agropecuario",
@@ -53723,22 +54593,10 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
-    }
-  ],
-  "Temperley": [
-    {
-      "date": "2026-03-15",
-      "opponent": "Gimnasia y Tiro (Salta)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
     },
     {
-      "date": "2026-03-22",
-      "opponent": "Atlanta",
+      "date": "2026-08-02",
+      "opponent": "Agropecuario",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
@@ -53746,6 +54604,18 @@
       "ga": 1,
       "result": "W"
     },
+    {
+      "date": "2026-08-02",
+      "opponent": "Agropecuario",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Temperley": [
     {
       "date": "2026-03-29",
       "opponent": "Los Andes",
@@ -53925,29 +54795,29 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
-    }
-  ],
-  "Agropecuario": [
+    },
     {
-      "date": "2026-02-28",
-      "opponent": "Nueva Chicago",
+      "date": "2026-08-02",
+      "opponent": "Gimnasia y Tiro (Salta)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 0,
+      "gf": 1,
       "ga": 2,
       "result": "L"
     },
     {
-      "date": "2026-03-15",
-      "opponent": "Chacarita Juniors",
+      "date": "2026-08-02",
+      "opponent": "Gimnasia y Tiro (Salta)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Agropecuario": [
     {
       "date": "2026-03-22",
       "opponent": "Güemes",
@@ -54127,29 +54997,29 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
-    }
-  ],
-  "Patronato": [
+    },
     {
-      "date": "2026-02-21",
-      "opponent": "Gimnasia y Tiro (Salta)",
+      "date": "2026-08-02",
+      "opponent": "Chacarita Juniors",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
+      "loc": "away",
       "gf": 1,
       "ga": 2,
       "result": "L"
     },
     {
-      "date": "2026-03-03",
-      "opponent": "Atlanta",
+      "date": "2026-08-02",
+      "opponent": "Chacarita Juniors",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Patronato": [
     {
       "date": "2026-03-14",
       "opponent": "Quilmes",
@@ -54329,29 +55199,29 @@
       "gf": 3,
       "ga": 3,
       "result": "D"
-    }
-  ],
-  "Chaco For Ever": [
+    },
     {
-      "date": "2026-02-22",
-      "opponent": "San Telmo",
+      "date": "2026-08-01",
+      "opponent": "Quilmes",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 2,
-      "ga": 2,
+      "gf": 3,
+      "ga": 3,
       "result": "D"
     },
     {
-      "date": "2026-02-28",
-      "opponent": "San Miguel",
+      "date": "2026-08-01",
+      "opponent": "Quilmes",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    }
+  ],
+  "Chaco For Ever": [
     {
       "date": "2026-03-14",
       "opponent": "Deportivo Morón",
@@ -54531,29 +55401,29 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Morón",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Morón",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Ferro Carril Oeste": [
-    {
-      "date": "2026-02-28",
-      "opponent": "Colón (Santa Fe)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-03-14",
-      "opponent": "Godoy Cruz Antonio Tomba",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
     {
       "date": "2026-03-21",
       "opponent": "Los Andes",
@@ -54722,6 +55592,26 @@
       "loc": "away",
       "gf": 0,
       "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Godoy Cruz Antonio Tomba",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Godoy Cruz Antonio Tomba",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
       "result": "L"
     },
     {
@@ -54939,26 +55829,6 @@
   ],
   "Deportivo Maipú": [
     {
-      "date": "2026-03-01",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-03-17",
-      "opponent": "Atlanta",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-03-22",
       "opponent": "Midland",
       "league": "Argentine Nacional B",
@@ -55137,29 +56007,29 @@
       "gf": 4,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Atlanta",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Atlanta",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
     }
   ],
   "Godoy Cruz Antonio Tomba": [
-    {
-      "date": "2026-03-01",
-      "opponent": "Deportivo Madryn",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-03-14",
-      "opponent": "Ferro Carril Oeste",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
     {
       "date": "2026-03-22",
       "opponent": "Chaco For Ever",
@@ -55339,29 +56209,29 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
-    }
-  ],
-  "Mitre (Santiago del Estero)": [
+    },
     {
-      "date": "2026-03-01",
-      "opponent": "Racing (Córdoba)",
+      "date": "2026-08-01",
+      "opponent": "Ferro Carril Oeste",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     },
     {
-      "date": "2026-03-15",
-      "opponent": "Ciudad de Bolívar",
+      "date": "2026-08-01",
+      "opponent": "Ferro Carril Oeste",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
+      "loc": "away",
+      "gf": 3,
       "ga": 1,
-      "result": "D"
-    },
+      "result": "W"
+    }
+  ],
+  "Mitre (Santiago del Estero)": [
     {
       "date": "2026-03-21",
       "opponent": "Defensores de Belgrano",
@@ -55541,29 +56411,29 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "Colón (Santa Fe)": [
+    },
     {
-      "date": "2026-02-22",
-      "opponent": "Central Norte",
+      "date": "2026-08-02",
+      "opponent": "Ciudad de Bolívar",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
-      "gf": 0,
+      "gf": 2,
       "ga": 0,
-      "result": "D"
+      "result": "W"
     },
     {
-      "date": "2026-02-28",
-      "opponent": "Ferro Carril Oeste",
+      "date": "2026-08-02",
+      "opponent": "Ciudad de Bolívar",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Colón (Santa Fe)": [
     {
       "date": "2026-03-14",
       "opponent": "Acassuso",
@@ -55743,12 +56613,10 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "Ciudad de Bolívar": [
+    },
     {
-      "date": "2026-03-15",
-      "opponent": "Mitre (Santiago del Estero)",
+      "date": "2026-08-01",
+      "opponent": "Acassuso",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
@@ -55757,15 +56625,17 @@
       "result": "D"
     },
     {
-      "date": "2026-03-21",
-      "opponent": "Almirante Brown",
+      "date": "2026-08-01",
+      "opponent": "Acassuso",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "result": "D"
-    },
+    }
+  ],
+  "Ciudad de Bolívar": [
     {
       "date": "2026-03-27",
       "opponent": "Agropecuario",
@@ -55945,29 +56815,29 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Mitre (Santiago del Estero)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Mitre (Santiago del Estero)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "San Martín (Tucumán)": [
-    {
-      "date": "2026-03-01",
-      "opponent": "Deportivo Maipú",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-03-15",
-      "opponent": "Nueva Chicago",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
     {
       "date": "2026-03-21",
       "opponent": "San Martín (San Juan)",
@@ -56134,6 +57004,26 @@
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Nueva Chicago",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Nueva Chicago",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
       "gf": 1,
       "ga": 2,
       "result": "L"
@@ -56555,26 +57445,6 @@
   ],
   "Midland": [
     {
-      "date": "2026-02-21",
-      "opponent": "Quilmes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-03-01",
-      "opponent": "Colegiales",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-03-15",
       "opponent": "Almagro",
       "league": "Argentine Nacional B",
@@ -56753,29 +57623,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "Atlanta": [
+    },
     {
-      "date": "2026-03-03",
-      "opponent": "Patronato",
+      "date": "2026-08-01",
+      "opponent": "Almagro",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "result": "D"
     },
     {
-      "date": "2026-03-17",
-      "opponent": "Deportivo Maipú",
+      "date": "2026-08-01",
+      "opponent": "Almagro",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
+      "loc": "away",
+      "gf": 1,
       "ga": 1,
-      "result": "W"
-    },
+      "result": "D"
+    }
+  ],
+  "Atlanta": [
     {
       "date": "2026-03-22",
       "opponent": "Temperley",
@@ -56944,6 +57814,26 @@
       "loc": "home",
       "gf": 1,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Maipú",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Maipú",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
       "result": "L"
     },
     {
@@ -57363,26 +58253,6 @@
   ],
   "Colegiales": [
     {
-      "date": "2026-03-01",
-      "opponent": "Midland",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-15",
-      "opponent": "Gimnasia y Esgrima (Jujuy)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-03-22",
       "opponent": "Patronato",
       "league": "Argentine Nacional B",
@@ -57561,29 +58431,29 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Gimnasia y Esgrima (Jujuy)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Gimnasia y Esgrima (Jujuy)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Defensores de Belgrano": [
-    {
-      "date": "2026-02-28",
-      "opponent": "Los Andes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-03-14",
-      "opponent": "Estudiantes (Buenos Aires)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
     {
       "date": "2026-03-21",
       "opponent": "Mitre (Santiago del Estero)",
@@ -57763,29 +58633,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "Nueva Chicago": [
+    },
     {
-      "date": "2026-02-21",
-      "opponent": "Tristán Suárez",
+      "date": "2026-08-01",
+      "opponent": "Estudiantes (Buenos Aires)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 0,
-      "ga": 0,
+      "gf": 1,
+      "ga": 1,
       "result": "D"
     },
     {
-      "date": "2026-02-28",
-      "opponent": "Agropecuario",
+      "date": "2026-08-01",
+      "opponent": "Estudiantes (Buenos Aires)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Nueva Chicago": [
     {
       "date": "2026-03-15",
       "opponent": "San Martín (Tucumán)",
@@ -57955,6 +58825,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     },
     {
       "date": "2026-08-01",
@@ -60383,26 +61273,6 @@
   ],
   "San Martín (San Juan)": [
     {
-      "date": "2026-02-15",
-      "opponent": "Chacarita Juniors",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-02-21",
-      "opponent": "Güemes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-03-01",
       "opponent": "Tristán Suárez",
       "league": "Argentine Nacional B",
@@ -60571,6 +61441,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Atletico Rafaela",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "Atletico Rafaela",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     },
     {
       "date": "2026-08-01",
@@ -60989,26 +61879,6 @@
   ],
   "San Miguel": [
     {
-      "date": "2026-02-21",
-      "opponent": "Ferro Carril Oeste",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-02-28",
-      "opponent": "Chaco For Ever",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-03-14",
       "opponent": "San Telmo",
       "league": "Argentine Nacional B",
@@ -61187,29 +62057,29 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
-    }
-  ],
-  "Estudiantes (Buenos Aires)": [
+    },
     {
-      "date": "2026-03-01",
-      "opponent": "Almirante Brown",
+      "date": "2026-08-02",
+      "opponent": "San Telmo",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
+      "loc": "away",
       "gf": 0,
       "ga": 1,
       "result": "L"
     },
     {
-      "date": "2026-03-14",
-      "opponent": "Defensores de Belgrano",
+      "date": "2026-08-02",
+      "opponent": "San Telmo",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
+      "loc": "away",
       "gf": 0,
-      "ga": 2,
+      "ga": 1,
       "result": "L"
-    },
+    }
+  ],
+  "Estudiantes (Buenos Aires)": [
     {
       "date": "2026-03-21",
       "opponent": "Deportivo Madryn",
@@ -61389,29 +62259,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "All Boys": [
+    },
     {
-      "date": "2026-02-22",
-      "opponent": "Almirante Brown",
+      "date": "2026-08-01",
+      "opponent": "Defensores de Belgrano",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-01",
-      "opponent": "Ciudad de Bolívar",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
+      "ga": 1,
       "result": "D"
     },
+    {
+      "date": "2026-08-01",
+      "opponent": "Defensores de Belgrano",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "All Boys": [
     {
       "date": "2026-03-14",
       "opponent": "Deportivo Madryn",
@@ -61591,29 +62461,29 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Madryn",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Deportivo Madryn",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Acassuso": [
-    {
-      "date": "2026-02-14",
-      "opponent": "Chaco For Ever",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-02-21",
-      "opponent": "Racing (Córdoba)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 0,
-      "result": "W"
-    },
     {
       "date": "2026-03-01",
       "opponent": "San Telmo",
@@ -61793,29 +62663,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "Atletico Rafaela": [
+    },
     {
-      "date": "2026-03-14",
-      "opponent": "San Martín (San Juan)",
+      "date": "2026-08-01",
+      "opponent": "Colón (Santa Fe)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
-      "ga": 0,
-      "result": "W"
+      "ga": 1,
+      "result": "D"
     },
     {
-      "date": "2026-03-22",
-      "opponent": "Chacarita Juniors",
+      "date": "2026-08-01",
+      "opponent": "Colón (Santa Fe)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "away",
+      "loc": "home",
       "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Atletico Rafaela": [
     {
       "date": "2026-03-30",
       "opponent": "Defensores de Belgrano",
@@ -61985,6 +62855,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Martín (San Juan)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-01",
+      "opponent": "San Martín (San Juan)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     },
     {
       "date": "2026-08-01",
@@ -62403,26 +63293,6 @@
   ],
   "Los Andes": [
     {
-      "date": "2026-02-28",
-      "opponent": "Defensores de Belgrano",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-14",
-      "opponent": "Central Norte",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-03-21",
       "opponent": "Ferro Carril Oeste",
       "league": "Argentine Nacional B",
@@ -62601,29 +63471,29 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
-    }
-  ],
-  "Racing (Córdoba)": [
+    },
     {
-      "date": "2026-02-21",
-      "opponent": "Acassuso",
+      "date": "2026-08-02",
+      "opponent": "Central Norte",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
       "gf": 0,
-      "ga": 3,
+      "ga": 1,
       "result": "L"
     },
     {
-      "date": "2026-03-01",
-      "opponent": "Mitre (Santiago del Estero)",
+      "date": "2026-08-02",
+      "opponent": "Central Norte",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "home",
+      "loc": "away",
       "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Racing (Córdoba)": [
     {
       "date": "2026-03-14",
       "opponent": "Almirante Brown",
@@ -62803,22 +63673,10 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
-    }
-  ],
-  "Central Norte": [
-    {
-      "date": "2026-02-22",
-      "opponent": "Colón (Santa Fe)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
     },
     {
-      "date": "2026-03-01",
-      "opponent": "Deportivo Morón",
+      "date": "2026-08-02",
+      "opponent": "Almirante Brown",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
@@ -62826,6 +63684,18 @@
       "ga": 2,
       "result": "L"
     },
+    {
+      "date": "2026-08-02",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Central Norte": [
     {
       "date": "2026-03-14",
       "opponent": "Los Andes",
@@ -62995,6 +63865,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Los Andes",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Los Andes",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     },
     {
       "date": "2026-08-02",
@@ -63753,6 +64643,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Kristiansund BK",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Kristiansund BK",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Rosenborg": [
@@ -63895,6 +64805,26 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "SK Brann",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "SK Brann",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Kristiansund BK": [
@@ -64027,6 +64957,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "KFUM Oslo",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "KFUM Oslo",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -64605,6 +65555,26 @@
       "gf": 3,
       "ga": 3,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Molde",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Molde",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
     }
   ],
   "Viking FK": [
@@ -64901,6 +65871,26 @@
       "result": "W"
     },
     {
+      "date": "2026-08-02",
+      "opponent": "Aalesund",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Aalesund",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 2,
+      "result": "W"
+    },
+    {
       "date": "2026-08-06",
       "opponent": "CFR Cluj-Napoca",
       "league": "UEFA Conference League Qualifying",
@@ -65183,6 +66173,26 @@
       "gf": 3,
       "ga": 3,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sarpsborg FK",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Sarpsborg FK",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "result": "D"
     }
   ],
   "Aalesund": [
@@ -65305,6 +66315,26 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Tromso",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-02",
+      "opponent": "Tromso",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 6,
+      "result": "L"
     },
     {
       "date": "2026-08-02",
@@ -79477,9 +80507,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Al Sadd",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Al Sadd": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Aris Limassol",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Aris Limassol",
@@ -79781,9 +80831,29 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "TBD Away",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "TBD Away": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Uniao da Serra",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Uniao da Serra",
@@ -80085,9 +81155,29 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Atromitos",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Atromitos": [
+    {
+      "date": "2026-08-06",
+      "opponent": "AEL",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "AEL",
@@ -80551,9 +81641,29 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Hammarby IF",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Györi ETO FC": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Riga FC",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Riga FC",
@@ -80600,6 +81710,16 @@
     }
   ],
   "Zalgiris Vilnius": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Hajduk Split",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Hajduk Split",
@@ -80689,9 +81809,29 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "KS Pogradeci",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "KS Pogradeci": [
+    {
+      "date": "2026-08-06",
+      "opponent": "AF Elbasani",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "AF Elbasani",
@@ -80722,6 +81862,64 @@
       "loc": "home",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Austria Vienna",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Anderlecht": [
+    {
+      "date": "2026-08-06",
+      "opponent": "PAOK",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Shelbourne": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Ajax Amsterdam",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "FC Twente": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Dunajska Streda",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Dunajska Streda": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Twente",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
       "result": "L"
     }
   ]

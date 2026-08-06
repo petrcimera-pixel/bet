@@ -99,9 +99,10 @@ def check_login():
     # dostane 302 na /login místo CSS, prohlížeč to zahodí jako 0 pravidel).
     if request.path.startswith("/static/"):
         return
-    # Cron endpoint má vlastní token-based auth (viz api_cron_settle) – běžná
-    # session zde nedává smysl, volá ho externí scheduler (GitHub Actions).
-    if request.path == "/api/cron/settle":
+    # Cron endpointy mají vlastní token-based auth (viz api_cron_settle,
+    # api_cron_retrain) – běžná session zde nedává smysl, volá je externí
+    # scheduler (GitHub Actions).
+    if request.path in ("/api/cron/settle", "/api/cron/retrain"):
         return
 
     # Check if user is authenticated
