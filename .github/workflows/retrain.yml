@@ -1,0 +1,26 @@
+name: Daily retrain (backfill + ML train + calibration)
+
+on:
+  schedule:
+    # Jednou denně brzy ráno (mimo špičku settle cronu). Čas mimo kulaté
+    # hodiny ze stejného důvodu jako v keepalive.yml – spolehlivější spuštění.
+    - cron: "23 3 * * *"
+  workflow_dispatch: {}   # ruční spuštění z GitHub UI
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger retrain
+        env:
+          CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
+        run: |
+          echo "Volám /api/cron/retrain ..."
+          resp=$(curl -s -m 120 -w "\n%{http_code}" "https://kurzanalytik.onrender.com/api/cron/retrain?token=${CRON_TOKEN}")
+          code=$(echo "$resp" | tail -n1)
+          body=$(echo "$resp" | sed '$d')
+          echo "HTTP status: $code"
+          echo "Odpověď: $body"
+          if [ "$code" != "200" ]; then
+            echo "::warning::Neočekávaný status kód $code"
+          fi

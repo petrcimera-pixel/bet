@@ -1188,6 +1188,42 @@ def api_cron_settle():
                     "auto_agent": agent_info, "virtual_bettors": vb_info})
 
 
+@app.route("/api/cron/retrain", methods=["GET", "POST"])
+def api_cron_retrain():
+    """Denní douč: doplní ratingy z čerstvě odehraných zápasů (7 dní stačí,
+    hlubší historie se řeší ručně přes /api/ratings/backfill), přetrénuje
+    ML model a přepočítá kalibraci. Stejný token-auth vzor jako
+    /api/cron/settle – volá to externí GitHub Actions scheduler, ne
+    přihlášený uživatel."""
+    expected = os.environ.get("CRON_TOKEN", "")
+    got = request.args.get("token") or request.headers.get("X-Cron-Token", "")
+    if not expected or got != expected:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    out = {}
+    for sport in ("soccer", "basketball", "hockey"):
+        try:
+            out[f"backfill_{sport}"] = pred.backfill_ratings(days_back=7, sport=sport)
+        except Exception as e:
+            out[f"backfill_{sport}"] = {"error": str(e)}
+    _PRED_CACHE.clear()
+
+    try:
+        from engine import ml_learner
+        success = ml_learner.train_model(days=30)
+        out["ml_train"] = {"success": success}
+    except Exception as e:
+        out["ml_train"] = {"error": str(e)}
+
+    try:
+        out["calibration"] = calibration.rebuild()
+    except Exception as e:
+        out["calibration"] = {"error": str(e)}
+
+    _persist_push_safe()
+    return jsonify(out)
+
+
 @app.route("/api/tips/settle", methods=["POST"])
 def api_tips_settle():
     """Vyhodnotí otevřené tipy i sázky (bank) – čerstvá data z ESPN, viz _settle_recent()."""
