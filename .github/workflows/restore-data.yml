@@ -1,0 +1,48 @@
+name: One-off - push repo data to Render
+
+on:
+  workflow_dispatch: {}   # jen ruční spuštění, žádný cron
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build payload and push to /api/cron/restore-data
+        env:
+          CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+
+          # Stejný seznam jako engine/persist.py FILES – jen ty appka
+          # skutečně zálohuje do gistu a smí přijmout /api/cron/restore-data.
+          FILES = ["bankroll.json", "tips.json", "settings.json", "team_ratings.json",
+                   "calibration.json", "config.json", "learning_metrics.json",
+                   "agent_last_run.json", "virtual_bettors.json",
+                   "team_history.json", "ratings_applied.json"]
+
+          files = {}
+          for name in FILES:
+              path = os.path.join("data", name)
+              if not os.path.exists(path):
+                  print(f"přeskakuji (v repu chybí): {name}")
+                  continue
+              with open(path, encoding="utf-8-sig") as f:
+                  files[name] = json.load(f)
+
+          payload = json.dumps({"files": files}).encode("utf-8")
+          token = os.environ["CRON_TOKEN"]
+          url = f"https://kurzanalytik.onrender.com/api/cron/restore-data?token={token}"
+          req = urllib.request.Request(url, data=payload, method="POST",
+                                        headers={"Content-Type": "application/json"})
+          try:
+              with urllib.request.urlopen(req, timeout=60) as r:
+                  print("HTTP status:", r.status)
+                  print("Odpověď:", r.read().decode("utf-8"))
+          except urllib.error.HTTPError as e:
+              print("HTTP status:", e.code)
+              print("Odpověď:", e.read().decode("utf-8"))
+              raise
+          PY
