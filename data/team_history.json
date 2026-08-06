@@ -7611,6 +7611,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Beitar Jerusalem",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Beitar Jerusalem",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Hajduk Split": [
@@ -21230,6 +21250,26 @@
       "date": "2026-08-06",
       "opponent": "Jagiellonia Bialystok",
       "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Jagiellonia",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Jagiellonia",
+      "league": "UEFA Europa League",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
@@ -53199,6 +53239,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Braga",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Braga",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Servette": [
@@ -66011,26 +66071,6 @@
   ],
   "Tromso": [
     {
-      "date": "2026-03-22",
-      "opponent": "SK Brann",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-04-06",
-      "opponent": "Rosenborg",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-04-11",
       "opponent": "Kristiansund BK",
       "league": "Norwegian Eliteserien",
@@ -66174,6 +66214,26 @@
       "date": "2026-08-06",
       "opponent": "CFR Cluj-Napoca",
       "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "CFR 1907 Cluj",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "CFR 1907 Cluj",
+      "league": "UEFA Europa Conference League",
       "sport": "soccer",
       "loc": "away",
       "gf": 5,
@@ -80635,6 +80695,26 @@
       "gf": 4,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Paide",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Paide",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Maccabi Tel-Aviv": [
@@ -82573,6 +82653,26 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Austria Vienna",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Austria Vienna",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Anderlecht": [
@@ -82692,6 +82792,26 @@
       "date": "2026-08-06",
       "opponent": "Ajax Amsterdam",
       "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Ajax",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Ajax",
+      "league": "UEFA Europa Conference League",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
@@ -83091,9 +83211,49 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "B71",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "B71",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "B71": [
+    {
+      "date": "2026-08-06",
+      "opponent": "EB / Streymur II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "EB / Streymur II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "EB / Streymur II",
@@ -83155,9 +83315,49 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "B36 II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "B36 II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "B36 II": [
+    {
+      "date": "2026-08-06",
+      "opponent": "HB II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "HB II",
+      "league": "1. Deild",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "HB II",
@@ -83209,9 +83409,49 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Universitatea Craiova",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Universitatea Craiova",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Universitatea Craiova": [
+    {
+      "date": "2026-08-06",
+      "opponent": "KuPS",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "KuPS",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "KuPS",
@@ -83253,9 +83493,49 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bumprom",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bumprom",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Bumprom": [
+    {
+      "date": "2026-08-06",
+      "opponent": "BATE II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "BATE II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "BATE II",
@@ -83297,6 +83577,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rangers",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rangers",
+      "league": "UEFA Europa League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Orsha": [
@@ -83319,9 +83619,49 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gomel II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gomel II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Gomel II": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Orsha",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Orsha",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Orsha",
@@ -83385,9 +83725,49 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Volna",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Volna",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     }
   ],
   "Volna": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Molodechno-DYuSSh 4",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Molodechno-DYuSSh 4",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Molodechno-DYuSSh 4",
@@ -83429,9 +83809,49 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Minsk II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Minsk II",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Minsk II": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Slonim",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Slonim",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Slonim",
@@ -83495,9 +83915,49 @@
       "gf": 7,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Merw",
+      "league": "Ýokary Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Merw",
+      "league": "Ýokary Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Merw": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Arkadag",
+      "league": "Ýokary Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Arkadag",
+      "league": "Ýokary Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Arkadag",
@@ -83671,9 +84131,49 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Buxoro",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Buxoro",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     }
   ],
   "Buxoro": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Pakhtakor",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Pakhtakor",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Pakhtakor",
@@ -83747,9 +84247,49 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rīgas FS",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rīgas FS",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Rīgas FS": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FK Jablonec",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FK Jablonec",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "FK Jablonec",
@@ -83811,9 +84351,49 @@
       "gf": 1,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rapid Vienna",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rapid Vienna",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "CFR 1907 Cluj": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Tromso",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Tromso",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Tromso",
@@ -83875,9 +84455,49 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Copenhagen",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Copenhagen",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "FC Copenhagen": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Debreceni VSC",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Debreceni VSC",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Debreceni VSC",
@@ -83961,9 +84581,49 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Flora Tallinn",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Flora Tallinn",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Flora Tallinn": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Inter Club d'Escaldes",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Inter Club d'Escaldes",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Inter Club d'Escaldes",
@@ -84025,9 +84685,49 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gent",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gent",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Gent": [
+    {
+      "date": "2026-08-06",
+      "opponent": "IFK Goteborg",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "IFK Goteborg",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "IFK Goteborg",
@@ -84243,6 +84943,26 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Shelbourne",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Shelbourne",
+      "league": "UEFA Europa Conference League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Twente": [
@@ -84385,9 +85105,49 @@
       "gf": 5,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Molde U19",
+      "league": "Nasjonal U19 Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Molde U19",
+      "league": "Nasjonal U19 Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 2,
+      "result": "W"
     }
   ],
   "Molde U19": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Rosenborg U19",
+      "league": "Nasjonal U19 Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rosenborg U19",
+      "league": "Nasjonal U19 Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Rosenborg U19",
@@ -84439,9 +85199,49 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Asia Talas",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Asia Talas",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Asia Talas": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Muras United",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Muras United",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Muras United",
@@ -84483,6 +85283,26 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Asiagoal",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Asiagoal",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Asiagoal": [
@@ -84505,9 +85325,49 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bishkek City",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bishkek City",
+      "league": "Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Atl. Rafaela 2": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Central Córdoba SdE Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Central Córdoba SdE Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Central Córdoba SdE Res.",
@@ -84569,9 +85429,49 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Atl. Rafaela 2",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Atl. Rafaela 2",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Rosario Central Res.": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Instituto Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Instituto Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Instituto Res.",
@@ -84633,9 +85533,49 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rosario Central Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rosario Central Res.",
+      "league": "Reserve League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     }
   ],
   "Bogense": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Esbjerg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Esbjerg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Esbjerg",
@@ -84677,9 +85617,49 @@
       "gf": 6,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bogense",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bogense",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "BSI": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Espergærde",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 7,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Espergærde",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 7,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Espergærde",
@@ -84721,9 +85701,49 @@
       "gf": 7,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "BSI",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 7,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "BSI",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 7,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Kjellerup": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Brønderslev",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Brønderslev",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Brønderslev",
@@ -84765,9 +85785,49 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Kjellerup",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Kjellerup",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "KRFK": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Skanderborg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Skanderborg",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Skanderborg",
@@ -84809,9 +85869,49 @@
       "gf": 0,
       "ga": 6,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "KRFK",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "KRFK",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
+      "result": "L"
     }
   ],
   "Naestved": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Hvidovre",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Hvidovre",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Hvidovre",
@@ -84853,9 +85953,49 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Naestved",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Naestved",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Vaeggerlose": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Hillerød",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 12,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Hillerød",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 12,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Hillerød",
@@ -84897,9 +86037,49 @@
       "gf": 12,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Vaeggerlose",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 12,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Vaeggerlose",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 12,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Aabenraa": [
+    {
+      "date": "2026-08-06",
+      "opponent": "SGI",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "SGI",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "SGI",
@@ -84941,9 +86121,49 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Aabenraa",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Aabenraa",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Aalborg KFUM": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Fuglebakken KFUM",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Fuglebakken KFUM",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Fuglebakken KFUM",
@@ -84985,9 +86205,49 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Aalborg KFUM",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Aalborg KFUM",
+      "league": "DBU Pokalen",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Legnago Salus": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Mantova",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Mantova",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Mantova",
@@ -85049,9 +86309,49 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Legnago Salus",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Legnago Salus",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Fiorentina": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Deportivo La Coruna",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Deportivo La Coruna",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Deportivo La Coruna",
@@ -85113,6 +86413,26 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Fiorentina",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Fiorentina",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Monaco": [
@@ -85145,9 +86465,49 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Getafe",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Getafe",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Getafe": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Monaco",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Monaco",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Monaco",
@@ -85253,9 +86613,49 @@
       "gf": 4,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Al-Arabi SC",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Al-Arabi SC",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
     }
   ],
   "Al-Arabi SC": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Malaga",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Malaga",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Malaga",
@@ -85361,9 +86761,49 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Irao",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Irao",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Irao": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Betlemi",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Betlemi",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Betlemi",
@@ -85425,9 +86865,49 @@
       "gf": 0,
       "ga": 5,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "WIT Georgia",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "WIT Georgia",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 5,
+      "result": "L"
     }
   ],
   "WIT Georgia": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Gardabani",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gardabani",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Gardabani",
@@ -85709,9 +87189,49 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Saburtalo II",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Saburtalo II",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Saburtalo II": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Iveria Khashuri",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Iveria Khashuri",
+      "league": "Liga 3",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Iveria Khashuri",
@@ -85763,6 +87283,26 @@
       "gf": 7,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Ulfstind",
+      "league": "3. Division - Girone 5",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Ulfstind",
+      "league": "3. Division - Girone 5",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Ulfstind": [
@@ -85785,9 +87325,49 @@
       "gf": 0,
       "ga": 7,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Fløya",
+      "league": "3. Division - Girone 5",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Fløya",
+      "league": "3. Division - Girone 5",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "result": "L"
     }
   ],
   "Erzgebirge Aue": [
+    {
+      "date": "2026-08-06",
+      "opponent": "BFC Dynamo",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "BFC Dynamo",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "BFC Dynamo",
@@ -85849,9 +87429,49 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Erzgebirge Aue",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Erzgebirge Aue",
+      "league": "Regionalliga - Nordost",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Gremio Prudente U20": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Capivariano U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Capivariano U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Capivariano U20",
@@ -85913,9 +87533,49 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gremio Prudente U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Gremio Prudente U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Portuguesa U20": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Juventus U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Juventus U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Juventus U20",
@@ -85977,9 +87637,49 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Portuguesa U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Portuguesa U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "São Caetano U20": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Novorizontino U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Novorizontino U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Novorizontino U20",
@@ -86041,9 +87741,49 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "São Caetano U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "São Caetano U20",
+      "league": "Paulista - U20",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Braga": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Dinamo Minsk",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Dinamo Minsk",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-06",
       "opponent": "Dinamo Minsk",
@@ -86085,9 +87825,49 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "NSI Runavik",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "NSI Runavik",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "NSI Runavik": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Lugano",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Lugano",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-06",
       "opponent": "FC Lugano",
@@ -86119,6 +87899,26 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "ML Vitebsk",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "ML Vitebsk",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "ML Vitebsk": [
@@ -86131,6 +87931,298 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Borac Banja Luka",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Borac Banja Luka",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Valur Reykjavik": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Nordsjælland",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Nordsjælland",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "FC Nordsjælland": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Valur Reykjavik",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Valur Reykjavik",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Real Jaen CF": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Córdoba",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Córdoba": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Real Jaen CF",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Cavese": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Juve Stabia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Juve Stabia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Juve Stabia": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Cavese",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Cavese",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Bristol City": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Walsall",
+      "league": "English Carabao Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Walsall": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Bristol City",
+      "league": "English Carabao Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Bohemians": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Midtjylland",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Midtjylland",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "FC Midtjylland": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Bohemians",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Bohemians",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Rijeka": [
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Ilves",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "FC Ilves",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "FC Ilves": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Rijeka",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-06",
+      "opponent": "Rijeka",
+      "league": "UEFA Conference League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "RB Salzburg": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Pafos",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Pafos": [
+    {
+      "date": "2026-08-06",
+      "opponent": "RB Salzburg",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Rayo Zuliano": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Anzoátegui FC",
+      "league": "Venezuelan Primera División",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Anzoátegui FC": [
+    {
+      "date": "2026-08-06",
+      "opponent": "Rayo Zuliano",
+      "league": "Venezuelan Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ]
 }

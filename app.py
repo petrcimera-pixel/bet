@@ -1252,8 +1252,16 @@ def api_cron_restore_data():
         written.append(name)
 
     _PRED_CACHE.clear()
-    pushed = persist.push(force=True)
-    return jsonify({"written": written, "skipped": skipped, "gist_pushed": pushed})
+    # Gist push BĚŽÍ NA POZADÍ, requestu se nečeká – velký payload (víc MB
+    # napříč soubory jako team_history.json/virtual_bettors.json) dřív
+    # blokoval request tak dlouho, že ho gunicorn (--timeout 300) zabil
+    # uprostřed a appka přestala odpovídat na cokoliv, dokud ji někdo
+    # ručně nerestartoval. Zápis na disk zůstává synchronní (rychlý,
+    # lokální), jen odeslání do gistu je oddělené.
+    if written:
+        threading.Thread(target=lambda: persist.push(force=True), daemon=True).start()
+    return jsonify({"written": written, "skipped": skipped,
+                    "gist_push": "scheduled" if written else "skipped"})
 
 
 @app.route("/api/tips/settle", methods=["POST"])
