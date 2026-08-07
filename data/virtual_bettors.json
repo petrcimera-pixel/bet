@@ -2844,7 +2844,7 @@
     "name": "Čtvrtinový Čeněk",
     "emoji": "🎯",
     "tagline": "Kvartový Kelly (25 %) – rozumný kompromis mezi růstem a rizikem.",
-    "balance": 159.97,
+    "balance": 169.88,
     "start_balance": 200.0,
     "bets": [
       {
@@ -2895,9 +2895,9 @@
         "odds": 1.37,
         "prob": 0.8073,
         "stake": 7.23,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.68,
+        "settled_ts": 1786113894,
         "ml_features": {
           "attack_home": 1.1778,
           "defense_home": 0.9259,
@@ -2907,6 +2907,10 @@
           "exp_goals_away": 1.21,
           "rating_confidence": 0.7,
           "edge": 0.0768
+        },
+        "result": {
+          "home": 4,
+          "away": 3
         }
       },
       {
@@ -3469,7 +3473,7 @@
     "last_run_date": "2026-08-07",
     "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 1,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -7028,9 +7032,40 @@
     "name": "Favorit Fanda",
     "emoji": "⭐",
     "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
-    "balance": 4.89,
+    "balance": 17.03,
     "start_balance": 200.0,
     "bets": [
+      {
+        "id": "6a464cbde9",
+        "ts": 1786115452,
+        "kind": "single",
+        "match_id": "401857122",
+        "match": "Connecticut Sun – Phoenix Mercury",
+        "league": "Women's National Basketball Association",
+        "match_date": "2026-08-07",
+        "match_time": "23:30",
+        "sport": "basketball",
+        "slug": "wnba",
+        "outcome": "away",
+        "label": "2",
+        "name": "2 · Phoenix Mercury",
+        "odds": 1.4,
+        "prob": 0.5399,
+        "stake": 5.0,
+        "status": "open",
+        "pnl": 0.0,
+        "settled_ts": null,
+        "ml_features": {
+          "attack_home": 0.8735,
+          "defense_home": 1.0848,
+          "attack_away": 1.1741,
+          "defense_away": 1.1932,
+          "exp_goals_home": 83.89,
+          "exp_goals_away": 75.76,
+          "rating_confidence": 1.0,
+          "edge": -0.1744
+        }
+      },
       {
         "id": "5b876a713d",
         "ts": 1786112569,
@@ -7203,9 +7238,9 @@
         "odds": 400.0,
         "prob": 0.4713,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786113894,
         "ml_features": {
           "attack_home": 1.5134,
           "defense_home": 1.5098,
@@ -7215,6 +7250,10 @@
           "exp_goals_away": 1.53,
           "rating_confidence": 0.575,
           "edge": 0.4688
+        },
+        "result": {
+          "home": 3,
+          "away": 4
         }
       },
       {
@@ -8292,9 +8331,9 @@
         "odds": 2.38,
         "prob": 0.582,
         "stake": 7.2,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 9.94,
+        "settled_ts": 1786113894,
         "ml_features": {
           "attack_home": 1.1778,
           "defense_home": 0.9259,
@@ -8304,6 +8343,10 @@
           "exp_goals_away": 1.21,
           "rating_confidence": 0.7,
           "edge": 0.1619
+        },
+        "result": {
+          "home": 4,
+          "away": 3
         }
       },
       {
@@ -10546,7 +10589,7 @@
     "last_run_date": "2026-08-07",
     "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 3,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1785776822,
@@ -88648,8 +88691,8 @@
   "cust_552e5922": {
     "name": "Analytik 1",
     "emoji": "🧬",
-    "tagline": "Vygenerováno z historie arény: nejvýnosnější segment byl kurz 2,00–3,00 (ROI 124,4 %) a jistota 55–65 % (ROI 67,5 %) v trhu vítěz.",
-    "balance": 75.6,
+    "tagline": "Jistota od 55 %, kurz 2–3, jen vítěz zápasu (1x2), 2,5 % banku, max 3 sázky.",
+    "balance": 87.3,
     "start_balance": 200.0,
     "bets": [
       {
@@ -88700,9 +88743,9 @@
         "odds": 2.34,
         "prob": 0.582,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 6.7,
+        "settled_ts": 1786113894,
         "ml_features": {
           "attack_home": 1.1778,
           "defense_home": 0.9259,
@@ -88712,6 +88755,10 @@
           "exp_goals_away": 1.21,
           "rating_confidence": 0.7,
           "edge": 0.1547
+        },
+        "result": {
+          "home": 4,
+          "away": 3
         }
       },
       {
@@ -89513,7 +89560,7 @@
     "last_run_date": "2026-08-07",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0,
+    "win_streak": 1,
     "custom": true,
     "params": {
       "market": "winner",
@@ -89526,7 +89573,10 @@
       "kelly_fraction": 0.25,
       "max_bets": 3,
       "pause_after_losses": 0,
-      "one_per_league": false
+      "one_per_league": false,
+      "legs": 2,
+      "leg_min_prob": 0.55,
+      "require_positive_ev": true
     },
     "group": "single",
     "transactions": [
@@ -91447,75 +91497,44 @@
     "name": "AI Adam",
     "emoji": "🤖",
     "tagline": "Sází podle natrénovaného ML modelu (XGBoost) místo syrové pravděpodobnosti z modelu skóre – dokud model není natrénovaný na dost datech, radši nesází vůbec.",
-    "group": "single",
-    "balance": 170.0,
+    "group": "ai",
+    "balance": 185.0,
     "start_balance": 200.0,
     "bets": [
       {
-        "id": "eae6b5696b",
-        "ts": 1786112571,
+        "id": "91205b60a7",
+        "ts": 1786115130,
         "kind": "single",
-        "match_id": "401875990",
-        "match": "VVV-Venlo – Heracles Almelo",
-        "league": "Dutch Keuken Kampioen Divisie",
+        "match_id": "apif-1497655",
+        "match": "Ostersunds FK – GIF Sundsvall",
+        "league": "Superettan",
         "match_date": "2026-08-07",
-        "match_time": "18:00",
+        "match_time": "17:00",
         "sport": "soccer",
-        "slug": "ned.2",
-        "outcome": "dnb_home",
-        "label": "1 rem. zpět",
-        "name": "VVV-Venlo (remíza zpět)",
-        "odds": 2.24,
-        "prob": 0.8989,
+        "slug": "apif:114",
+        "outcome": "dc_x2",
+        "label": "X2",
+        "name": "Remíza nebo GIF Sundsvall",
+        "odds": 2.59,
+        "prob": 0.6334,
         "stake": 5.0,
         "status": "open",
         "pnl": 0.0,
         "settled_ts": null,
         "ml_features": {
-          "attack_home": 0.8662,
-          "defense_home": 1.0227,
-          "attack_away": 0.4181,
-          "defense_away": 1.4177,
-          "exp_goals_home": 1.76,
-          "exp_goals_away": 0.69,
-          "rating_confidence": 0.65,
-          "edge": 0.3797
+          "attack_home": 0.8807,
+          "defense_home": 0.6667,
+          "attack_away": 0.6667,
+          "defense_away": 1.8125,
+          "exp_goals_home": 1.56,
+          "exp_goals_away": 1.06,
+          "rating_confidence": 0.05,
+          "edge": 0.1401
         }
       },
       {
-        "id": "38fde869e5",
-        "ts": 1786112571,
-        "kind": "single",
-        "match_id": "401841482",
-        "match": "Boca Juniors – Vélez Sarsfield",
-        "league": "Argentine Liga Profesional de Fútbol",
-        "match_date": "2026-08-08",
-        "match_time": "22:15",
-        "sport": "soccer",
-        "slug": "arg.1",
-        "outcome": "draw",
-        "label": "X",
-        "name": "X · remíza",
-        "odds": 3.15,
-        "prob": 0.6431,
-        "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
-        "ml_features": {
-          "attack_home": 1.1425,
-          "defense_home": 0.6935,
-          "attack_away": 1.3838,
-          "defense_away": 0.4933,
-          "exp_goals_home": 0.86,
-          "exp_goals_away": 0.61,
-          "rating_confidence": 1.0,
-          "edge": 0.0815
-        }
-      },
-      {
-        "id": "bdf7b39af3",
-        "ts": 1786112571,
+        "id": "230ac3da3d",
+        "ts": 1786115130,
         "kind": "single",
         "match_id": "401875991",
         "match": "Vitesse – RKC Waalwijk",
@@ -91528,7 +91547,7 @@
         "label": "1",
         "name": "1 · Vitesse",
         "odds": 2.45,
-        "prob": 0.8549,
+        "prob": 0.7092,
         "stake": 5.0,
         "status": "open",
         "pnl": 0.0,
@@ -91545,109 +91564,55 @@
         }
       },
       {
-        "id": "8dc6be42a6",
-        "ts": 1786112161,
+        "id": "5186cb8a5e",
+        "ts": 1786115130,
         "kind": "single",
-        "match_id": "401842781",
-        "match": "Malmö FF – Degerfors IF",
-        "league": "Swedish Allsvenskan",
-        "match_date": "2026-08-09",
-        "match_time": "12:00",
+        "match_id": "401875990",
+        "match": "VVV-Venlo – Heracles Almelo",
+        "league": "Dutch Keuken Kampioen Divisie",
+        "match_date": "2026-08-07",
+        "match_time": "18:00",
         "sport": "soccer",
-        "slug": "swe.1",
-        "outcome": "dc_x2",
-        "label": "X2",
-        "name": "Remíza nebo Degerfors IF",
-        "odds": 2.57,
-        "prob": 0.5097,
+        "slug": "ned.2",
+        "outcome": "under2.5",
+        "label": "Méně 2,5",
+        "name": "Méně než 2,5 gólu",
+        "odds": 2.25,
+        "prob": 0.8935,
         "stake": 5.0,
         "status": "open",
         "pnl": 0.0,
         "settled_ts": null,
         "ml_features": {
-          "attack_home": 1.5074,
-          "defense_home": 1.1188,
-          "attack_away": 0.5566,
-          "defense_away": 1.1342,
-          "exp_goals_home": 3.14,
-          "exp_goals_away": 2.65,
-          "rating_confidence": 1.0,
-          "edge": 0.1208
-        }
-      },
-      {
-        "id": "6ae6133bbb",
-        "ts": 1786112161,
-        "kind": "single",
-        "match_id": "401889384",
-        "match": "Carlisle United – Worthing",
-        "league": "English National League",
-        "match_date": "2026-08-08",
-        "match_time": "14:00",
-        "sport": "soccer",
-        "slug": "eng.5",
-        "outcome": "dnb_away",
-        "label": "2 rem. zpět",
-        "name": "Worthing (remíza zpět)",
-        "odds": 3.96,
-        "prob": 0.3523,
-        "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
-        "ml_features": {
-          "attack_home": 1.489,
-          "defense_home": 0.7125,
-          "attack_away": 1.3466,
-          "defense_away": 0.6667,
-          "exp_goals_home": 1.57,
-          "exp_goals_away": 1.11,
-          "rating_confidence": 0.475,
-          "edge": 0.0995
-        }
-      },
-      {
-        "id": "fff1f1c91b",
-        "ts": 1786112161,
-        "kind": "single",
-        "match_id": "401878405",
-        "match": "Rangers – Hibernian",
-        "league": "Scottish Premiership",
-        "match_date": "2026-08-09",
-        "match_time": "15:00",
-        "sport": "soccer",
-        "slug": "sco.1",
-        "outcome": "dnb_away",
-        "label": "2 rem. zpět",
-        "name": "Hibernian (remíza zpět)",
-        "odds": 4.6,
-        "prob": 0.2798,
-        "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
-        "ml_features": {
-          "attack_home": 1.8499,
-          "defense_home": 0.7575,
-          "attack_away": 1.4531,
-          "defense_away": 0.7282,
-          "exp_goals_home": 1.91,
-          "exp_goals_away": 1.14,
-          "rating_confidence": 1.0,
-          "edge": 0.0626
+          "attack_home": 0.8662,
+          "defense_home": 1.0227,
+          "attack_away": 0.4181,
+          "defense_away": 1.4177,
+          "exp_goals_home": 1.76,
+          "exp_goals_away": 0.69,
+          "rating_confidence": 0.65,
+          "edge": 0.1125
         }
       }
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0
+    "win_streak": 0,
+    "transactions": [
+      {
+        "ts": 1786115121,
+        "type": "start",
+        "amount": 200.0,
+        "note": "Reset"
+      }
+    ]
   },
   "ai_combo": {
     "name": "AI Karel",
     "emoji": "🤖🔗",
     "tagline": "Kombinace dvou trhů jednoho zápasu – obě nohy musí projít přes natrénovaný ML model, ne přes syrovou pravděpodobnost.",
-    "group": "combo",
+    "group": "ai",
     "balance": 185.0,
     "start_balance": 200.0,
     "bets": [
@@ -91840,13 +91805,14 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_acca": {
     "name": "AI Klára",
     "emoji": "🤖🎯",
     "tagline": "Akumulátor tří zápasů – každá noha musí projít přes natrénovaný ML model, ne přes syrovou pravděpodobnost.",
-    "group": "acca",
+    "group": "ai",
     "balance": 195.0,
     "start_balance": 200.0,
     "bets": [
@@ -91915,6 +91881,46 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
+  },
+  "cust_5f8a859b": {
+    "name": "Analytik 3",
+    "emoji": "🧬",
+    "tagline": "Vygenerováno z 529 vyhodnocených sázek arény: kurzy 2,00–3,00 (ROI 1,6 %), jistota 55–65 % (ROI 1,6 %), trh vítěz, jen kalibrované kladné EV.",
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0,
+    "win_streak": 0,
+    "custom": true,
+    "params": {
+      "market": "winner",
+      "progression": "none",
+      "stake_mode": "flat",
+      "min_prob": 0.55,
+      "min_odds": 2.0,
+      "max_odds": 3.0,
+      "stake_pct": 0.025,
+      "kelly_fraction": 0.25,
+      "max_bets": 3,
+      "pause_after_losses": 0,
+      "one_per_league": false,
+      "legs": 2,
+      "leg_min_prob": 0.55,
+      "require_positive_ev": true
+    },
+    "group": "single",
+    "transactions": [
+      {
+        "ts": 1786114271,
+        "type": "start",
+        "amount": 200.0,
+        "note": "Počáteční vklad"
+      }
+    ],
+    "generated": true
   }
 }

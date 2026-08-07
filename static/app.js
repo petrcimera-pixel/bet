@@ -1785,6 +1785,88 @@ async function deleteBettor(id, name) {
   }
 }
 
+async function resetOneBettor(id, name) {
+  if (!confirm(`Resetovat sázkaře „${name}“?\n\nSmaže se mu celá historie sázek a bank se vrátí na start. Nejde to vrátit.`)) return;
+  try {
+    await api(`/api/bettors/${id}/reset`, { method: 'POST', timeoutMs: 20000 });
+    toast(`Sázkař „${name}“ resetován.`);
+    loadBettors();
+  } catch (e) {
+    toast('Reset se nepovedl: ' + e.message, 'err');
+  }
+}
+
+async function retrainOneBettor(id, name) {
+  try {
+    toast(`Přetrénovávám „${name}“…`, 'info', 4000);
+    const data = await api(`/api/bettors/${id}/retrain`, { method: 'POST', timeoutMs: 60000 });
+    const extra = data.params_updated ? ' – parametry přeladěny podle nejnovějších dat.' : '';
+    toast(`„${name}“ přetrénován${extra}`, 'ok', 6000);
+    loadBettors();
+  } catch (e) {
+    toast('Přetrénování se nepovedlo: ' + e.message, 'err');
+  }
+}
+
+async function runOneBettor(id, name) {
+  try {
+    const data = await api(`/api/bettors/${id}/run`, { method: 'POST', timeoutMs: 40000 });
+    toast(data.placed ? `„${name}“ vsadil ${data.placed}×.` : `„${name}“ teď nenašel žádnou příležitost.`, 'ok');
+    loadBettors();
+  } catch (e) {
+    toast('Vytvoření sázek se nepovedlo: ' + e.message, 'err');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Kontextové menu (pravé tlačítko myši) u karty sázkaře v aréně – Resetovat
+// sázky / Přetrénovat / Vytvořit sázky. Jednoduché vlastní menu, appka
+// žádné jiné nikde nemá, tak drženo minimální (jedna instance v DOM,
+// zavírá se klikem mimo nebo Escapem).
+// ---------------------------------------------------------------------------
+let _ctxMenuEl = null;
+
+function closeBettorContextMenu() {
+  if (_ctxMenuEl) { _ctxMenuEl.remove(); _ctxMenuEl = null; }
+  document.removeEventListener('click', closeBettorContextMenu);
+  document.removeEventListener('keydown', _ctxMenuEscHandler);
+}
+
+function _ctxMenuEscHandler(e) {
+  if (e.key === 'Escape') closeBettorContextMenu();
+}
+
+function openBettorContextMenu(e, id, name) {
+  e.preventDefault();
+  closeBettorContextMenu();
+  const items = [
+    { label: '🔁 Resetovat sázky', fn: () => resetOneBettor(id, name) },
+    { label: '🧬 Přetrénovat', fn: () => retrainOneBettor(id, name) },
+    { label: '🎯 Vytvořit sázky', fn: () => runOneBettor(id, name) },
+  ];
+  const menu = document.createElement('div');
+  menu.className = 'ctx-menu';
+  menu.innerHTML = items.map((it, i) => `<button data-i="${i}">${it.label}</button>`).join('');
+  document.body.appendChild(menu);
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const mw = 200, mh = items.length * 36 + 8;
+  menu.style.left = Math.min(e.clientX, vw - mw - 8) + 'px';
+  menu.style.top = Math.min(e.clientY, vh - mh - 8) + 'px';
+  menu.querySelectorAll('button').forEach((btn, i) => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      closeBettorContextMenu();
+      items[i].fn();
+    });
+  });
+  _ctxMenuEl = menu;
+  // otevřít na tenhle klik nezavře hned samo sebe – listener se přidá až v dalším tiku
+  setTimeout(() => {
+    document.addEventListener('click', closeBettorContextMenu);
+    document.addEventListener('keydown', _ctxMenuEscHandler);
+  }, 0);
+}
+
 function wizParams() {
   return {
     market: el('wizMarket').value,
@@ -2040,7 +2122,7 @@ function renderBettors(bettors) {
   if (!_arenaAll.length) { box.innerHTML = '<div class="empty-state">Žádní sázkaři</div>'; return; }
 
   const groups = _bettorGroups || {};
-  const order = ['single', 'acca', 'combo'];
+  const order = ['single', 'acca', 'combo', 'ai'];
   const pocty = {};
   _arenaAll.forEach(b => { const g = b.group || 'single'; pocty[g] = (pocty[g] || 0) + 1; });
   if (!pocty[_arenaGroup]) _arenaGroup = order.find(g => pocty[g]) || 'single';
@@ -2207,6 +2289,12 @@ function wireBettorCards(box) {
     tr.addEventListener('click', (e) => {
       if (e.target.closest('.arena-acts')) return;   // klik na akční tlačítko nic nerozbaluje
       toggleBettorDetail(tr.dataset.id, tr);
+    });
+    // Pravé tlačítko myši → menu (Resetovat sázky / Přetrénovat / Vytvořit sázky)
+    tr.addEventListener('contextmenu', (e) => {
+      const nameEl = tr.querySelector('.nm');
+      const name = nameEl ? nameEl.textContent.replace(/\s*bez sázek\s*$/, '').trim() : tr.dataset.id;
+      openBettorContextMenu(e, tr.dataset.id, name);
     });
   });
 }

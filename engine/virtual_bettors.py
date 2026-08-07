@@ -375,6 +375,10 @@ GROUPS = {
                "desc": "Několik trhů JEDNOHO zápasu na jednom tiketu (jako kombi u sázkovek). "
                        "Pravděpodobnost se počítá společně ze skóre gridu, ne součinem – "
                        "trhy jednoho zápasu spolu souvisí."},
+    "ai":     {"label": "AI sázkaři", "emoji": "🤖",
+               "desc": "Rozhodují podle natrénovaného ML modelu (XGBoost), ne podle "
+                       "Poissonova modelu skóre – druhý, nezávislý pohled na každý zápas. "
+                       "Bez natrénovaného modelu nesází vůbec."},
 }
 
 
@@ -996,15 +1000,15 @@ PROFILES = [
      "tagline": "Sází podle natrénovaného ML modelu (XGBoost) místo syrové "
                 "pravděpodobnosti z modelu skóre – dokud model není natrénovaný "
                 "na dost datech, radši nesází vůbec.",
-     "strategy": _s_ai_model, "group": "single"},
+     "strategy": _s_ai_model, "group": "ai"},
     {"id": "ai_combo", "name": "AI Karel", "emoji": "🤖🔗",
      "tagline": "Kombinace dvou trhů jednoho zápasu – obě nohy musí projít "
                 "přes natrénovaný ML model, ne přes syrovou pravděpodobnost.",
-     "strategy": _s_ai_combo, "group": "combo"},
+     "strategy": _s_ai_combo, "group": "ai"},
     {"id": "ai_acca", "name": "AI Klára", "emoji": "🤖🎯",
      "tagline": "Akumulátor tří zápasů – každá noha musí projít přes "
                 "natrénovaný ML model, ne přes syrovou pravděpodobnost.",
-     "strategy": _s_ai_acca, "group": "acca"},
+     "strategy": _s_ai_acca, "group": "ai"},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
 
@@ -1533,6 +1537,81 @@ def reset_all(start_balance: float = DEFAULT_START_BALANCE) -> dict:
     return {"reset": n, "start_balance": float(start_balance)}
 
 
+def reset_bettor(bid: str, start_balance: float = DEFAULT_START_BALANCE) -> dict:
+    """Stejné jako reset_all, ale jen pro JEDNOHO sázkaře – pravé tlačítko
+    myši → "Resetovat sázky" u konkrétní karty v aréně."""
+    st = load_state()
+    b = st.get(bid)
+    if b is None:
+        return {"reset": False, "error": "not_found"}
+    b["balance"] = float(start_balance)
+    b["start_balance"] = float(start_balance)
+    b["bets"] = []
+    b["last_run_date"] = None
+    b["ran_hours"] = []
+    b["loss_streak"] = 0
+    b["win_streak"] = 0
+    prof = _BY_ID.get(bid)
+    if prof and not b.get("custom"):
+        b["group"] = prof.get("group", b.get("group", "single"))
+        b["name"] = prof["name"]
+        b["emoji"] = prof["emoji"]
+        b["tagline"] = prof["tagline"]
+    b["transactions"] = [{"ts": int(time.time()), "type": "start",
+                          "amount": float(start_balance), "note": "Reset"}]
+    save_state(st)
+    return {"reset": True, "id": bid, "start_balance": float(start_balance)}
+
+
+def retrain_bettor(bid: str) -> dict:
+    """Přetrénování za jedním konkrétním sázkařem – pravé tlačítko myši →
+    "Přetrénovat" u karty v aréně.
+
+    Skládá se ze dvou kroků, oba sdílené napříč celou arénou (žádný
+    sázkař nemá vlastní izolovaný model – ML model i kalibrace jsou
+    společné appce), plus třetí krok navíc pro vlastní/vygenerované
+    sázkaře, kteří MAJÍ svoje vlastní tunable parametry:
+      1. ml_learner.train_model() – přetrénuje sdílený XGBoost model
+         (na němž stojí AI Adam/Karel/Klára) na nejnovější historii.
+      2. calibration.rebuild() – přepočítá kalibrační křivku (na ní
+         stojí filtr require_positive_ev u vygenerovaných sázkařů).
+      3. U custom/vygenerovaných sázkařů navíc znovu spustí
+         analyze_best_params() pro jejich skupinu a přeladí JEHO VLASTNÍ
+         parametry (min_odds/min_prob/leg_min_prob/...) podle nejčerstvějších
+         dat arény – ne jen sdílený model."""
+    from . import ml_learner, calibration
+    st = load_state()
+    b = st.get(bid)
+    if b is None:
+        return {"retrained": False, "error": "not_found"}
+
+    out = {"retrained": True, "id": bid}
+    try:
+        out["ml_train"] = ml_learner.train_model(days=30)
+    except Exception as e:
+        out["ml_train"] = False
+        out["ml_train_error"] = str(e)
+    try:
+        calibration.rebuild()
+        out["calibration"] = True
+    except Exception as e:
+        out["calibration"] = False
+        out["calibration_error"] = str(e)
+
+    if b.get("custom"):
+        analysis = analyze_best_params(b.get("group", "single"))
+        out["params_updated"] = bool(analysis.get("available"))
+        if analysis.get("available"):
+            b["params"] = analysis["params"]
+            b["tagline"] = describe_params(analysis["params"])
+            save_state(st)
+        out["analysis"] = analysis
+    else:
+        out["params_updated"] = False   # vestavění sázkaři nemají tunable parametry
+
+    return out
+
+
 def delete_bettor(bid: str) -> bool:
     st = load_state()
     if bid not in st:
@@ -1603,6 +1682,15 @@ def load_state():
         if p["id"] not in st and p["id"] not in deleted:
             st[p["id"]] = _default_state()[p["id"]]
             changed = True
+        elif p["id"] in st and not st[p["id"]].get("custom"):
+            # Definice v PROFILES se mohla změnit (např. sázkař přeřazený do
+            # jiné skupiny – viz AI Adam/Karel/Klára přesunutí do "ai") –
+            # bez týhle synchronizace by appka dál používala starou hodnotu
+            # uloženou ze dne, kdy sázkař poprvé vznikl.
+            b = st[p["id"]]
+            if b.get("group") != p.get("group"):
+                b["group"] = p.get("group", "single")
+                changed = True
     # Vyřazené vestavěné sázkaře (kteří už v PROFILES nejsou – např. slabé
     # single strategie odebrané při zúžení skupiny na 15) taky odstranit ze
     # stavu, aby se dál nezobrazovali. Vlastní sázkaři se nedotýkají.
@@ -1720,6 +1808,124 @@ def _build_pool(predictions):
 # víckrát denně místo jen jednou. Každý sázkař navíc nikdy nevsadí na
 # zápas, na který už (kdykoliv dřív) vsadil.
 # ---------------------------------------------------------------------------
+def _run_one_bettor(bid, b, pool, today_str: str, current_hour: int = None,
+                    allowed_hours: list = None, force: bool = False) -> int:
+    """Odsází jedno kolo za JEDNOHO sázkaře – mění `b` na místě (bety,
+    balance, ran_hours...), volající si state uloží sám. Vrací počet
+    nově umístěných sázek/tiketů. Sdíleno mezi run_all (smyčka přes
+    všechny) a run_one (jen jeden, z pravého tlačítka v UI)."""
+    strategy = _strategy_for(bid, b)
+    if strategy is None:
+        return 0
+    if b.get("last_run_date") != today_str:
+        b["last_run_date"] = today_str
+        b["ran_hours"] = []
+
+    if not force:
+        if current_hour is None or allowed_hours is None:
+            return 0
+        if current_hour not in allowed_hours:
+            return 0
+        if current_hour in b.get("ran_hours", []):
+            return 0   # tuhle naplánovanou hodinu už dnes odsázel
+
+    if not pool:
+        return 0
+
+    # Cooldown po sérii proher – dá pauzu jedno kolo, aby nespáchal víc
+    # škody než dobra. Pak se počítadlo resetne a zkusí to znovu.
+    if b.get("loss_streak", 0) >= LOSS_STREAK_COOLDOWN:
+        b["loss_streak"] = 0   # jedno kolo pauzy stačí – další už zase sází
+        return 0
+
+    # Nikdy dvakrát na stejný zápas – bez ohledu na to, kolikrát denně
+    # sázkař běží, pool se mu vždy filtruje na zápasy, na které ještě nevsadil.
+    already = {bet["match_id"] for bet in b["bets"]}
+    # Sport blacklist – přeskočí sporty, kde má tenhle sázkař ≥15 sázek
+    # a záporné ROI. Automatická sebeobrana proti systematicky ztrátovým
+    # oblastem, bez ručního zásahu.
+    blacklisted = _blacklisted_sports(b)
+    bettor_pool = [c for c in pool
+                   if c["match_id"] not in already
+                   and c.get("sport") not in blacklisted]
+
+    try:
+        decisions = strategy(bettor_pool, b, b["balance"]) if bettor_pool else []
+    except Exception:
+        decisions = []
+    placed = 0
+    used_matches = set()
+    # Ochrana proti totálnímu vytunelování: jednotlivá sázka nesmí nikdy
+    # přesáhnout 20 % AKTUÁLNÍHO banku bez ohledu na to, co strategie
+    # (např. plný Kelly) sama spočítá. Pod 10 % startovního banku (vážná
+    # série proher) se strop dál zpřísní na 5 %, ať i "agresivní"
+    # strategie nemůže bank definitivně dorazit jednou špatnou sázkou.
+    single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", DEFAULT_START_BALANCE) * 0.10 else 0.20
+    # Váha dovedností/zkušeností – nový sázkař sází zlomek, ustálený
+    # ziskový plnou sázku, propadák se stahuje. Viz _experience_scale.
+    skill = _experience_scale(b)
+    for c, stake in decisions:
+        legs = c.get("legs")
+        # zápasy, které tiket obsadí (u tiketu všechny jeho nohy)
+        ids = [l["match_id"] for l in legs] if legs else [c["match_id"]]
+        if any(i in used_matches for i in ids):
+            continue
+        stake = stake * skill
+        # Když strategie vůbec něco navrhla (nenulově), zaokrouhlí se to
+        # do rozsahu MIN..MAX Kč. Dřív jsme sázku pod MIN úplně přeskočili,
+        # jenže s malým bankem (200 Kč) + experience nováčka (×0.35) vyšlo
+        # skoro každé strategii pod 5 Kč a sázelo jen Kelly Kateřina.
+        # Uživatelův záměr byl "min 5, max 10 na tiket", ne "kdo netrefí
+        # svůj předepsaný výpočet, prostě nesází".
+        if stake < 0.5 or stake > b["balance"]:
+            continue
+        stake = max(MIN_STAKE_PER_TICKET,
+                    min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET))
+        stake = round(stake, 2)
+        if stake > b["balance"]:
+            continue
+        if legs:
+            # Tiket z více výběrů: akumulátor (různé zápasy) nebo kombinace
+            # trhů jednoho zápasu. Nejbližší výkop rozhoduje, kdy se tiket
+            # začne vyhodnocovat.
+            dated = sorted((l.get("date", ""), l.get("time", "")) for l in legs if l.get("date"))
+            d0, t0 = dated[0] if dated else ("", "")
+            kind = c.get("kind", "acca")
+            title = (legs[0]["match"] if kind == "combo"
+                     else f"Tiket {len(legs)}× ({legs[0]['match'].split(' – ')[0]}…)")
+            bet = {
+                "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
+                "kind": kind, "match_id": "", "match": title,
+                "league": legs[0].get("league", ""),
+                "match_date": d0, "match_time": t0,
+                "sport": legs[0].get("sport", "soccer"), "slug": legs[0].get("slug", ""),
+                "outcome": kind, "label": f"{'KOMBI' if kind == 'combo' else 'AKO'} {len(legs)}",
+                "name": " + ".join(l["name"] for l in legs),
+                "odds": round(float(c["odds"]), 2), "prob": round(float(c["prob"]), 4),
+                "legs": _legs_payload(legs),
+                "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
+                "ml_features": dict(legs[0].get("ml_features") or {}),
+            }
+        else:
+            bet = {
+                "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
+                "kind": "single",
+                "match_id": c["match_id"], "match": c["match"], "league": c["league"],
+                "match_date": c["date"], "match_time": c["time"], "sport": c["sport"], "slug": c["slug"],
+                "outcome": c["outcome"], "label": c["label"], "name": c["name"],
+                "odds": round(c["odds"], 2), "prob": round(c["prob"], 4),
+                "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
+                "ml_features": dict(c.get("ml_features") or {}, edge=c.get("edge", 0.0)),
+            }
+        b["balance"] = round(b["balance"] - stake, 2)
+        b["bets"].insert(0, bet)
+        used_matches.update(ids)
+        placed += 1
+    if current_hour is not None and current_hour not in b.get("ran_hours", []):
+        b.setdefault("ran_hours", []).append(current_hour)
+    return placed
+
+
 def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours: list = None,
             force: bool = False) -> dict:
     """current_hour/allowed_hours: hodinový rozvrh (stejný jako Nastavení →
@@ -1733,118 +1939,23 @@ def run_all(predictions, today_str: str, current_hour: int = None, allowed_hours
     # projít VŠECHNY sázkaře ve stavu (vestavěné i vlastní), ne jen PROFILES
     for bid in list(st.keys()):
         b = st[bid]
-        strategy = _strategy_for(bid, b)
-        if strategy is None:
-            continue
-        if b.get("last_run_date") != today_str:
-            b["last_run_date"] = today_str
-            b["ran_hours"] = []
-
-        if not force:
-            if current_hour is None or allowed_hours is None:
-                continue
-            if current_hour not in allowed_hours:
-                continue
-            if current_hour in b.get("ran_hours", []):
-                continue   # tuhle naplánovanou hodinu už dnes odsázel
-
-        if not pool:
-            continue
-
-        # Cooldown po sérii proher – dá pauzu jedno kolo, aby nespáchal víc
-        # škody než dobra. Pak se počítadlo resetne a zkusí to znovu.
-        if b.get("loss_streak", 0) >= LOSS_STREAK_COOLDOWN:
-            b["loss_streak"] = 0   # jedno kolo pauzy stačí – další už zase sází
-            continue
-
-        # Nikdy dvakrát na stejný zápas – bez ohledu na to, kolikrát denně
-        # sázkař běží, pool se mu vždy filtruje na zápasy, na které ještě nevsadil.
-        already = {bet["match_id"] for bet in b["bets"]}
-        # Sport blacklist – přeskočí sporty, kde má tenhle sázkař ≥15 sázek
-        # a záporné ROI. Automatická sebeobrana proti systematicky ztrátovým
-        # oblastem, bez ručního zásahu.
-        blacklisted = _blacklisted_sports(b)
-        bettor_pool = [c for c in pool
-                       if c["match_id"] not in already
-                       and c.get("sport") not in blacklisted]
-
-        try:
-            decisions = strategy(bettor_pool, b, b["balance"]) if bettor_pool else []
-        except Exception:
-            decisions = []
-        placed = 0
-        used_matches = set()
-        # Ochrana proti totálnímu vytunelování: jednotlivá sázka nesmí nikdy
-        # přesáhnout 20 % AKTUÁLNÍHO banku bez ohledu na to, co strategie
-        # (např. plný Kelly) sama spočítá. Pod 10 % startovního banku (vážná
-        # série proher) se strop dál zpřísní na 5 %, ať i "agresivní"
-        # strategie nemůže bank definitivně dorazit jednou špatnou sázkou.
-        single_bet_cap = 0.05 if b["balance"] < b.get("start_balance", DEFAULT_START_BALANCE) * 0.10 else 0.20
-        # Váha dovedností/zkušeností – nový sázkař sází zlomek, ustálený
-        # ziskový plnou sázku, propadák se stahuje. Viz _experience_scale.
-        skill = _experience_scale(b)
-        for c, stake in decisions:
-            legs = c.get("legs")
-            # zápasy, které tiket obsadí (u tiketu všechny jeho nohy)
-            ids = [l["match_id"] for l in legs] if legs else [c["match_id"]]
-            if any(i in used_matches for i in ids):
-                continue
-            stake = stake * skill
-            # Když strategie vůbec něco navrhla (nenulově), zaokrouhlí se to
-            # do rozsahu MIN..MAX Kč. Dřív jsme sázku pod MIN úplně přeskočili,
-            # jenže s malým bankem (200 Kč) + experience nováčka (×0.35) vyšlo
-            # skoro každé strategii pod 5 Kč a sázelo jen Kelly Kateřina.
-            # Uživatelův záměr byl "min 5, max 10 na tiket", ne "kdo netrefí
-            # svůj předepsaný výpočet, prostě nesází".
-            if stake < 0.5 or stake > b["balance"]:
-                continue
-            stake = max(MIN_STAKE_PER_TICKET,
-                        min(stake, b["balance"], b["balance"] * single_bet_cap, MAX_STAKE_PER_TICKET))
-            stake = round(stake, 2)
-            if stake > b["balance"]:
-                continue
-            if legs:
-                # Tiket z více výběrů: akumulátor (různé zápasy) nebo kombinace
-                # trhů jednoho zápasu. Nejbližší výkop rozhoduje, kdy se tiket
-                # začne vyhodnocovat.
-                dated = sorted((l.get("date", ""), l.get("time", "")) for l in legs if l.get("date"))
-                d0, t0 = dated[0] if dated else ("", "")
-                kind = c.get("kind", "acca")
-                title = (legs[0]["match"] if kind == "combo"
-                         else f"Tiket {len(legs)}× ({legs[0]['match'].split(' – ')[0]}…)")
-                bet = {
-                    "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
-                    "kind": kind, "match_id": "", "match": title,
-                    "league": legs[0].get("league", ""),
-                    "match_date": d0, "match_time": t0,
-                    "sport": legs[0].get("sport", "soccer"), "slug": legs[0].get("slug", ""),
-                    "outcome": kind, "label": f"{'KOMBI' if kind == 'combo' else 'AKO'} {len(legs)}",
-                    "name": " + ".join(l["name"] for l in legs),
-                    "odds": round(float(c["odds"]), 2), "prob": round(float(c["prob"]), 4),
-                    "legs": _legs_payload(legs),
-                    "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
-                    "ml_features": dict(legs[0].get("ml_features") or {}),
-                }
-            else:
-                bet = {
-                    "id": uuid.uuid4().hex[:10], "ts": int(time.time()),
-                    "kind": "single",
-                    "match_id": c["match_id"], "match": c["match"], "league": c["league"],
-                    "match_date": c["date"], "match_time": c["time"], "sport": c["sport"], "slug": c["slug"],
-                    "outcome": c["outcome"], "label": c["label"], "name": c["name"],
-                    "odds": round(c["odds"], 2), "prob": round(c["prob"], 4),
-                    "stake": stake, "status": "open", "pnl": 0.0, "settled_ts": None,
-                    "ml_features": dict(c.get("ml_features") or {}, edge=c.get("edge", 0.0)),
-                }
-            b["balance"] = round(b["balance"] - stake, 2)
-            b["bets"].insert(0, bet)
-            used_matches.update(ids)
-            placed += 1
-        if current_hour is not None and current_hour not in b.get("ran_hours", []):
-            b.setdefault("ran_hours", []).append(current_hour)
-        placed_total[bid] = placed
+        placed_total[bid] = _run_one_bettor(bid, b, pool, today_str, current_hour, allowed_hours, force)
     save_state(st)
     return placed_total
+
+
+def run_one(bid: str, predictions, today_str: str) -> dict:
+    """Odsází kolo jen za JEDNOHO sázkaře (pravé tlačítko myši → "Vytvořit
+    sázky" u konkrétního sázkaře v aréně) - obchází rozvrh stejně jako
+    ruční "Spustit kolo teď", jen pro jednoho místo pro všechny."""
+    st = load_state()
+    b = st.get(bid)
+    if b is None:
+        return {"placed": 0, "error": "not_found"}
+    pool = _build_pool(predictions)
+    placed = _run_one_bettor(bid, b, pool, today_str, force=True)
+    save_state(st)
+    return {"placed": placed}
 
 
 def staked_since(bid: str, ts: int) -> float:
@@ -2166,7 +2277,7 @@ def group_comparison() -> dict:
             d[k] = round(d[k], 2)
         d["roi"] = round(d["pnl"] / d["staked"] * 100, 1) if d["staked"] else 0.0
         d["win_rate"] = round(d["won"] / d["settled"] * 100, 1) if d["settled"] else None
-    order = ["single", "acca", "combo"]
+    order = ["single", "acca", "combo", "ai"]
     return {"groups": [out[g] for g in order if g in out]}
 
 

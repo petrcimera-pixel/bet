@@ -172,6 +172,7 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
 
 
 _VB_SPORTS = ("soccer", "basketball", "hockey")
+_VB_DAYS_AHEAD = 1   # sázkaři v aréně sází maximálně na zápasy zítřejšího dne, ne dál dopředu
 
 
 def _predictions_multi_sport(date_str: str, days: int = 4, sports=_VB_SPORTS) -> list:
@@ -1863,12 +1864,55 @@ def api_bettor_deposit(bid):
     return jsonify(res)
 
 
+@app.route("/api/bettors/<bid>/reset", methods=["POST"])
+@login_required
+def api_bettor_reset(bid):
+    """Reset jednoho konkrétního sázkaře (pravé tlačítko myši v aréně) –
+    smaže jeho historii sázek a vrátí bank na start, stejně jako hromadný
+    reset, jen pro jednoho."""
+    d = request.get_json(silent=True) or {}
+    start = float(d.get("start_balance") or virtual_bettors.DEFAULT_START_BALANCE)
+    res = virtual_bettors.reset_bettor(bid, start)
+    if not res.get("reset"):
+        return jsonify(res), 404
+    _persist_push_safe()
+    return jsonify(res)
+
+
+@app.route("/api/bettors/<bid>/retrain", methods=["POST"])
+@login_required
+def api_bettor_retrain(bid):
+    """Přetrénování za jedním sázkařem (pravé tlačítko myši) – přetrénuje
+    sdílený ML model a kalibraci (na nich stojí všichni), a u vlastních/
+    vygenerovaných sázkařů navíc přeladí jeho vlastní parametry z
+    nejčerstvějších dat arény."""
+    res = virtual_bettors.retrain_bettor(bid)
+    if not res.get("retrained"):
+        return jsonify(res), 404
+    _persist_push_safe()
+    return jsonify(res)
+
+
+@app.route("/api/bettors/<bid>/run", methods=["POST"])
+@login_required
+def api_bettor_run_one(bid):
+    """Vsadí kolo jen za JEDNOHO sázkaře (pravé tlačítko myši → "Vytvořit
+    sázky") – obchází rozvrh stejně jako hromadné 'Spustit kolo teď'."""
+    today = ds.today_str()
+    predictions = _predictions_multi_sport(today, days=_VB_DAYS_AHEAD)
+    res = virtual_bettors.run_one(bid, predictions, today)
+    if res.get("error"):
+        return jsonify(res), 404
+    _persist_push_safe()
+    return jsonify(res)
+
+
 @app.route("/api/bettors/run", methods=["POST"])
 def api_bettors_run():
     """Ruční spuštění kola sázení – obchází hodinový rozvrh (force=True),
     ale sázkaři pořád nikdy nevsadí dvakrát na stejný zápas."""
     today = ds.today_str()
-    predictions = _predictions_multi_sport(today, days=4)
+    predictions = _predictions_multi_sport(today, days=_VB_DAYS_AHEAD)
     t0 = _time.time()
     placed = virtual_bettors.run_all(predictions, today, force=True)
     _persist_push_safe()
@@ -2292,7 +2336,7 @@ def _run_virtual_bettors_if_due():
         if all(now.hour in b.get("ran_hours", []) and b.get("last_run_date") == today for b in st.values()):
             return {"ran": False, "reason": "already_ran"}
 
-        predictions = _predictions_multi_sport(today, days=4)
+        predictions = _predictions_multi_sport(today, days=_VB_DAYS_AHEAD)
         placed = virtual_bettors.run_all(predictions, today, current_hour=now.hour, allowed_hours=allowed_hours)
         # Zápis do statusu – ať se ve stavové liště hned objeví, kdy poslední
         # automatické kolo běželo (stejná struktura jako u ručního běhu).

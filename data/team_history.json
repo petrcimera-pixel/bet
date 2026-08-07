@@ -95729,6 +95729,26 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Almeria",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Almeria",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Santos Laguna": [
@@ -96901,6 +96921,36 @@
       "gf": 3,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Kashima",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Kashima",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Kashima",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Kashima Antlers": [
@@ -96950,6 +97000,36 @@
       "date": "2026-08-07",
       "opponent": "Urawa Red Diamonds",
       "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Urawa",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Urawa",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Urawa",
+      "league": "J1 League",
       "sport": "soccer",
       "loc": "home",
       "gf": 4,
@@ -97217,6 +97297,26 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Sichuan Jiuniu",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Sichuan Jiuniu",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Shenzhen Xinpengcheng": [
@@ -97353,6 +97453,26 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Melbourne City",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Melbourne City",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Aston Villa": [
@@ -97365,6 +97485,1746 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Bayern München",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Prospect United": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Mt Druitt Town",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Mt Druitt Town",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Mt Druitt Town",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Mt Druitt Town": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Prospect United",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Prospect United",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Prospect United",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Blacktown Spartans": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Inter Lions",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Inter Lions",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Inter Lions",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Inter Lions": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Blacktown Spartans",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Blacktown Spartans",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Blacktown Spartans",
+      "league": "New South Wales NPL 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Sichuan Jiuniu": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Beijing Guoan",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Beijing Guoan",
+      "league": "Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Bayside Argonauts": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Box Hill",
+      "league": "Victoria Premier League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Box Hill",
+      "league": "Victoria Premier League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Box Hill": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Bayside Argonauts",
+      "league": "Victoria Premier League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Bayside Argonauts",
+      "league": "Victoria Premier League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Dynamo Dresden U19": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Erzgebirge Aue U19",
+      "league": "U19 Bundesliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Erzgebirge Aue U19",
+      "league": "U19 Bundesliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Erzgebirge Aue U19": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Dynamo Dresden U19",
+      "league": "U19 Bundesliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Dynamo Dresden U19",
+      "league": "U19 Bundesliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Lions": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Brisbane Roar II",
+      "league": "Queensland NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Brisbane Roar II": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Lions",
+      "league": "Queensland NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Olympia Warriors": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Clarence Zebras II",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Clarence Zebras II",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Clarence Zebras II",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Clarence Zebras II": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Olympia Warriors",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Olympia Warriors",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Olympia Warriors",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Glenorchy Knights U21": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Hobart Utd.",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hobart Utd.",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hobart Utd.",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 6,
+      "result": "L"
+    }
+  ],
+  "Hobart Utd.": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Glenorchy Knights U21",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Glenorchy Knights U21",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Glenorchy Knights U21",
+      "league": "Tasmania Southern Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 3,
+      "result": "W"
+    }
+  ],
+  "Adelaide Raiders": [
+    {
+      "date": "2026-08-07",
+      "opponent": "The Cove",
+      "league": "South Australia State League 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "The Cove",
+      "league": "South Australia State League 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "The Cove": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide Raiders",
+      "league": "South Australia State League 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide Raiders",
+      "league": "South Australia State League 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Breidablik W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Dinamo-BGU W",
+      "league": "UEFA Champions League Women",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    }
+  ],
+  "Dinamo-BGU W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Breidablik W",
+      "league": "UEFA Champions League Women",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "UCSA": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Nyva Ternopil",
+      "league": "Persha Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Nyva Ternopil",
+      "league": "Persha Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Nyva Ternopil": [
+    {
+      "date": "2026-08-07",
+      "opponent": "UCSA",
+      "league": "Persha Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "UCSA",
+      "league": "Persha Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Almeria": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Cordoba",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Cordoba",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Racing Santander": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Sporting Gijon",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Sporting Gijon",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Sporting Gijon": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Racing Santander",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Racing Santander",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Melbourne City": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Palermo",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Palermo",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Bayern München": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Aston Villa",
+      "league": "Friendlies Clubs",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Kashima": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Yokohama F. Marinos",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Yokohama F. Marinos",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Yokohama F. Marinos",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    }
+  ],
+  "Urawa": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gamba Osaka",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gamba Osaka",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gamba Osaka",
+      "league": "J1 League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Almaz Antey U19": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Nizhny Novgorod U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Nizhny Novgorod U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Nizhny Novgorod U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Nizhny Novgorod U19": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Almaz Antey U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Almaz Antey U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Almaz Antey U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "result": "W"
+    }
+  ],
+  "Akademiya Konoplev U20": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Krasnodar U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Krasnodar U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Krasnodar U19",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Krasnodar U19": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Akademiya Konoplev U20",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Akademiya Konoplev U20",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Akademiya Konoplev U20",
+      "league": "Youth Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Asan Mugunghwa": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Ansan Greeners",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Ansan Greeners",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Ansan Greeners",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Ansan Greeners": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Asan Mugunghwa",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Asan Mugunghwa",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Asan Mugunghwa",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Gimpo Citizen": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Cheongju",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Cheongju",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Cheongju",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Cheongju": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimpo Citizen",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimpo Citizen",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimpo Citizen",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Gyeongnam FC": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Daegu FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Daegu FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Daegu FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Daegu FC": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gyeongnam FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gyeongnam FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gyeongnam FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Hwaseong": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Seoul E-Land FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Seoul E-Land FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Seoul E-Land FC",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Seoul E-Land FC": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Hwaseong",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hwaseong",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hwaseong",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Suwon Bluewings": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimhae City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimhae City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gimhae City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Gimhae City": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Suwon Bluewings",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Suwon Bluewings",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Suwon Bluewings",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Yongin City": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Busan I Park",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Busan I Park",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Busan I Park",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Busan I Park": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Yongin City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Yongin City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Yongin City",
+      "league": "K League 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Arys": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Tobol 2",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Tobol 2",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Tobol 2": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Arys",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Arys",
+      "league": "1. Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Calcutta Customs": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Railway",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Railway",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Railway": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Calcutta Customs",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Calcutta Customs",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Mohun Bagan": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Bhawanipore",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Bhawanipore",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Bhawanipore": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Mohun Bagan",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Mohun Bagan",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "United Kolkata": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Kidderpore",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Kidderpore",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Kidderpore": [
+    {
+      "date": "2026-08-07",
+      "opponent": "United Kolkata",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "United Kolkata",
+      "league": "Calcutta Premier Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Incheon Red Angels W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gumi Sportstoto W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gumi Sportstoto W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Gumi Sportstoto W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Incheon Red Angels W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Incheon Red Angels W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Hwacheon KSPO W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Gyeongju W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Gyeongju W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Gyeongju W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Hwacheon KSPO W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hwacheon KSPO W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Suwon FMC W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Changnyeong W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Changnyeong W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Changnyeong W": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Suwon FMC W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Suwon FMC W",
+      "league": "WK-League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Adelaide Comets": [
+    {
+      "date": "2026-08-07",
+      "opponent": "MetroStars",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "MetroStars",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "MetroStars": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide Comets",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide Comets",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Adelaide City": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Playford City Patriots",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Playford City Patriots",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Playford City Patriots": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide City",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Adelaide City",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Campbelltown City": [
+    {
+      "date": "2026-08-07",
+      "opponent": "FK Beograd",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "FK Beograd",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "FK Beograd": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Campbelltown City",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Campbelltown City",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "West Torrens Birkalla": [
+    {
+      "date": "2026-08-07",
+      "opponent": "West Adelaide",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "West Adelaide",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "West Adelaide": [
+    {
+      "date": "2026-08-07",
+      "opponent": "West Torrens Birkalla",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "West Torrens Birkalla",
+      "league": "South Australia NPL",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 6,
+      "result": "L"
+    }
+  ],
+  "Vietnam": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Cambodia",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Cambodia",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Cambodia": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Vietnam",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Vietnam",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Singapore": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Indonesia",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Indonesia": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Singapore",
+      "league": "ASEAN Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ]
 }
