@@ -151,7 +151,7 @@
       "stake": 5.47,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0026,
+      "clv": -0.0261,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -174,7 +174,7 @@
         "Comunicaciones má výrazně silnější útočný rating.",
         "Kurz 1.526 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.526
+      "closing_odds": 1.571
     },
     {
       "id": "9970562efc",
@@ -268,8 +268,8 @@
       "odds": 1.67,
       "prob": 0.8705,
       "stake": 5.47,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -5.47,
       "clv": 0.0277,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -293,7 +293,12 @@
         "Alebrijes de Oaxaca má výrazně silnější útočný rating.",
         "Kurz 1.667 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.625
+      "closing_odds": 1.625,
+      "settled_ts": 1786060912,
+      "result": {
+        "home": 0,
+        "away": 2
+      }
     },
     {
       "id": "4f894e1ebd",
@@ -560,7 +565,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0248,
+      "clv": 0.0139,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -582,7 +587,7 @@
         "Nejpravděpodobnější výsledek 0:0 (22 %).",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.571
+      "closing_odds": 1.588
     },
     {
       "id": "36f1dd66f3",
@@ -908,7 +913,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0292,
+      "clv": -0.0397,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -931,7 +936,7 @@
         "Ceará má výrazně silnější útočný rating.",
         "Kurz 1.333 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.37
+      "closing_odds": 1.385
     },
     {
       "id": "e08c7bcd0f",

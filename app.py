@@ -171,6 +171,23 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
     return predictions
 
 
+_VB_SPORTS = ("soccer", "basketball", "hockey")
+
+
+def _predictions_multi_sport(date_str: str, days: int = 4, sports=_VB_SPORTS) -> list:
+    """Predikce napříč víc sporty najednou (virtuální sázkaři).
+
+    _predictions_for bere jen jeden sport – dřív se sázkařům vždycky
+    posílal jen fotbal, takže strategie kombinující víc sportů na jednom
+    tiketu (např. "Sportovní Mix Milan") nikdy nenašla dost různých
+    sportů ve fondu a nemohla nikdy vsadit, bez ohledu na to, jak dlouho
+    appka běžela."""
+    out = []
+    for sport in sports:
+        out.extend(_predictions_for(date_str, days=days, sport=sport))
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Login
 # ---------------------------------------------------------------------------
@@ -1838,7 +1855,7 @@ def api_bettors_run():
     """Ruční spuštění kola sázení – obchází hodinový rozvrh (force=True),
     ale sázkaři pořád nikdy nevsadí dvakrát na stejný zápas."""
     today = ds.today_str()
-    predictions = _predictions_for(today, days=4, sport="soccer")
+    predictions = _predictions_multi_sport(today, days=4)
     t0 = _time.time()
     placed = virtual_bettors.run_all(predictions, today, force=True)
     _persist_push_safe()
@@ -2262,7 +2279,7 @@ def _run_virtual_bettors_if_due():
         if all(now.hour in b.get("ran_hours", []) and b.get("last_run_date") == today for b in st.values()):
             return {"ran": False, "reason": "already_ran"}
 
-        predictions = _predictions_for(today, days=4, sport="soccer")
+        predictions = _predictions_multi_sport(today, days=4)
         placed = virtual_bettors.run_all(predictions, today, current_hour=now.hour, allowed_hours=allowed_hours)
         # Zápis do statusu – ať se ve stavové liště hned objeví, kdy poslední
         # automatické kolo běželo (stejná struktura jako u ručního běhu).
