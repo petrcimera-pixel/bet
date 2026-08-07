@@ -1624,12 +1624,24 @@ def api_bettors_reset_all():
 @app.route("/api/bettors/generate", methods=["POST"])
 @login_required
 def api_bettors_generate():
-    """Vygeneruje nového sázkaře z nasbírané historie – najde nejvýnosnější
-    rozsah kurzu/jistoty/trhu napříč VŠEMI dosavadními sázkami arény a
-    postaví z něj nového custom sázkaře. Vrací created=False s důvodem,
-    když je dat zatím málo nebo nic ziskového nenašel."""
-    result = virtual_bettors.generate_optimal_bettor()
-    return jsonify(result)
+    """Vygeneruje nové sázkaře z nasbírané historie arény – zvlášť pro
+    jednotlivé sázky, kombinace i akumulátory (dřív to uměl jen pro
+    jednotlivé, protože analýza tikety z historie úplně vynechávala).
+    Volitelné tělo {"group": "single"|"combo"|"acca"} vygeneruje jen tu
+    jednu skupinu; bez něj appka zkusí všechny tři a vytvoří sázkaře
+    pro každou, kde má dost dat a existuje ziskový segment."""
+    d = request.get_json(silent=True) or {}
+    requested = d.get("group")
+    groups = [requested] if requested in ("single", "combo", "acca") else ["single", "combo", "acca"]
+    results = {g: virtual_bettors.generate_optimal_bettor(g) for g in groups}
+    created = [r for r in results.values() if r.get("created")]
+    if not created:
+        # nic se nevytvořilo – vrátit info o "single" (nejvíc dat, nejinformativnější)
+        return jsonify(results.get("single") or next(iter(results.values())))
+    # tvar kompatibilní se starým API (created/bettor/tagline) pro prvního
+    # vytvořeného + all_created se všemi, ať frontend může ukázat víc najednou
+    first = created[0]
+    return jsonify({**first, "all_created": created})
 
 
 @app.route("/api/bettors/generate/preview")
@@ -1637,7 +1649,8 @@ def api_bettors_generate():
 def api_bettors_generate_preview():
     """Jen analýza bez vytvoření sázkaře – ať si uživatel může prohlédnout,
     co by se vygenerovalo, než na to klikne."""
-    return jsonify(virtual_bettors.analyze_best_params())
+    group = request.args.get("group", "single")
+    return jsonify(virtual_bettors.analyze_best_params(group))
 
 
 @app.route("/api/agent/reset", methods=["POST"])

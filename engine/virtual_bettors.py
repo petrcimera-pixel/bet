@@ -902,7 +902,15 @@ def default_params() -> dict:
     return {"min_prob": 0.60, "min_odds": 1.20, "max_odds": 10.0,
             "market": "any", "stake_mode": "flat", "stake_pct": 0.03,
             "kelly_fraction": 0.25, "max_bets": 3, "progression": "none",
-            "one_per_league": False, "pause_after_losses": 0}
+            "one_per_league": False, "pause_after_losses": 0,
+            # legs/leg_min_prob: jen pro group="combo"/"acca" (viz _s_custom_combo,
+            # _s_custom_acca) - kolik nohou tiket má a jaká minimální pravděpodobnost
+            # se u KAŽDÉ z nich vyžaduje. require_positive_ev: filtr navíc podle
+            # KALIBROVANÉ pravděpodobnosti (ne syrové z modelu) - syrová pravděpodobnost
+            # bývá přehnaně sebejistá, takže sázka s "dobrým EV" podle ní ve
+            # skutečnosti dlouhodobě prodělává (zjištěno na aréně: jednotlivé sázky
+            # měly 53% win rate, ale přesto -12,9 % ROI).
+            "legs": 2, "leg_min_prob": 0.55, "require_positive_ev": False}
 
 
 def normalize_params(params: dict) -> dict:
@@ -930,6 +938,9 @@ def normalize_params(params: dict) -> dict:
         "max_bets": int(num("max_bets", 1, 20)),
         "pause_after_losses": int(num("pause_after_losses", 0, 20)),
         "one_per_league": bool(p.get("one_per_league")),
+        "legs": int(num("legs", 2, 5)),
+        "leg_min_prob": num("leg_min_prob", 0.01, 0.99),
+        "require_positive_ev": bool(p.get("require_positive_ev")),
     }
     if out["max_odds"] < out["min_odds"]:
         out["max_odds"] = out["min_odds"]
@@ -964,6 +975,8 @@ def _s_custom(pool, b, bal):
              if c["prob"] >= float(params["min_prob"])
              and float(params["min_odds"]) <= c["odds"] <= float(params["max_odds"])
              and ok(c)]
+    if params.get("require_positive_ev"):
+        cands = [c for c in cands if _calibrated_ev(c["prob"], c["odds"]) > 0]
     cands.sort(key=lambda c: -c["prob"])
 
     mult = _progression_multiplier(params, b)
@@ -986,6 +999,58 @@ def _s_custom(pool, b, bal):
         if len(out) >= int(params.get("max_bets", 3)):
             break
     return out
+
+
+def _calibrated_ev(prob: float, odds: float) -> float:
+    """EV podle KALIBROVANÉ pravděpodobnosti, ne syrové z modelu. Syrová
+    pravděpodobnost bývá přehnaně sebejistá – aréna ukázala, že jednotlivé
+    sázky s ní mají solidní 53% win rate, ale i tak -12,9 % ROI, protože
+    "výhodné" kurzy podle syrové p ve skutečnosti marži sázkovky nepokryjí."""
+    from . import calibration
+    return calibration.calibrate(prob) * odds - 1.0
+
+
+def _s_custom_combo(pool, b, bal):
+    """Generický kombo sázkař (parametry z generate_optimal_bettor, group="combo") –
+    N nohou (params['legs']) STEJNÉHO zápasu, každá musí mít prob >= leg_min_prob."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    n_legs = int(params.get("legs", 2))
+    leg_min = float(params.get("leg_min_prob", 0.55))
+    wanted = [lambda c, lp=leg_min: c["prob"] >= lp for _ in range(n_legs)]
+    ts = _combo_pick(pool, wanted, min_prob=0.05, limit=int(params.get("max_bets", 2)),
+                     sort_key=lambda t: -(t["prob"] * t["odds"]))
+    if params.get("require_positive_ev"):
+        ts = [t for t in ts if _calibrated_ev(t["prob"], t["odds"]) > 0]
+    mult = _progression_multiplier(params, b)
+    out = []
+    for t in ts:
+        stake = round(min(bal * float(params.get("stake_pct", 0.02)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+        if stake < 1:
+            continue
+        out.append((t, stake))
+    return out
+
+
+def _s_custom_acca(pool, b, bal):
+    """Generický akumulátorový sázkař (group="acca") – N nohou z RŮZNÝCH
+    zápasů, každá musí mít prob >= leg_min_prob."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    n_legs = int(params.get("legs", 3))
+    leg_min = float(params.get("leg_min_prob", 0.55))
+    legs = _acca_pick(pool, n_legs, lambda c: -(c["prob"] * c["odds"]),
+                      lambda c: c["prob"] >= leg_min)
+    if not legs:
+        return []
+    t = _ticket(legs, "acca")
+    if params.get("require_positive_ev") and _calibrated_ev(t["prob"], t["odds"]) <= 0:
+        return []
+    mult = _progression_multiplier(params, b)
+    stake = round(min(bal * float(params.get("stake_pct", 0.02)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+    return [(t, stake)] if stake >= 1 else []
 
 
 def describe_params(params: dict) -> str:
@@ -1091,14 +1156,14 @@ MARKET_OF = {
 
 
 def _all_settled_bets() -> list:
-    """Všechny vyhodnocené (won/lost) sázky napříč všemi sázkaři arény,
-    s doplněným 'market' polem (winner/goals/handicap/jiné)."""
+    """Všechny vyhodnocené (won/lost) JEDNOTLIVÉ sázky napříč všemi sázkaři
+    arény, s doplněným 'market' polem (winner/goals/handicap/jiné)."""
     st = load_state()
     out = []
     for b in st.values():
         for bet in b.get("bets", []):
             if bet.get("status") not in ("won", "lost") or bet.get("legs"):
-                continue   # tikety mají jinou dynamiku, počítat jen jednotlivé sázky
+                continue   # tikety mají jinou dynamiku, viz _all_settled_tickets
             oc = bet.get("outcome", "")
             if oc in MARKET_OF["winner"]:
                 market = "winner"
@@ -1109,6 +1174,22 @@ def _all_settled_bets() -> list:
             else:
                 market = "jiné"
             out.append({**bet, "market": market})
+    return out
+
+
+def _all_settled_tickets(kind: str) -> list:
+    """Všechny vyhodnocené tikety daného druhu ("combo"/"acca") napříč
+    sázkaři arény, s doplněným 'leg_min_prob' (nejslabší noha tiketu –
+    tou se dá tiket "vyladit" stejně jako jednotlivá sázka svou prob)."""
+    st = load_state()
+    out = []
+    for b in st.values():
+        for bet in b.get("bets", []):
+            if bet.get("status") not in ("won", "lost") or bet.get("kind") != kind:
+                continue
+            legs = bet.get("legs") or []
+            leg_probs = [l.get("prob", 0) for l in legs]
+            out.append({**bet, "leg_min_prob": min(leg_probs) if leg_probs else 0.0})
     return out
 
 
@@ -1132,32 +1213,42 @@ def _bucket_stats(bets: list, key_fn, buckets) -> list:
     return out
 
 
-def analyze_best_params() -> dict:
-    """Najde nejvýnosnější rozsah kurzu, jistoty a typ trhu z NASBÍRANÉ
-    historie všech sázkařů. Vrací navržené parametry + odůvodnění (na jakých
-    datech to stojí), nebo available=False, když je dat zatím málo."""
-    bets = _all_settled_bets()
+def analyze_best_params(group: str = "single") -> dict:
+    """Najde nejvýnosnější rozsah kurzu a jistoty z NASBÍRANÉ historie
+    arény pro danou skupinu ("single"/"combo"/"acca"). Combo/acca se dřív
+    z generátoru úplně vynechávaly (_all_settled_bets výslovně přeskakuje
+    tikety) – proto "Vygenerovat z dat" uměl postavit jen sázkaře na
+    jednotlivé sázky, i když aréna má celou dobu i kombinace a akumulátory.
+    Vrací navržené parametry + odůvodnění, nebo available=False."""
+    if group == "single":
+        bets = _all_settled_bets()
+        prob_key = lambda b: b.get("prob", 0)
+    else:
+        bets = _all_settled_tickets(group)
+        prob_key = lambda b: b.get("leg_min_prob", 0)
+
     if len(bets) < GEN_MIN_TOTAL_BETS:
-        return {"available": False, "reason": "not_enough_data",
+        return {"available": False, "reason": "not_enough_data", "group": group,
                 "have": len(bets), "need": GEN_MIN_TOTAL_BETS}
 
     odds_stats = _bucket_stats(bets, lambda b: b.get("odds", 0), ODDS_BUCKETS)
-    prob_stats = _bucket_stats(bets, lambda b: b.get("prob", 0), PROB_BUCKETS)
+    prob_stats = _bucket_stats(bets, prob_key, PROB_BUCKETS)
 
     market_stats = []
-    for mk in ("winner", "goals", "handicap"):
-        sub = [b for b in bets if b["market"] == mk]
-        if len(sub) < GEN_MIN_BUCKET_BETS:
-            continue
-        staked = sum(b.get("stake", 0) for b in sub)
-        pnl = sum(b.get("pnl", 0) for b in sub)
-        market_stats.append({
-            "market": mk, "n": len(sub),
-            "roi": round(pnl / staked * 100, 1) if staked else 0.0,
-        })
+    if group == "single":
+        for mk in ("winner", "goals", "handicap"):
+            sub = [b for b in bets if b["market"] == mk]
+            if len(sub) < GEN_MIN_BUCKET_BETS:
+                continue
+            staked = sum(b.get("stake", 0) for b in sub)
+            pnl = sum(b.get("pnl", 0) for b in sub)
+            market_stats.append({
+                "market": mk, "n": len(sub),
+                "roi": round(pnl / staked * 100, 1) if staked else 0.0,
+            })
 
     if not odds_stats or not prob_stats:
-        return {"available": False, "reason": "not_enough_bucket_data", "have": len(bets)}
+        return {"available": False, "reason": "not_enough_bucket_data", "group": group, "have": len(bets)}
 
     best_odds = max(odds_stats, key=lambda x: x["roi"])
     best_prob = max(prob_stats, key=lambda x: x["roi"])
@@ -1166,26 +1257,36 @@ def analyze_best_params() -> dict:
     # Pokud je nejlepší ROI segment stejně pod nulou jako všechno ostatní,
     # nemá smysl z toho vyrábět sázkaře – radši to appka řekne narovinu.
     if best_odds["roi"] <= 0 and best_prob["roi"] <= 0:
-        return {"available": False, "reason": "no_profitable_segment",
+        return {"available": False, "reason": "no_profitable_segment", "group": group,
                 "have": len(bets), "best_odds_roi": best_odds["roi"], "best_prob_roi": best_prob["roi"]}
 
     params = default_params()
     params["min_odds"] = round(best_odds["range"][0], 2)
     params["max_odds"] = round(min(best_odds["range"][1], 100.0), 2)
-    params["min_prob"] = round(best_prob["range"][0], 2) if best_prob["range"][0] > 0 else 0.5
-    if best_market and best_market["market"] != "goals":
-        # market="any" pokrývá goals i winner i handicap; jediné omezitelné
-        # market filtry v custom systému jsou home/away/over/under/winner
-        if best_market["market"] == "winner":
-            params["market"] = "winner"
-    # Konzervativnější vklad než default (3 %) – generovaný sázkař staví na
-    # statisticky nejlepším segmentu, ale historie je vždycky menší vzorek
-    # než by chtěl klasický backtest, takže se sází opatrněji.
-    params["stake_pct"] = 0.025
-    params["max_bets"] = 3
+    if group == "single":
+        params["min_prob"] = round(best_prob["range"][0], 2) if best_prob["range"][0] > 0 else 0.5
+        if best_market and best_market["market"] != "goals":
+            # market="any" pokrývá goals i winner i handicap; jediné omezitelné
+            # market filtry v custom systému jsou home/away/over/under/winner
+            if best_market["market"] == "winner":
+                params["market"] = "winner"
+        params["stake_pct"] = 0.025
+        params["max_bets"] = 3
+    else:
+        params["leg_min_prob"] = round(best_prob["range"][0], 2) if best_prob["range"][0] > 0 else 0.55
+        params["legs"] = 2 if group == "combo" else 3
+        # menší vklad než u jednotlivých sázek – tikety mají o dost nižší
+        # win rate (víc nohou musí sednout najednou), takže i menší chyba
+        # v odhadu segmentu bolí víc.
+        params["stake_pct"] = 0.02
+        params["max_bets"] = 2
+    # Nová generace vždycky filtruje na KALIBROVANOU pravděpodobnost, ne
+    # syrovou z modelu – aréna ukázala, že syrová prob dá slušný win rate,
+    # ale i tak záporné ROI, protože nadhodnocuje jistotu (viz _calibrated_ev).
+    params["require_positive_ev"] = True
 
     return {
-        "available": True,
+        "available": True, "group": group,
         "params": normalize_params(params),
         "evidence": {
             "total_bets_analyzed": len(bets),
@@ -1199,10 +1300,15 @@ def analyze_best_params() -> dict:
     }
 
 
-def generate_optimal_bettor() -> dict:
-    """Vytvoří nového sázkaře s parametry odvozenými z analyze_best_params().
-    Jméno a tagline explicitně říkají, že vznikl z dat, ne z šablony."""
-    analysis = analyze_best_params()
+_GEN_NAME_PREFIX = {"single": "Analytik", "combo": "Kombinér", "acca": "Akumulátor"}
+_GEN_EMOJI = {"single": "🧬", "combo": "🧬🔗", "acca": "🧬🎯"}
+
+
+def generate_optimal_bettor(group: str = "single") -> dict:
+    """Vytvoří nového sázkaře s parametry odvozenými z analyze_best_params()
+    pro danou skupinu. Jméno a tagline explicitně říkají, že vznikl z dat,
+    ne z šablony."""
+    analysis = analyze_best_params(group)
     if not analysis.get("available"):
         return {"created": False, **analysis}
 
@@ -1210,32 +1316,35 @@ def generate_optimal_bettor() -> dict:
     ev = analysis["evidence"]
     params = analysis["params"]
 
-    taken = [v.get("name") for v in st.values()]
-    _, emoji = generate_name(params, taken=taken)
-    emoji = "🧬"   # vlastní odznak pro AI-generované, ať je na první pohled odlišitelný
+    prefix = _GEN_NAME_PREFIX.get(group, "Analytik")
+    emoji = _GEN_EMOJI.get(group, "🧬")   # vlastní odznak pro AI-generované, ať je na první pohled odlišitelný
 
     # Pořadové číslo, aby šlo mít víc generací a rozlišit je
-    gen_n = 1 + sum(1 for v in st.values() if str(v.get("name", "")).startswith("Analytik"))
-    name = f"Analytik {gen_n}"
+    gen_n = 1 + sum(1 for v in st.values() if str(v.get("name", "")).startswith(prefix))
+    name = f"{prefix} {gen_n}"
 
     MARKET_CZ = {"winner": "vítěz", "goals": "góly", "handicap": "handicap"}
+    unit = "vyhodnocených sázek" if group == "single" else "vyhodnocených tiketů"
+    prob_label = "jistota" if group == "single" else f"jistota nohy ({params['legs']}× v tiketu)"
     tagline = (
-        f"Vygenerováno z {ev['total_bets_analyzed']} vyhodnocených sázek arény: "
+        f"Vygenerováno z {ev['total_bets_analyzed']} {unit} arény: "
         f"kurzy {ev['best_odds_bucket']['label']} (ROI {cz_num(ev['best_odds_bucket']['roi'])} %), "
-        f"jistota {ev['best_prob_bucket']['label']} (ROI {cz_num(ev['best_prob_bucket']['roi'])} %)"
+        f"{prob_label} {ev['best_prob_bucket']['label']} (ROI {cz_num(ev['best_prob_bucket']['roi'])} %)"
         + (f", trh {MARKET_CZ.get(ev['best_market']['market'], ev['best_market']['market'])}"
-           if ev.get('best_market') else "") + "."
+           if ev.get('best_market') else "")
+        + ", jen kalibrované kladné EV."
     )
 
     bettor = add_bettor(params, name=name, emoji=emoji, start_balance=DEFAULT_START_BALANCE)
     bettor["bid"] = bettor.get("id")
     st2 = load_state()
     st2[bettor["id"]]["tagline"] = tagline
-    st2[bettor["id"]]["group"] = "single"
+    st2[bettor["id"]]["group"] = group
     st2[bettor["id"]]["generated"] = True
     save_state(st2)
 
-    return {"created": True, "bettor": bettor, "tagline": tagline, "evidence": ev, "params": params}
+    return {"created": True, "bettor": bettor, "tagline": tagline, "evidence": ev,
+            "params": params, "group": group}
 
 
 def add_bettor(params: dict, name: str = None, emoji: str = None,
@@ -1376,8 +1485,14 @@ def load_state():
 
 
 def _strategy_for(bid, b):
-    """Vestavěný sázkař má strategii v kódu, vlastní ji skládá z parametrů."""
+    """Vestavěný sázkař má strategii v kódu, vlastní ji skládá z parametrů –
+    podle group (single/combo/acca), protože každá staví tiket jinak."""
     if b.get("custom"):
+        grp = b.get("group", "single")
+        if grp == "combo":
+            return _s_custom_combo
+        if grp == "acca":
+            return _s_custom_acca
         return _s_custom
     prof = _BY_ID.get(bid)
     return prof["strategy"] if prof else None

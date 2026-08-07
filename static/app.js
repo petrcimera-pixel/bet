@@ -2407,7 +2407,12 @@ async function generateBettorFromData() {
       toast(msgs[data.reason] || 'Zatím se nepodařilo najít ziskový segment.', 'info', 8000);
       return;
     }
-    toast(`Vytvořen sázkař „${data.bettor.name}" – ${data.tagline}`, 'ok', 8000);
+    const all = data.all_created || [data];
+    if (all.length > 1) {
+      toast(`Vytvořeno ${all.length} sázkařů: ${all.map(x => x.bettor.name).join(', ')}`, 'ok', 8000);
+    } else {
+      toast(`Vytvořen sázkař „${data.bettor.name}" – ${data.tagline}`, 'ok', 8000);
+    }
     loadBettors();
   } catch (e) {
     toast(`Generování selhalo: ${e.message}`, 'err');
