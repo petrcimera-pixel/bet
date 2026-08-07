@@ -2,6 +2,7 @@
 """Jednoduché ukládání stavu do JSON souborů v ./data."""
 
 import os, json, glob, threading
+from collections import OrderedDict
 
 _DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 _LOCK = threading.Lock()
@@ -18,7 +19,18 @@ _LOCK = threading.Lock()
 # "načti → uprav in-place → hned ulož" (viz tips_db.py, bankroll.py) – mezi
 # načtením a uložením se objekt nikdy nezahazuje ani nedrží přes více
 # requestů. Čistě čtecí přístupy (filtrování, iterace) objekt nemutují.
-_CACHE = {}   # name -> (mtime, data)
+#
+# LRU s omezenou velikostí, ne obyčejný dict – appka během dne prochází
+# desítky/stovky RŮZNÝCH per-liga-den ESPN cache souborů
+# (cache_{sport}_{start}_{end}.json, viz data_sources.py), a obyčejný dict
+# by je držel v paměti NAVŽDY, i den poté, co appka na daný den/ligu už
+# nikdy nesáhne. Na Render free tieru (512 MB) to byl skutečný důvod
+# opakovaných OOM pádů dnes. OrderedDict + move_to_end při každém
+# přístupu = nejčastěji používané soubory (bankroll.json, tips.json,
+# team_ratings.json...) zůstávají "nahoře" a nikdy se nezahodí, zatímco
+# staré jednorázové cache soubory se dřív nebo později vytlačí.
+_CACHE = OrderedDict()   # name -> (mtime, data)
+_CACHE_MAX_ENTRIES = 60
 
 
 def _path(name: str) -> str:
@@ -37,6 +49,11 @@ def remove_matching(pattern: str) -> int:
     return n
 
 
+def _evict_if_needed() -> None:
+    while len(_CACHE) > _CACHE_MAX_ENTRIES:
+        _CACHE.popitem(last=False)   # nejdéle nepoužitý záznam (LRU)
+
+
 def load(name: str, default):
     path = _path(name)
     try:
@@ -47,6 +64,7 @@ def load(name: str, default):
 
     cached = _CACHE.get(name)
     if cached and cached[0] == mtime:
+        _CACHE.move_to_end(name)
         return cached[1]
 
     # utf-8-sig: soubory upravené externě (PowerShell) mohou mít BOM
@@ -57,6 +75,8 @@ def load(name: str, default):
         return default
 
     _CACHE[name] = (mtime, data)
+    _CACHE.move_to_end(name)
+    _evict_if_needed()
     return data
 
 
@@ -71,6 +91,8 @@ def save(name: str, data) -> None:
         # requestu nemusí znovu číst z disku
         try:
             _CACHE[name] = (os.path.getmtime(_path(name)), data)
+            _CACHE.move_to_end(name)
+            _evict_if_needed()
         except OSError:
             _CACHE.pop(name, None)
 

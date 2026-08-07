@@ -3976,8 +3976,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1431
         },
-        "closing_odds": 1.389,
-        "clv": -0.0065
+        "closing_odds": 1.364,
+        "clv": 0.0117
       },
       {
         "id": "153e239e70",
@@ -4031,9 +4031,9 @@
         "odds": 1.57,
         "prob": 0.8707,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -4045,7 +4045,11 @@
           "edge": 0.2342
         },
         "closing_odds": 1.6,
-        "clv": -0.0188
+        "clv": -0.0188,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "5479391876",
@@ -4355,8 +4359,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0581
         },
-        "closing_odds": 1.047,
-        "clv": -0.0258
+        "closing_odds": 1.019,
+        "clv": 0.001
       },
       {
         "id": "db2d76166c",
@@ -4421,8 +4425,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "22bf92bc81",
@@ -5161,9 +5165,9 @@
       }
     ],
     "last_run_date": "2026-08-07",
-    "loss_streak": 0,
+    "loss_streak": 1,
     "ran_hours": [],
-    "win_streak": 4,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -6007,8 +6011,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2812
         },
-        "closing_odds": 1.814,
-        "clv": 0.0254
+        "closing_odds": 1.754,
+        "clv": 0.0604
       },
       {
         "id": "5953ae0e53",
@@ -6270,9 +6274,9 @@
         "odds": 2.27,
         "prob": 0.8263,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -6284,7 +6288,11 @@
           "edge": 0.3852
         },
         "closing_odds": 2.239,
-        "clv": 0.0138
+        "clv": 0.0138,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "d82999aa5f",
@@ -6338,9 +6346,9 @@
         "odds": 3.67,
         "prob": 0.7435,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.1343,
           "defense_home": 1.3463,
@@ -6352,7 +6360,11 @@
           "edge": 0.4714
         },
         "closing_odds": 3.927,
-        "clv": -0.0654
+        "clv": -0.0654,
+        "result": {
+          "home": 1,
+          "away": 2
+        }
       },
       {
         "id": "50dd979e8f",
@@ -7091,7 +7103,7 @@
       }
     ],
     "last_run_date": "2026-08-07",
-    "loss_streak": 0,
+    "loss_streak": 2,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -7108,7 +7120,7 @@
     "name": "Favorit Fanda",
     "emoji": "⭐",
     "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
-    "balance": 14.35,
+    "balance": 33.71,
     "start_balance": 200.0,
     "bets": [
       {
@@ -7141,8 +7153,8 @@
           "rating_confidence": 0.95,
           "edge": 0.1062
         },
-        "closing_odds": 2.45,
-        "clv": 0.0
+        "closing_odds": 2.88,
+        "clv": -0.1493
       },
       {
         "id": "9b78d582ca",
@@ -7206,7 +7218,9 @@
           "exp_goals_away": 1.07,
           "rating_confidence": 0.05,
           "edge": 0.4126
-        }
+        },
+        "closing_odds": 17.0,
+        "clv": 0.0
       },
       {
         "id": "6a464cbde9",
@@ -7999,8 +8013,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0188
         },
-        "closing_odds": 1.51,
-        "clv": -0.0066
+        "closing_odds": 1.5,
+        "clv": 0.0
       },
       {
         "id": "e81f2a4cd7",
@@ -8065,8 +8079,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0357
         },
-        "closing_odds": 1.26,
-        "clv": -0.0079
+        "closing_odds": 1.14,
+        "clv": 0.0965
       },
       {
         "id": "69cbb16186",
@@ -8098,8 +8112,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2125
         },
-        "closing_odds": 9.0,
-        "clv": -0.3611
+        "closing_odds": 451.0,
+        "clv": -0.9873
       },
       {
         "id": "af5521d11b",
@@ -8131,8 +8145,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1781
         },
-        "closing_odds": 2.4,
-        "clv": -0.0208
+        "closing_odds": 2.3,
+        "clv": 0.0217
       },
       {
         "id": "b36b396623",
@@ -8164,8 +8178,8 @@
           "rating_confidence": 0.725,
           "edge": 0.0746
         },
-        "closing_odds": 2.3,
-        "clv": -0.0217
+        "closing_odds": 14.0,
+        "clv": -0.8393
       },
       {
         "id": "a6e611749e",
@@ -8184,9 +8198,9 @@
         "odds": 2.85,
         "prob": 0.6151,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -8198,7 +8212,11 @@
           "edge": 0.2642
         },
         "closing_odds": 2.85,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "bd1c8183c2",
@@ -8217,9 +8235,9 @@
         "odds": 2.35,
         "prob": 0.5638,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -8231,7 +8249,11 @@
           "edge": 0.1383
         },
         "closing_odds": 2.45,
-        "clv": -0.0408
+        "clv": -0.0408,
+        "result": {
+          "home": 1,
+          "away": 1
+        }
       },
       {
         "id": "3d0641d5bc",
@@ -8250,9 +8272,9 @@
         "odds": 4.3,
         "prob": 0.5508,
         "stake": 5.12,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.12,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.1343,
           "defense_home": 1.3463,
@@ -8264,7 +8286,11 @@
           "edge": 0.3183
         },
         "closing_odds": 4.7,
-        "clv": -0.0851
+        "clv": -0.0851,
+        "result": {
+          "home": 1,
+          "away": 2
+        }
       },
       {
         "id": "aafa82269e",
@@ -8283,9 +8309,9 @@
         "odds": 2.3,
         "prob": 0.3717,
         "stake": 5.12,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 6.66,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8805,
           "defense_home": 1.2541,
@@ -8297,7 +8323,11 @@
           "edge": -0.0631
         },
         "closing_odds": 2.55,
-        "clv": -0.098
+        "clv": -0.098,
+        "result": {
+          "home": 1,
+          "away": 0
+        }
       },
       {
         "id": "c5b8de32e6",
@@ -8316,9 +8346,9 @@
         "odds": 1.48,
         "prob": 0.429,
         "stake": 5.12,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.46,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -8330,7 +8360,11 @@
           "edge": -0.2485
         },
         "closing_odds": 1.606,
-        "clv": -0.0785
+        "clv": -0.0785,
+        "result": {
+          "home": 2,
+          "away": 1
+        }
       },
       {
         "id": "cc2f7d8405",
@@ -10854,9 +10888,9 @@
       }
     ],
     "last_run_date": "2026-08-07",
-    "loss_streak": 1,
+    "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 0,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -11372,8 +11406,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0125
         },
-        "closing_odds": 6.2,
-        "clv": -0.0323
+        "closing_odds": 9.6,
+        "clv": -0.375
       },
       {
         "id": "808a15b2f6",
@@ -11662,9 +11696,9 @@
         "odds": 5.5,
         "prob": 0.2822,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -11676,7 +11710,11 @@
           "edge": 0.1004
         },
         "closing_odds": 4.8,
-        "clv": 0.1458
+        "clv": 0.1458,
+        "result": {
+          "home": 2,
+          "away": 1
+        }
       },
       {
         "id": "6df2f22b15",
@@ -11918,8 +11956,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3236
         },
-        "closing_odds": 17.667,
-        "clv": -0.5585
+        "closing_odds": 452.0,
+        "clv": -0.9827
       },
       {
         "id": "e6241c7570",
@@ -12658,7 +12696,7 @@
       }
     ],
     "last_run_date": "2026-08-07",
-    "loss_streak": 1,
+    "loss_streak": 2,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -13652,8 +13690,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0581
         },
-        "closing_odds": 1.047,
-        "clv": -0.0258
+        "closing_odds": 1.019,
+        "clv": 0.001
       },
       {
         "id": "78a0289317",
@@ -13718,8 +13756,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "c1ea1c4186",
@@ -15514,9 +15552,9 @@
         "odds": 2.3,
         "prob": 0.5638,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -15528,7 +15566,11 @@
           "edge": 0.129
         },
         "closing_odds": 2.45,
-        "clv": -0.0612
+        "clv": -0.0612,
+        "result": {
+          "home": 1,
+          "away": 1
+        }
       },
       {
         "id": "053288aee5",
@@ -15547,9 +15589,9 @@
         "odds": 2.9,
         "prob": 0.6151,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -15561,7 +15603,11 @@
           "edge": 0.2702
         },
         "closing_odds": 2.85,
-        "clv": 0.0175
+        "clv": 0.0175,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "e5676fd845",
@@ -15685,9 +15731,9 @@
         "odds": 4.4,
         "prob": 0.5508,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.1343,
           "defense_home": 1.3463,
@@ -15699,7 +15745,11 @@
           "edge": 0.3235
         },
         "closing_odds": 4.7,
-        "clv": -0.0638
+        "clv": -0.0638,
+        "result": {
+          "home": 1,
+          "away": 2
+        }
       },
       {
         "id": "064895c8c9",
@@ -15908,8 +15958,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1869
         },
-        "closing_odds": 2.4,
-        "clv": 0.0
+        "closing_odds": 2.3,
+        "clv": 0.0435
       },
       {
         "id": "13679494fb",
@@ -16011,8 +16061,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0253
         },
-        "closing_odds": 1.51,
-        "clv": -0.0066
+        "closing_odds": 1.5,
+        "clv": 0.0
       },
       {
         "id": "d4e80bfa3a",
@@ -16077,8 +16127,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0454
         },
-        "closing_odds": 1.26,
-        "clv": -0.0159
+        "closing_odds": 1.14,
+        "clv": 0.0877
       },
       {
         "id": "439dca231c",
@@ -16818,7 +16868,7 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 4,
     "win_streak": 0,
     "transactions": [
       {
@@ -17957,9 +18007,9 @@
         "odds": 1.53,
         "prob": 0.618,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -17971,7 +18021,11 @@
           "edge": -0.0373
         },
         "closing_odds": 1.625,
-        "clv": -0.0585
+        "clv": -0.0585,
+        "result": {
+          "home": 1,
+          "away": 1
+        }
       },
       {
         "id": "f0ea6afa3f",
@@ -18534,8 +18588,8 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 3,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -18550,7 +18604,7 @@
     "name": "Betonový Bedřich",
     "emoji": "🧱",
     "tagline": "Jen Under linie – věří na uzavřené obranné zápasy.",
-    "balance": 104.55,
+    "balance": 128.75,
     "start_balance": 200.0,
     "bets": [
       {
@@ -19079,9 +19133,9 @@
         "odds": 1.56,
         "prob": 0.6966,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.8,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.1343,
           "defense_home": 1.3463,
@@ -19093,7 +19147,11 @@
           "edge": 0.0539
         },
         "closing_odds": 1.606,
-        "clv": -0.0286
+        "clv": -0.0286,
+        "result": {
+          "home": 1,
+          "away": 2
+        }
       },
       {
         "id": "35bed4055c",
@@ -19316,9 +19374,9 @@
         "odds": 1.67,
         "prob": 0.7246,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.35,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -19330,7 +19388,11 @@
           "edge": 0.1247
         },
         "closing_odds": 1.667,
-        "clv": 0.0018
+        "clv": 0.0018,
+        "result": {
+          "home": 2,
+          "away": 1
+        }
       },
       {
         "id": "bdb4de7372",
@@ -19487,9 +19549,9 @@
         "odds": 1.61,
         "prob": 0.7677,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.05,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8805,
           "defense_home": 1.2541,
@@ -19499,6 +19561,10 @@
           "exp_goals_away": 1.17,
           "rating_confidence": 0.75,
           "edge": 0.145
+        },
+        "result": {
+          "home": 1,
+          "away": 0
         }
       },
       {
@@ -20169,8 +20235,8 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1785776822,
@@ -20352,8 +20418,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1431
         },
-        "closing_odds": 1.389,
-        "clv": -0.0065
+        "closing_odds": 1.364,
+        "clv": 0.0117
       },
       {
         "id": "066af13c73",
@@ -20407,9 +20473,9 @@
         "odds": 1.59,
         "prob": 0.8707,
         "stake": 5.35,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.35,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -20421,7 +20487,11 @@
           "edge": 0.2402
         },
         "closing_odds": 1.6,
-        "clv": -0.0062
+        "clv": -0.0062,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "533c77f89b",
@@ -20801,8 +20871,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0581
         },
-        "closing_odds": 1.047,
-        "clv": -0.0258
+        "closing_odds": 1.019,
+        "clv": 0.001
       },
       {
         "id": "5d3892136e",
@@ -20867,8 +20937,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "26c11a6c4d",
@@ -21433,8 +21503,8 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 2,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -21970,8 +22040,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1431
         },
-        "closing_odds": 1.389,
-        "clv": -0.0065
+        "closing_odds": 1.364,
+        "clv": 0.0117
       },
       {
         "id": "4ce5b17d2f",
@@ -22038,8 +22108,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0581
         },
-        "closing_odds": 1.047,
-        "clv": -0.0258
+        "closing_odds": 1.019,
+        "clv": 0.001
       },
       {
         "id": "b533d0e008",
@@ -22104,8 +22174,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "793c617f5f",
@@ -23229,9 +23299,9 @@
         "odds": 2.12,
         "prob": 0.81,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.1343,
           "defense_home": 1.3463,
@@ -23243,7 +23313,11 @@
           "edge": 0.3387
         },
         "closing_odds": 2.299,
-        "clv": -0.0779
+        "clv": -0.0779,
+        "result": {
+          "home": 1,
+          "away": 2
+        }
       },
       {
         "id": "545d0a2807",
@@ -23507,9 +23581,9 @@
         "odds": 1.57,
         "prob": 0.8707,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -23521,7 +23595,11 @@
           "edge": 0.2342
         },
         "closing_odds": 1.6,
-        "clv": -0.0188
+        "clv": -0.0188,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "0dd766d08a",
@@ -23656,8 +23734,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1431
         },
-        "closing_odds": 1.389,
-        "clv": -0.0065
+        "closing_odds": 1.364,
+        "clv": 0.0117
       },
       {
         "id": "704c8fb859",
@@ -23827,8 +23905,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0186
         },
-        "closing_odds": 1.101,
-        "clv": 0.0263
+        "closing_odds": 1.018,
+        "clv": 0.11
       },
       {
         "id": "58c473f9b5",
@@ -23860,8 +23938,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "273512daba",
@@ -24601,8 +24679,8 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 2,
+    "loss_streak": 2,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1785776822,
@@ -24753,8 +24831,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1431
         },
-        "closing_odds": 1.389,
-        "clv": -0.0065
+        "closing_odds": 1.364,
+        "clv": 0.0117
       },
       {
         "id": "feb97496cd",
@@ -24821,8 +24899,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0581
         },
-        "closing_odds": 1.047,
-        "clv": -0.0258
+        "closing_odds": 1.019,
+        "clv": 0.001
       },
       {
         "id": "93b5e1fa6d",
@@ -24887,8 +24965,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0025
         },
-        "closing_odds": 1.078,
-        "clv": -0.0074
+        "closing_odds": 1.076,
+        "clv": -0.0056
       },
       {
         "id": "b5e51447d5",
@@ -26064,7 +26142,7 @@
     "name": "Spirálová Simona",
     "emoji": "🌀",
     "tagline": "Jistota od 72 %, kurz 1.2–10.0, jen under linie, 3 % banku, po prohře další fibonacciho číslo, max 2 sázky, nejvýš 1 na ligu.",
-    "balance": 84.64,
+    "balance": 102.25,
     "start_balance": 200.0,
     "bets": [
       {
@@ -26750,9 +26828,9 @@
         "odds": 1.67,
         "prob": 0.7246,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.35,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -26764,7 +26842,11 @@
           "edge": 0.1247
         },
         "closing_odds": 1.667,
-        "clv": 0.0018
+        "clv": 0.0018,
+        "result": {
+          "home": 2,
+          "away": 1
+        }
       },
       {
         "id": "583ad5406d",
@@ -27024,9 +27106,9 @@
         "odds": 1.61,
         "prob": 0.7677,
         "stake": 5.75,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.51,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8805,
           "defense_home": 1.2541,
@@ -27036,6 +27118,10 @@
           "exp_goals_away": 1.17,
           "rating_confidence": 0.75,
           "edge": 0.145
+        },
+        "result": {
+          "home": 1,
+          "away": 0
         }
       },
       {
@@ -27357,7 +27443,7 @@
     "last_run_date": "2026-08-07",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 3,
     "custom": true,
     "params": {
       "market": "under",
@@ -27419,8 +27505,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401845024",
@@ -27436,8 +27522,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.231,
-            "clv": 0.0073
+            "closing_odds": 1.238,
+            "clv": 0.0016
           }
         ],
         "stake": 5.0,
@@ -32524,8 +32610,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": -0.0074
+            "closing_odds": 1.076,
+            "clv": -0.0056
           }
         ],
         "stake": 5.0,
@@ -32611,8 +32697,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": -0.0074
+            "closing_odds": 1.076,
+            "clv": -0.0056
           }
         ],
         "stake": 5.0,
@@ -32698,8 +32784,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": -0.0074
+            "closing_odds": 1.076,
+            "clv": -0.0056
           }
         ],
         "stake": 5.0,
@@ -32785,8 +32871,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": -0.0074
+            "closing_odds": 1.076,
+            "clv": -0.0056
           }
         ],
         "stake": 5.0,
@@ -32872,8 +32958,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": -0.0074
+            "closing_odds": 1.076,
+            "clv": -0.0056
           }
         ],
         "stake": 5.0,
@@ -35565,8 +35651,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.0046
+            "closing_odds": 1.31,
+            "clv": 0.0
           },
           {
             "match_id": "401844042",
@@ -35733,8 +35819,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.0046
+            "closing_odds": 1.31,
+            "clv": 0.0
           },
           {
             "match_id": "401844042",
@@ -35901,8 +35987,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.0046
+            "closing_odds": 1.31,
+            "clv": 0.0
           },
           {
             "match_id": "401844042",
@@ -36069,8 +36155,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.0046
+            "closing_odds": 1.31,
+            "clv": 0.0
           },
           {
             "match_id": "401844042",
@@ -36237,8 +36323,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.0046
+            "closing_odds": 1.31,
+            "clv": 0.0
           },
           {
             "match_id": "401899800",
@@ -47252,8 +47338,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -47337,8 +47423,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -47422,8 +47508,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -47507,8 +47593,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -47934,8 +48020,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -48021,8 +48107,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -50461,8 +50547,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401845024",
@@ -50478,8 +50564,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.231,
-            "clv": 0.0073
+            "closing_odds": 1.238,
+            "clv": 0.0016
           },
           {
             "match_id": "401845031",
@@ -50495,8 +50581,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 2.4,
-            "clv": 0.0208
+            "closing_odds": 2.45,
+            "clv": 0.0
           },
           {
             "match_id": "401860269",
@@ -57054,8 +57140,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": 0.0
+            "closing_odds": 1.5,
+            "clv": 0.0067
           },
           {
             "match_id": "401841491",
@@ -57252,8 +57338,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": 0.0
+            "closing_odds": 1.5,
+            "clv": 0.0067
           },
           {
             "match_id": "401841491",
@@ -57384,8 +57470,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": 0.0
+            "closing_odds": 1.5,
+            "clv": 0.0067
           },
           {
             "match_id": "401841491",
@@ -57516,8 +57602,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": 0.0
+            "closing_odds": 1.5,
+            "clv": 0.0067
           },
           {
             "match_id": "401841491",
@@ -57582,8 +57668,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -57788,8 +57874,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -57924,8 +58010,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -58060,8 +58146,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -58126,8 +58212,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -58262,8 +58348,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": -0.0066
+            "closing_odds": 1.5,
+            "clv": 0.0
           },
           {
             "match_id": "401841491",
@@ -63218,7 +63304,7 @@
     "name": "Jistá Jiřina",
     "emoji": "🛡️",
     "tagline": "Jen kombinace, které i po spojení drží nad 60 %.",
-    "balance": 45.0,
+    "balance": 71.9,
     "start_balance": 200.0,
     "bets": [
       {
@@ -64621,7 +64707,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "Jong Ajax s hendikepem +1,5 + Méně než 3,5 gólu",
-        "odds": 2.68,
+        "odds": 2.69,
         "prob": 0.6067,
         "legs": [
           {
@@ -64637,7 +64723,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           },
           {
             "match_id": "401875994",
@@ -64652,15 +64742,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0018
+            "clv": 0.0018,
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 8.45,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -64817,7 +64911,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "Jong Ajax s hendikepem +1,5 + Méně než 3,5 gólu",
-        "odds": 2.68,
+        "odds": 2.69,
         "prob": 0.6067,
         "legs": [
           {
@@ -64833,7 +64927,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           },
           {
             "match_id": "401875994",
@@ -64848,15 +64946,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0018
+            "clv": 0.0018,
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 8.45,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -65267,7 +65369,7 @@
     "last_run_date": "2026-08-07",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -65282,7 +65384,7 @@
     "name": "Odvážný Otakar",
     "emoji": "💥",
     "tagline": "Kombinace s co nejvyšším kurzem, drobný vklad.",
-    "balance": 90.0,
+    "balance": 116.9,
     "start_balance": 200.0,
     "bets": [
       {
@@ -66091,7 +66193,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "Jong Ajax s hendikepem +1,5 + Méně než 3,5 gólu",
-        "odds": 2.68,
+        "odds": 2.69,
         "prob": 0.6067,
         "legs": [
           {
@@ -66107,7 +66209,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           },
           {
             "match_id": "401875994",
@@ -66122,15 +66228,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0018
+            "clv": 0.0018,
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 8.45,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -66287,7 +66397,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "Jong Ajax s hendikepem +1,5 + Méně než 3,5 gólu",
-        "odds": 2.68,
+        "odds": 2.69,
         "prob": 0.6067,
         "legs": [
           {
@@ -66303,7 +66413,11 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null
+            "result": "won",
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           },
           {
             "match_id": "401875994",
@@ -66318,15 +66432,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0018
+            "clv": 0.0018,
+            "score": {
+              "home": 2,
+              "away": 1
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 8.45,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.7639,
           "defense_home": 1.1999,
@@ -66737,7 +66855,7 @@
     "last_run_date": "2026-08-07",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1785776822,
@@ -68920,8 +69038,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401863570",
@@ -74045,8 +74163,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401845024",
@@ -74062,8 +74180,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.231,
-            "clv": 0.0073
+            "closing_odds": 1.238,
+            "clv": 0.0016
           },
           {
             "match_id": "401845031",
@@ -74079,8 +74197,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 2.4,
-            "clv": 0.0208
+            "closing_odds": 2.45,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,
@@ -74128,8 +74246,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": -0.035
+            "closing_odds": 1.31,
+            "clv": -0.0305
           },
           {
             "match_id": "401845024",
@@ -74145,8 +74263,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.231,
-            "clv": -0.0008
+            "closing_odds": 1.238,
+            "clv": -0.0065
           },
           {
             "match_id": "401845031",
@@ -74162,8 +74280,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 2.4,
-            "clv": 0.0
+            "closing_odds": 2.45,
+            "clv": -0.0204
           }
         ],
         "stake": 5.0,
@@ -76205,8 +76323,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0079
+            "closing_odds": 1.14,
+            "clv": 0.0965
           }
         ],
         "stake": 5.0,
@@ -76607,8 +76725,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           }
         ],
         "stake": 5.0,
@@ -76692,8 +76810,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -76796,8 +76914,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -76900,8 +77018,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -77004,8 +77122,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -77510,8 +77628,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -77616,8 +77734,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": -0.0159
+            "closing_odds": 1.14,
+            "clv": 0.0877
           },
           {
             "match_id": "401902961",
@@ -79795,8 +79913,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401845024",
@@ -79812,8 +79930,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.231,
-            "clv": 0.0073
+            "closing_odds": 1.238,
+            "clv": 0.0016
           },
           {
             "match_id": "401845031",
@@ -79829,8 +79947,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 2.4,
-            "clv": 0.0208
+            "closing_odds": 2.45,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,
@@ -89249,8 +89367,8 @@
             "sport": "soccer",
             "slug": "per.1",
             "result": null,
-            "closing_odds": 1.273,
-            "clv": 0.0134
+            "closing_odds": 1.287,
+            "clv": 0.0023
           },
           {
             "match_id": "401886111",
@@ -89315,8 +89433,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 1.286,
-            "clv": 0.0187
+            "closing_odds": 1.311,
+            "clv": -0.0008
           },
           {
             "match_id": "401845031",
@@ -89332,8 +89450,8 @@
             "sport": "soccer",
             "slug": "arg.3",
             "result": null,
-            "closing_odds": 2.4,
-            "clv": 0.0208
+            "closing_odds": 2.45,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,
@@ -91669,8 +91787,8 @@
             "sport": "soccer",
             "slug": "concacaf.leagues.cup",
             "result": null,
-            "closing_odds": 1.316,
-            "clv": 0.003
+            "closing_odds": 1.31,
+            "clv": 0.0076
           },
           {
             "match_id": "401863570",
@@ -92522,8 +92640,8 @@
           "rating_confidence": 1.0,
           "edge": 0.1954
         },
-        "closing_odds": 2.4,
-        "clv": 0.0208
+        "closing_odds": 2.3,
+        "clv": 0.0652
       },
       {
         "id": "af9f2a670b",
@@ -92608,9 +92726,9 @@
         "odds": 2.3,
         "prob": 0.5638,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -92622,7 +92740,11 @@
           "edge": 0.129
         },
         "closing_odds": 2.45,
-        "clv": -0.0612
+        "clv": -0.0612,
+        "result": {
+          "home": 1,
+          "away": 1
+        }
       },
       {
         "id": "b65b59b10c",
@@ -92748,9 +92870,9 @@
         "odds": 2.9,
         "prob": 0.6151,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -92762,7 +92884,11 @@
           "edge": 0.2702
         },
         "closing_odds": 2.85,
-        "clv": 0.0175
+        "clv": 0.0175,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "1268ec04e5",
@@ -92802,7 +92928,7 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 3,
     "win_streak": 0,
     "custom": true,
     "params": {
@@ -94103,9 +94229,9 @@
         "odds": 1.6,
         "prob": 0.8707,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -94117,7 +94243,11 @@
           "edge": 0.2457
         },
         "closing_odds": 1.6,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       },
       {
         "id": "45b0f4dd24",
@@ -94479,8 +94609,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2973
         },
-        "closing_odds": 1.548,
-        "clv": 0.053
+        "closing_odds": 1.541,
+        "clv": 0.0578
       },
       {
         "id": "502050c2fb",
@@ -94848,7 +94978,7 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "win_streak": 0,
     "custom": true,
     "params": {
@@ -94913,8 +95043,8 @@
           "rating_confidence": 0.725,
           "edge": 0.1305
         },
-        "closing_odds": 1.697,
-        "clv": 0.0018
+        "closing_odds": 11.37,
+        "clv": -0.8505
       },
       {
         "id": "a6578113e1",
@@ -94945,7 +95075,9 @@
           "exp_goals_away": 1.07,
           "rating_confidence": 0.05,
           "edge": 0.1182
-        }
+        },
+        "closing_odds": 1.85,
+        "clv": 0.0
       },
       {
         "id": "4f114f8489",
@@ -94977,8 +95109,8 @@
           "rating_confidence": 0.275,
           "edge": 0.1596
         },
-        "closing_odds": 2.664,
-        "clv": -0.0015
+        "closing_odds": 2.806,
+        "clv": -0.052
       },
       {
         "id": "f09940ad4c",
@@ -95043,8 +95175,8 @@
           "rating_confidence": 0.95,
           "edge": 0.1273
         },
-        "closing_odds": 1.79,
-        "clv": -0.0615
+        "closing_odds": 1.6,
+        "clv": 0.05
       },
       {
         "id": "dea2a2f0fc",
@@ -95129,9 +95261,9 @@
         "odds": 2.45,
         "prob": 0.7092,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -95143,7 +95275,11 @@
           "edge": 0.1556
         },
         "closing_odds": 2.45,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 1,
+          "away": 1
+        }
       },
       {
         "id": "5186cb8a5e",
@@ -95162,9 +95298,9 @@
         "odds": 2.25,
         "prob": 0.8935,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -95176,12 +95312,16 @@
           "edge": 0.1125
         },
         "closing_odds": 2.3,
-        "clv": -0.0217
+        "clv": -0.0217,
+        "result": {
+          "home": 3,
+          "away": 4
+        }
       }
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -95231,8 +95371,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.51,
-            "clv": 0.0
+            "closing_odds": 1.5,
+            "clv": 0.0067
           },
           {
             "match_id": "401841491",
@@ -95248,8 +95388,8 @@
             "sport": "soccer",
             "slug": "arg.1",
             "result": null,
-            "closing_odds": 1.078,
-            "clv": 0.0019
+            "closing_odds": 1.076,
+            "clv": 0.0037
           }
         ],
         "stake": 5.0,
@@ -95297,8 +95437,8 @@
             "sport": "soccer",
             "slug": "bol.1",
             "result": null,
-            "closing_odds": 1.556,
-            "clv": 0.009
+            "closing_odds": 1.571,
+            "clv": -0.0006
           },
           {
             "match_id": "401879656",
@@ -95314,8 +95454,8 @@
             "sport": "soccer",
             "slug": "bol.1",
             "result": null,
-            "closing_odds": 1.163,
-            "clv": -0.0026
+            "closing_odds": 1.164,
+            "clv": -0.0034
           }
         ],
         "stake": 5.0,
@@ -95363,8 +95503,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.26,
-            "clv": 0.0
+            "closing_odds": 1.14,
+            "clv": 0.1053
           },
           {
             "match_id": "401879041",
@@ -95380,8 +95520,8 @@
             "sport": "soccer",
             "slug": "bel.1",
             "result": null,
-            "closing_odds": 1.047,
-            "clv": 0.0029
+            "closing_odds": 1.019,
+            "clv": 0.0304
           }
         ],
         "stake": 5.0,
@@ -95568,9 +95708,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 1,
+              "away": 1
+            }
           },
           {
             "match_id": "401875991",
@@ -95591,9 +95735,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 1.3934,
           "defense_home": 0.7735,
@@ -95701,8 +95845,8 @@
             "sport": "soccer",
             "slug": "ger.2",
             "result": null,
-            "closing_odds": 2.3,
-            "clv": 0.0
+            "closing_odds": 14.0,
+            "clv": -0.8357
           },
           {
             "match_id": "401885155",
@@ -95718,8 +95862,8 @@
             "sport": "soccer",
             "slug": "ger.2",
             "result": null,
-            "closing_odds": 1.697,
-            "clv": 0.0489
+            "closing_odds": 11.37,
+            "clv": -0.8434
           }
         ],
         "stake": 5.0,
@@ -95766,9 +95910,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ned.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.85,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 4
+            }
           },
           {
             "match_id": "401875990",
@@ -95789,9 +95937,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1786132901,
         "ml_features": {
           "attack_home": 0.8662,
           "defense_home": 1.0227,
@@ -95805,8 +95953,8 @@
     ],
     "last_run_date": "2026-08-07",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 1
+    "loss_streak": 2,
+    "win_streak": 0
   },
   "ai_acca": {
     "name": "AI Klára",
@@ -95847,8 +95995,8 @@
             "sport": "soccer",
             "slug": "apif:357",
             "result": null,
-            "closing_odds": 2.664,
-            "clv": -0.0015
+            "closing_odds": 2.806,
+            "clv": -0.052
           },
           {
             "match_id": "apif-1495751",
@@ -95863,7 +96011,9 @@
             "time": "16:00",
             "sport": "soccer",
             "slug": "apif:244",
-            "result": null
+            "result": null,
+            "closing_odds": 1.85,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,

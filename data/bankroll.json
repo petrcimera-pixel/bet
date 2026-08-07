@@ -1,6 +1,6 @@
 {
   "start_balance": 200.0,
-  "balance": 17.23,
+  "balance": 25.28,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -890,8 +890,8 @@
       "odds": 1.61,
       "prob": 0.6656,
       "stake": 5.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 3.05,
       "clv": 0.0139,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -914,7 +914,12 @@
         "Nejpravděpodobnější výsledek 1:1 (15 %).",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.588
+      "closing_odds": 1.588,
+      "settled_ts": 1786132901,
+      "result": {
+        "home": 1,
+        "away": 0
+      }
     },
     {
       "id": "2382f0634b",
@@ -1376,7 +1381,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0066,
+      "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1399,7 +1404,7 @@
         "Rosario Central má výrazně silnější útočný rating.",
         "Kurz 1.5 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.51
+      "closing_odds": 1.5
     },
     {
       "id": "fcc303c1cc",
@@ -1416,7 +1421,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0159,
+      "clv": 0.0877,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1439,7 +1444,7 @@
         "Club Brugge má výrazně silnější útočný rating.",
         "Kurz 1.235 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.26
+      "closing_odds": 1.14
     },
     {
       "id": "7b1c0759db",

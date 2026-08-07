@@ -165,6 +165,16 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "FC Andorra",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "UD Logroñés": [
@@ -69835,16 +69845,6 @@
       "result": "L"
     },
     {
-      "date": "2026-07-12",
-      "opponent": "Bodo/Glimt",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
       "date": "2026-07-18",
       "opponent": "Lillestrom",
       "league": "Norwegian Eliteserien",
@@ -69982,6 +69982,16 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Sandefjord",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -70421,16 +70431,6 @@
       "result": "L"
     },
     {
-      "date": "2026-05-16",
-      "opponent": "Lillestrom",
-      "league": "Norwegian Eliteserien",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-05-25",
       "opponent": "Fredrikstad",
       "league": "Norwegian Eliteserien",
@@ -70588,6 +70588,16 @@
       "loc": "home",
       "gf": 0,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "KFUM Oslo",
+      "league": "Norwegian Eliteserien",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
       "result": "L"
     },
     {
@@ -87943,6 +87953,16 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Huesca",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "FC Hradec Králové": [
@@ -97889,6 +97909,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Ceuta",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Al Arabi": [
@@ -100767,6 +100797,16 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Cremonese",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Cremonese": [
@@ -100799,9 +100839,29 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Hellas Verona",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Girona": [
+    {
+      "date": "2026-08-07",
+      "opponent": "CD Sabadell",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
     {
       "date": "2026-08-07",
       "opponent": "CD Sabadell",
@@ -100943,9 +101003,29 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Girona",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
     }
   ],
   "Sønderjyske Fodbold": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Viborg FF",
+      "league": "Danish Superliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Viborg FF",
@@ -100987,9 +101067,29 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Sønderjyske Fodbold",
+      "league": "Danish Superliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Ceuta": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Málaga",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Málaga",
@@ -101031,9 +101131,29 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Crystal Palace",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Crystal Palace": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Fulham",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Fulham",
@@ -101065,9 +101185,29 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "WSG Swarovski Tirol",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "WSG Swarovski Tirol": [
+    {
+      "date": "2026-08-07",
+      "opponent": "SC Rheindorf Altach",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-07",
       "opponent": "SC Rheindorf Altach",
@@ -101089,9 +101229,29 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Mérida",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Mérida": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Leganés",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Leganés",
@@ -101113,9 +101273,29 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Castellón",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Castellón": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Hercules",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Hercules",
@@ -101137,9 +101317,29 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Xerez",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Xerez": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Chiclana",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Chiclana",
@@ -101161,9 +101361,29 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Alavés",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Alavés": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Racing Luxembourg",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
     {
       "date": "2026-08-07",
       "opponent": "Racing Luxembourg",
@@ -101185,6 +101405,16 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "Excelsior",
+      "league": "Dutch Eredivisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Excelsior": [
@@ -101196,6 +101426,160 @@
       "loc": "away",
       "gf": 4,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-07",
+      "opponent": "SC Cambuur",
+      "league": "Dutch Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Sport Huancayo": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Los Chankas",
+      "league": "Peruvian Liga 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Los Chankas": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Sport Huancayo",
+      "league": "Peruvian Liga 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "FC Dordrecht": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Jong Ajax",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Jong Ajax": [
+    {
+      "date": "2026-08-07",
+      "opponent": "FC Dordrecht",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "FC Emmen": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Roda JC Kerkrade",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Roda JC Kerkrade": [
+    {
+      "date": "2026-08-07",
+      "opponent": "FC Emmen",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "TOP Oss": [
+    {
+      "date": "2026-08-07",
+      "opponent": "NAC Breda",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "NAC Breda": [
+    {
+      "date": "2026-08-07",
+      "opponent": "TOP Oss",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Vitesse": [
+    {
+      "date": "2026-08-07",
+      "opponent": "RKC Waalwijk",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "RKC Waalwijk": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Vitesse",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "VVV-Venlo": [
+    {
+      "date": "2026-08-07",
+      "opponent": "Heracles Almelo",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "result": "L"
+    }
+  ],
+  "Heracles Almelo": [
+    {
+      "date": "2026-08-07",
+      "opponent": "VVV-Venlo",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
       "result": "W"
     }
   ]

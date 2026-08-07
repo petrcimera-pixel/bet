@@ -152,6 +152,14 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                     m["real_odds"] = {"provider": rb[0]["name"], "odds": rb[0]["odds"]}
     predictions = pred.predict_all(matches)
     _PRED_CACHE[key] = (_time.time(), predictions)
+    # Aktivně zahodit prošlé záznamy – bez tohohle TTL jen znamenal
+    # "nepoužívat", ne "uvolnit". Klíč se liší podle (sport, datum, dny),
+    # takže starý den appka po zbytek běhu (do dalšího restartu) drží
+    # navěky v paměti, a každý drží kompletní predikce VŠECH zápasů dané
+    # sady dní – na Render free tieru (512 MB) reálně přispívalo k OOM.
+    now = _time.time()
+    for k in [k for k, v in _PRED_CACHE.items() if now - v[0] >= PRED_CACHE_TTL]:
+        del _PRED_CACHE[k]
 
     # CLV: u otevřených sázek si zapsat aktuální kurz trhu. Poslední hodnota
     # před výkopem je "closing line" a porovnání s cenou, za kterou jsme
