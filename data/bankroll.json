@@ -1201,7 +1201,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0614,
+      "clv": -0.0567,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1224,7 +1224,7 @@
         "Ceará má výrazně silnější útočný rating.",
         "Kurz 1.333 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.417
+      "closing_odds": 1.41
     },
     {
       "id": "e08c7bcd0f",
@@ -1376,7 +1376,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0086,
+      "clv": -0.0066,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1399,7 +1399,7 @@
         "Rosario Central má výrazně silnější útočný rating.",
         "Kurz 1.5 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.513
+      "closing_odds": 1.51
     },
     {
       "id": "fcc303c1cc",
@@ -1416,7 +1416,7 @@
       "stake": 5.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0239,
+      "clv": -0.0159,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -1439,7 +1439,7 @@
         "Club Brugge má výrazně silnější útočný rating.",
         "Kurz 1.235 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.211
+      "closing_odds": 1.26
     },
     {
       "id": "7b1c0759db",

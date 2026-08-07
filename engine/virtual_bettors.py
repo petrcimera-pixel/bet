@@ -738,17 +738,22 @@ def _ai_score_pool(pool, min_win_prob):
     """Společný krok pro všechny AI sázkaře: obohatí kandidáty z poolu o
     win_prob z natrénovaného ML modelu (engine/ml_learner.py – stejný, co
     používá agent jako veto), přeskočí ty pod prahem. Bez natrénovaného
-    modelu vrátí prázdno – žádný AI sázkař nemá hádat."""
+    modelu vrátí prázdno – žádný AI sázkař nemá hádat.
+
+    Skóruje CELÝ pool JEDNÍM dávkovým voláním (ml_learner.predict_batch),
+    ne kandidát po kandidátovi ve smyčce – pool má klidně tisíce položek
+    (fotbal+basketbal+hokej dohromady) a tisíce jednotlivých volání modelu
+    dokázaly na omezeném CPU (Render free tier) zaměstnat appku natolik
+    dlouho, že přestala odpovídat na cokoliv jiného."""
     from . import ml_learner
     learner = ml_learner.get_learner()
-    if learner.model is None:
+    if learner.model is None or not pool:
         return []
+    feats = [{"odds": c["odds"], "prob": c["prob"], "prediction": c["outcome"],
+              "league": c.get("league"), **(c.get("ml_features") or {})} for c in pool]
+    preds = ml_learner.predict_batch(feats)
     scored = []
-    for c in pool:
-        pred = learner.predict_with_confidence({
-            "odds": c["odds"], "prob": c["prob"], "prediction": c["outcome"],
-            "league": c.get("league"), **(c.get("ml_features") or {}),
-        })
+    for c, pred in zip(pool, preds):
         if pred.get("model_status") != "ready":
             continue
         win_prob = pred.get("win_prob", 0.5)

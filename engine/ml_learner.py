@@ -299,6 +299,43 @@ class MLLearner:
         except Exception:
             return {"win_prob": 0.5, "confidence": 0.0, "model_status": "error"}
 
+    def predict_batch(self, features_dicts):
+        """Stejné jako predict_with_confidence, ale pro VÍC kandidátů
+        najednou jedním maticovým voláním modelu místo smyčky s jedním
+        řádkem na volání.
+
+        Virtuální sázkaři (AI Adam/Karel/Klára) skórují celý fond
+        kandidátů - klidně tisíce najednou. Volat predict_with_confidence()
+        v Python smyčce pro každého zvlášť znamenalo tisíce jednotlivých
+        scaler.transform()/predict_proba() volání na jeden kolo sázení,
+        což na omezeném CPU (Render free tier) dokázalo zaměstnat jediný
+        gunicorn worker natolik dlouho, že appka přestala odpovídat na
+        cokoliv jiného. Jedna dávková matice je řádově rychlejší."""
+        if self.model is None or not features_dicts:
+            return [{"win_prob": 0.5, "confidence": 0.0, "model_status": "not_trained"} for _ in features_dicts]
+        try:
+            rows = []
+            for fd in features_dicts:
+                odds = fd.get("odds", 1.5)
+                prob = float(fd.get("prob", 1.0 / odds if odds > 1 else 0.5))
+                implied = 1.0 / odds if odds > 1 else 0.5
+                rows.append([
+                    odds, np.log(odds), prob,
+                    fd.get("edge", prob - implied),
+                    _is_home_enc(fd.get("prediction")),
+                    fd.get("attack_home", 1.0), fd.get("defense_home", 1.0),
+                    fd.get("attack_away", 1.0), fd.get("defense_away", 1.0),
+                    (fd.get("exp_goals_home") or 1.3) / 2.0,
+                    (fd.get("exp_goals_away") or 1.1) / 2.0,
+                    fd.get("rating_confidence", 0.0),
+                ])
+            X_scaled = self.scaler.transform(np.array(rows))
+            proba = self.model.predict_proba(X_scaled)
+            return [{"win_prob": float(p[1]), "confidence": float(max(p)), "model_status": "ready"}
+                    for p in proba]
+        except Exception:
+            return [{"win_prob": 0.5, "confidence": 0.0, "model_status": "error"} for _ in features_dicts]
+
     def get_feature_importance(self):
         """Get feature importance for explainability."""
         if self.model is None or self.feature_names is None:
@@ -441,3 +478,8 @@ def predict_with_model(features_dict):
     """Public API to get model prediction."""
     learner = get_learner()
     return learner.predict_with_confidence(features_dict)
+
+def predict_batch(features_dicts):
+    """Public API - dávková predikce pro víc kandidátů jedním voláním."""
+    learner = get_learner()
+    return learner.predict_batch(features_dicts)

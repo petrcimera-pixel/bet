@@ -416,15 +416,15 @@
     "n_away": 2
   },
   "Alavés": {
-    "a": 1.237,
-    "d": 1.3009,
-    "n": 17,
+    "a": 1.2189,
+    "d": 1.0481,
+    "n": 18,
     "a_home": 1.237,
     "d_home": 1.3009,
     "n_home": 0,
-    "a_away": 1.237,
-    "d_away": 1.3009,
-    "n_away": 0
+    "a_away": 1.1161,
+    "d_away": 1.0481,
+    "n_away": 1
   },
   "Mirandés": {
     "a": 0.9591,
@@ -434,7 +434,13 @@
   "Real Valladolid": {
     "a": 0.7949,
     "d": 1.0617,
-    "n": 18
+    "n": 18,
+    "a_home": 0.7949,
+    "d_home": 1.0617,
+    "n_home": 0,
+    "a_away": 0.7949,
+    "d_away": 1.0617,
+    "n_away": 0
   },
   "Real Sociedad II": {
     "a": 0.8001,
@@ -450,7 +456,13 @@
   "Granada": {
     "a": 1.0645,
     "d": 1.1719,
-    "n": 30
+    "n": 30,
+    "a_home": 1.0645,
+    "d_home": 1.1719,
+    "n_home": 0,
+    "a_away": 1.0645,
+    "d_away": 1.1719,
+    "n_away": 0
   },
   "Estoril": {
     "a": 1.0419,
@@ -596,23 +608,23 @@
     "n_away": 12
   },
   "KFUM Oslo": {
-    "a": 0.7965,
-    "d": 1.2795,
-    "n": 56,
+    "a": 0.8006,
+    "d": 1.2054,
+    "n": 58,
     "a_home": 0.6448,
     "d_home": 1.0088,
     "n_home": 26,
-    "a_away": 0.8446,
-    "d_away": 2.285,
-    "n_away": 14
+    "a_away": 0.853,
+    "d_away": 2.0814,
+    "n_away": 16
   },
   "Sandefjord": {
-    "a": 0.6897,
-    "d": 0.9478,
-    "n": 50,
-    "a_home": 0.414,
-    "d_home": 1.1476,
-    "n_home": 18,
+    "a": 0.6498,
+    "d": 0.9527,
+    "n": 52,
+    "a_home": 0.4,
+    "d_home": 1.159,
+    "n_home": 20,
     "a_away": 1.0463,
     "d_away": 0.8891,
     "n_away": 16
@@ -1557,15 +1569,15 @@
     "n": 15
   },
   "Viborg FF": {
-    "a": 0.9535,
-    "d": 0.9464,
-    "n": 17,
+    "a": 0.8551,
+    "d": 0.8614,
+    "n": 19,
     "a_home": 0.9535,
     "d_home": 0.9464,
     "n_home": 0,
-    "a_away": 0.9535,
-    "d_away": 0.9464,
-    "n_away": 0
+    "a_away": 0.4413,
+    "d_away": 0.5137,
+    "n_away": 2
   },
   "FC Midtjylland": {
     "a": 1.3557,
@@ -2904,15 +2916,15 @@
     "n_away": 3
   },
   "Castellón": {
-    "a": 1.3322,
-    "d": 1.1019,
-    "n": 21,
+    "a": 1.2688,
+    "d": 0.6961,
+    "n": 22,
     "a_home": 1.3322,
     "d_home": 1.1019,
     "n_home": 0,
-    "a_away": 1.3322,
-    "d_away": 1.1019,
-    "n_away": 0
+    "a_away": 0.8249,
+    "d_away": 0.6961,
+    "n_away": 1
   },
   "Cultural Leonesa": {
     "a": 0.6297,
@@ -3266,12 +3278,12 @@
     "n_away": 0
   },
   "SC Cambuur": {
-    "a": 1.1315,
-    "d": 1.0166,
-    "n": 15,
-    "a_home": 1.1315,
-    "d_home": 1.0166,
-    "n_home": 0,
+    "a": 1.0594,
+    "d": 1.0763,
+    "n": 16,
+    "a_home": 0.6986,
+    "d_home": 1.68,
+    "n_home": 1,
     "a_away": 1.1315,
     "d_away": 1.0166,
     "n_away": 0
@@ -5737,12 +5749,12 @@
     "n_away": 0
   },
   "Ceuta": {
-    "a": 0.8842,
-    "d": 1.0946,
-    "n": 18,
-    "a_home": 0.8842,
-    "d_home": 1.0946,
-    "n_home": 0,
+    "a": 0.9044,
+    "d": 1.049,
+    "n": 20,
+    "a_home": 1.0156,
+    "d_home": 0.765,
+    "n_home": 2,
     "a_away": 0.8842,
     "d_away": 1.0946,
     "n_away": 0
@@ -6154,12 +6166,12 @@
     "n_away": 0
   },
   "Huesca": {
-    "a": 0.6989,
-    "d": 1.0291,
-    "n": 27,
-    "a_home": 0.5346,
-    "d_home": 1.0273,
-    "n_home": 1,
+    "a": 1.0711,
+    "d": 0.8525,
+    "n": 33,
+    "a_home": 2.6,
+    "d_home": 0.6751,
+    "n_home": 7,
     "a_away": 0.7178,
     "d_away": 1.0299,
     "n_away": 0
@@ -6356,23 +6368,23 @@
     "n_away": 29
   },
   "Málaga": {
-    "a": 1.5391,
-    "d": 1.2085,
-    "n": 23,
+    "a": 1.4749,
+    "d": 1.2361,
+    "n": 25,
     "a_home": 1.9653,
     "d_home": 1.2085,
     "n_home": 1,
-    "a_away": 1.481,
-    "d_away": 0.9219,
-    "n_away": 0
+    "a_away": 1.0351,
+    "d_away": 1.059,
+    "n_away": 2
   },
   "Leganés": {
-    "a": 0.686,
-    "d": 1.1374,
-    "n": 19,
-    "a_home": 0.686,
-    "d_home": 1.1374,
-    "n_home": 0,
+    "a": 0.738,
+    "d": 0.8866,
+    "n": 20,
+    "a_home": 1.0673,
+    "d_home": 0.8031,
+    "n_home": 1,
     "a_away": 0.686,
     "d_away": 1.1374,
     "n_away": 0
@@ -7061,15 +7073,15 @@
     "n": 7
   },
   "FC Andorra": {
-    "a": 1.2078,
-    "d": 0.6911,
-    "n": 30,
+    "a": 1.0006,
+    "d": 1.0591,
+    "n": 36,
     "a_home": 1.3164,
     "d_home": 0.9079,
     "n_home": 0,
-    "a_away": 0.8702,
-    "d_away": 0.4,
-    "n_away": 10
+    "a_away": 0.572,
+    "d_away": 2.6,
+    "n_away": 16
   },
   "ADO Den Haag": {
     "a": 1.381,
@@ -7083,15 +7095,15 @@
     "n_away": 0
   },
   "Excelsior": {
-    "a": 0.9337,
-    "d": 1.0625,
-    "n": 56,
+    "a": 0.9885,
+    "d": 0.9948,
+    "n": 57,
     "a_home": 0.9337,
     "d_home": 1.0625,
     "n_home": 0,
-    "a_away": 0.9337,
-    "d_away": 1.0625,
-    "n_away": 0
+    "a_away": 1.543,
+    "d_away": 0.656,
+    "n_away": 1
   },
   "FC Utrecht": {
     "a": 1.3015,
@@ -8432,12 +8444,12 @@
     "n_away": 0
   },
   "SC Rheindorf Altach": {
-    "a": 0.7981,
-    "d": 0.8858,
-    "n": 17,
-    "a_home": 0.7981,
-    "d_home": 0.8858,
-    "n_home": 0,
+    "a": 0.8336,
+    "d": 0.8893,
+    "n": 18,
+    "a_home": 1.0344,
+    "d_home": 0.9095,
+    "n_home": 1,
     "a_away": 0.7981,
     "d_away": 0.8858,
     "n_away": 0
@@ -9295,7 +9307,13 @@
   "Troyes": {
     "a": 1.465,
     "d": 0.8049,
-    "n": 14
+    "n": 14,
+    "a_home": 1.465,
+    "d_home": 0.8049,
+    "n_home": 0,
+    "a_away": 1.465,
+    "d_away": 0.8049,
+    "n_away": 0
   },
   "Stade de Reims": {
     "a": 0.8163,
@@ -9415,7 +9433,13 @@
   "Hamburg SV": {
     "a": 0.9405,
     "d": 1.0242,
-    "n": 15
+    "n": 15,
+    "a_home": 0.9405,
+    "d_home": 1.0242,
+    "n_home": 0,
+    "a_away": 0.9405,
+    "d_away": 1.0242,
+    "n_away": 0
   },
   "TSG Hoffenheim": {
     "a": 1.0222,
@@ -9646,15 +9670,15 @@
     "n": 15
   },
   "WSG Swarovski Tirol": {
-    "a": 0.8112,
-    "d": 1.1175,
-    "n": 17,
+    "a": 0.8144,
+    "d": 1.1671,
+    "n": 18,
     "a_home": 0.8112,
     "d_home": 1.1175,
     "n_home": 0,
-    "a_away": 0.8112,
-    "d_away": 1.1175,
-    "n_away": 0
+    "a_away": 0.8329,
+    "d_away": 1.4484,
+    "n_away": 1
   },
   "Wolfsberger": {
     "a": 0.9275,
@@ -9668,17 +9692,23 @@
     "n_away": 0
   },
   "Hellas Verona": {
-    "a": 0.6495,
-    "d": 0.6325,
-    "n": 17
+    "a": 0.5801,
+    "d": 0.6704,
+    "n": 20,
+    "a_home": 0.4,
+    "d_home": 1.0161,
+    "n_home": 3,
+    "a_away": 0.6495,
+    "d_away": 0.6325,
+    "n_away": 0
   },
   "Sønderjyske Fodbold": {
-    "a": 0.8021,
-    "d": 1.3161,
-    "n": 16,
-    "a_home": 0.8021,
-    "d_home": 1.3161,
-    "n_home": 0,
+    "a": 0.7301,
+    "d": 1.1804,
+    "n": 18,
+    "a_home": 0.4354,
+    "d_home": 0.6092,
+    "n_home": 2,
     "a_away": 0.8021,
     "d_away": 1.3161,
     "n_away": 0
@@ -10753,15 +10783,15 @@
     "n_away": 0
   },
   "Cremonese": {
-    "a": 0.6668,
-    "d": 0.9393,
-    "n": 54,
+    "a": 0.7067,
+    "d": 0.839,
+    "n": 57,
     "a_home": 0.6668,
     "d_home": 0.9393,
     "n_home": 0,
-    "a_away": 0.6668,
-    "d_away": 0.9393,
-    "n_away": 0
+    "a_away": 1.0713,
+    "d_away": 0.4713,
+    "n_away": 3
   },
   "Bologna": {
     "a": 1.029,
@@ -10935,7 +10965,13 @@
   "AJ Auxerre": {
     "a": 1.1032,
     "d": 0.8856,
-    "n": 14
+    "n": 14,
+    "a_home": 1.1032,
+    "d_home": 0.8856,
+    "n_home": 0,
+    "a_away": 1.1032,
+    "d_away": 0.8856,
+    "n_away": 0
   },
   "Lorient": {
     "a": 1.0741,
@@ -10978,7 +11014,13 @@
   "FC Cologne": {
     "a": 0.9478,
     "d": 1.2783,
-    "n": 14
+    "n": 14,
+    "a_home": 0.9478,
+    "d_home": 1.2783,
+    "n_home": 0,
+    "a_away": 0.9478,
+    "d_away": 1.2783,
+    "n_away": 0
   },
   "Dundee": {
     "a": 1.2954,
@@ -11565,7 +11607,13 @@
   "Ipswich Town": {
     "a": 1.3012,
     "d": 0.8203,
-    "n": 18
+    "n": 18,
+    "a_home": 1.3012,
+    "d_home": 0.8203,
+    "n_home": 0,
+    "a_away": 1.3012,
+    "d_away": 0.8203,
+    "n_away": 0
   },
   "Cardiff City": {
     "a": 1.7167,
@@ -11835,12 +11883,12 @@
     "n_away": 0
   },
   "Girona": {
-    "a": 0.9276,
-    "d": 1.0931,
-    "n": 94,
-    "a_home": 0.9276,
-    "d_home": 1.0931,
-    "n_home": 0,
+    "a": 0.9976,
+    "d": 1.4078,
+    "n": 101,
+    "a_home": 1.4836,
+    "d_home": 1.4078,
+    "n_home": 7,
     "a_away": 0.9276,
     "d_away": 1.0931,
     "n_away": 0
@@ -12022,15 +12070,15 @@
     "n": 16
   },
   "Crystal Palace": {
-    "a": 0.9991,
-    "d": 0.6064,
-    "n": 104,
+    "a": 1.0644,
+    "d": 0.61,
+    "n": 106,
     "a_home": 0.9991,
     "d_home": 0.6064,
     "n_home": 0,
-    "a_away": 0.9991,
-    "d_away": 0.6064,
-    "n_away": 0
+    "a_away": 1.7228,
+    "d_away": 0.6419,
+    "n_away": 2
   },
   "Shakhtar Donetsk": {
     "a": 1.596,
@@ -12092,12 +12140,12 @@
     "n_away": 0
   },
   "Fulham": {
-    "a": 0.9673,
-    "d": 0.8087,
-    "n": 93,
-    "a_home": 0.9673,
-    "d_home": 0.8087,
-    "n_home": 0,
+    "a": 0.973,
+    "d": 0.8615,
+    "n": 95,
+    "a_home": 1.0239,
+    "d_home": 1.3944,
+    "n_home": 2,
     "a_away": 0.9673,
     "d_away": 0.8087,
     "n_away": 0
@@ -12434,7 +12482,13 @@
   "ADO '20": {
     "a": 0.7432,
     "d": 1.0122,
-    "n": 4
+    "n": 4,
+    "a_home": 0.7432,
+    "d_home": 1.0122,
+    "n_home": 0,
+    "a_away": 0.7432,
+    "d_away": 1.0122,
+    "n_away": 0
   },
   "FC Lisse": {
     "a": 0.5559,
@@ -12465,7 +12519,13 @@
   "IJsselmeervogels": {
     "a": 1.8959,
     "d": 0.5393,
-    "n": 6
+    "n": 6,
+    "a_home": 1.8959,
+    "d_home": 0.5393,
+    "n_home": 0,
+    "a_away": 1.8959,
+    "d_away": 0.5393,
+    "n_away": 0
   },
   "VVSB": {
     "a": 0.6883,
@@ -12475,7 +12535,13 @@
   "Excelsior Maassluis": {
     "a": 1.2439,
     "d": 0.7069,
-    "n": 6
+    "n": 6,
+    "a_home": 1.2439,
+    "d_home": 0.7069,
+    "n_home": 0,
+    "a_away": 1.2439,
+    "d_away": 0.7069,
+    "n_away": 0
   },
   "Qatar": {
     "a": 0.5834,
@@ -12584,7 +12650,13 @@
   "Jong Sparta Rotterdam": {
     "a": 1.2458,
     "d": 1.1392,
-    "n": 2
+    "n": 2,
+    "a_home": 1.2458,
+    "d_home": 1.1392,
+    "n_home": 0,
+    "a_away": 1.2458,
+    "d_away": 1.1392,
+    "n_away": 0
   },
   "Honduras": {
     "a": 0.8776,
@@ -14528,15 +14600,15 @@
     "n_away": 0
   },
   "Mérida": {
-    "a": 0.6934,
-    "d": 0.9854,
-    "n": 1,
+    "a": 0.5405,
+    "d": 1.0601,
+    "n": 2,
     "a_home": 0.6934,
     "d_home": 0.9854,
     "n_home": 0,
-    "a_away": 0.6934,
-    "d_away": 0.9854,
-    "n_away": 0
+    "a_away": 0.4896,
+    "d_away": 1.5332,
+    "n_away": 1
   },
   "Verdes FC": {
     "a": 0.5766,
@@ -20362,7 +20434,13 @@
   "Apoel Nicosia": {
     "a": 0.8966,
     "d": 1.1674,
-    "n": 2
+    "n": 2,
+    "a_home": 0.8966,
+    "d_home": 1.1674,
+    "n_home": 0,
+    "a_away": 0.8966,
+    "d_away": 1.1674,
+    "n_away": 0
   },
   "Jamus": {
     "a": 0.9921,
@@ -34606,7 +34684,13 @@
   "Barbastro": {
     "a": 1.2727,
     "d": 0.8807,
-    "n": 1
+    "n": 1,
+    "a_home": 1.2727,
+    "d_home": 0.8807,
+    "n_home": 0,
+    "a_away": 1.2727,
+    "d_away": 0.8807,
+    "n_away": 0
   },
   "FC Minsk": {
     "a": 1.5097,
@@ -54760,12 +54844,12 @@
     "n_away": 6
   },
   "Racing Luxembourg": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0,
-    "a_home": 1.0,
-    "d_home": 1.0,
-    "n_home": 0,
+    "a": 0.8057,
+    "d": 0.9853,
+    "n": 1,
+    "a_home": 0.8057,
+    "d_home": 0.9023,
+    "n_home": 1,
     "a_away": 1.0,
     "d_away": 1.0,
     "n_away": 0
@@ -59776,15 +59860,15 @@
     "n_away": 1
   },
   "CD Sabadell": {
-    "a": 1.0,
-    "d": 1.0,
-    "n": 0,
+    "a": 1.2879,
+    "d": 1.0756,
+    "n": 7,
     "a_home": 1.0,
     "d_home": 1.0,
     "n_home": 0,
-    "a_away": 1.0,
-    "d_away": 1.0,
-    "n_away": 0
+    "a_away": 1.2879,
+    "d_away": 1.5994,
+    "n_away": 7
   },
   "ROYAL KNOKKE FC": {
     "a": 1.0,
@@ -59919,6 +60003,391 @@
     "n_away": 0
   },
   "Royal Francs Borains": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "ROYAL ANTWERP B": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "U.S.D. Sestri Levante": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Hercules": {
+    "a": 0.6317,
+    "d": 0.9524,
+    "n": 1,
+    "a_home": 0.6317,
+    "d_home": 0.6192,
+    "n_home": 1,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Chiclana": {
+    "a": 0.6478,
+    "d": 0.9697,
+    "n": 1,
+    "a_home": 0.6478,
+    "d_home": 0.9697,
+    "n_home": 1,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Xerez": {
+    "a": 0.9697,
+    "d": 0.6478,
+    "n": 1,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 0.9697,
+    "d_away": 0.6478,
+    "n_away": 1
+  },
+  "AD Alcorcón": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "CD Artistico Navalcarnero": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "CLUB NXT (CLUB BRUGGE)": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "UCAM Murcia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Orihuela": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Gimnastica Segoviana": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Atlético Madrid B": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Real Sporting de Gijón II": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Cristo Atletico": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "EVV": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Noordwijk": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "De Treffers": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "SC Genemuiden": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "HHC Hardenberg": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Koninklijke HFC": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Latte Dolce": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "ASD Torres": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Eupen": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "RFC Seraing": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Olympiakos Nicosia": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "ALS OMONIA": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Atlètic Lleida": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Atletico Astorga": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "REAL CLUB DEPORTIVO FABRIL": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "La Nucía": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Alcoyano": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Real Ávila": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Unionistas de Salamanca": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "Antequera CF": {
+    "a": 1.0,
+    "d": 1.0,
+    "n": 0,
+    "a_home": 1.0,
+    "d_home": 1.0,
+    "n_home": 0,
+    "a_away": 1.0,
+    "d_away": 1.0,
+    "n_away": 0
+  },
+  "ASD SERAVEZZA POZZI": {
     "a": 1.0,
     "d": 1.0,
     "n": 0,
