@@ -726,6 +726,122 @@ def _s_combo_quad(pool, b, bal):
     return [(t, round(bal * 0.012, 2)) for t in ts]
 
 
+AI_MIN_WIN_PROB = 0.58   # pod tuhle hranici AI sázkaři radši nesází, i když je model natrénovaný
+
+
+def _ai_score_pool(pool, min_win_prob):
+    """Společný krok pro všechny AI sázkaře: obohatí kandidáty z poolu o
+    win_prob z natrénovaného ML modelu (engine/ml_learner.py – stejný, co
+    používá agent jako veto), přeskočí ty pod prahem. Bez natrénovaného
+    modelu vrátí prázdno – žádný AI sázkař nemá hádat."""
+    from . import ml_learner
+    learner = ml_learner.get_learner()
+    if learner.model is None:
+        return []
+    scored = []
+    for c in pool:
+        pred = learner.predict_with_confidence({
+            "odds": c["odds"], "prob": c["prob"], "prediction": c["outcome"],
+            "league": c.get("league"), **(c.get("ml_features") or {}),
+        })
+        if pred.get("model_status") != "ready":
+            continue
+        win_prob = pred.get("win_prob", 0.5)
+        if win_prob < min_win_prob:
+            continue
+        # ai_prob nahrazuje "prob" pro tenhle kandidát – kombinace/akumulátory
+        # se pak skládají a řadí podle NÁZORU MODELU, ne podle Poissonova
+        # modelu, i když technicky pořád stojí na stejném poli "prob".
+        scored.append({**c, "prob": win_prob, "raw_prob": c["prob"], "ai_prob": win_prob})
+    return scored
+
+
+def _s_ai_model(pool, b, bal):
+    """AI Adam – nerozhoduje podle syrové ani kalibrované pravděpodobnosti
+    z Poissonova modelu, ale podle SAMOSTATNĚ natrénovaného XGBoost modelu.
+    Ten se učí přímo z toho, jak sázky arény doopravdy dopadly - je to
+    druhý, nezávislý "názor" na každý zápas, ne jen jiné prahování
+    stejného čísla."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    min_win_prob = float(params.get("ai_min_win_prob", AI_MIN_WIN_PROB))
+    scored = _ai_score_pool(pool, min_win_prob)
+    # Řadit podle ML-implikovaného EV (win_prob × kurz), ne jen podle
+    # win_prob samotné - vysoká šance na výhru s kurzem 1.05 nemá cenu.
+    scored.sort(key=lambda c: -(c["prob"] * c["odds"]))
+
+    mult = _progression_multiplier(params, b)
+    out, seen_m, seen_lg = [], set(), set()
+    for c in scored:
+        if c["match_id"] in seen_m:
+            continue
+        if params.get("one_per_league") and c["league"] in seen_lg:
+            continue
+        stake = round(min(bal * float(params.get("stake_pct", 0.025)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+        if stake < 1:
+            continue
+        seen_m.add(c["match_id"]); seen_lg.add(c["league"])
+        out.append((c, stake))
+        if len(out) >= int(params.get("max_bets", 3)):
+            break
+    return out
+
+
+def _s_ai_combo(pool, b, bal):
+    """AI Karel – kombinace dvou trhů STEJNÉHO zápasu, ale obě nohy musí
+    projít přes natrénovaný ML model (win_prob nad prahem), ne přes
+    syrovou/kalibrovanou pravděpodobnost jako ostatní kombo sázkaři."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    min_win_prob = float(params.get("ai_min_win_prob", AI_MIN_WIN_PROB))
+    ai_pool = _ai_score_pool(pool, min_win_prob)
+    if not ai_pool:
+        return []
+    n_legs = int(params.get("legs", 2))
+    if n_legs <= 2:
+        # Dvounohý tiket: jedna noha vítěz, druhá jiný trh (góly/handicap/
+        # dvojtip). Bez týhle diverzity model občas vybere dvě silně
+        # překrývající se varianty téže otázky (např. "1 nebo 2" a "X nebo 2"
+        # najednou) - _combo_pick to správně spočítá jako prakticky nulovou
+        # společnou pravděpodobnost (viz combo_probability ve scoreline gridu),
+        # takže by AI Karel nikdy nic nenašel.
+        wanted = [lambda c: c.get("market") == "winner", lambda c: c.get("market") != "winner"]
+    else:
+        wanted = [lambda c: True for _ in range(n_legs)]   # filtr na win_prob je už v _ai_score_pool
+    ts = _combo_pick(ai_pool, wanted, min_prob=0.02, limit=int(params.get("max_bets", 2)),
+                     sort_key=lambda t: -(t["prob"] * t["odds"]))
+    mult = _progression_multiplier(params, b)
+    out = []
+    for t in ts:
+        stake = round(min(bal * float(params.get("stake_pct", 0.02)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+        if stake < 1:
+            continue
+        out.append((t, stake))
+    return out
+
+
+def _s_ai_acca(pool, b, bal):
+    """AI Klára – akumulátor z RŮZNÝCH zápasů, každá noha musí mít ML
+    win_prob nad prahem (ne syrovou/kalibrovanou pravděpodobnost)."""
+    params = normalize_params(b.get("params"))
+    if params.get("pause_after_losses") and b.get("loss_streak", 0) >= int(params["pause_after_losses"]):
+        return []
+    min_win_prob = float(params.get("ai_min_win_prob", AI_MIN_WIN_PROB))
+    ai_pool = _ai_score_pool(pool, min_win_prob)
+    if not ai_pool:
+        return []
+    n_legs = int(params.get("legs", 3))
+    legs = _acca_pick(ai_pool, n_legs, lambda c: -(c["prob"] * c["odds"]))
+    if not legs:
+        return []
+    t = _ticket(legs, "acca")
+    mult = _progression_multiplier(params, b)
+    stake = round(min(bal * float(params.get("stake_pct", 0.02)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+    return [(t, stake)] if stake >= 1 else []
+
+
 PROFILES = [
     {"id": "kelly", "name": "Kelly Kateřina", "emoji": "📐",
      "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
@@ -873,6 +989,22 @@ PROFILES = [
     {"id": "combo_quad", "name": "Čtyřkombinace Čestmír", "emoji": "🎲",
      "tagline": "Čtyři trhy jednoho zápasu naráz – extrémně agresivní, drobný vklad.",
      "strategy": _s_combo_quad, "group": "combo"},
+    # --- AI sázkaři: rozhodují podle natrénovaného ML modelu, ne podle
+    # Poissonova modelu ani jeho kalibrace – druhý, nezávislý pohled, po
+    # jednom pro každou kategorii ---
+    {"id": "ai_model", "name": "AI Adam", "emoji": "🤖",
+     "tagline": "Sází podle natrénovaného ML modelu (XGBoost) místo syrové "
+                "pravděpodobnosti z modelu skóre – dokud model není natrénovaný "
+                "na dost datech, radši nesází vůbec.",
+     "strategy": _s_ai_model, "group": "single"},
+    {"id": "ai_combo", "name": "AI Karel", "emoji": "🤖🔗",
+     "tagline": "Kombinace dvou trhů jednoho zápasu – obě nohy musí projít "
+                "přes natrénovaný ML model, ne přes syrovou pravděpodobnost.",
+     "strategy": _s_ai_combo, "group": "combo"},
+    {"id": "ai_acca", "name": "AI Klára", "emoji": "🤖🎯",
+     "tagline": "Akumulátor tří zápasů – každá noha musí projít přes "
+                "natrénovaný ML model, ne přes syrovou pravděpodobnost.",
+     "strategy": _s_ai_acca, "group": "acca"},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
 
@@ -910,7 +1042,8 @@ def default_params() -> dict:
             # bývá přehnaně sebejistá, takže sázka s "dobrým EV" podle ní ve
             # skutečnosti dlouhodobě prodělává (zjištěno na aréně: jednotlivé sázky
             # měly 53% win rate, ale přesto -12,9 % ROI).
-            "legs": 2, "leg_min_prob": 0.55, "require_positive_ev": False}
+            "legs": 2, "leg_min_prob": 0.55, "require_positive_ev": False,
+            "ai_min_win_prob": AI_MIN_WIN_PROB}
 
 
 def normalize_params(params: dict) -> dict:

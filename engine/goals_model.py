@@ -496,6 +496,16 @@ def _outcome_hits(outcome: str, i: int, j: int) -> bool:
         return i > 0 and j > 0
     if outcome == "btts_no":
         return not (i > 0 and j > 0)
+    if outcome == "dc_1x":
+        return i >= j
+    if outcome == "dc_12":
+        return i != j
+    if outcome == "dc_x2":
+        return i <= j
+    if outcome == "dnb_home":
+        return i > j
+    if outcome == "dnb_away":
+        return j > i
     if outcome.startswith("over"):
         return total > float(outcome[4:])
     if outcome.startswith("under"):

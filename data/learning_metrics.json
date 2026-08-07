@@ -1,13 +1,13 @@
 {
   "status": "trained",
-  "accuracy": 0.7733050847457628,
-  "last_trained": "2026-08-07T06:42:19.874064",
-  "total_feedback": 2413,
-  "training_samples": 1888,
-  "test_samples": 472,
-  "auc": 0.8768918073796124,
-  "precision": 0.41134751773049644,
-  "recall": 0.7073170731707317,
-  "win_rate": 0.5063559322033898,
+  "accuracy": 0.8037974683544303,
+  "last_trained": "2026-08-07T16:18:50.948364",
+  "total_feedback": 2425,
+  "training_samples": 1894,
+  "test_samples": 474,
+  "auc": 0.8954910258281044,
+  "precision": 0.4863013698630137,
+  "recall": 0.797752808988764,
+  "win_rate": 0.5047518479408659,
   "model_version": 2
 }
