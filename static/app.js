@@ -2163,6 +2163,11 @@ function renderArenaBody() {
   const uspesnost = vyresene ? (vyhry / vyresene * 100) : null;
   const nejlepsi = list.reduce((a, x) => (!a || (x.profit || 0) > (a.profit || 0)) ? x : a, null);
   const vPlusu = list.filter(b => (b.profit || 0) > 0).length;
+  // Vážený průměr CLV napříč sázkaři kategorie – nejspolehlivější ukazatel
+  // skutečné výhody, nezávislý na krátkodobé smůle výsledků.
+  const clvSum = list.reduce((a, x) => a + (x.avg_clv || 0) * (x.clv_n || 0), 0);
+  const clvN = list.reduce((a, x) => a + (x.clv_n || 0), 0);
+  const avgClv = clvN ? clvSum / clvN : null;
 
   const razeno = [...list].sort((a, b) => {
     const k = _arenaSort.key;
@@ -2196,6 +2201,11 @@ function renderArenaBody() {
         <div class="label">Vede</div>
         <div class="value" style="font-size:17px;">${nejlepsi ? nejlepsi.emoji + ' ' + nejlepsi.name : '—'}</div>
         <div class="hint">${nejlepsi ? ((nejlepsi.profit >= 0 ? '+' : '') + fmt(nejlepsi.profit) + ' Kč') : ''}</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Průměrné CLV</div>
+        <div class="value ${avgClv !== null && avgClv >= 0 ? 'pos' : avgClv !== null ? 'bad' : ''}">${avgClv !== null ? (avgClv >= 0 ? '+' : '') + pct(avgClv) : '—'}</div>
+        <div class="hint">${clvN ? `z ${clvN} sázek/noh` : 'zatím žádná data'}</div>
       </div>
     </div>
 
@@ -2393,15 +2403,25 @@ async function toggleBettorDetail(id, sourceEl) {
         ${perfTable(bd.sport, 'Podle sportu')}
         ${perfTable(bd.market, 'Podle typu trhu')}
         ${perfTable(bd.league?.slice(0, 6), 'Top ligy')}
+        ${perfTable(bd.weekday, 'Podle dne v týdnu')}
+        ${perfTable(bd.hour, 'Podle denní doby výkopu')}
       </div>
       ${bl.length ? `<div class="perf-blacklist">🚫 Automaticky vyřazené sporty: <b>${bl.join(', ')}</b> — sázkař na ně po ≥15 sázkách má záporné ROI a přestal na ně sázet.</div>` : ''}
     ` : '';
+    // CLV (closing line value) - nejspolehlivější ukazatel skutečné výhody,
+    // nezávislý na krátkodobé smůle výsledků. avg_clv > 0 = sázkař bere
+    // lepší cenu, než jaká byla těsně před výkopem.
+    const clvHtml = (data.clv_n > 0) ? `
+      <div class="perf-clv">
+        📐 Průměrné CLV: <strong class="${data.avg_clv >= 0 ? 'pos' : 'bad'}">${data.avg_clv >= 0 ? '+' : ''}${pct(data.avg_clv)}</strong>
+        <span class="muted">(z ${data.clv_n} sázek/noh) – ${data.avg_clv >= 0 ? 'bere lepší cenu, než byla těsně před výkopem' : 'bere horší cenu, než byla těsně před výkopem'}</span>
+      </div>` : '';
     // pohyby na banku se ukážou i u sázkaře, co ještě nestihl vsadit
     if (!bets.length) {
-      box.innerHTML = txHtml + breakdownHtml + '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>';
+      box.innerHTML = txHtml + clvHtml + breakdownHtml + '<div class="empty-state" style="padding:14px 0;">Zatím žádné sázky</div>';
       return;
     }
-    box.innerHTML = txHtml + breakdownHtml + `<div class="table-wrap"><table>
+    box.innerHTML = txHtml + clvHtml + breakdownHtml + `<div class="table-wrap"><table>
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr${bt.legs ? ' class="ticket-row"' : ''}>
@@ -2517,6 +2537,8 @@ async function generateBettorFromData() {
 // ---------------------------------------------------------------------------
 const NOTIF_SEEN_BETS_KEY = 'kurzanalytik_notif_seen_bets';
 const NOTIF_LAST_TIP_KEY = 'kurzanalytik_notif_last_tip';
+const NOTIF_BETTOR_EXTREMES_KEY = 'kurzanalytik_notif_bettor_extremes';
+const NOTIF_AI_READY_KEY = 'kurzanalytik_notif_ai_ready';
 const NOTIF_POLL_MS = 3 * 60 * 1000;
 
 /** Systemove notifikace prohlizec pousti jen v "zabezpecenem kontextu",
@@ -2613,6 +2635,44 @@ async function pollForNotifications() {
       }
     }
     localStorage.setItem(NOTIF_SEEN_BETS_KEY, JSON.stringify(settled.map(b => b.id)));
+  } catch (e) { /* nic */ }
+
+  // Nové maximum/minimum banku u sázkaře v aréně
+  try {
+    const bd = await api('/api/bettors', { timeoutMs: 20000 });
+    const extremes = JSON.parse(localStorage.getItem(NOTIF_BETTOR_EXTREMES_KEY) || '{}');
+    let changed = false;
+    for (const b of bd.bettors || []) {
+      const prev = extremes[b.id];
+      if (!prev) {
+        // první běh po zapnutí – jen zapamatovat, ne hned troubit
+        extremes[b.id] = { max: b.balance, min: b.balance };
+        changed = true;
+        continue;
+      }
+      if (b.balance > prev.max) {
+        notify('📈 Nové maximum banku', `${b.emoji} ${b.name} – ${fmt(b.balance)} Kč (dřívější max ${fmt(prev.max)} Kč)`);
+        prev.max = b.balance;
+        changed = true;
+      } else if (b.balance < prev.min) {
+        notify('📉 Nové minimum banku', `${b.emoji} ${b.name} – ${fmt(b.balance)} Kč (dřívější min ${fmt(prev.min)} Kč)`);
+        prev.min = b.balance;
+        changed = true;
+      }
+    }
+    if (changed) localStorage.setItem(NOTIF_BETTOR_EXTREMES_KEY, JSON.stringify(extremes));
+  } catch (e) { /* nic */ }
+
+  // AI sázkaři – upozornit, když natrénovaný model přestane být použitelný
+  // (typicky ztráta po redeployi bez zálohy) – jinak by AI Adam/Karel/Klára
+  // jen tiše přestali sázet a nikdo by nevěděl proč.
+  try {
+    const st = await api('/api/bettors/ai-status', { timeoutMs: 15000 });
+    const prevReady = localStorage.getItem(NOTIF_AI_READY_KEY);
+    if (prevReady === 'true' && !st.model_ready) {
+      notify('🤖 AI sázkaři nemají model', 'ML model přestal být natrénovaný – AI Adam/Karel/Klára teď nebudou sázet, dokud se znovu nepřetrénuje.');
+    }
+    localStorage.setItem(NOTIF_AI_READY_KEY, String(!!st.model_ready));
   } catch (e) { /* nic */ }
 }
 

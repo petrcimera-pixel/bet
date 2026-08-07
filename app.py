@@ -161,6 +161,7 @@ def _predictions_for(date_str: str, days: int = 1, sport: str = "soccer", refres
                               if v.get("real") and v.get("odds")}
                     for p in predictions if p.get("result") is None}
         bankroll.track_closing_odds(cur_odds)
+        virtual_bettors.track_closing_odds(cur_odds)
     except Exception:
         pass
     # Automaticky uloží nové tipy na pozadí (nesynchronně, aby nezdržovalo odpověď)
@@ -1956,6 +1957,31 @@ def api_bettors_status():
 def api_bettor_groups():
     """Srovnání kategorií sázkařů – vyplácí se skládat tikety?"""
     return jsonify(virtual_bettors.group_comparison())
+
+
+@app.route("/api/bettors/ai-status")
+@login_required
+def api_bettors_ai_status():
+    """Je natrénovaný ML model, na kterém stojí AI Adam/Karel/Klára,
+    použitelný? Frontend na tohle upozorní, když se model "ztratí"
+    (např. po redeployi bez zálohy) – bez toho AI sázkaři jen tiše
+    přestanou sázet a nikdo by nevěděl proč."""
+    try:
+        from engine import ml_learner
+        learner = ml_learner.get_learner()
+        ready = learner.model is not None
+    except Exception:
+        ready = False
+    return jsonify({"model_ready": ready})
+
+
+@app.route("/api/bettors/breakdown/time")
+@login_required
+def api_bettors_breakdown_time():
+    """Rozklad podle dne v týdnu / denní doby výkopu napříč VŠEMI sázkami
+    arény – mnohem větší vzorek než u jednoho sázkaře, ukáže vzorce
+    v modelu samotném."""
+    return jsonify(virtual_bettors.arena_time_breakdown())
 
 
 @app.route("/api/bettors/calibration")

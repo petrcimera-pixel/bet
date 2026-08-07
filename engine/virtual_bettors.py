@@ -11,6 +11,7 @@ data/virtual_bettors.json, vlastní vyhodnocování napojené na stejné ESPN
 výsledky, co používá settle smyčka pro tipy/sázky.
 """
 
+import datetime
 import random
 import time
 import uuid
@@ -2103,6 +2104,14 @@ def _bettor_stats(bid, b):
     for x in sorted(settled, key=lambda x: x.get("settled_ts") or x["ts"]):
         cum = round(cum + x["pnl"], 2)
         equity.append(cum)
+    # CLV napříč jednotlivými sázkami i nohami tiketů – nejspolehlivější
+    # ukazatel skutečné výhody nezávislý na krátkodobé smůle výsledků.
+    clvs = []
+    for x in b["bets"]:
+        if x.get("legs"):
+            clvs.extend(l["clv"] for l in x["legs"] if l.get("clv") is not None)
+        elif x.get("clv") is not None:
+            clvs.append(x["clv"])
     return {
         "id": bid, "name": b["name"], "emoji": b["emoji"], "tagline": b["tagline"],
         "group": b.get("group") or (_BY_ID.get(bid, {}) or {}).get("group", "single"),
@@ -2122,7 +2131,60 @@ def _bettor_stats(bid, b):
         "open_count": sum(1 for x in b["bets"] if x["status"] == "open"),
         "void_count": sum(1 for x in b["bets"] if x["status"] == "void"),
         "equity": equity,
+        "avg_clv": round(sum(clvs) / len(clvs) * 100, 2) if clvs else None,
+        "clv_n": len(clvs),
     }
+
+
+def _clv(odds, consensus_odds):
+    """Náskok kurzu nad tržním konsenzem (stejný vzorec jako bankroll._clv,
+    ale pro arénu): >0 = sázkař vzal lepší cenu, než jaká byla těsně
+    před výkopem. Na rozdíl od zisku dává smysl už po pár desítkách
+    sázek, protože nezávisí na tom, jestli zrovna padl gól."""
+    try:
+        co = float(consensus_odds)
+        if co > 0:
+            return round(float(odds) / co - 1.0, 4)
+    except (TypeError, ValueError):
+        pass
+    return None
+
+
+def track_closing_odds(match_odds: dict) -> int:
+    """Zapíše k VŠEM otevřeným sázkám arény (i nohám tiketů) aktuální kurz
+    trhu – closing line value, viz bankroll.track_closing_odds (stejný
+    princip, jen pro celou arénu místo jednoho agentova bankrollu).
+    match_odds: {match_id: {outcome: odds}} z čerstvých predikcí."""
+    if not match_odds:
+        return 0
+    st = load_state()
+    n = 0
+    for b in st.values():
+        for bet in b.get("bets", []):
+            if bet.get("status") != "open":
+                continue
+            legs = bet.get("legs")
+            if legs:
+                changed = False
+                for leg in legs:
+                    cur = (match_odds.get(leg.get("match_id")) or {}).get(leg.get("outcome"))
+                    if not cur or leg.get("closing_odds") == cur:
+                        continue
+                    leg["closing_odds"] = round(float(cur), 3)
+                    leg["clv"] = _clv(leg.get("odds"), cur)
+                    changed = True
+                if changed:
+                    n += 1
+            else:
+                cur = (match_odds.get(bet.get("match_id")) or {}).get(bet.get("outcome"))
+                if not cur or bet.get("closing_odds") == cur:
+                    continue
+                bet["closing_odds"] = round(float(cur), 3)
+                bet["clv"] = _clv(bet.get("odds"), cur)
+                n += 1
+    if n:
+        save_state(st)
+    return n
 
 
 def leaderboard() -> list:
@@ -2174,6 +2236,74 @@ def _perf_breakdown(bets: list, key: str) -> list:
     return sorted(by.values(), key=lambda x: -x["pnl"])
 
 
+_WEEKDAY_CZ = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
+_HOUR_BUCKETS = [(5, 12, "ráno (5–12)"), (12, 17, "odpoledne (12–17)"),
+                 (17, 22, "večer (17–22)"), (22, 29, "noc (22–5)")]
+
+
+def _perf_breakdown_time(bets: list) -> dict:
+    """Rozklad VYHODNOCENÝCH sázek podle dne v týdnu a denní doby výkopu –
+    ukáže, jestli sázkař (a model pod ním) funguje v některé dny/hodiny
+    systematicky lépe nebo hůř. Bez tohohle appka žádný takový vzorec
+    nikde neukazovala, i když data (match_date/match_time u každé sázky)
+    má celou dobu."""
+    by_day, by_hour = {}, {}
+    for x in bets:
+        if x.get("status") not in ("won", "lost"):
+            continue
+        d, t = x.get("match_date"), x.get("match_time")
+        wd_key = None
+        if d:
+            try:
+                wd_key = _WEEKDAY_CZ[datetime.date.fromisoformat(d).weekday()]
+            except (ValueError, TypeError):
+                pass
+        hr_key = None
+        if t:
+            try:
+                hr = int(str(t).split(":")[0]) % 24
+                if hr < 5:
+                    hr += 24   # půlnoc až 5:00 patří do noční směny (22-5)
+                for lo, hi, label in _HOUR_BUCKETS:
+                    if lo <= hr < hi:
+                        hr_key = label
+                        break
+            except (ValueError, TypeError):
+                pass
+        for key, store in ((wd_key, by_day), (hr_key, by_hour)):
+            if key is None:
+                continue
+            d2 = store.setdefault(key, {"key": key, "n": 0, "won": 0, "staked": 0.0, "pnl": 0.0})
+            d2["n"] += 1
+            d2["won"] += 1 if x["status"] == "won" else 0
+            d2["staked"] += x.get("stake", 0)
+            d2["pnl"] += x.get("pnl", 0)
+
+    def finalize(store, order):
+        for d2 in store.values():
+            d2["win_rate"] = round(d2["won"] / d2["n"] * 100, 1) if d2["n"] else 0.0
+            d2["roi"] = round(d2["pnl"] / d2["staked"] * 100, 1) if d2["staked"] else 0.0
+            d2["pnl"] = round(d2["pnl"], 2)
+            d2["staked"] = round(d2["staked"], 2)
+        return [store[k] for k in order if k in store]
+
+    return {
+        "weekday": finalize(by_day, _WEEKDAY_CZ),
+        "hour": finalize(by_hour, [b[2] for b in _HOUR_BUCKETS]),
+    }
+
+
+def arena_time_breakdown() -> dict:
+    """Stejné jako _perf_breakdown_time, ale napříč VŠEMI sázkami arény
+    (ne jen jednoho sázkaře) – mnohem větší vzorek, ukáže vzorce v modelu
+    samotném, ne jen šum jedné strategie."""
+    st = load_state()
+    all_bets = []
+    for b in st.values():
+        all_bets.extend(b.get("bets", []))
+    return _perf_breakdown_time(all_bets)
+
+
 def bettor_detail(bid: str) -> dict:
     st = load_state()
     b = st.get(bid)
@@ -2190,6 +2320,7 @@ def bettor_detail(bid: str) -> dict:
         "sport": _perf_breakdown(b.get("bets", []), "sport"),
         "market": _perf_breakdown(b.get("bets", []), "outcome"),
         "league": _perf_breakdown(b.get("bets", []), "league"),
+        **_perf_breakdown_time(b.get("bets", [])),
     }
     stats["blacklisted_sports"] = sorted(_blacklisted_sports(b))
     return stats
@@ -2249,7 +2380,7 @@ def group_comparison() -> dict:
                                "emoji": GROUPS.get(g, {}).get("emoji", ""),
                                "bettors": 0, "start": 0.0, "balance": 0.0,
                                "staked": 0.0, "pnl": 0.0, "settled": 0, "won": 0,
-                               "open_stake": 0.0, "_events": []})
+                               "open_stake": 0.0, "_events": [], "_clvs": []})
         d["bettors"] += 1
         d["start"] += b.get("start_balance", 0.0)
         d["balance"] += b.get("balance", 0.0)
@@ -2262,12 +2393,18 @@ def group_comparison() -> dict:
                 d["_events"].append((x.get("settled_ts") or x["ts"], x["pnl"]))
             elif x["status"] == "open":
                 d["open_stake"] += x["stake"]
+            if x.get("legs"):
+                d["_clvs"].extend(l["clv"] for l in x["legs"] if l.get("clv") is not None)
+            elif x.get("clv") is not None:
+                d["_clvs"].append(x["clv"])
 
     for d in out.values():
         cum, curve = 0.0, [0.0]
         for _, pnl in sorted(d.pop("_events")):
             cum = round(cum + pnl, 2)
             curve.append(cum)
+        clvs = d.pop("_clvs")
+        d["avg_clv"] = round(sum(clvs) / len(clvs) * 100, 2) if clvs else None
         # křivka se zkrátí na rozumný počet bodů, ať se dá vykreslit
         if len(curve) > 60:
             step = len(curve) / 60.0
