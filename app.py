@@ -1719,6 +1719,36 @@ def api_ratings_backfill_archive():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/ratings/merge-duplicates", methods=["POST"])
+@login_required
+def api_ratings_merge_duplicates():
+    """Jednorázová oprava: sloučí ratingy/historii týmů rozdělené kvůli
+    diakritice mezi zdroji dat (viz goals_model._norm_team)."""
+    try:
+        res = pred.merge_duplicate_team_names()
+        _PRED_CACHE.clear()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/ratings/reset-home-away-split", methods=["POST"])
+@login_required
+def api_ratings_reset_home_away_split():
+    """Jednorázová oprava dvojitého započítání domácí výhody (viz
+    goals_model.reset_home_away_split) - resetuje a_home/d_home/a_away/
+    d_away na neutrální hodnoty, ať se od teď učí znovu opraveným
+    vzorcem místo dál používat zkreslená data."""
+    try:
+        res = pred.reset_home_away_split()
+        _PRED_CACHE.clear()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/model/benchmark")
 @login_required
 def api_model_benchmark():

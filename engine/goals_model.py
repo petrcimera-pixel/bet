@@ -17,9 +17,25 @@ Zásadní změna oproti staré verzi (engine/prediction.py):
 
 import datetime
 import math
+import unicodedata
 
 from . import storage
 from . import data_sources as ds
+
+
+def _norm_team(name: str) -> str:
+    """Kanonický klíč pro tým v ratings/history slovnících – bez diakritiky.
+
+    ESPN a football-data.co.uk (viz footballdata.py, archivní historie)
+    zapisují stejný tým jinak: "Beşiktaş" vs "Besiktas", "Grêmio" vs
+    "Gremio". Bez normalizace appka drží DVĚ oddělené, řídké položky
+    ratingu pro tentýž tým místo jedné bohaté – 73 týmů (146 záznamů)
+    takhle fragmentovaných po archivním backfillu. Zobrazované jméno
+    (v UI, tiketech) se NEMĚNÍ – tohle je jen interní klíč."""
+    if not name:
+        return name
+    decomposed = unicodedata.normalize("NFKD", name)
+    return "".join(c for c in decomposed if not unicodedata.combining(c)).strip()
 
 MAX_GOALS = 8
 DC_RHO = -0.13          # Dixon-Coles korekce nízkých skóre (standardní hodnota z literatury)
@@ -174,6 +190,7 @@ def _save_ratings(r: dict) -> None:
 
 
 def get_rating(team: str, ratings: dict) -> dict:
+    team = _norm_team(team)
     if team not in ratings:
         ratings[team] = {"a": 1.0, "d": 1.0, "n": 0}
     r = ratings[team]
@@ -248,7 +265,7 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
     entry_a = {"date": date, "opponent": home, "league": league, "sport": sport,
                "loc": "away", "gf": as_, "ga": hs,
                "result": "W" if as_ > hs else "L" if as_ < hs else "D"}
-    for team, entry in ((home, entry_h), (away, entry_a)):
+    for team, entry in ((_norm_team(home), entry_h), (_norm_team(away), entry_a)):
         lst = hist.setdefault(team, [])
         lst.append(entry)
         lst.sort(key=lambda e: e.get("date", ""))
@@ -260,14 +277,15 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
 
 def team_form(team: str, n: int = 5) -> list:
     """Posledních n výsledků týmu jako list 'W'/'D'/'L', nejnovější poslední."""
-    hist = _team_history().get(team, [])
+    hist = _team_history().get(_norm_team(team), [])
     return [e["result"] for e in hist[-n:]]
 
 
 def head_to_head(team_a: str, team_b: str, n: int = 5) -> list:
     """Posledních n vzájemných zápasů mezi dvěma týmy, nejnovější první."""
-    hist = _team_history().get(team_a, [])
-    matches = [e for e in hist if e.get("opponent") == team_b]
+    hist = _team_history().get(_norm_team(team_a), [])
+    team_b_norm = _norm_team(team_b)
+    matches = [e for e in hist if _norm_team(e.get("opponent", "")) == team_b_norm]
     return list(reversed(matches[-n:]))
 
 
@@ -349,10 +367,27 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     # n_home/n_away, ne celkového n) a vlastní počítadlo. Domácí tým se učí
     # jen na SVÝCH domácích zápasech, hostující tým jen na SVÝCH venkovních –
     # jinak by týmy, co doma hrají silněji, tenhle rozdíl nikdy nezachytily.
+    #
+    # DŮLEŽITÉ: ratio_h se počítá proti exp_h, který už v sobě má
+    # HOME_ADV_FACTOR (pevný násobič +12 % za výhodu prostředí) - kdyby se
+    # ratio_h použil i pro učení a_home/d_home, split by se učil "co zbylo
+    # po odečtení fixního bonusu", ne skutečnou domácí sílu, a v průměru by
+    # táhl a_home dolů (dvojité započítání domácí výhody, jednou fixně,
+    # podruhé se to samé odečítalo přes split). Benchmark to potvrdil:
+    # týmy s dost domácími zápasy měly a_home systematicky NIŽŠÍ než
+    # celkové a, i když doma hrají líp - model tak v průměru dával domácím
+    # jen 31 % šance na výhru místo reálných ~43 %. Split se proto učí
+    # proti "neutrálnímu" očekávání bez fixního násobiče, ať zachycuje jen
+    # to, co fixní bonus nepokryl, místo aby s ním soupeřil.
+    if not sport or sport == "soccer":
+        exp_h_neutral = max(0.35, raw_h / HOME_ADV_FACTOR)
+        ratio_h_home = (hs + prior_h) / (exp_h_neutral + prior_h)
+    else:
+        ratio_h_home = ratio_h
     alpha_h_home = max(0.06, 2.0 / (rh.get("n_home", 0) + 3.0))
     alpha_a_away = max(0.06, 2.0 / (ra.get("n_away", 0) + 3.0))
-    rh["a_home"] = _clamp(rh.get("a_home", rh["a"]) * (1 + alpha_h_home * (ratio_h - 1)))
-    ra["d_away"] = _clamp(ra.get("d_away", ra["d"]) * (1 + alpha_h_home * (ratio_h - 1)))
+    rh["a_home"] = _clamp(rh.get("a_home", rh["a"]) * (1 + alpha_h_home * (ratio_h_home - 1)))
+    ra["d_away"] = _clamp(ra.get("d_away", ra["d"]) * (1 + alpha_h_home * (ratio_h_home - 1)))
     ra["a_away"] = _clamp(ra.get("a_away", ra["a"]) * (1 + alpha_a_away * (ratio_a - 1)))
     rh["d_home"] = _clamp(rh.get("d_home", rh["d"]) * (1 + alpha_a_away * (ratio_a - 1)))
     rh["n_home"] = rh.get("n_home", 0) + 1
@@ -363,6 +398,83 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     if own_ratings:
         _save_ratings(ratings)
     return True
+
+
+def reset_home_away_split() -> dict:
+    """Jednorázová oprava: donedávna se a_home/d_home učily proti
+    očekávání, které UŽ obsahovalo fixní HOME_ADV_FACTOR bonus (dvojité
+    započítání domácí výhody) - u týmů s dost domácími zápasy to v
+    průměru srazilo a_home POD reálnou hodnotu, takže model dával
+    domácím jen ~31 % šance na výhru místo reálných ~43 % (viz
+    update_from_result, kde se teď ratio_h_home počítá proti neutrálnímu
+    očekávání bez tohohle bonusu).
+
+    Existující a_home/d_home/a_away/d_away se ale opravou vzorce samy
+    nespraví - jsou to už nahromaděné, zkreslené hodnoty. Resetuje je na
+    neutrální (rovné celkovému a/d) a n_home/n_away na 0, ať
+    effective_ab() dočasně padá zpátky na celkový rating (bez zkreslení)
+    a split se od teď učí znovu, tentokrát opraveným vzorcem."""
+    ratings = _ratings()
+    n = 0
+    for r in ratings.values():
+        if r.get("n_home", 0) == 0 and r.get("n_away", 0) == 0:
+            continue
+        r["a_home"], r["d_home"] = r["a"], r["d"]
+        r["a_away"], r["d_away"] = r["a"], r["d"]
+        r["n_home"], r["n_away"] = 0, 0
+        n += 1
+    _save_ratings(ratings)
+    return {"teams_reset": n}
+
+
+def merge_duplicate_team_names() -> dict:
+    """Jednorázová oprava: appka donedávna neuměla _norm_team() (bez
+    diakritiky), takže tentýž tým zapsaný různě mezi zdroji (ESPN
+    "Beşiktaş" vs football-data.co.uk "Besiktas") měl DVĚ oddělené,
+    řídké položky ratingu/historie místo jedné bohaté. Pro každou takovou
+    skupinu nechá tu s VÍC odehranými zápasy (spolehlivější signál) a
+    chudší zahodí - nezkouší je numericky sléva – dvě různé EMA stopy by
+    se blendem nesprávně zkreslily. Po zavedení _norm_team() do
+    get_rating/team_form/atd. se appka do budoucna už nikdy takhle
+    nerozštěpí; tohle jen uklidí, co se nastřádalo předtím."""
+    ratings = _ratings()
+    r_groups = {}
+    for name in list(ratings):
+        r_groups.setdefault(_norm_team(name), []).append(name)
+    r_merged = 0
+    for canon, names in r_groups.items():
+        if len(names) == 1:
+            if names[0] != canon:
+                ratings[canon] = ratings.pop(names[0])
+            continue
+        names.sort(key=lambda n: ratings[n].get("n", 0), reverse=True)
+        entry = ratings.pop(names[0])
+        for loser in names[1:]:
+            del ratings[loser]
+            r_merged += 1
+        ratings[canon] = entry
+    _save_ratings(ratings)
+
+    hist = _team_history()
+    h_groups = {}
+    for name in list(hist):
+        h_groups.setdefault(_norm_team(name), []).append(name)
+    h_merged = 0
+    for canon, names in h_groups.items():
+        if len(names) == 1:
+            if names[0] != canon:
+                hist[canon] = hist.pop(names[0])
+            continue
+        combined = []
+        for n in names:
+            combined.extend(hist.pop(n))
+        combined.sort(key=lambda e: e.get("date", ""))
+        del combined[:-_HISTORY_MAX_PER_TEAM]
+        hist[canon] = combined
+        h_merged += len(names) - 1
+    storage.save(_HISTORY_FILE, hist)
+
+    return {"ratings_groups_merged": r_merged, "history_names_merged": h_merged}
 
 
 def backfill_ratings(days_back: int = 60, sport: str = "soccer",
@@ -860,7 +972,7 @@ def _team_rest_days(team: str, match_date: str) -> int:
     zápasu. None když chybí historie nebo datum – pak se nic neupravuje."""
     if not match_date:
         return None
-    hist = _team_history().get(team) or []
+    hist = _team_history().get(_norm_team(team)) or []
     if not hist:
         return None
     last_date = hist[-1].get("date")

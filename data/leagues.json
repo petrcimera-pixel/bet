@@ -1,5 +1,5 @@
 {
-  "ts": 1785697058,
+  "ts": 1786999023,
   "slugs": [
     [
       "fifa.world",
@@ -426,10 +426,6 @@
       "Africa"
     ],
     [
-      "caf.championship_qual",
-      "Africa"
-    ],
-    [
       "can.w.nsl",
       "Canada"
     ],
@@ -448,6 +444,14 @@
     [
       "fifa.intercontinental_cup",
       "World"
+    ],
+    [
+      "afc.champions_qual",
+      "Asia"
+    ],
+    [
+      "afc.cup_qual",
+      "Asia"
     ],
     [
       "nonfifa",
@@ -586,18 +590,6 @@
       "England"
     ],
     [
-      "eng.fa_qual",
-      "England"
-    ],
-    [
-      "usa.ncaa.m.1",
-      "USA"
-    ],
-    [
-      "usa.ncaa.w.1",
-      "USA"
-    ],
-    [
       "sco.1.promotion.relegation",
       "Scotland"
     ],
@@ -611,10 +603,6 @@
     ],
     [
       "sco.challenge",
-      "Scotland"
-    ],
-    [
-      "sco.tennents_qual",
       "Scotland"
     ],
     [
@@ -830,10 +818,6 @@
       "Guatemala"
     ],
     [
-      "afc.cup_qual",
-      "Asia"
-    ],
-    [
       "slv.1",
       "El Salvador"
     ],
@@ -854,15 +838,7 @@
       "India"
     ],
     [
-      "ind.2",
-      "India"
-    ],
-    [
       "global.gulf_cup",
-      "World"
-    ],
-    [
-      "bangabandhu.cup",
       "World"
     ],
     [
@@ -880,6 +856,14 @@
     [
       "rsa.1",
       "South Africa"
+    ],
+    [
+      "usa.ncaa.m.1",
+      "USA"
+    ],
+    [
+      "usa.ncaa.w.1",
+      "USA"
     ]
   ]
 }
