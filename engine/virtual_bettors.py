@@ -788,7 +788,15 @@ def _s_ai_model(pool, b, bal):
             continue
         if params.get("one_per_league") and c["league"] in seen_lg:
             continue
-        stake = round(min(bal * float(params.get("stake_pct", 0.025)) * mult, bal * DAILY_STAKE_CAP_PCT), 2)
+        if params.get("stake_mode") == "kelly":
+            # Kelly z ML win_prob místo Poissonovy pravděpodobnosti - jiný
+            # vstup do stejného vzorce, ať má tahle varianta jinou "osobnost"
+            # (roste rychleji na hodně sebejistých tipech) než flat sázkaři.
+            stake = _kelly_stake(c["prob"], c["odds"], bal,
+                                 float(params.get("kelly_fraction", 0.25)), cap_pct=0.25)
+        else:
+            stake = bal * float(params.get("stake_pct", 0.025))
+        stake = round(min(stake * mult, bal * DAILY_STAKE_CAP_PCT), 2)
         if stake < 1:
             continue
         seen_m.add(c["match_id"]); seen_lg.add(c["league"])
@@ -1015,6 +1023,69 @@ PROFILES = [
      "tagline": "Akumulátor tří zápasů – každá noha musí projít přes "
                 "natrénovaný ML model, ne přes syrovou pravděpodobnost.",
      "strategy": _s_ai_acca, "group": "ai"},
+    # --- rozšíření AI kategorie na 15 členů (12 nových) – stejné tři
+    # generické strategie (_s_ai_model/_s_ai_combo/_s_ai_acca), jen s jinými
+    # parametry (params se propíšou z _default_state) - různý práh jistoty
+    # ML modelu, počet nohou, styl vkladu. Žádná z nich nehádá bez
+    # natrénovaného modelu, jen se liší v tom, jak přísně/agresivně model
+    # využívají.
+    {"id": "ai_model_aggressive", "name": "AI Agresivní Aleš", "emoji": "🤖⚡",
+     "tagline": "Stejný ML model jako AI Adam, ale nižší práh jistoty (52 %) "
+                "a větší vklad – víc sázek, víc rizika.",
+     "strategy": _s_ai_model, "group": "ai",
+     "params": {"ai_min_win_prob": 0.52, "stake_pct": 0.035, "max_bets": 5}},
+    {"id": "ai_model_conservative", "name": "AI Opatrný Ota", "emoji": "🤖🛡️",
+     "tagline": "Stejný ML model jako AI Adam, ale přísnější práh jistoty "
+                "(68 %) a menší vklad – míň sázek, míň rizika.",
+     "strategy": _s_ai_model, "group": "ai",
+     "params": {"ai_min_win_prob": 0.68, "stake_pct": 0.02, "max_bets": 2}},
+    {"id": "ai_model_kelly", "name": "AI Kelly Kristýna", "emoji": "🤖📐",
+     "tagline": "Vklad podle Kelly kritéria počítaného z ML win_prob "
+                "(ne z Poissonovy pravděpodobnosti) – roste rychleji na "
+                "hodně sebejistých tipech modelu.",
+     "strategy": _s_ai_model, "group": "ai",
+     "params": {"ai_min_win_prob": 0.6, "stake_mode": "kelly", "kelly_fraction": 0.3, "max_bets": 3}},
+    {"id": "ai_model_ultra", "name": "AI Ultra Jistý Umberto", "emoji": "🤖🔒",
+     "tagline": "Jen nejvyšší jistota ML modelu (75 %+) – velmi málo sázek, "
+                "ale prakticky jen tipy, kterými si model je hodně jistý.",
+     "strategy": _s_ai_model, "group": "ai",
+     "params": {"ai_min_win_prob": 0.75, "stake_pct": 0.03, "max_bets": 2}},
+    {"id": "ai_combo_triple", "name": "AI Trojkombinátor Tobiáš", "emoji": "🤖🔗🔗",
+     "tagline": "Jako AI Karel, ale tři trhy jednoho zápasu místo dvou – "
+                "všechny musí projít přes ML model.",
+     "strategy": _s_ai_combo, "group": "ai",
+     "params": {"ai_min_win_prob": 0.55, "legs": 3, "stake_pct": 0.015, "max_bets": 2}},
+    {"id": "ai_combo_conservative", "name": "AI Karel Konzervativní", "emoji": "🤖🔗🛡️",
+     "tagline": "Jako AI Karel, ale přísnější práh jistoty (65 %) a menší vklad.",
+     "strategy": _s_ai_combo, "group": "ai",
+     "params": {"ai_min_win_prob": 0.65, "legs": 2, "stake_pct": 0.015, "max_bets": 2}},
+    {"id": "ai_combo_aggressive", "name": "AI Karel Agresivní", "emoji": "🤖🔗⚡",
+     "tagline": "Jako AI Karel, ale nižší práh jistoty (52 %) a větší vklad.",
+     "strategy": _s_ai_combo, "group": "ai",
+     "params": {"ai_min_win_prob": 0.52, "legs": 2, "stake_pct": 0.03, "max_bets": 3}},
+    {"id": "ai_combo_ultra", "name": "AI Karel Ultra Jistý", "emoji": "🤖🔗🔒",
+     "tagline": "Jako AI Karel, ale jen nejvyšší jistota ML modelu (70 %+).",
+     "strategy": _s_ai_combo, "group": "ai",
+     "params": {"ai_min_win_prob": 0.7, "legs": 2, "stake_pct": 0.02, "max_bets": 1}},
+    {"id": "ai_acca_duo", "name": "AI Klára Duo", "emoji": "🤖🎯2️⃣",
+     "tagline": "Jako AI Klára, ale akumulátor jen ze dvou zápasů – menší "
+                "kurz, ale vyšší šance, že celý tiket vyjde.",
+     "strategy": _s_ai_acca, "group": "ai",
+     "params": {"ai_min_win_prob": 0.58, "legs": 2, "stake_pct": 0.025, "max_bets": 1}},
+    {"id": "ai_acca_penta", "name": "AI Klára Penta", "emoji": "🤖🎯5️⃣",
+     "tagline": "Jako AI Klára, ale akumulátor z pěti zápasů – extrémně "
+                "agresivní, obří kurz, drobný vklad.",
+     "strategy": _s_ai_acca, "group": "ai",
+     "params": {"ai_min_win_prob": 0.55, "legs": 5, "stake_pct": 0.01, "max_bets": 1}},
+    {"id": "ai_acca_conservative", "name": "AI Klára Konzervativní", "emoji": "🤖🎯🛡️",
+     "tagline": "Jako AI Klára, ale přísnější práh jistoty (68 %) na "
+                "každou nohu tiketu.",
+     "strategy": _s_ai_acca, "group": "ai",
+     "params": {"ai_min_win_prob": 0.68, "legs": 3, "stake_pct": 0.015, "max_bets": 1}},
+    {"id": "ai_acca_aggressive", "name": "AI Klára Agresivní", "emoji": "🤖🎯⚡",
+     "tagline": "Jako AI Klára, ale nižší práh jistoty (50 %) a větší vklad.",
+     "strategy": _s_ai_acca, "group": "ai",
+     "params": {"ai_min_win_prob": 0.5, "legs": 3, "stake_pct": 0.03, "max_bets": 1}},
 ]
 _BY_ID = {p["id"]: p for p in PROFILES}
 
@@ -1669,6 +1740,13 @@ def _default_state():
         p["id"]: {
             "name": p["name"], "emoji": p["emoji"], "tagline": p["tagline"],
             "group": p.get("group", "single"),
+            # Vestavění sázkaři normálně nemají tunable parametry (strategie je
+            # v kódu), ale AI varianty (AI Karel Opatrný apod.) sdílejí STEJNOU
+            # generickou strategii (_s_ai_model/_s_ai_combo/_s_ai_acca) jen s
+            # jinými hodnotami (ai_min_win_prob/legs/stake_pct) - params z
+            # PROFILES se propíšou, ať mají od začátku svoje vlastní nastavení
+            # místo dědění defaultů.
+            "params": p.get("params"),
             "balance": DEFAULT_START_BALANCE, "start_balance": DEFAULT_START_BALANCE,
             "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
         } for p in PROFILES
