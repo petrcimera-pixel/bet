@@ -1719,6 +1719,19 @@ def api_ratings_backfill_archive():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/ratings/cleanup-empty", methods=["POST"])
+@login_required
+def api_ratings_cleanup_empty():
+    """Smaže záznamy týmů s n=0 (nikdy neodehráli zápas) - jen šetří
+    paměť, nic neztrácí (viz goals_model.cleanup_empty_ratings)."""
+    try:
+        res = pred.cleanup_empty_ratings()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/ratings/merge-duplicates", methods=["POST"])
 @login_required
 def api_ratings_merge_duplicates():

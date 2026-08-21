@@ -368,22 +368,12 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     # jen na SVÝCH domácích zápasech, hostující tým jen na SVÝCH venkovních –
     # jinak by týmy, co doma hrají silněji, tenhle rozdíl nikdy nezachytily.
     #
-    # DŮLEŽITÉ: ratio_h se počítá proti exp_h, který už v sobě má
-    # HOME_ADV_FACTOR (pevný násobič +12 % za výhodu prostředí) - kdyby se
-    # ratio_h použil i pro učení a_home/d_home, split by se učil "co zbylo
-    # po odečtení fixního bonusu", ne skutečnou domácí sílu, a v průměru by
-    # táhl a_home dolů (dvojité započítání domácí výhody, jednou fixně,
-    # podruhé se to samé odečítalo přes split). Benchmark to potvrdil:
-    # týmy s dost domácími zápasy měly a_home systematicky NIŽŠÍ než
-    # celkové a, i když doma hrají líp - model tak v průměru dával domácím
-    # jen 31 % šance na výhru místo reálných ~43 %. Split se proto učí
-    # proti "neutrálnímu" očekávání bez fixního násobiče, ať zachycuje jen
-    # to, co fixní bonus nepokryl, místo aby s ním soupeřil.
-    if not sport or sport == "soccer":
-        exp_h_neutral = max(0.35, raw_h / HOME_ADV_FACTOR)
-        ratio_h_home = (hs + prior_h) / (exp_h_neutral + prior_h)
-    else:
-        ratio_h_home = ratio_h
+    # exp_h (a tedy ratio_h) už NEOBSAHUJE žádný extra fixní bonus navíc
+    # (viz expected_scores – dřív se tam HOME_ADV_FACTOR násobilo podruhé,
+    # což split učilo proti kontaminovanému očekávání a v průměru táhlo
+    # a_home POD realitu). Teď je ratio_h čistě "skutečnost vs. co model
+    # čekal z ratingu + ligového základu", takže se dá použít přímo.
+    ratio_h_home = ratio_h
     alpha_h_home = max(0.06, 2.0 / (rh.get("n_home", 0) + 3.0))
     alpha_a_away = max(0.06, 2.0 / (ra.get("n_away", 0) + 3.0))
     rh["a_home"] = _clamp(rh.get("a_home", rh["a"]) * (1 + alpha_h_home * (ratio_h_home - 1)))
@@ -398,6 +388,21 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     if own_ratings:
         _save_ratings(ratings)
     return True
+
+
+def cleanup_empty_ratings() -> dict:
+    """Smaže záznamy týmů s n=0 (nikdy neodehráli zápas v appce – vznikly
+    jen tím, že se na ně někdy zeptala predikce budoucího zápasu, viz
+    get_rating). Nejsou škodlivé, jen zbytečně nafukují team_ratings.json
+    (paměť na Render free tieru je omezená) – při další predikci se
+    stejný tým znovu vytvoří s neutrálním ratingem, takže se nic
+    neztrácí, jen se to nedrží v paměti/na disku předem."""
+    ratings = _ratings()
+    dead = [k for k, v in ratings.items() if v.get("n", 0) == 0]
+    for k in dead:
+        del ratings[k]
+    _save_ratings(ratings)
+    return {"removed": len(dead), "remaining": len(ratings)}
 
 
 def reset_home_away_split() -> dict:
@@ -926,14 +931,19 @@ def expected_scores(league: str, sport: str, a_h: float, d_h: float,
     lišily, rating by se učil proti jinému očekávání, než jaké model předpovídá
     (přesně ten druh nekonzistence, co u domácí výhody dřív kontaminoval útok).
 
-    U fotbalu se domácí výhoda přidává násobkem (LEAGUE_GOALS ji nese jen
-    zčásti), u ostatních sportů je už celá v base_goals() jako přerozdělení."""
+    U fotbalu je domácí výhoda CELÁ už v LEAGUE_GOALS/DEFAULT_GOALS (home
+    > away pro každou ligu, viz base_goals) – dřív se tu navíc násobilo
+    HOME_ADV_FACTOR, což ji fakticky počítalo dvakrát (efektivní bonus
+    ~1.22-1.27 z LEAGUE_GOALS × další 1.12 navrch = ~1.37-1.42). Benchmark
+    proti zavíracímu kurzu Pinnacle to potvrdil: průměrná model home
+    pravděpodobnost 0.469 vs skutečná home win rate 0.429 - po odstranění
+    duplicitního násobiče sedí přesně (0.429 vs 0.429) a Brier skóre se
+    dál zlepšilo. U ostatních sportů je domácí výhoda celá v base_goals()
+    jako přerozdělení (podmínka níž se jich netýkala ani předtím)."""
     base_h, base_a = base_goals(league, sport, slug)
     damp = _rating_damping(sport, slug, league) if sport and sport != "soccer" else 1.0
     exp_h = base_h * (a_h * d_a) ** damp
     exp_a = base_a * (a_a * d_h) ** damp
-    if not sport or sport == "soccer":
-        exp_h *= HOME_ADV_FACTOR
     return exp_h, exp_a
 
 
