@@ -7626,12 +7626,12 @@
     "n_away": 0
   },
   "Al Hazem": {
-    "a": 1.0052,
-    "d": 1.0768,
-    "n": 22,
-    "a_home": 0.5112,
-    "d_home": 1.0628,
-    "n_home": 2,
+    "a": 0.8936,
+    "d": 1.0696,
+    "n": 25,
+    "a_home": 0.4,
+    "d_home": 1.0509,
+    "n_home": 5,
     "a_away": 1.1045,
     "d_away": 1.0885,
     "n_away": 0
@@ -47757,10 +47757,10 @@
   "ASD Seravezza Pozzi": {
     "a": 0.4,
     "d": 0.4,
-    "n": 15,
+    "n": 19,
     "a_home": 0.4,
     "d_home": 0.4,
-    "n_home": 5,
+    "n_home": 9,
     "a_away": 0.4,
     "d_away": 0.4,
     "n_away": 0
@@ -49856,15 +49856,15 @@
     "n_away": 0
   },
   "Al Diriyah": {
-    "a": 0.7653,
-    "d": 0.9601,
-    "n": 6,
+    "a": 0.7603,
+    "d": 0.8535,
+    "n": 9,
     "a_home": 0.7737,
     "d_home": 1.0549,
     "n_home": 0,
-    "a_away": 0.7554,
-    "d_away": 0.4883,
-    "n_away": 2
+    "a_away": 0.7468,
+    "d_away": 0.4,
+    "n_away": 5
   },
   "Pakhtakor Tashkent": {
     "a": 1.2533,
@@ -54125,14 +54125,14 @@
   },
   "ACV Scandicci": {
     "a": 0.4,
-    "d": 0.5832,
-    "n": 11,
+    "d": 0.5353,
+    "n": 15,
     "a_home": 0.4964,
     "d_home": 0.6727,
     "n_home": 0,
     "a_away": 0.4,
-    "d_away": 0.4151,
-    "n_away": 5
+    "d_away": 0.4,
+    "n_away": 9
   },
   "IU Pennsylvania": {
     "a": 0.9741,

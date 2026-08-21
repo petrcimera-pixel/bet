@@ -198175,6 +198175,36 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Diriyah",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Diriyah",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Diriyah",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
     }
   ],
   "Al Diriyah": [
@@ -198238,6 +198268,36 @@
       "ga": 0,
       "cf": null,
       "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
       "result": "W"
     }
   ],
@@ -199328,6 +199388,48 @@
       "ga": 0,
       "cf": null,
       "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ACV Scandicci",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ACV Scandicci",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ACV Scandicci",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ACV Scandicci",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     }
   ],
@@ -275910,6 +276012,48 @@
       "ga": 0,
       "cf": null,
       "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ASD Seravezza Pozzi",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ASD Seravezza Pozzi",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ASD Seravezza Pozzi",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "ASD Seravezza Pozzi",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     }
   ]
