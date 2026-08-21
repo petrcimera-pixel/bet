@@ -3,7 +3,7 @@
     "name": "Kelly Kateřina",
     "emoji": "📐",
     "tagline": "Plný Kelly kritérium – matematicky optimální růst banku, ale vysoká volatilita.",
-    "balance": 37.19,
+    "balance": 47.19,
     "start_balance": 200.0,
     "bets": [
       {
@@ -386,9 +386,9 @@
         "odds": 2.2,
         "prob": 0.681,
         "stake": 7.98,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -7.98,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -400,7 +400,11 @@
           "edge": 0.2265
         },
         "closing_odds": 2.2,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "ed2eea2d7b",
@@ -456,9 +460,9 @@
         "odds": 1.62,
         "prob": 0.6824,
         "stake": 8.84,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -8.84,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -470,7 +474,11 @@
           "edge": 0.067
         },
         "closing_odds": 1.606,
-        "clv": 0.0087
+        "clv": 0.0087,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "a7d1bcc9e8",
@@ -489,9 +497,9 @@
         "odds": 2.25,
         "prob": 0.6705,
         "stake": 10.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -10.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -503,7 +511,11 @@
           "edge": 0.226
         },
         "closing_odds": 2.3,
-        "clv": -0.0217
+        "clv": -0.0217,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "c60574539d",
@@ -596,9 +608,9 @@
         "odds": 1.82,
         "prob": 0.854,
         "stake": 10.0,
-        "status": "open",
+        "status": "void",
         "pnl": 0.0,
-        "settled_ts": null,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -610,7 +622,11 @@
           "edge": 0.3045
         },
         "closing_odds": 1.79,
-        "clv": 0.0168
+        "clv": 0.0168,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "073a28789b",
@@ -836,7 +852,7 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 3,
+    "loss_streak": 6,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -853,7 +869,7 @@
     "name": "Čtvrtinový Čeněk",
     "emoji": "🎯",
     "tagline": "Kvartový Kelly (25 %) – rozumný kompromis mezi růstem a rizikem.",
-    "balance": 149.03,
+    "balance": 159.91,
     "start_balance": 200.0,
     "bets": [
       {
@@ -1009,9 +1025,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 8.18,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.7,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -1023,7 +1039,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "18235eee96",
@@ -1212,9 +1232,9 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 2,
+    "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -1229,7 +1249,7 @@
     "name": "Konzervativní Klára",
     "emoji": "🛡️",
     "tagline": "Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.",
-    "balance": 140.6,
+    "balance": 157.45,
     "start_balance": 200.0,
     "bets": [
       {
@@ -1315,9 +1335,9 @@
         "odds": 1.02,
         "prob": 0.8391,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -1329,7 +1349,11 @@
           "edge": -0.1403
         },
         "closing_odds": 1.024,
-        "clv": -0.0039
+        "clv": -0.0039,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "da3b9ffc4f",
@@ -1348,9 +1372,9 @@
         "odds": 1.02,
         "prob": 0.8429,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -1362,7 +1386,11 @@
           "edge": -0.1366
         },
         "closing_odds": 1.021,
-        "clv": -0.001
+        "clv": -0.001,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "efc93f3d94",
@@ -1513,9 +1541,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -1527,7 +1555,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "49be340a6f",
@@ -1669,7 +1701,7 @@
     "last_run_date": "2026-08-21",
     "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 1,
+    "win_streak": 4,
     "transactions": [
       {
         "ts": 1787337975,
@@ -1684,7 +1716,7 @@
     "name": "Value Hunter Viktor",
     "emoji": "🔍",
     "tagline": "Loví podhodnocené kurzy (edge 8+ p.b.), na absolutní jistotě mu nezáleží.",
-    "balance": 140.0,
+    "balance": 145.0,
     "start_balance": 200.0,
     "bets": [
       {
@@ -1770,9 +1802,9 @@
         "odds": 2.2,
         "prob": 0.681,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -1784,7 +1816,11 @@
           "edge": 0.2265
         },
         "closing_odds": 2.2,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "eb6d5b053c",
@@ -1978,9 +2014,9 @@
         "odds": 1.82,
         "prob": 0.854,
         "stake": 5.0,
-        "status": "open",
+        "status": "void",
         "pnl": 0.0,
-        "settled_ts": null,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -1992,7 +2028,11 @@
           "edge": 0.3045
         },
         "closing_odds": 1.79,
-        "clv": 0.0168
+        "clv": 0.0168,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "b211ff8beb",
@@ -2095,7 +2135,7 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 3,
+    "loss_streak": 4,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -2112,7 +2152,7 @@
     "name": "Favorit Fanda",
     "emoji": "⭐",
     "tagline": "Vždy vsadí na favorita zápasu, i když kurz nemá žádnou value.",
-    "balance": 157.95,
+    "balance": 170.0,
     "start_balance": 200.0,
     "bets": [
       {
@@ -2198,9 +2238,9 @@
         "odds": 1.2,
         "prob": 0.5655,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -2212,7 +2252,11 @@
           "edge": -0.2678
         },
         "closing_odds": 1.2,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "62cfdd8a1f",
@@ -2231,9 +2275,9 @@
         "odds": 1.21,
         "prob": 0.575,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.05,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -2245,7 +2289,11 @@
           "edge": -0.2508
         },
         "closing_odds": 1.211,
-        "clv": -0.0008
+        "clv": -0.0008,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "187c3e217d",
@@ -2301,9 +2349,9 @@
         "odds": 2.5,
         "prob": 0.6563,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -2315,7 +2363,11 @@
           "edge": 0.2563
         },
         "closing_odds": 2.45,
-        "clv": 0.0204
+        "clv": 0.0204,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "fe2b12b000",
@@ -2541,9 +2593,9 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 3,
+    "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -2852,9 +2904,9 @@
         "odds": 4.4,
         "prob": 0.1772,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -2866,7 +2918,11 @@
           "edge": -0.0501
         },
         "closing_odds": 4.5,
-        "clv": -0.0222
+        "clv": -0.0222,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "5ed55bce37",
@@ -2918,9 +2974,9 @@
         "odds": 11.0,
         "prob": 0.1571,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -2932,7 +2988,11 @@
           "edge": 0.0662
         },
         "closing_odds": 11.0,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "df1386ac5f",
@@ -2951,9 +3011,9 @@
         "odds": 14.0,
         "prob": 0.1609,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -2965,11 +3025,15 @@
           "edge": 0.0894
         },
         "closing_odds": 15.0,
-        "clv": -0.0667
+        "clv": -0.0667,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 3,
+    "loss_streak": 6,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -2986,7 +3050,7 @@
     "name": "Disciplinovaný Dan",
     "emoji": "📋",
     "tagline": "Flat 5 %, max 2 sázky denně, diverzifikuje napříč ligami.",
-    "balance": 165.6,
+    "balance": 172.25,
     "start_balance": 200.0,
     "bets": [
       {
@@ -3105,9 +3169,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -3119,7 +3183,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "6d2651be7d",
@@ -3261,7 +3329,7 @@
     "last_run_date": "2026-08-21",
     "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 1,
+    "win_streak": 2,
     "transactions": [
       {
         "ts": 1787337975,
@@ -3276,7 +3344,7 @@
     "name": "Domácí Dalibor",
     "emoji": "🏠",
     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-    "balance": 169.8,
+    "balance": 184.55,
     "start_balance": 200.0,
     "bets": [
       {
@@ -3506,9 +3574,9 @@
         "odds": 1.21,
         "prob": 0.5655,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.05,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -3520,7 +3588,11 @@
           "edge": -0.2603
         },
         "closing_odds": 1.2,
-        "clv": 0.0083
+        "clv": 0.0083,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "843043a903",
@@ -3539,9 +3611,9 @@
         "odds": 1.74,
         "prob": 0.5725,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.7,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -3553,7 +3625,11 @@
           "edge": -0.0018
         },
         "closing_odds": 1.714,
-        "clv": 0.0152
+        "clv": 0.0152,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "74878ad0fd",
@@ -3625,7 +3701,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -3640,7 +3716,7 @@
     "name": "Gólový Gustav",
     "emoji": "⚡",
     "tagline": "Jen Over linie – věří, že góly padnou.",
-    "balance": 186.0,
+    "balance": 194.25,
     "start_balance": 200.0,
     "bets": [
       {
@@ -3800,9 +3876,9 @@
         "odds": 1.65,
         "prob": 0.7515,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 3.25,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -3814,7 +3890,11 @@
           "edge": 0.1436
         },
         "closing_odds": 1.645,
-        "clv": 0.003
+        "clv": 0.003,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "05a3a5ffe6",
@@ -3853,7 +3933,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 2,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -4024,9 +4104,9 @@
         "odds": 1.62,
         "prob": 0.6824,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -4038,7 +4118,11 @@
           "edge": 0.067
         },
         "closing_odds": 1.606,
-        "clv": 0.0087
+        "clv": 0.0087,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "e6b852c685",
@@ -4197,9 +4281,9 @@
         "odds": 1.8,
         "prob": 0.7631,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -4211,7 +4295,11 @@
           "edge": 0.2076
         },
         "closing_odds": 1.833,
-        "clv": -0.018
+        "clv": -0.018,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "569954739d",
@@ -4315,7 +4403,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 2,
+    "loss_streak": 4,
     "win_streak": 0,
     "transactions": [
       {
@@ -4331,7 +4419,7 @@
     "name": "Paroli Pavla",
     "emoji": "🚀",
     "tagline": "Opak Martingalu: zvyšuje po výhře, riskuje jen vyhrané peníze.",
-    "balance": 145.6,
+    "balance": 157.35,
     "start_balance": 200.0,
     "bets": [
       {
@@ -4417,9 +4505,9 @@
         "odds": 1.02,
         "prob": 0.8391,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -4431,7 +4519,11 @@
           "edge": -0.1374
         },
         "closing_odds": 1.024,
-        "clv": -0.0039
+        "clv": -0.0039,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "737e926ef3",
@@ -4582,9 +4674,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -4596,7 +4688,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "a2ebb31fa6",
@@ -4738,7 +4834,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -4753,7 +4849,7 @@
     "name": "Jistotář Jarda",
     "emoji": "🔒",
     "tagline": "Jen kurzy do 1.5 – hodně malých jistých výher.",
-    "balance": 110.6,
+    "balance": 133.55,
     "start_balance": 200.0,
     "bets": [
       {
@@ -4973,9 +5069,9 @@
         "odds": 1.22,
         "prob": 0.8228,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.1,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -4987,7 +5083,11 @@
           "edge": 0.0045
         },
         "closing_odds": 1.209,
-        "clv": 0.0091
+        "clv": 0.0091,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "a2ba856d02",
@@ -5043,9 +5143,9 @@
         "odds": 1.02,
         "prob": 0.8391,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -5057,7 +5157,11 @@
           "edge": -0.1403
         },
         "closing_odds": 1.024,
-        "clv": -0.0039
+        "clv": -0.0039,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "2051781e83",
@@ -5076,9 +5180,9 @@
         "odds": 1.02,
         "prob": 0.8429,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -5090,7 +5194,11 @@
           "edge": -0.1366
         },
         "closing_odds": 1.021,
-        "clv": -0.001
+        "clv": -0.001,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "7f165ec82d",
@@ -5241,9 +5349,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -5255,7 +5363,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "39907e653b",
@@ -5396,8 +5508,8 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 4,
     "transactions": [
       {
         "ts": 1787337975,
@@ -5412,7 +5524,7 @@
     "name": "Kalibrovaný Karel",
     "emoji": "🎚️",
     "tagline": "Nevěří syrové jistotě modelu, ale opravené podle skutečné úspěšnosti.",
-    "balance": 142.7,
+    "balance": 149.35,
     "start_balance": 200.0,
     "bets": [
       {
@@ -5601,9 +5713,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -5615,7 +5727,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "1386b1a001",
@@ -5855,8 +5971,8 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -5871,7 +5987,7 @@
     "name": "Diverzifikátor Dita",
     "emoji": "🕸️",
     "tagline": "Hodně malých sázek, ale nejvýš jedna na ligu – rozloží riziko.",
-    "balance": 95.55,
+    "balance": 118.5,
     "start_balance": 200.0,
     "bets": [
       {
@@ -6309,9 +6425,9 @@
         "odds": 1.22,
         "prob": 0.8228,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.1,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -6323,7 +6439,11 @@
           "edge": 0.0045
         },
         "closing_odds": 1.209,
-        "clv": 0.0091
+        "clv": 0.0091,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "469d2f8692",
@@ -6412,9 +6532,9 @@
         "odds": 1.02,
         "prob": 0.8391,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -6426,7 +6546,11 @@
           "edge": -0.1403
         },
         "closing_odds": 1.024,
-        "clv": -0.0039
+        "clv": -0.0039,
+        "result": {
+          "home": 3,
+          "away": 0
+        }
       },
       {
         "id": "13d0dd0f5d",
@@ -6478,9 +6602,9 @@
         "odds": 1.33,
         "prob": 0.8878,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.65,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -6492,7 +6616,11 @@
           "edge": 0.137
         },
         "closing_odds": 1.317,
-        "clv": 0.0099
+        "clv": 0.0099,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "16d5aeebfd",
@@ -6511,9 +6639,9 @@
         "odds": 1.02,
         "prob": 0.8429,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.1,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -6525,7 +6653,11 @@
           "edge": -0.1366
         },
         "closing_odds": 1.021,
-        "clv": -0.001
+        "clv": -0.001,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "2f340501a6",
@@ -6766,7 +6898,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 1,
+    "win_streak": 5,
     "transactions": [
       {
         "ts": 1787337975,
@@ -7667,9 +7799,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
@@ -7788,9 +7924,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
@@ -7909,9 +8049,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
@@ -8082,9 +8226,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.024,
-            "clv": -0.0039
+            "clv": -0.0039,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401841511",
@@ -8220,9 +8368,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401903363",
@@ -8392,9 +8544,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401903363",
@@ -8564,9 +8720,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401903363",
@@ -9491,9 +9651,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844065",
@@ -9574,9 +9738,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844065",
@@ -9657,9 +9825,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844065",
@@ -9849,9 +10021,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -9872,9 +10048,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.7998,
           "defense_home": 1.2023,
@@ -9936,9 +10112,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -9959,9 +10139,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.7998,
           "defense_home": 1.2023,
@@ -10023,9 +10203,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -10046,9 +10230,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.7998,
           "defense_home": 1.2023,
@@ -10062,7 +10246,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -11545,9 +11729,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.2,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401879301",
@@ -11562,15 +11750,19 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.4,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -11677,9 +11869,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -11694,15 +11890,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.606,
-            "clv": 0.0087
+            "clv": 0.0087,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -11743,9 +11943,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -11760,15 +11964,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -11809,9 +12017,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -11826,15 +12038,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.606,
-            "clv": 0.0087
+            "clv": 0.0087,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -11875,9 +12091,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -11892,15 +12112,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -11941,9 +12165,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -11958,15 +12186,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.606,
-            "clv": 0.0087
+            "clv": 0.0087,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -12007,9 +12239,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -12024,15 +12260,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -12046,7 +12286,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 7,
     "win_streak": 0,
     "transactions": [
       {
@@ -15510,7 +15750,7 @@
     "name": "Domácí Dominik",
     "emoji": "🏠",
     "tagline": "Domácí vyhrají a oba týmy dají gól.",
-    "balance": 160.0,
+    "balance": 204.1,
     "start_balance": 200.0,
     "bets": [
       {
@@ -15675,9 +15915,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -15692,15 +15936,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 9.7,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -15807,9 +16055,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -15824,15 +16076,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 9.7,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -15939,9 +16195,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -15956,15 +16216,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.667,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 9.7,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -16045,7 +16309,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -16732,9 +16996,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401879301",
@@ -16749,9 +17017,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.2,
-            "clv": 0.0083
+            "clv": 0.0083,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
@@ -16832,9 +17104,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401879301",
@@ -16849,9 +17125,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.2,
-            "clv": 0.0083
+            "clv": 0.0083,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
@@ -16932,9 +17212,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401879301",
@@ -16949,9 +17233,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.2,
-            "clv": 0.0083
+            "clv": 0.0083,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
@@ -17020,9 +17308,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 4.773,
-            "clv": -0.0006
+            "clv": -0.0006,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401857162",
@@ -17060,9 +17352,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -17120,9 +17412,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 4.773,
-            "clv": -0.0698
+            "clv": -0.0698,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401845045",
@@ -17143,9 +17439,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 1.1558,
           "defense_home": 1.2947,
@@ -17203,9 +17499,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 4.773,
-            "clv": -0.0698
+            "clv": -0.0698,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401845045",
@@ -17226,9 +17526,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 1.1558,
           "defense_home": 1.2947,
@@ -17286,9 +17586,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 4.773,
-            "clv": -0.0698
+            "clv": -0.0698,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401845045",
@@ -17309,9 +17613,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 1.1558,
           "defense_home": 1.2947,
@@ -17325,7 +17629,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 4,
     "win_streak": 0,
     "transactions": [
       {
@@ -17810,9 +18114,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -17827,15 +18135,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -17946,9 +18258,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -17963,15 +18279,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -18082,9 +18402,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.211,
-            "clv": -0.0008
+            "clv": -0.0008,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           },
           {
             "match_id": "401875187",
@@ -18099,15 +18423,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.833,
-            "clv": -0.018
+            "clv": -0.018,
+            "score": {
+              "home": 0,
+              "away": 4
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -18121,7 +18449,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -18567,7 +18895,7 @@
     "emoji": "✌️",
     "tagline": "Dvojtip (1X, 12, X2) plus Over – vyšší jistota, přidaná hodnota v gólech.",
     "group": "combo",
-    "balance": 160.0,
+    "balance": 192.85,
     "start_balance": 200.0,
     "bets": [
       {
@@ -18798,9 +19126,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -18815,15 +19147,19 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 5.95,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -18930,9 +19266,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -18947,15 +19287,19 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 5.95,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -19062,9 +19406,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.317,
-            "clv": 0.0099
+            "clv": 0.0099,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -19079,15 +19427,19 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.645,
-            "clv": 0.003
+            "clv": 0.003,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 5.95,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -19102,7 +19454,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 0,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -20475,9 +20827,9 @@
         "odds": 2.5,
         "prob": 0.6563,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -20489,7 +20841,11 @@
           "edge": 0.2563
         },
         "closing_odds": 2.45,
-        "clv": 0.0204
+        "clv": 0.0204,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       },
       {
         "id": "ad14462a43",
@@ -20568,8 +20924,8 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 1,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -20641,9 +20997,9 @@
         "odds": 2.25,
         "prob": 0.6409,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 0.6089,
           "defense_home": 1.0768,
@@ -20655,7 +21011,11 @@
           "edge": 0.226
         },
         "closing_odds": 2.3,
-        "clv": -0.0217
+        "clv": -0.0217,
+        "result": {
+          "home": 0,
+          "away": 4
+        }
       },
       {
         "id": "bfb8a28087",
@@ -20878,9 +21238,9 @@
         "odds": 2.5,
         "prob": 0.8236,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -20892,12 +21252,16 @@
           "edge": 0.2563
         },
         "closing_odds": 2.45,
-        "clv": 0.0204
+        "clv": 0.0204,
+        "result": {
+          "home": 2,
+          "away": 2
+        }
       }
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -20913,7 +21277,7 @@
     "emoji": "🤖🔗",
     "tagline": "Kombinace dvou trhů jednoho zápasu – obě nohy musí projít přes natrénovaný ML model, ne přes syrovou pravděpodobnost.",
     "group": "ai",
-    "balance": 170.8,
+    "balance": 213.5,
     "start_balance": 200.0,
     "bets": [
       {
@@ -20930,7 +21294,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "1 · Arsenal + Arsenal nebo remíza",
-        "odds": 1.23,
+        "odds": 1.22,
         "prob": 0.564,
         "legs": [
           {
@@ -20946,9 +21310,13 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.2,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           },
           {
             "match_id": "401879301",
@@ -20963,15 +21331,19 @@
             "time": "19:00",
             "sport": "soccer",
             "slug": "eng.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.024,
-            "clv": -0.0039
+            "clv": -0.0039,
+            "score": {
+              "home": 3,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.1,
+        "settled_ts": 1787345612,
         "ml_features": {
           "attack_home": 2.2162,
           "defense_home": 0.4595,
@@ -21062,7 +21434,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "1 · Marseille + Marseille (remíza zpět)",
-        "odds": 2.43,
+        "odds": 2.44,
         "prob": 0.5731,
         "legs": [
           {
@@ -21078,9 +21450,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -21095,15 +21471,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.381,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 7.2,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -21218,9 +21598,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -21241,9 +21625,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21268,7 +21652,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "1 · Marseille + Marseille (remíza zpět)",
-        "odds": 2.43,
+        "odds": 2.44,
         "prob": 0.5731,
         "legs": [
           {
@@ -21284,9 +21668,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -21301,15 +21689,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.381,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 7.2,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -21424,9 +21816,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -21447,9 +21843,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21474,7 +21870,7 @@
         "outcome": "combo",
         "label": "KOMBI 2",
         "name": "1 · Marseille + Marseille (remíza zpět)",
-        "odds": 2.43,
+        "odds": 2.44,
         "prob": 0.5731,
         "legs": [
           {
@@ -21490,9 +21886,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.714,
-            "clv": 0.0152
+            "clv": 0.0152,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401876489",
@@ -21507,15 +21907,19 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.381,
-            "clv": 0.0138
+            "clv": 0.0138,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 7.2,
+        "settled_ts": 1787345032,
         "ml_features": {
           "attack_home": 1.2848,
           "defense_home": 0.8385,
@@ -21630,9 +22034,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401844076",
@@ -21653,9 +22061,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21670,7 +22078,7 @@
     "last_run_date": "2026-08-21",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 3,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -21784,9 +22192,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -21807,9 +22219,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21850,9 +22262,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -21873,9 +22289,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21916,9 +22332,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.45,
-            "clv": 0.0204
+            "clv": 0.0204,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -21939,9 +22359,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -21955,7 +22375,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -21965,231 +22385,6 @@
         "note": "Reset"
       }
     ]
-  },
-  "ai_model_aggressive": {
-    "name": "AI Agresivní Aleš",
-    "emoji": "🤖⚡",
-    "tagline": "Stejný ML model jako AI Adam, ale nižší práh jistoty (52 %) a větší vklad – víc sázek, víc rizika.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.52,
-      "stake_pct": 0.035,
-      "max_bets": 5
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_model_conservative": {
-    "name": "AI Opatrný Ota",
-    "emoji": "🤖🛡️",
-    "tagline": "Stejný ML model jako AI Adam, ale přísnější práh jistoty (68 %) a menší vklad – míň sázek, míň rizika.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.68,
-      "stake_pct": 0.02,
-      "max_bets": 2
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_model_kelly": {
-    "name": "AI Kelly Kristýna",
-    "emoji": "🤖📐",
-    "tagline": "Vklad podle Kelly kritéria počítaného z ML win_prob (ne z Poissonovy pravděpodobnosti) – roste rychleji na hodně sebejistých tipech modelu.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.6,
-      "stake_mode": "kelly",
-      "kelly_fraction": 0.3,
-      "max_bets": 3
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_model_ultra": {
-    "name": "AI Ultra Jistý Umberto",
-    "emoji": "🤖🔒",
-    "tagline": "Jen nejvyšší jistota ML modelu (75 %+) – velmi málo sázek, ale prakticky jen tipy, kterými si model je hodně jistý.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.75,
-      "stake_pct": 0.03,
-      "max_bets": 2
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_combo_triple": {
-    "name": "AI Trojkombinátor Tobiáš",
-    "emoji": "🤖🔗🔗",
-    "tagline": "Jako AI Karel, ale tři trhy jednoho zápasu místo dvou – všechny musí projít přes ML model.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.55,
-      "legs": 3,
-      "stake_pct": 0.015,
-      "max_bets": 2
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_combo_conservative": {
-    "name": "AI Karel Konzervativní",
-    "emoji": "🤖🔗🛡️",
-    "tagline": "Jako AI Karel, ale přísnější práh jistoty (65 %) a menší vklad.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.65,
-      "legs": 2,
-      "stake_pct": 0.015,
-      "max_bets": 2
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_combo_aggressive": {
-    "name": "AI Karel Agresivní",
-    "emoji": "🤖🔗⚡",
-    "tagline": "Jako AI Karel, ale nižší práh jistoty (52 %) a větší vklad.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.52,
-      "legs": 2,
-      "stake_pct": 0.03,
-      "max_bets": 3
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_combo_ultra": {
-    "name": "AI Karel Ultra Jistý",
-    "emoji": "🤖🔗🔒",
-    "tagline": "Jako AI Karel, ale jen nejvyšší jistota ML modelu (70 %+).",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.7,
-      "legs": 2,
-      "stake_pct": 0.02,
-      "max_bets": 1
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_acca_duo": {
-    "name": "AI Klára Duo",
-    "emoji": "🤖🎯2️⃣",
-    "tagline": "Jako AI Klára, ale akumulátor jen ze dvou zápasů – menší kurz, ale vyšší šance, že celý tiket vyjde.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.58,
-      "legs": 2,
-      "stake_pct": 0.025,
-      "max_bets": 1
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_acca_penta": {
-    "name": "AI Klára Penta",
-    "emoji": "🤖🎯5️⃣",
-    "tagline": "Jako AI Klára, ale akumulátor z pěti zápasů – extrémně agresivní, obří kurz, drobný vklad.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.55,
-      "legs": 5,
-      "stake_pct": 0.01,
-      "max_bets": 1
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_acca_conservative": {
-    "name": "AI Klára Konzervativní",
-    "emoji": "🤖🎯🛡️",
-    "tagline": "Jako AI Klára, ale přísnější práh jistoty (68 %) na každou nohu tiketu.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.68,
-      "legs": 3,
-      "stake_pct": 0.015,
-      "max_bets": 1
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
-  },
-  "ai_acca_aggressive": {
-    "name": "AI Klára Agresivní",
-    "emoji": "🤖🎯⚡",
-    "tagline": "Jako AI Klára, ale nižší práh jistoty (50 %) a větší vklad.",
-    "group": "ai",
-    "params": {
-      "ai_min_win_prob": 0.5,
-      "legs": 3,
-      "stake_pct": 0.03,
-      "max_bets": 1
-    },
-    "balance": 200.0,
-    "start_balance": 200.0,
-    "bets": [],
-    "last_run_date": null,
-    "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 0
   },
   "ai_champion": {
     "name": "AI Šampion",
@@ -22248,9 +22443,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "arg.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 2.4,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 2,
+              "away": 2
+            }
           },
           {
             "match_id": "401857162",
@@ -22269,9 +22468,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787345540,
         "ml_features": {
           "attack_home": 0.6189,
           "defense_home": 1.2084,
@@ -22285,7 +22484,7 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 0,
+    "loss_streak": 1,
     "transactions": [
       {
         "ts": 1787344724,
@@ -22295,5 +22494,218 @@
       }
     ],
     "win_streak": 0
+  },
+  "ai_model_aggressive": {
+    "name": "AI Agresivní Aleš",
+    "emoji": "🤖⚡",
+    "tagline": "Stejný ML model jako AI Adam, ale nižší práh jistoty (52 %) a větší vklad – víc sázek, víc rizika.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.52,
+      "stake_pct": 0.035,
+      "max_bets": 5
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_model_conservative": {
+    "name": "AI Opatrný Ota",
+    "emoji": "🤖🛡️",
+    "tagline": "Stejný ML model jako AI Adam, ale přísnější práh jistoty (68 %) a menší vklad – míň sázek, míň rizika.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.68,
+      "stake_pct": 0.02,
+      "max_bets": 2
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_model_kelly": {
+    "name": "AI Kelly Kristýna",
+    "emoji": "🤖📐",
+    "tagline": "Vklad podle Kelly kritéria počítaného z ML win_prob (ne z Poissonovy pravděpodobnosti) – roste rychleji na hodně sebejistých tipech modelu.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.6,
+      "stake_mode": "kelly",
+      "kelly_fraction": 0.3,
+      "max_bets": 3
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_model_ultra": {
+    "name": "AI Ultra Jistý Umberto",
+    "emoji": "🤖🔒",
+    "tagline": "Jen nejvyšší jistota ML modelu (75 %+) – velmi málo sázek, ale prakticky jen tipy, kterými si model je hodně jistý.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.75,
+      "stake_pct": 0.03,
+      "max_bets": 2
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_combo_triple": {
+    "name": "AI Trojkombinátor Tobiáš",
+    "emoji": "🤖🔗🔗",
+    "tagline": "Jako AI Karel, ale tři trhy jednoho zápasu místo dvou – všechny musí projít přes ML model.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.55,
+      "legs": 3,
+      "stake_pct": 0.015,
+      "max_bets": 2
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_combo_conservative": {
+    "name": "AI Karel Konzervativní",
+    "emoji": "🤖🔗🛡️",
+    "tagline": "Jako AI Karel, ale přísnější práh jistoty (65 %) a menší vklad.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.65,
+      "legs": 2,
+      "stake_pct": 0.015,
+      "max_bets": 2
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_combo_aggressive": {
+    "name": "AI Karel Agresivní",
+    "emoji": "🤖🔗⚡",
+    "tagline": "Jako AI Karel, ale nižší práh jistoty (52 %) a větší vklad.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.52,
+      "legs": 2,
+      "stake_pct": 0.03,
+      "max_bets": 3
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_combo_ultra": {
+    "name": "AI Karel Ultra Jistý",
+    "emoji": "🤖🔗🔒",
+    "tagline": "Jako AI Karel, ale jen nejvyšší jistota ML modelu (70 %+).",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.7,
+      "legs": 2,
+      "stake_pct": 0.02,
+      "max_bets": 1
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_acca_duo": {
+    "name": "AI Klára Duo",
+    "emoji": "🤖🎯2️⃣",
+    "tagline": "Jako AI Klára, ale akumulátor jen ze dvou zápasů – menší kurz, ale vyšší šance, že celý tiket vyjde.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.58,
+      "legs": 2,
+      "stake_pct": 0.025,
+      "max_bets": 1
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_acca_penta": {
+    "name": "AI Klára Penta",
+    "emoji": "🤖🎯5️⃣",
+    "tagline": "Jako AI Klára, ale akumulátor z pěti zápasů – extrémně agresivní, obří kurz, drobný vklad.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.55,
+      "legs": 5,
+      "stake_pct": 0.01,
+      "max_bets": 1
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_acca_conservative": {
+    "name": "AI Klára Konzervativní",
+    "emoji": "🤖🎯🛡️",
+    "tagline": "Jako AI Klára, ale přísnější práh jistoty (68 %) na každou nohu tiketu.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.68,
+      "legs": 3,
+      "stake_pct": 0.015,
+      "max_bets": 1
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
+  },
+  "ai_acca_aggressive": {
+    "name": "AI Klára Agresivní",
+    "emoji": "🤖🎯⚡",
+    "tagline": "Jako AI Klára, ale nižší práh jistoty (50 %) a větší vklad.",
+    "group": "ai",
+    "params": {
+      "ai_min_win_prob": 0.5,
+      "legs": 3,
+      "stake_pct": 0.03,
+      "max_bets": 1
+    },
+    "balance": 200.0,
+    "start_balance": 200.0,
+    "bets": [],
+    "last_run_date": null,
+    "ran_hours": [],
+    "loss_streak": 0
   }
 }

@@ -797,18 +797,6 @@
   ],
   "Strasbourg": [
     {
-      "date": "2024-02-18",
-      "opponent": "Lorient",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 3,
-      "result": "L",
-      "cf": 9,
-      "ca": 4
-    },
-    {
       "date": "2024-02-24",
       "opponent": "Brest",
       "league": "French Ligue 1",
@@ -1021,6 +1009,16 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Marseille",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "SV Elversberg": [
@@ -26345,16 +26343,6 @@
       "result": "W"
     },
     {
-      "date": "2026-04-26",
-      "opponent": "OL Lyonnes",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-05-02",
       "opponent": "OL Lyonnes",
       "league": "UEFA Women's Champions League",
@@ -26512,6 +26500,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Coventry City",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -69501,26 +69501,6 @@
       "result": "L"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Colón (Santa Fe)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-09",
-      "opponent": "Colón (Santa Fe)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Quilmes",
       "league": "Argentine Nacional B",
@@ -69669,6 +69649,30 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Deportivo Morón",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Deportivo Morón",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Deportivo Madryn": [
@@ -136407,6 +136411,16 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Hansa Rostock",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Everton": [
@@ -138959,6 +138973,18 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Arsenal",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Espanyol": [
@@ -160940,6 +160966,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "RAAL La Louvière",
+      "league": "Belgian Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     },
     {
@@ -202481,18 +202519,6 @@
   ],
   "Marseille": [
     {
-      "date": "2023-12-20",
-      "opponent": "Montpellier",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D",
-      "cf": 10,
-      "ca": 5
-    },
-    {
       "date": "2024-01-12",
       "opponent": "Strasbourg",
       "league": "French Ligue 1",
@@ -202715,6 +202741,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Strasbourg",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "NK Bjelovar": [
@@ -245329,18 +245365,6 @@
   ],
   "Hansa Rostock": [
     {
-      "date": "2023-12-03",
-      "opponent": "Karlsruhe",
-      "league": "German 2. Bundesliga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D",
-      "cf": 5,
-      "ca": 8
-    },
-    {
       "date": "2023-12-10",
       "opponent": "Schalke 04",
       "league": "German 2. Bundesliga",
@@ -245567,6 +245591,16 @@
       "result": "L",
       "cf": 1,
       "ca": 6
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "VfB Stuttgart",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Seraing": [
@@ -266229,26 +266263,6 @@
       "result": "W"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Acassuso",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-09",
-      "opponent": "Acassuso",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Almagro",
       "league": "Argentine Nacional B",
@@ -266407,6 +266421,30 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "San Telmo",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "San Telmo",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Guemes": [
@@ -274397,6 +274435,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Standard Liege",
+      "league": "Belgian Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Atletico Grau": [
@@ -278665,6 +278715,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Cayón",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Cayón",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Cayón": [
@@ -278702,6 +278776,30 @@
     }
   ],
   "Cayon": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Selaya FC",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Selaya FC",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
     {
       "date": "2026-08-21",
       "opponent": "Selaya FC",

@@ -9,15 +9,12 @@ engine.odds_api) – Nastavení v UI na ně jen odkazuje, ať nevzniká duplicit
 from . import storage
 
 _DEFAULTS = {
-    "model": {
-        "dc_rho": -0.13,          # Dixon-Coles korekce nízkých skóre
-        "home_adv": 60,           # domácí výhoda v Elo
-        "elo_k": 22,              # rychlost učení Elo z výsledků
-        "rating_to_goals": 0.40,  # váha Elo rozdílu → góly
-        "default_sport": "soccer",
-        "default_window": 7,      # výchozí časové okno (dny)
-        "live_refresh_sec": 60,   # interval auto-refreshe živých zápasů
-    },
+    # Poznámka: dřív tu byla i sekce "model" (dc_rho, home_adv, elo_k,
+    # rating_to_goals...) – pozůstatek starého Elo enginu (engine/prediction.py,
+    # nahrazeného goals-ratio modelem v goals_model.py). Appka ji nikde
+    # nečetla ani nezobrazovala v UI, čistě mrtvý kód matoucí pro údržbu -
+    # goals_model.py má svoje vlastní konstanty (HOME_ADV_FACTOR, DC_RHO)
+    # přímo v sobě, ne přes tohle nastavení.
     "appearance": {
         "theme": "dark",          # dark | light
         "density": "comfortable",  # comfortable | compact
@@ -106,12 +103,19 @@ def reset_tips_db() -> None:
 
 
 def export_all() -> dict:
-    """Vrátí kompletní export uživatelských dat (bez API klíčů) pro zálohu."""
+    """Vrátí kompletní export uživatelských dat (bez API klíčů) pro zálohu.
+
+    Dřív četlo "ratings.json" – soubor, co po přepisu na goals-ratio engine
+    (viz goals_model.py) už vůbec neexistuje (skutečný je team_ratings.json).
+    Záloha tak tiše vynechávala nejcennější data appky – naučené ratingy
+    tisíců týmů. Teď bere správný soubor a navíc i team_history.json
+    (forma/H2H), bez kterého by import obnovil ratingy, ale ne historii."""
     return {
         "settings": get_settings(),
         "bankroll": storage.load("bankroll.json", {}),
         "tips": storage.load("tips.json", {"tips": []}),
-        "ratings": storage.load("ratings.json", {}),
+        "ratings": storage.load("team_ratings.json", {}),
+        "team_history": storage.load("team_history.json", {}),
     }
 
 
@@ -123,4 +127,6 @@ def import_all(data: dict) -> None:
     if "tips" in data:
         storage.save("tips.json", data["tips"])
     if "ratings" in data:
-        storage.save("ratings.json", data["ratings"])
+        storage.save("team_ratings.json", data["ratings"])
+    if "team_history" in data:
+        storage.save("team_history.json", data["team_history"])
