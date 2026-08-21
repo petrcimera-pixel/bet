@@ -234,8 +234,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0871
         },
-        "closing_odds": 3.455,
-        "clv": 0.0014
+        "closing_odds": 3.611,
+        "clv": -0.0418
       },
       {
         "id": "c20f384470",
@@ -419,9 +419,9 @@
         "odds": 2.0,
         "prob": 0.5495,
         "stake": 5.02,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.02,
+        "settled_ts": 1787344648,
         "ml_features": {
           "attack_home": 1.1933,
           "defense_home": 1.3482,
@@ -433,7 +433,11 @@
           "edge": 0.0495
         },
         "closing_odds": 2.0,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "f41f6ebec4",
@@ -498,8 +502,8 @@
           "rating_confidence": 1.0,
           "edge": 0.226
         },
-        "closing_odds": 2.25,
-        "clv": 0.0
+        "closing_odds": 2.3,
+        "clv": -0.0217
       },
       {
         "id": "c60574539d",
@@ -832,7 +836,7 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 2,
+    "loss_streak": 3,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -1357,8 +1361,8 @@
           "rating_confidence": 1.0,
           "edge": -0.1366
         },
-        "closing_odds": 1.029,
-        "clv": -0.0087
+        "closing_odds": 1.021,
+        "clv": -0.001
       },
       {
         "id": "efc93f3d94",
@@ -1456,8 +1460,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0013
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.178,
+        "clv": -0.0068
       },
       {
         "id": "507e1ea33c",
@@ -1884,8 +1888,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2543
         },
-        "closing_odds": 1.926,
-        "clv": 0.0021
+        "closing_odds": 1.952,
+        "clv": -0.0113
       },
       {
         "id": "18e915ba12",
@@ -2240,8 +2244,8 @@
           "rating_confidence": 1.0,
           "edge": -0.2508
         },
-        "closing_odds": 1.222,
-        "clv": -0.0098
+        "closing_odds": 1.211,
+        "clv": -0.0008
       },
       {
         "id": "187c3e217d",
@@ -2811,9 +2815,9 @@
         "odds": 4.1,
         "prob": 0.2394,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787344648,
         "ml_features": {
           "attack_home": 1.1933,
           "defense_home": 1.3482,
@@ -2825,7 +2829,11 @@
           "edge": -0.0045
         },
         "closing_odds": 3.85,
-        "clv": 0.0649
+        "clv": 0.0649,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "160b996118",
@@ -2857,8 +2865,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0501
         },
-        "closing_odds": 4.4,
-        "clv": 0.0
+        "closing_odds": 4.5,
+        "clv": -0.0222
       },
       {
         "id": "5ed55bce37",
@@ -2890,8 +2898,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0256
         },
-        "closing_odds": 4.5,
-        "clv": 0.0
+        "closing_odds": 4.7,
+        "clv": -0.0426
       },
       {
         "id": "77c2b36d56",
@@ -2961,7 +2969,7 @@
       }
     ],
     "last_run_date": "2026-08-21",
-    "loss_streak": 2,
+    "loss_streak": 3,
     "ran_hours": [],
     "win_streak": 0,
     "transactions": [
@@ -3044,8 +3052,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0064
         },
-        "closing_odds": 1.172,
-        "clv": 0.0068
+        "closing_odds": 1.178,
+        "clv": 0.0017
       },
       {
         "id": "4599971bdf",
@@ -3268,7 +3276,7 @@
     "name": "Domácí Dalibor",
     "emoji": "🏠",
     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-    "balance": 160.25,
+    "balance": 169.8,
     "start_balance": 200.0,
     "bets": [
       {
@@ -3301,8 +3309,8 @@
           "rating_confidence": 1.0,
           "edge": -0.1352
         },
-        "closing_odds": 1.833,
-        "clv": -0.0016
+        "closing_odds": 1.8,
+        "clv": 0.0167
       },
       {
         "id": "2a18a0ecc3",
@@ -3406,8 +3414,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0065
         },
-        "closing_odds": 2.14,
-        "clv": 0.0
+        "closing_odds": 2.02,
+        "clv": 0.0594
       },
       {
         "id": "cc662fc276",
@@ -3426,9 +3434,9 @@
         "odds": 1.91,
         "prob": 0.4941,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 4.55,
+        "settled_ts": 1787344648,
         "ml_features": {
           "attack_home": 1.1933,
           "defense_home": 1.3482,
@@ -3440,7 +3448,11 @@
           "edge": -0.0297
         },
         "closing_odds": 2.0,
-        "clv": -0.045
+        "clv": -0.045,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "a6fbf60a32",
@@ -3540,8 +3552,8 @@
           "rating_confidence": 1.0,
           "edge": -0.0018
         },
-        "closing_odds": 1.741,
-        "clv": -0.0006
+        "closing_odds": 1.714,
+        "clv": 0.0152
       },
       {
         "id": "74878ad0fd",
@@ -3612,8 +3624,8 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -4058,8 +4070,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0593
         },
-        "closing_odds": 1.588,
-        "clv": 0.0013
+        "closing_odds": 1.556,
+        "clv": 0.0219
       },
       {
         "id": "2b1850af19",
@@ -4198,8 +4210,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2076
         },
-        "closing_odds": 1.769,
-        "clv": 0.0175
+        "closing_odds": 1.833,
+        "clv": -0.018
       },
       {
         "id": "569954739d",
@@ -4231,8 +4243,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2543
         },
-        "closing_odds": 1.926,
-        "clv": 0.0021
+        "closing_odds": 1.952,
+        "clv": -0.0113
       },
       {
         "id": "4693a0bd4f",
@@ -4517,8 +4529,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0013
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.178,
+        "clv": -0.0068
       },
       {
         "id": "d669619ea1",
@@ -4807,8 +4819,8 @@
           "rating_confidence": 1.0,
           "edge": -0.101
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.158,
+        "clv": 0.0104
       },
       {
         "id": "d72fc31d1c",
@@ -4974,8 +4986,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0045
         },
-        "closing_odds": 1.222,
-        "clv": -0.0016
+        "closing_odds": 1.209,
+        "clv": 0.0091
       },
       {
         "id": "a2ba856d02",
@@ -5077,8 +5089,8 @@
           "rating_confidence": 1.0,
           "edge": -0.1366
         },
-        "closing_odds": 1.029,
-        "clv": -0.0087
+        "closing_odds": 1.021,
+        "clv": -0.001
       },
       {
         "id": "7f165ec82d",
@@ -5176,8 +5188,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0013
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.178,
+        "clv": -0.0068
       },
       {
         "id": "8526a05571",
@@ -5432,7 +5444,9 @@
           "exp_goals_away": 74.65,
           "rating_confidence": 1.0,
           "edge": 0.2543
-        }
+        },
+        "closing_odds": 1.952,
+        "clv": -0.0113
       },
       {
         "id": "a8e50c3333",
@@ -5534,8 +5548,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0013
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.178,
+        "clv": -0.0068
       },
       {
         "id": "b15d942e1e",
@@ -5857,7 +5871,7 @@
     "name": "Diverzifikátor Dita",
     "emoji": "🕸️",
     "tagline": "Hodně malých sázek, ale nejvýš jedna na ligu – rozloží riziko.",
-    "balance": 89.35,
+    "balance": 95.55,
     "start_balance": 200.0,
     "bets": [
       {
@@ -5889,7 +5903,9 @@
           "exp_goals_away": 75.21,
           "rating_confidence": 1.0,
           "edge": 0.1715
-        }
+        },
+        "closing_odds": 1.926,
+        "clv": 0.0021
       },
       {
         "id": "9c78671d6f",
@@ -5991,8 +6007,8 @@
           "rating_confidence": 1.0,
           "edge": -0.101
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.158,
+        "clv": 0.0104
       },
       {
         "id": "7e54dd922d",
@@ -6048,9 +6064,9 @@
         "odds": 1.24,
         "prob": 0.7606,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 1.2,
+        "settled_ts": 1787344648,
         "ml_features": {
           "attack_home": 1.1933,
           "defense_home": 1.3482,
@@ -6062,7 +6078,11 @@
           "edge": -0.0491
         },
         "closing_odds": 1.259,
-        "clv": -0.0151
+        "clv": -0.0151,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "0fa8a7b321",
@@ -6131,8 +6151,8 @@
           "rating_confidence": 1.0,
           "edge": 0.2543
         },
-        "closing_odds": 1.926,
-        "clv": 0.0021
+        "closing_odds": 1.952,
+        "clv": -0.0113
       },
       {
         "id": "ff6a5e536e",
@@ -6302,8 +6322,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0045
         },
-        "closing_odds": 1.222,
-        "clv": -0.0016
+        "closing_odds": 1.209,
+        "clv": 0.0091
       },
       {
         "id": "469d2f8692",
@@ -6438,8 +6458,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0013
         },
-        "closing_odds": 1.172,
-        "clv": -0.0017
+        "closing_odds": 1.178,
+        "clv": -0.0068
       },
       {
         "id": "06a3325929",
@@ -6504,8 +6524,8 @@
           "rating_confidence": 1.0,
           "edge": -0.1366
         },
-        "closing_odds": 1.029,
-        "clv": -0.0087
+        "closing_odds": 1.021,
+        "clv": -0.001
       },
       {
         "id": "2f340501a6",
@@ -6745,8 +6765,8 @@
     ],
     "last_run_date": "2026-08-21",
     "ran_hours": [],
-    "loss_streak": 2,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -7510,8 +7530,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": 0.0068
+            "closing_odds": 1.178,
+            "clv": 0.0017
           },
           {
             "match_id": "401845045",
@@ -8012,8 +8032,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": 0.0068
+            "closing_odds": 1.178,
+            "clv": 0.0017
           },
           {
             "match_id": "401845045",
@@ -8235,8 +8255,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": -0.0017
+            "closing_odds": 1.178,
+            "clv": -0.0068
           },
           {
             "match_id": "401845045",
@@ -8407,8 +8427,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": -0.0017
+            "closing_odds": 1.178,
+            "clv": -0.0068
           },
           {
             "match_id": "401845045",
@@ -8579,8 +8599,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": -0.0017
+            "closing_odds": 1.178,
+            "clv": -0.0068
           },
           {
             "match_id": "401845045",
@@ -8700,7 +8720,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 3.2,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,
@@ -9070,8 +9092,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": 0.0068
+            "closing_odds": 1.178,
+            "clv": 0.0017
           }
         ],
         "stake": 5.0,
@@ -9723,7 +9745,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 3.2,
+            "clv": 0.0
           },
           {
             "match_id": "401883224",
@@ -10105,8 +10129,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 1.172,
-            "clv": 0.0068
+            "closing_odds": 1.178,
+            "clv": 0.0017
           }
         ],
         "stake": 5.0,
@@ -11654,8 +11678,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -11720,8 +11744,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -11737,8 +11761,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -11786,8 +11810,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -11852,8 +11876,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -11869,8 +11893,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -11918,8 +11942,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -11984,8 +12008,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -12001,8 +12025,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -13983,7 +14007,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 1.952,
+            "clv": -0.0113
           },
           {
             "match_id": "401857161",
@@ -13998,7 +14024,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 1.82,
+            "clv": -0.044
           }
         ],
         "stake": 5.0,
@@ -14045,7 +14073,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 1.926,
+            "clv": 0.0021
           },
           {
             "match_id": "401857162",
@@ -14060,7 +14090,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 3.2,
+            "clv": 0.0
           }
         ],
         "stake": 5.0,
@@ -14174,8 +14206,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.926,
-            "clv": 0.0021
+            "closing_odds": 1.952,
+            "clv": -0.0113
           },
           {
             "match_id": "401857161",
@@ -14191,8 +14223,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.82,
+            "clv": -0.044
           }
         ],
         "stake": 5.0,
@@ -14372,8 +14404,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.926,
-            "clv": 0.0021
+            "closing_odds": 1.952,
+            "clv": -0.0113
           },
           {
             "match_id": "401857161",
@@ -14389,8 +14421,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.82,
+            "clv": -0.044
           }
         ],
         "stake": 5.0,
@@ -14570,8 +14602,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.926,
-            "clv": 0.0021
+            "closing_odds": 1.952,
+            "clv": -0.0113
           },
           {
             "match_id": "401857161",
@@ -14587,8 +14619,8 @@
             "sport": "basketball",
             "slug": "wnba",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0235
+            "closing_odds": 1.82,
+            "clv": -0.0659
           }
         ],
         "stake": 5.0,
@@ -15512,8 +15544,8 @@
             "sport": "soccer",
             "slug": "col.1",
             "result": null,
-            "closing_odds": 1.833,
-            "clv": -0.0016
+            "closing_odds": 1.8,
+            "clv": 0.0167
           },
           {
             "match_id": "401877994",
@@ -15529,8 +15561,8 @@
             "sport": "soccer",
             "slug": "col.1",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0006
+            "closing_odds": 1.741,
+            "clv": 0.0167
           }
         ],
         "stake": 5.0,
@@ -15644,8 +15676,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -15776,8 +15808,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -15908,8 +15940,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -16701,8 +16733,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401879301",
@@ -16801,8 +16833,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401879301",
@@ -16901,8 +16933,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401879301",
@@ -17005,7 +17037,9 @@
             "time": "23:30",
             "sport": "basketball",
             "slug": "wnba",
-            "result": null
+            "result": null,
+            "closing_odds": 3.2,
+            "clv": 0.0
           },
           {
             "match_id": "401845045",
@@ -17777,8 +17811,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -17794,8 +17828,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -17913,8 +17947,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -17930,8 +17964,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -18049,8 +18083,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.222,
-            "clv": -0.0098
+            "closing_odds": 1.211,
+            "clv": -0.0008
           },
           {
             "match_id": "401875187",
@@ -18066,8 +18100,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.769,
-            "clv": 0.0175
+            "closing_odds": 1.833,
+            "clv": -0.018
           }
         ],
         "stake": 5.0,
@@ -20620,8 +20654,8 @@
           "rating_confidence": 1.0,
           "edge": 0.226
         },
-        "closing_odds": 2.25,
-        "clv": 0.0
+        "closing_odds": 2.3,
+        "clv": -0.0217
       },
       {
         "id": "bfb8a28087",
@@ -20653,8 +20687,8 @@
           "rating_confidence": 1.0,
           "edge": -0.1351
         },
-        "closing_odds": 1.832,
-        "clv": 0.0153
+        "closing_odds": 1.848,
+        "clv": 0.0065
       },
       {
         "id": "c2ca24bc49",
@@ -21045,8 +21079,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -21062,8 +21096,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.396,
-            "clv": 0.0029
+            "closing_odds": 1.381,
+            "clv": 0.0138
           }
         ],
         "stake": 5.0,
@@ -21251,8 +21285,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -21268,8 +21302,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.396,
-            "clv": 0.0029
+            "closing_odds": 1.381,
+            "clv": 0.0138
           }
         ],
         "stake": 5.0,
@@ -21457,8 +21491,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.741,
-            "clv": -0.0006
+            "closing_odds": 1.714,
+            "clv": 0.0152
           },
           {
             "match_id": "401876489",
@@ -21474,8 +21508,8 @@
             "sport": "soccer",
             "slug": "fra.1",
             "result": null,
-            "closing_odds": 1.396,
-            "clv": 0.0029
+            "closing_odds": 1.381,
+            "clv": 0.0138
           }
         ],
         "stake": 5.0,
@@ -21685,8 +21719,8 @@
             "sport": "soccer",
             "slug": "ven.1",
             "result": null,
-            "closing_odds": 2.05,
-            "clv": 0.0244
+            "closing_odds": 2.1,
+            "clv": 0.0
           },
           {
             "match_id": "401883224",
@@ -21947,7 +21981,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_model_conservative": {
     "name": "AI Opatrný Ota",
@@ -21964,7 +21999,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_model_kelly": {
     "name": "AI Kelly Kristýna",
@@ -21982,7 +22018,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_model_ultra": {
     "name": "AI Ultra Jistý Umberto",
@@ -21999,7 +22036,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_combo_triple": {
     "name": "AI Trojkombinátor Tobiáš",
@@ -22017,7 +22055,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_combo_conservative": {
     "name": "AI Karel Konzervativní",
@@ -22035,7 +22074,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_combo_aggressive": {
     "name": "AI Karel Agresivní",
@@ -22053,7 +22093,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_combo_ultra": {
     "name": "AI Karel Ultra Jistý",
@@ -22071,7 +22112,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_acca_duo": {
     "name": "AI Klára Duo",
@@ -22089,7 +22131,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_acca_penta": {
     "name": "AI Klára Penta",
@@ -22107,7 +22150,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_acca_conservative": {
     "name": "AI Klára Konzervativní",
@@ -22125,7 +22169,8 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
   },
   "ai_acca_aggressive": {
     "name": "AI Klára Agresivní",
@@ -22143,6 +22188,112 @@
     "bets": [],
     "last_run_date": null,
     "ran_hours": [],
-    "loss_streak": 0
+    "loss_streak": 0,
+    "win_streak": 0
+  },
+  "ai_champion": {
+    "name": "AI Šampion",
+    "emoji": "🤖🏆",
+    "tagline": "Evoluce AI kategorie – zdroj: AI Klára (CLV 0.71%, 8 vzorků), práh jistoty 0.592.",
+    "group": "ai",
+    "custom": true,
+    "ai_kind": "acca",
+    "params": {
+      "market": "any",
+      "progression": "none",
+      "stake_mode": "flat",
+      "min_prob": 0.6,
+      "min_odds": 1.2,
+      "max_odds": 10.0,
+      "stake_pct": 0.03,
+      "kelly_fraction": 0.25,
+      "max_bets": 3,
+      "pause_after_losses": 0,
+      "one_per_league": false,
+      "legs": 2,
+      "leg_min_prob": 0.55,
+      "require_positive_ev": false,
+      "ai_min_win_prob": 0.592
+    },
+    "balance": 195.0,
+    "start_balance": 200.0,
+    "bets": [
+      {
+        "id": "df07647677",
+        "ts": 1787344748,
+        "kind": "acca",
+        "match_id": "",
+        "match": "Tiket 2× (San Telmo…)",
+        "league": "Argentine Nacional B",
+        "match_date": "2026-08-21",
+        "match_time": "18:30",
+        "sport": "soccer",
+        "slug": "arg.2",
+        "outcome": "acca",
+        "label": "AKO 2",
+        "name": "Deportivo Morón s hendikepem -0,5 + Více než 163,5 bodu",
+        "odds": 4.54,
+        "prob": 0.6901,
+        "legs": [
+          {
+            "match_id": "401844076",
+            "match": "San Telmo – Deportivo Morón",
+            "league": "Argentine Nacional B",
+            "outcome": "ah_away_-0.5",
+            "label": "Hendikep -0,5",
+            "name": "Deportivo Morón s hendikepem -0,5",
+            "odds": 2.4,
+            "prob": 0.8366,
+            "date": "2026-08-21",
+            "time": "18:30",
+            "sport": "soccer",
+            "slug": "arg.2",
+            "result": null,
+            "closing_odds": 2.4,
+            "clv": 0.0
+          },
+          {
+            "match_id": "401857162",
+            "match": "Chicago Sky – Golden State Valkyries",
+            "league": "Women's National Basketball Association",
+            "outcome": "over163.5",
+            "label": "Více 163,5",
+            "name": "Více než 163,5 bodu",
+            "odds": 1.89,
+            "prob": 0.8249,
+            "date": "2026-08-21",
+            "time": "23:30",
+            "sport": "basketball",
+            "slug": "wnba",
+            "result": null
+          }
+        ],
+        "stake": 5.0,
+        "status": "open",
+        "pnl": 0.0,
+        "settled_ts": null,
+        "ml_features": {
+          "attack_home": 0.6189,
+          "defense_home": 1.2084,
+          "attack_away": 1.4593,
+          "defense_away": 0.8301,
+          "exp_goals_home": 0.69,
+          "exp_goals_away": 1.94,
+          "rating_confidence": 1.0
+        }
+      }
+    ],
+    "last_run_date": "2026-08-21",
+    "ran_hours": [],
+    "loss_streak": 0,
+    "transactions": [
+      {
+        "ts": 1787344724,
+        "type": "start",
+        "amount": 200.0,
+        "note": "Start"
+      }
+    ],
+    "win_streak": 0
   }
 }

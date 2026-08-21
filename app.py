@@ -1253,6 +1253,11 @@ def api_cron_retrain():
     except Exception as e:
         out["benchmark"] = {"error": str(e)}
 
+    try:
+        out["ai_evolve"] = virtual_bettors.evolve_ai_champion()
+    except Exception as e:
+        out["ai_evolve"] = {"error": str(e)}
+
     _persist_push_safe()
     return jsonify(out)
 
@@ -2058,6 +2063,28 @@ def api_bettors_ai_status():
     except Exception:
         ready = False
     return jsonify({"model_ready": ready})
+
+
+@app.route("/api/bettors/ai-tournament")
+@login_required
+def api_bettors_ai_tournament():
+    """Žebříček všech AI sázkařů podle CLV (spolehlivější na malém vzorku
+    než syrový zisk) - z tohohle vychází evolve_ai_champion()."""
+    return jsonify({"tournament": virtual_bettors.ai_tournament()})
+
+
+@app.route("/api/bettors/ai-champion/evolve", methods=["POST"])
+@login_required
+def api_bettors_ai_champion_evolve():
+    """Najde aktuálně nejlepší AI sázkařku a vytvoří/aktualizuje z ní
+    'AI Šampiona' s mírně zmutovanými parametry - AI kategorie se tak
+    postupně sama vylepšuje. Volá se i z denního retrain cronu."""
+    try:
+        res = virtual_bettors.evolve_ai_champion()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/api/bettors/breakdown/time")

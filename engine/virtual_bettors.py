@@ -1791,9 +1791,17 @@ def load_state():
 
 def _strategy_for(bid, b):
     """Vestavěný sázkař má strategii v kódu, vlastní ji skládá z parametrů –
-    podle group (single/combo/acca), protože každá staví tiket jinak."""
+    podle group (single/combo/acca/ai), protože každá staví tiket jinak."""
     if b.get("custom"):
         grp = b.get("group", "single")
+        if grp == "ai":
+            # ai_kind rozlišuje STYL uvnitř AI kategorie (single/combo/acca) -
+            # group u AI sázkařů je vždycky "ai", to samo nestačí k výběru
+            # strategie. Používá to evolve_ai_champion() - AI Šampion je
+            # custom sázkař, co reálně stojí na _s_ai_model/_s_ai_combo/
+            # _s_ai_acca stejně jako vestavění, jen s vyladěnými parametry.
+            kind = b.get("ai_kind", "single")
+            return {"single": _s_ai_model, "combo": _s_ai_combo, "acca": _s_ai_acca}.get(kind, _s_ai_model)
         if grp == "combo":
             return _s_custom_combo
         if grp == "acca":
@@ -2282,6 +2290,85 @@ def leaderboard() -> list:
         per_group[g] = per_group.get(g, 0) + 1
         r["rank"] = per_group[g]
     return rows
+
+
+AI_CHAMPION_ID = "ai_champion"
+AI_TOURNAMENT_MIN_CLV_N = 5   # kolik sazek/noh s CLV je potreba, nez se sazkar bere vazne
+
+
+def ai_tournament() -> list:
+    """Porovná všechny AI sázkaře (group="ai") mezi sebou. Řadí primárně
+    podle CLV (closing line value) – na malém vzorku spolehlivější
+    ukazatel skutečné výhody než syrový zisk, protože nezávisí na tom,
+    jestli zrovna padl gól. Zisk je jen sekundární tiebreaker."""
+    st = load_state()
+    rows = []
+    for bid, b in st.items():
+        grp = b.get("group") or (_BY_ID.get(bid, {}) or {}).get("group", "single")
+        if grp != "ai":
+            continue
+        stats = _bettor_stats(bid, b)
+        stats["params"] = b.get("params") or {}
+        stats["ai_kind"] = b.get("ai_kind")
+        rows.append(stats)
+    rows.sort(key=lambda r: (
+        -(r["avg_clv"]) if (r.get("clv_n") or 0) >= AI_TOURNAMENT_MIN_CLV_N and r.get("avg_clv") is not None else 999,
+        -(r.get("profit") or 0),
+    ))
+    for i, r in enumerate(rows, 1):
+        r["rank"] = i
+    return rows
+
+
+def evolve_ai_champion() -> dict:
+    """Najde aktuálně nejlepší AI sázkařku (podle ai_tournament) a vytvoří/
+    aktualizuje JEDNOHO 'AI Šampiona' s mírně zmutovanými parametry vítěze
+    (práh jistoty posunutý o náhodný krok ±3 p.b.) - AI kategorie se tak
+    postupně sama vylepšuje prohledáváním okolí toho, co už funguje,
+    místo aby zůstala navždy jen na napevno vymyšlených variantách.
+
+    Jen JEDEN šampion (přepisuje parametry, nevytváří nové ID) - jinak by
+    aréna po každé evoluci nabobtnala o dalšího sázkaře donekonečna.
+    Bank/historie šampiona zůstává (je to porád "ten samý" sázkař, jen
+    se mu doladí nastavení) - reset by měl smysl jen po velké změně."""
+    rows = [r for r in ai_tournament()
+            if r["id"] != AI_CHAMPION_ID and (r.get("clv_n") or 0) >= AI_TOURNAMENT_MIN_CLV_N]
+    if not rows:
+        return {"evolved": False, "reason": "not_enough_data"}
+    winner = rows[0]
+    base_params = normalize_params(winner.get("params") or {})
+    wp = float(base_params.get("ai_min_win_prob", AI_MIN_WIN_PROB))
+    base_params["ai_min_win_prob"] = round(max(0.5, min(0.85, wp + random.uniform(-0.03, 0.03))), 3)
+
+    wid = winner["id"]
+    if "combo" in wid:
+        kind = "combo"
+    elif "acca" in wid:
+        kind = "acca"
+    else:
+        kind = "single"
+
+    st = load_state()
+    tagline = (f"Evoluce AI kategorie – zdroj: {winner['name']} "
+              f"(CLV {winner.get('avg_clv')}%, {winner.get('clv_n')} vzorků), "
+              f"práh jistoty {base_params['ai_min_win_prob']}.")
+    existing = st.get(AI_CHAMPION_ID)
+    if existing and existing.get("custom"):
+        existing["params"] = base_params
+        existing["ai_kind"] = kind
+        existing["tagline"] = tagline
+    else:
+        st[AI_CHAMPION_ID] = {
+            "name": "AI Šampion", "emoji": "🤖🏆", "tagline": tagline,
+            "group": "ai", "custom": True, "ai_kind": kind, "params": base_params,
+            "balance": DEFAULT_START_BALANCE, "start_balance": DEFAULT_START_BALANCE,
+            "bets": [], "last_run_date": None, "ran_hours": [], "loss_streak": 0,
+            "transactions": [{"ts": int(time.time()), "type": "start",
+                              "amount": float(DEFAULT_START_BALANCE), "note": "Start"}],
+        }
+    save_state(st)
+    return {"evolved": True, "source": winner["name"], "source_id": winner["id"],
+            "params": base_params, "kind": kind}
 
 
 def _perf_breakdown(bets: list, key: str) -> list:
