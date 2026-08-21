@@ -1248,6 +1248,11 @@ def api_cron_retrain():
     except Exception as e:
         out["calibration"] = {"error": str(e)}
 
+    try:
+        out["benchmark"] = footballdata.benchmark_and_log(limit=2000, ts=int(_time.time()))
+    except Exception as e:
+        out["benchmark"] = {"error": str(e)}
+
     _persist_push_safe()
     return jsonify(out)
 
@@ -1719,6 +1724,25 @@ def api_ratings_backfill_archive():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/ratings/backfill-corners", methods=["POST"])
+@login_required
+def api_ratings_backfill_corners():
+    """Doplní rohy (cf/ca) do UŽ zapsané historie - backfill_ratings() je
+    kvůli dedupu znovu nesahne (viz footballdata.backfill_corners_only)."""
+    d = request.get_json(force=True) or {}
+    try:
+        seasons = int(d.get("seasons") or 8)
+    except (TypeError, ValueError):
+        seasons = 8
+    try:
+        res = footballdata.backfill_corners_only(seasons=footballdata.seasons_back(max(1, min(8, seasons))))
+        _PRED_CACHE.clear()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/ratings/cleanup-empty", methods=["POST"])
 @login_required
 def api_ratings_cleanup_empty():
@@ -1765,15 +1789,25 @@ def api_ratings_reset_home_away_split():
 @app.route("/api/model/benchmark")
 @login_required
 def api_model_benchmark():
-    """Porovnání modelu se zavíracím kurzem Pinnacle (Brierovo skóre)."""
+    """Porovnání modelu se zavíracím kurzem Pinnacle (Brierovo skóre).
+    Výsledek se rovnou loguje do historie (viz /api/model/benchmark/history),
+    ať jde sledovat, jestli se model v čase zlepšuje, nebo naopak."""
     try:
         limit = int(request.args.get("limit") or 1500)
     except (TypeError, ValueError):
         limit = 1500
     try:
-        return jsonify(footballdata.benchmark(limit=max(200, min(8000, limit))))
+        return jsonify(footballdata.benchmark_and_log(limit=max(200, min(8000, limit)),
+                                                       ts=int(_time.time())))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/model/benchmark/history")
+@login_required
+def api_model_benchmark_history():
+    """Historie benchmarku v čase - ukazuje, jestli se model zlepšuje."""
+    return jsonify({"history": footballdata.benchmark_history()})
 
 
 @app.route("/api/server/info")

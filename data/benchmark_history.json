@@ -1,0 +1,9 @@
+[
+  {
+    "ts": 1787335937,
+    "brier_model": 0.633,
+    "brier_market": 0.607,
+    "diff": -0.026,
+    "matches": 1000
+  }
+]

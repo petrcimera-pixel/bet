@@ -158,7 +158,7 @@ def backfill_ratings(seasons=None, codes=None, progress=None) -> dict:
                 m["home"], m["away"], m["league"], m["home_score"], m["away_score"],
                 "soccer", m["slug"], match_id=m["id"], date=m.get("date"),
                 _ratings_cache=batch_ratings, _history_cache=batch_history,
-                _applied_cache=batch_applied)
+                _applied_cache=batch_applied, corners=m.get("corners"))
             applied += 1 if ok else 0
             skipped += 0 if ok else 1
         except Exception:
@@ -176,6 +176,36 @@ def backfill_ratings(seasons=None, codes=None, progress=None) -> dict:
         "median_games": ns[len(ns) // 2] if ns else 0,
         "avg_games": round(sum(ns) / len(ns), 1) if ns else 0,
     }
+
+
+def backfill_corners_only(seasons=None, codes=None) -> dict:
+    """Dosadí rohy (cf/ca) do UŽ zapsaných záznamů historie – backfill_ratings()
+    zápasy, co má v ratings_applied.json, znovu nesahne (dedup podle
+    match_id), takže archiv natažený PŘED přidáním pole corners by je
+    jinak nikdy nedostal. Historii jen OBOHACUJE (matchuje podle
+    tým+datum+soupeř), ratingy ani applied-dedup se nedotýká."""
+    from . import goals_model
+
+    matches = fetch_all(seasons, codes)
+    hist = goals_model._team_history()
+    filled = 0
+    for m in matches:
+        c = m.get("corners") or {}
+        if c.get("home") is None or c.get("away") is None:
+            continue
+        for team, opp, loc, cf, ca in (
+            (goals_model._norm_team(m["home"]), goals_model._norm_team(m["away"]), "home", c["home"], c["away"]),
+            (goals_model._norm_team(m["away"]), goals_model._norm_team(m["home"]), "away", c["away"], c["home"]),
+        ):
+            for entry in hist.get(team, []):
+                if (entry.get("date") == m["date"] and entry.get("loc") == loc
+                        and goals_model._norm_team(entry.get("opponent", "")) == opp
+                        and entry.get("cf") is None):
+                    entry["cf"], entry["ca"] = cf, ca
+                    filled += 1
+                    break
+    goals_model.storage.save(goals_model._HISTORY_FILE, hist)
+    return {"filled": filled}
 
 
 def benchmark(seasons=None, codes=None, limit=4000) -> dict:
@@ -226,3 +256,28 @@ def benchmark(seasons=None, codes=None, limit=4000) -> dict:
                  "Model zatím zavírací kurz neporáží – to je běžné, trh je "
                  "silný protivník. Kladný rozdíl je cíl, ne samozřejmost."),
     }
+
+
+_HISTORY_LOG = "benchmark_history.json"
+_HISTORY_MAX = 200   # dost na roky týdenních běhů, ať soubor neroste bez konce
+
+
+def benchmark_and_log(seasons=None, codes=None, limit=4000, ts: int = None) -> dict:
+    """Stejné jako benchmark(), ale výsledek si navíc uloží do historie
+    (benchmark_history.json) - bez tohohle appka měla jen "teď", žádný
+    přehled, jestli se model v čase zlepšuje, nebo naopak degraduje po
+    nějaké změně. ts se předává zvenčí (Date.now() je v appce jinak
+    zakázané kvůli deterministickým workflow běhům) - bez něj appka
+    prostě časové razítko nepřipojí."""
+    res = benchmark(seasons, codes, limit)
+    if res.get("matches"):
+        log = storage.load(_HISTORY_LOG, [])
+        log.append({"ts": ts, "brier_model": res["brier_model"],
+                    "brier_market": res["brier_market"], "diff": res["diff"],
+                    "matches": res["matches"]})
+        storage.save(_HISTORY_LOG, log[-_HISTORY_MAX:])
+    return res
+
+
+def benchmark_history() -> list:
+    return storage.load(_HISTORY_LOG, [])

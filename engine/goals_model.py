@@ -246,10 +246,15 @@ def _team_history() -> dict:
 
 
 def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
-                          date: str, sport: str, hist: dict = None) -> dict:
+                          date: str, sport: str, hist: dict = None,
+                          corners: dict = None) -> dict:
     """Zapíše zápas do historie OBOU týmů – používá se pro formu (posledních
     N výsledků) a head-to-head (vzájemné zápasy). Nezávislé na ratingech,
     takže se dá číst i pro sporty/situace, kde by rating byl nespolehlivý.
+
+    corners: {"home": n, "away": n} – jen football-data.co.uk archiv to
+    má (viz footballdata.py), ESPN kurzy na rohy nedává vůbec. Bez
+    dostupných dat zůstává None a expected_corners() ten zápas přeskočí.
 
     hist: když je předaný (dávkové zpracování, viz backfill_ratings), upraví
     se v paměti a NEUKLOŽÍ se – volající uloží jednou po celé dávce. Bez
@@ -259,11 +264,13 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
     own_hist = hist is None
     if own_hist:
         hist = _team_history()
+    c_h = (corners or {}).get("home")
+    c_a = (corners or {}).get("away")
     entry_h = {"date": date, "opponent": away, "league": league, "sport": sport,
-               "loc": "home", "gf": hs, "ga": as_,
+               "loc": "home", "gf": hs, "ga": as_, "cf": c_h, "ca": c_a,
                "result": "W" if hs > as_ else "L" if hs < as_ else "D"}
     entry_a = {"date": date, "opponent": home, "league": league, "sport": sport,
-               "loc": "away", "gf": as_, "ga": hs,
+               "loc": "away", "gf": as_, "ga": hs, "cf": c_a, "ca": c_h,
                "result": "W" if as_ > hs else "L" if as_ < hs else "D"}
     for team, entry in ((_norm_team(home), entry_h), (_norm_team(away), entry_a)):
         lst = hist.setdefault(team, [])
@@ -273,6 +280,31 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
     if own_hist:
         storage.save(_HISTORY_FILE, hist)
     return hist
+
+
+CORNERS_MIN_SAMPLES = 3   # ať odhad nestojí na jednom náhodném zápase
+
+
+def expected_corners(home: str, away: str, n: int = 10) -> dict:
+    """Hrubý odhad rohů z posledních zápasů OBOU týmů (cf/ca v historii –
+    jen football-data.co.uk archiv je má, ESPN kurzy na rohy nedává vůbec,
+    takže se na ně nikdy nesází, jen se zobrazují jako 'jen model' info
+    v detailu zápasu). None, když ani jeden tým nemá dost dat s rohy."""
+    h_hist = [e for e in _team_history().get(_norm_team(home), []) if e.get("cf") is not None][-n:]
+    a_hist = [e for e in _team_history().get(_norm_team(away), []) if e.get("cf") is not None][-n:]
+    if len(h_hist) < CORNERS_MIN_SAMPLES or len(a_hist) < CORNERS_MIN_SAMPLES:
+        return None
+    h_for = sum(e["cf"] for e in h_hist) / len(h_hist)
+    h_against = sum(e["ca"] for e in h_hist) / len(h_hist)
+    a_for = sum(e["cf"] for e in a_hist) / len(a_hist)
+    a_against = sum(e["ca"] for e in a_hist) / len(a_hist)
+    # Domácí očekávané rohy = průměr jeho vlastního "cf" a soupeřova "ca"
+    # (co typicky dovolí soupeřům) – stejná logika jako u gólového ratingu,
+    # jen bez EMA učení, čistě popisný průměr posledních n zápasů.
+    exp_h = round((h_for + a_against) / 2, 1)
+    exp_a = round((a_for + h_against) / 2, 1)
+    return {"home": exp_h, "away": exp_a, "total": round(exp_h + exp_a, 1),
+            "sample_home": len(h_hist), "sample_away": len(a_hist)}
 
 
 def team_form(team: str, n: int = 5) -> list:
@@ -293,7 +325,7 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
                         sport: str = "soccer", slug: str = "",
                         match_id: str = None, date: str = None,
                         _ratings_cache: dict = None, _history_cache: dict = None,
-                        _applied_cache: set = None) -> bool:
+                        _applied_cache: set = None, corners: dict = None) -> bool:
     """Po vyhodnoceném zápase posune attack/defense obou týmů směrem k tomu,
     co skutečně předvedly oproti očekávání – učení se zpomaluje s počtem
     odehraných zápasů (n).
@@ -325,7 +357,7 @@ def update_from_result(home: str, away: str, league: str, hs: int, as_: int,
     # data padá na dnešek – lepší přibližné pořadí než žádné.
     _record_team_history(home, away, league, hs, as_,
                          date or datetime.date.today().isoformat(), sport,
-                         hist=_history_cache)
+                         hist=_history_cache, corners=corners)
 
     own_ratings = _ratings_cache is None
     ratings = _ratings_cache if _ratings_cache is not None else _ratings()
@@ -1154,6 +1186,10 @@ def predict_match(m: dict) -> dict:
                 "first_half": _half_exact_goals_probs(h1_lam),
             },
         }
+        if sport == "soccer":
+            corners = expected_corners(m["home"], m["away"])
+            if corners:
+                extra_markets["corners"] = corners
 
     # Dvojtip a "remíza zpět" – nejsou to nové kurzy od sázkovky, ale PŘESNÝ
     # přepočet z reálných kurzů na 1/X/2. Jsou to vzájemně se vylučující

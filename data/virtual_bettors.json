@@ -100778,8 +100778,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.571,
-            "clv": 0.0121
+            "closing_odds": 1.588,
+            "clv": 0.0013
           },
           {
             "match_id": "401844076",
@@ -100795,8 +100795,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.473,
-            "clv": -0.0224
+            "closing_odds": 1.437,
+            "clv": 0.0021
           },
           {
             "match_id": "401845044",
@@ -100861,8 +100861,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.571,
-            "clv": 0.0248
+            "closing_odds": 1.588,
+            "clv": 0.0139
           },
           {
             "match_id": "401844076",
@@ -100878,8 +100878,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.473,
-            "clv": -0.002
+            "closing_odds": 1.437,
+            "clv": 0.023
           },
           {
             "match_id": "401845044",
@@ -125976,8 +125976,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.473,
-            "clv": -0.0224
+            "closing_odds": 1.437,
+            "clv": 0.0021
           },
           {
             "match_id": "401844076",
@@ -125993,8 +125993,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.513,
-            "clv": -0.0218
+            "closing_odds": 1.476,
+            "clv": 0.0027
           },
           {
             "match_id": "401844076",
@@ -126010,8 +126010,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 2.22,
-            "clv": -0.045
+            "closing_odds": 2.115,
+            "clv": 0.0024
           },
           {
             "match_id": "401844076",
@@ -126027,8 +126027,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.374,
-            "clv": -0.0029
+            "closing_odds": 1.371,
+            "clv": -0.0007
           }
         ],
         "stake": 9.38,
@@ -126076,8 +126076,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.473,
-            "clv": -0.002
+            "closing_odds": 1.437,
+            "clv": 0.023
           },
           {
             "match_id": "401844076",
@@ -126093,8 +126093,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.513,
-            "clv": -0.002
+            "closing_odds": 1.476,
+            "clv": 0.023
           },
           {
             "match_id": "401844076",
@@ -126110,8 +126110,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 2.22,
-            "clv": 0.0
+            "closing_odds": 2.115,
+            "clv": 0.0496
           },
           {
             "match_id": "401844076",
@@ -126127,8 +126127,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 1.374,
-            "clv": -0.0029
+            "closing_odds": 1.371,
+            "clv": -0.0007
           }
         ],
         "stake": 9.54,
@@ -149839,8 +149839,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3647
         },
-        "closing_odds": 1.571,
-        "clv": 0.0121
+        "closing_odds": 1.588,
+        "clv": 0.0013
       },
       {
         "id": "7338e328fb",
@@ -149938,8 +149938,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3146
         },
-        "closing_odds": 1.473,
-        "clv": -0.002
+        "closing_odds": 1.437,
+        "clv": 0.023
       },
       {
         "id": "7abe617515",
@@ -154451,8 +154451,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3647
         },
-        "closing_odds": 1.571,
-        "clv": 0.0121
+        "closing_odds": 1.588,
+        "clv": 0.0013
       },
       {
         "id": "b4b015cd24",
@@ -154550,8 +154550,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3146
         },
-        "closing_odds": 1.473,
-        "clv": -0.002
+        "closing_odds": 1.437,
+        "clv": 0.023
       },
       {
         "id": "4eb4296a3e",
@@ -159162,8 +159162,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3719
         },
-        "closing_odds": 1.571,
-        "clv": 0.0248
+        "closing_odds": 1.588,
+        "clv": 0.0139
       },
       {
         "id": "edf3ba40aa",
@@ -165734,8 +165734,8 @@
             "sport": "soccer",
             "slug": "arg.2",
             "result": null,
-            "closing_odds": 3.05,
-            "clv": 0.0
+            "closing_odds": 2.9,
+            "clv": 0.0517
           },
           {
             "match_id": "401875187",
