@@ -17,6 +17,7 @@ neexistující české ligy), který se při výpadku ESPN dostal do appky jako 
 Výsledky se kešují do data/cache_<datum>.json.
 """
 
+import os
 import re
 import time
 import threading
@@ -31,6 +32,16 @@ from . import storage
 TIMEOUT = 8   # kratší timeout = rychlejší selhání jednotlivého požadavku
               # při síťových problémech, místo dlouhého blokování celé dávky
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/{sport}/{slug}/scoreboard"
+
+# Kolik dotazů na ligy appka pouští souběžně. Render (RENDER_SERVICE_ID env
+# proměnná, kterou tam Render sám nastaví) má jen 512 MB – tam zůstává
+# konzervativních 15 (viz komentář u ThreadPoolExecutor níž, riziko OOM).
+# Na běžném PC je paměti řádově víc a "studená" cache (244 lig / 15 = ~16
+# sekvenčních dávek) uměla trvat desítky sekund - lokálně proto appka pustí
+# mnohem víc najednou. Přepsatelné přes env proměnnou FETCH_WORKERS, kdyby
+# bylo třeba doladit na konkrétním stroji.
+_MAX_FETCH_WORKERS = int(os.environ.get(
+    "FETCH_WORKERS", "15" if os.environ.get("RENDER_SERVICE_ID") else "48"))
 ESPN_SUMMARY = "https://site.api.espn.com/apis/site/v2/sports/{sport}/{slug}/summary"
 ESPN_LIST = "https://sports.core.api.espn.com/v2/sports/soccer/leagues?limit=1000"
 TSDB = "https://www.thesportsdb.com/api/v1/json/3/eventsday.php"
@@ -48,8 +59,12 @@ SPORTS = {
     },
     "basketball": {
         "label": "🏀 Basketbal", "two_way": True, "unit": "bodů",
+        # nbl (Australian NBL) a acb (Španělská Liga ACB) ověřeny přímo proti
+        # ESPN API (200 s validní scoreboard odpovědí) - ESPN je má, appka je
+        # dřív jen nevyužívala.
         "leagues": [("nba", "USA"), ("wnba", "USA"),
-                    ("mens-college-basketball", "USA"), ("euroleague", "Europe")],
+                    ("mens-college-basketball", "USA"), ("euroleague", "Europe"),
+                    ("nbl", "Australia"), ("acb", "Spain")],
         "avg_total": 224.0, "sd_total": 19.0, "lines": [210.5, 220.5, 230.5],
     },
     "hockey": {
@@ -401,10 +416,7 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return []
 
     try:
-        with ThreadPoolExecutor(max_workers=15) as ex:  # zvýšeno z 6 – 244 lig / 6 = ~41 sekvenčních dávek
-                                                          # dělalo /api/matches na studené cache nesnesitelně
-                                                          # pomalé (desítky s až přes minutu). 15 je opatrný
-                                                          # kompromis vůči OOM na Render free tieru (512 MB).
+        with ThreadPoolExecutor(max_workers=_MAX_FETCH_WORKERS) as ex:
             for res in ex.map(grab, league_slugs(sport)):
                 out.extend(res)
     except Exception:

@@ -1,9 +1,217 @@
 {
   "start_balance": 200.0,
-  "balance": 48.13,
+  "balance": 8.88,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "b1253b1c08",
+      "ts": 1787378449,
+      "match_id": "",
+      "match": "Víkendový tiket (5 tipů)",
+      "match_date": "2026-08-22",
+      "match_time": "11:00",
+      "outcome": "acca",
+      "label": "AKO 5",
+      "odds": 14.46,
+      "prob": 0.6648,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": null,
+      "tag": "bet-agent",
+      "legs": [
+        {
+          "match": "New York Liberty – Indiana Fever",
+          "name": "Méně než 186,5 bodu",
+          "match_id": "401857164",
+          "outcome": "under186.5",
+          "prob": 0.9404,
+          "result": null,
+          "odds": 1.909,
+          "date": "2026-08-22",
+          "time": "23:00"
+        },
+        {
+          "match": "Toronto Tempo – Las Vegas Aces",
+          "name": "Méně než 183,5 bodu",
+          "match_id": "401857170",
+          "outcome": "under183.5",
+          "prob": 0.9509,
+          "result": null,
+          "odds": 1.909,
+          "date": "2026-08-23",
+          "time": "23:00"
+        },
+        {
+          "match": "Brøndby IF – Silkeborg IF",
+          "name": "Méně než 3,5 gólu",
+          "match_id": "401874505",
+          "outcome": "under3.5",
+          "prob": 0.9144,
+          "result": null,
+          "odds": 1.606,
+          "date": "2026-08-24",
+          "time": "17:00"
+        },
+        {
+          "match": "SV Wehen Wiesbaden – Bayer Leverkusen",
+          "name": "Méně než 4,5 gólu",
+          "match_id": "401874891",
+          "outcome": "under4.5",
+          "prob": 0.9024,
+          "result": null,
+          "odds": 1.588,
+          "date": "2026-08-22",
+          "time": "11:00"
+        },
+        {
+          "match": "River Plate – Vélez Sarsfield",
+          "name": "Méně než 2,5 gólu",
+          "match_id": "401841518",
+          "outcome": "under2.5",
+          "prob": 0.9009,
+          "result": null,
+          "odds": 1.556,
+          "date": "2026-08-23",
+          "time": "22:15"
+        }
+      ],
+      "ticket_kind": "weekend"
+    },
+    {
+      "id": "afe3d42ad7",
+      "ts": 1787378449,
+      "match_id": "",
+      "match": "Jistota dne (3 tipy)",
+      "match_date": "2026-08-22",
+      "match_time": "23:00",
+      "outcome": "acca",
+      "label": "AKO 3",
+      "odds": 5.85,
+      "prob": 0.8177,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": null,
+      "tag": "bet-agent",
+      "legs": [
+        {
+          "match": "New York Liberty – Indiana Fever",
+          "name": "Méně než 186,5 bodu",
+          "match_id": "401857164",
+          "outcome": "under186.5",
+          "prob": 0.9404,
+          "result": null,
+          "odds": 1.909,
+          "date": "2026-08-22",
+          "time": "23:00"
+        },
+        {
+          "match": "Toronto Tempo – Las Vegas Aces",
+          "name": "Méně než 183,5 bodu",
+          "match_id": "401857170",
+          "outcome": "under183.5",
+          "prob": 0.9509,
+          "result": null,
+          "odds": 1.909,
+          "date": "2026-08-23",
+          "time": "23:00"
+        },
+        {
+          "match": "Brøndby IF – Silkeborg IF",
+          "name": "Méně než 3,5 gólu",
+          "match_id": "401874505",
+          "outcome": "under3.5",
+          "prob": 0.9144,
+          "result": null,
+          "odds": 1.606,
+          "date": "2026-08-24",
+          "time": "17:00"
+        }
+      ],
+      "ticket_kind": "daily"
+    },
+    {
+      "id": "e70fd90b6b",
+      "ts": 1787378449,
+      "match_id": "401882911",
+      "match": "Getafe – Racing Santander",
+      "match_date": "2026-08-23",
+      "match_time": "17:30",
+      "league": "Spanish LALIGA",
+      "outcome": "over1.5",
+      "label": "Více 1,5",
+      "odds": 1.59,
+      "prob": 0.711,
+      "stake": 9.25,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0013,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "esp.1",
+      "ml_features": {
+        "edge": 0.124,
+        "attack_home": 0.9018,
+        "defense_home": 0.8756,
+        "attack_away": 1.6682,
+        "defense_away": 0.8533,
+        "exp_goals_home": 0.98,
+        "exp_goals_away": 1.65,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 71 % (model říká 75 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.98 : 1.65 gólů (celkem 2.63).",
+        "Nejpravděpodobnější výsledek 1:1 (13 %).",
+        "Racing Santander má výrazně silnější útočný rating.",
+        "Kurz 1.588 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.588
+    },
+    {
+      "id": "f7746ee4ff",
+      "ts": 1787378449,
+      "match_id": "401909196",
+      "match": "Bodo/Glimt – NEC Nijmegen",
+      "match_date": "2026-08-25",
+      "match_time": "19:00",
+      "league": "UEFA Champions League Qualifying",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.87,
+      "prob": 0.9013,
+      "stake": 10.0,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "uefa.champions_qual",
+      "ml_features": {
+        "edge": 0.3059,
+        "attack_home": 1.911,
+        "defense_home": 0.4027,
+        "attack_away": 0.9957,
+        "defense_away": 0.5092,
+        "exp_goals_home": 1.58,
+        "exp_goals_away": 0.51,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 90 % (model říká 84 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 1.58 : 0.51 gólů (celkem 2.09).",
+        "Nejpravděpodobnější výsledek 1:0 (18 %).",
+        "Bodo/Glimt má výrazně silnější útočný rating.",
+        "Kurz 1.87 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.87
+    },
     {
       "id": "315715dd17",
       "ts": 1787323611,
@@ -147,7 +355,7 @@
       "stake": 5.42,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0152,
+      "clv": -0.0006,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -169,7 +377,7 @@
         "Nejpravděpodobnější výsledek 2:0 (11 %).",
         "Kurz 1.741 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.714
+      "closing_odds": 1.741
     },
     {
       "id": "b25532010f",
@@ -226,7 +434,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0013,
+      "clv": -0.0215,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -249,7 +457,7 @@
         "AZ Alkmaar má výrazně silnější útočný rating.",
         "Kurz 1.588 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.588
+      "closing_odds": 1.625
     },
     {
       "id": "c91fd912e7",
@@ -266,7 +474,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0025,
+      "clv": -0.0213,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -289,7 +497,7 @@
         "Southampton má výrazně silnější útočný rating.",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.606
+      "closing_odds": 1.645
     },
     {
       "id": "43e087305c",
@@ -306,7 +514,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0214,
+      "clv": -0.0414,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -329,7 +537,7 @@
         "AS Roma má výrazně silnější útočný rating.",
         "Kurz 1.833 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.87
+      "closing_odds": 1.909
     },
     {
       "id": "5f3187fd2e",
@@ -399,7 +607,7 @@
       "stake": 9.84,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": 0.0426,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -422,7 +630,7 @@
         "Lincoln City má výrazně silnější útočný rating.",
         "Kurz 2.45 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 2.45
+      "closing_odds": 2.35
     },
     {
       "id": "ca8e085dce",
@@ -519,7 +727,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": -0.014,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -541,7 +749,7 @@
         "Nejpravděpodobnější výsledek 1:0 (21 %).",
         "Kurz 1.69 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.69
+      "closing_odds": 1.714
     },
     {
       "id": "7a11089854",
@@ -777,7 +985,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0146,
+      "clv": 0.0289,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -800,7 +1008,7 @@
         "Manchester United má výrazně silnější útočný rating.",
         "Kurz 1.385 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.37
+      "closing_odds": 1.351
     },
     {
       "id": "0e16cc4408",

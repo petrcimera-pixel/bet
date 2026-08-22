@@ -72,6 +72,11 @@ LEAGUE_TOTALS = {
     "wnba": 163.0,
     "mens-college-basketball": 145.0,
     "euroleague": 160.0,
+    # nbl/acb – odhad podle typického tempa evropského/australského basketbalu
+    # (blízko Euroleague), ne z appky nasbíraných dat – zpřesní se samo, jak
+    # rating jednotlivých týmů odchytí skutečné tempo té které soutěže.
+    "nbl": 170.0,
+    "acb": 158.0,
     "nhl": 6.1,
     "nfl": 45.0,
     "college-football": 55.0,

@@ -793,21 +793,21 @@
       "gf": 3,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Bromley",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Strasbourg": [
-    {
-      "date": "2024-03-31",
-      "opponent": "Rennes",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W",
-      "cf": 4,
-      "ca": 5
-    },
     {
       "date": "2024-04-07",
       "opponent": "Toulouse",
@@ -1015,6 +1015,16 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Marseille",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "SV Elversberg": [
@@ -1066,6 +1076,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "MSV Duisburg",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -1519,6 +1541,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Wigan Athletic",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Grimsby": [
@@ -3453,6 +3487,30 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lokomotiv Moscow",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lokomotiv Moscow",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "ABB": [
@@ -4287,16 +4345,6 @@
   ],
   "Carabobo": [
     {
-      "date": "2026-03-07",
-      "opponent": "Zamora FC",
-      "league": "Venezuelan Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-03-15",
       "opponent": "Rayo Zuliano",
       "league": "Venezuelan Primera División",
@@ -4485,19 +4533,19 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
-    }
-  ],
-  "Trujillanos": [
+    },
     {
-      "date": "2026-03-17",
+      "date": "2026-08-21",
       "opponent": "Caracas FC",
       "league": "Venezuelan Primera División",
       "sport": "soccer",
       "loc": "away",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Trujillanos": [
     {
       "date": "2026-03-17",
       "opponent": "Caracas FC",
@@ -4687,6 +4735,16 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Anzoátegui FC",
+      "league": "Venezuelan Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Llaneros FC": [
@@ -10039,16 +10097,6 @@
       "result": "L"
     },
     {
-      "date": "2026-04-22",
-      "opponent": "Pumas UNAM",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Atlético de San Luis",
       "league": "Mexican Liga BBVA MX",
@@ -10216,21 +10264,21 @@
       "loc": "away",
       "gf": 1,
       "ga": 6,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "América",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
       "result": "L"
     }
   ],
   "Tigres UANL": [
     {
-      "date": "2026-04-23",
-      "opponent": "Atlas",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-04-25",
       "opponent": "Mazatlán FC",
       "league": "Mexican Liga BBVA MX",
@@ -10419,6 +10467,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Atlante",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Real Salt Lake": [
@@ -11603,16 +11661,6 @@
   ],
   "Golden State Valkyries": [
     {
-      "date": "2026-06-27",
-      "opponent": "Atlanta Dream",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "home",
-      "gf": 78,
-      "ga": 75,
-      "result": "W"
-    },
-    {
       "date": "2026-06-28",
       "opponent": "New York Liberty",
       "league": "Women's National Basketball Association",
@@ -11801,19 +11849,19 @@
       "gf": 66,
       "ga": 77,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Chicago Sky",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "away",
+      "gf": 70,
+      "ga": 73,
+      "result": "L"
     }
   ],
   "Toronto Tempo": [
-    {
-      "date": "2026-06-25",
-      "opponent": "Los Angeles Sparks",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "home",
-      "gf": 125,
-      "ga": 97,
-      "result": "W"
-    },
     {
       "date": "2026-06-27",
       "opponent": "Phoenix Mercury",
@@ -12003,6 +12051,16 @@
       "gf": 82,
       "ga": 93,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Portland Fire",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "home",
+      "gf": 82,
+      "ga": 79,
+      "result": "W"
     }
   ],
   "Vancouver Whitecaps": [
@@ -12149,174 +12207,174 @@
       "result": "L"
     },
     {
-      "date": "2026-04-12",
-      "opponent": "Cancún FC",
+      "date": "2026-04-17",
+      "opponent": "Club Atlético La Paz",
       "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-04-17",
+      "opponent": "Club Atlético La Paz",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-04-17",
+      "opponent": "Club Atlético La Paz",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-04-17",
+      "opponent": "Club Atlético La Paz",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-04-17",
+      "opponent": "Club Atlético La Paz",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Vancouver Whitecaps",
+      "league": "Leagues Cup",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-05",
+      "opponent": "Vancouver Whitecaps",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-09",
+      "opponent": "Real Salt Lake",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-09",
+      "opponent": "Real Salt Lake",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-09",
+      "opponent": "Real Salt Lake",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-12",
+      "opponent": "Minnesota United FC",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-12",
+      "opponent": "Minnesota United FC",
+      "league": "Leagues Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Toluca",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Toluca",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Toluca",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Toluca",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Tigres UANL",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
       "ga": 2,
       "result": "L"
-    },
-    {
-      "date": "2026-04-17",
-      "opponent": "Club Atlético La Paz",
-      "league": "Mexican Liga de Expansión MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-17",
-      "opponent": "Club Atlético La Paz",
-      "league": "Mexican Liga de Expansión MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-17",
-      "opponent": "Club Atlético La Paz",
-      "league": "Mexican Liga de Expansión MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-17",
-      "opponent": "Club Atlético La Paz",
-      "league": "Mexican Liga de Expansión MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-04-17",
-      "opponent": "Club Atlético La Paz",
-      "league": "Mexican Liga de Expansión MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-05",
-      "opponent": "Vancouver Whitecaps",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-05",
-      "opponent": "Vancouver Whitecaps",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-09",
-      "opponent": "Real Salt Lake",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-09",
-      "opponent": "Real Salt Lake",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-09",
-      "opponent": "Real Salt Lake",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-12",
-      "opponent": "Minnesota United FC",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-12",
-      "opponent": "Minnesota United FC",
-      "league": "Leagues Cup",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Toluca",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Toluca",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Toluca",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Toluca",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
     }
   ],
   "Brann W": [
@@ -13761,18 +13819,6 @@
   ],
   "PSV Eindhoven": [
     {
-      "date": "2024-04-13",
-      "opponent": "Vitesse",
-      "league": "Dutch Eredivisie",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 6,
-      "ga": 0,
-      "result": "W",
-      "cf": 5,
-      "ca": 4
-    },
-    {
       "date": "2024-04-25",
       "opponent": "Heerenveen",
       "league": "Dutch Eredivisie",
@@ -13973,6 +14019,18 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Utrecht",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Sporting CP": [
@@ -14191,16 +14249,6 @@
   ],
   "Ajax Amsterdam": [
     {
-      "date": "2026-08-08",
-      "opponent": "Rangers",
-      "league": "UEFA Women's Champions League Qualifying",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-08-09",
       "opponent": "PEC Zwolle",
       "league": "Dutch Eredivisie",
@@ -14388,6 +14436,18 @@
       "loc": "away",
       "gf": 4,
       "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "PEC Zwolle",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -15672,6 +15732,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Nea Salamis Famagusta",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -25351,6 +25423,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Austria Lustenau",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Almagro": [
@@ -27126,6 +27210,16 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Oriente Petrolero",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
       "result": "L"
     }
   ],
@@ -30159,16 +30253,6 @@
   ],
   "Washington Mystics": [
     {
-      "date": "2026-07-06",
-      "opponent": "Golden State Valkyries",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "home",
-      "gf": 49,
-      "ga": 62,
-      "result": "L"
-    },
-    {
       "date": "2026-07-12",
       "opponent": "Seattle Storm",
       "league": "Women's National Basketball Association",
@@ -30357,6 +30441,16 @@
       "gf": 93,
       "ga": 82,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Minnesota Lynx",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "home",
+      "gf": 84,
+      "ga": 94,
+      "result": "L"
     }
   ],
   "Dallas Wings": [
@@ -31189,6 +31283,18 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Energie Cottbus",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Valladolid": [
@@ -32065,6 +32171,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Santomera",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Real Murcia": [
@@ -32312,6 +32430,16 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Universitario de Vinto",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 3,
       "result": "W"
     }
   ],
@@ -36291,16 +36419,6 @@
   ],
   "Monterrey": [
     {
-      "date": "2026-04-22",
-      "opponent": "Puebla",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "Santos",
       "league": "Mexican Liga BBVA MX",
@@ -36489,6 +36607,16 @@
       "gf": 6,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "León",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
     }
   ],
   "Orlando City SC": [
@@ -36823,6 +36951,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "San Antonio Bulo Bulo",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Cibao": [
@@ -38387,16 +38525,6 @@
   ],
   "Chicago Sky": [
     {
-      "date": "2026-06-26",
-      "opponent": "Portland Fire",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "home",
-      "gf": 124,
-      "ga": 94,
-      "result": "W"
-    },
-    {
       "date": "2026-06-28",
       "opponent": "Las Vegas Aces",
       "league": "Women's National Basketball Association",
@@ -38584,6 +38712,16 @@
       "loc": "home",
       "gf": 93,
       "ga": 86,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Golden State Valkyries",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "home",
+      "gf": 73,
+      "ga": 70,
       "result": "W"
     }
   ],
@@ -41044,16 +41182,6 @@
   "Alianza FC": [
     {
       "date": "2026-08-06",
-      "opponent": "Herediano",
-      "league": "Concacaf Central American Cup",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-06",
       "opponent": "Saprissa",
       "league": "Concacaf Central American Cup",
       "sport": "soccer",
@@ -41241,6 +41369,16 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Deportivo Pereira",
+      "league": "Colombian Primera A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Herediano": [
@@ -41449,16 +41587,6 @@
       "result": "L"
     },
     {
-      "date": "2026-04-23",
-      "opponent": "Mazatlán FC",
-      "league": "Mexican Liga BBVA MX",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 4,
-      "result": "L"
-    },
-    {
       "date": "2026-04-26",
       "opponent": "León",
       "league": "Mexican Liga BBVA MX",
@@ -41627,6 +41755,16 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Querétaro",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Seattle Sounders FC": [
@@ -47321,193 +47459,195 @@
       "result": "L"
     },
     {
-      "date": "2026-03-15",
-      "opponent": "Chelsea",
-      "league": "English Women's League Cup",
+      "date": "2026-03-25",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-03-25",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-03-25",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-03-25",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-03-25",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-04-01",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-04-01",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-04-01",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-04-01",
+      "opponent": "Bayern Munich",
+      "league": "UEFA Women's Champions League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-08",
+      "opponent": "Paris Saint-Germain",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-08",
+      "opponent": "Paris Saint-Germain",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-12",
+      "opponent": "Leeds United",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-12",
+      "opponent": "Leeds United",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-12",
+      "opponent": "Leeds United",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "AC Milan",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "AC Milan",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "AC Milan",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "AC Milan",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Hull City",
+      "league": "English Premier League",
       "sport": "soccer",
       "loc": "away",
       "gf": 0,
       "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-25",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-25",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-25",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-25",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-03-25",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 3,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-01",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-01",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-01",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-04-01",
-      "opponent": "Bayern Munich",
-      "league": "UEFA Women's Champions League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-08",
-      "opponent": "Paris Saint-Germain",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-08",
-      "opponent": "Paris Saint-Germain",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-12",
-      "opponent": "Leeds United",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-12",
-      "opponent": "Leeds United",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-12",
-      "opponent": "Leeds United",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "AC Milan",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "AC Milan",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "AC Milan",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 4,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "AC Milan",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 4,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -48489,6 +48629,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Central Español Fútbol Club",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Internacional": [
@@ -49065,20 +49217,20 @@
       "gf": 4,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Alianza Atlético",
+      "league": "Peruvian Liga 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Liverpool": [
     {
-      "date": "2026-02-25",
-      "opponent": "Independiente Medellín",
-      "league": "CONMEBOL Libertadores",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-08-08",
       "opponent": "Albion FC",
       "league": "Liga AUF Uruguaya",
@@ -49264,6 +49416,16 @@
       "league": "Liga AUF Uruguaya",
       "sport": "soccer",
       "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Cerro",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "home",
       "gf": 4,
       "ga": 0,
       "result": "W"
@@ -50049,6 +50211,18 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cerro Largo",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Academia Puerto Cabello": [
@@ -50507,153 +50681,153 @@
       "result": "D"
     },
     {
-      "date": "2026-08-11",
-      "opponent": "Ñublense",
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Everton CD",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Unión La Calera",
       "league": "Chilean Primera División",
       "sport": "soccer",
       "loc": "home",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Everton CD",
-      "league": "Chilean Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     }
   ],
@@ -50790,16 +50964,6 @@
     }
   ],
   "Caracas FC": [
-    {
-      "date": "2026-03-17",
-      "opponent": "Trujillanos",
-      "league": "Venezuelan Primera División",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 2,
-      "result": "W"
-    },
     {
       "date": "2026-03-22",
       "opponent": "Monagas SC",
@@ -50989,6 +51153,16 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Carabobo",
+      "league": "Venezuelan Primera División",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "Sportivo Trinidense": [
@@ -51003,16 +51177,6 @@
       "result": "D"
     },
     {
-      "date": "2026-04-12",
-      "opponent": "Libertad",
-      "league": "Paraguayan Primera División",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
       "date": "2026-04-17",
       "opponent": "Sportivo San Lorenzo",
       "league": "Paraguayan Primera División",
@@ -51190,6 +51354,16 @@
       "loc": "home",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Rubio Ñú",
+      "league": "Paraguayan Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
       "result": "D"
     }
   ],
@@ -55391,16 +55565,6 @@
       "result": "L"
     },
     {
-      "date": "2026-08-01",
-      "opponent": "Charleston Battery",
-      "league": "USL Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 5,
-      "result": "L"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Lexington SC",
       "league": "USL Super League",
@@ -55578,6 +55742,16 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "DC Power FC",
+      "league": "USL Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
       "result": "L"
     }
   ],
@@ -64899,164 +65073,164 @@
       "result": "L"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Huracán",
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
       "league": "Argentine Liga Profesional de Fútbol",
       "sport": "soccer",
       "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Unión (Santa Fe)",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Estudiantes de Río Cuarto",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "away",
       "gf": 0,
-      "ga": 2,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
       "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Unión (Santa Fe)",
-      "league": "Argentine Liga Profesional de Fútbol",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W"
+      "result": "D"
     }
   ],
   "Independiente Rivadavia": [
@@ -69609,16 +69783,6 @@
       "result": "L"
     },
     {
-      "date": "2026-08-15",
-      "opponent": "Quilmes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-08-21",
       "opponent": "Deportivo Morón",
       "league": "Argentine Nacional B",
@@ -69686,6 +69850,16 @@
       "ga": 2,
       "cf": null,
       "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Deportivo Morón",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
       "result": "D"
     }
   ],
@@ -69761,134 +69935,134 @@
       "result": "W"
     },
     {
-      "date": "2026-08-08",
-      "opponent": "Estudiantes (Buenos Aires)",
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
       "league": "Argentine Nacional B",
       "sport": "soccer",
       "loc": "away",
-      "gf": 1,
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "San Martín (Tucumán)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Mitre (Santiago del Estero)",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
       "ga": 0,
       "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "San Martín (Tucumán)",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 2,
-      "result": "D"
     }
   ],
   "Chacarita Juniors": [
@@ -70337,16 +70511,6 @@
       "result": "W"
     },
     {
-      "date": "2026-08-08",
-      "opponent": "Güemes",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 0,
-      "result": "W"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Ciudad de Bolívar",
       "league": "Argentine Nacional B",
@@ -70495,6 +70659,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Tristán Suárez",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Patronato": [
@@ -71349,16 +71525,6 @@
       "result": "W"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Defensores de Belgrano",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 1,
-      "result": "W"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Güemes",
       "league": "Argentine Nacional B",
@@ -71507,6 +71673,16 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Deportivo Madryn",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Midland": [
@@ -72187,134 +72363,134 @@
       "result": "D"
     },
     {
-      "date": "2026-08-08",
-      "opponent": "Flandria",
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Brown de Adrogué",
       "league": "Argentine Primera B",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
       "ga": 1,
       "result": "D"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Deportivo Armenio",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
     }
   ],
   "Colegiales": [
@@ -73583,153 +73759,153 @@
       "result": "D"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Arsenal Sarandi",
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Excursionistas",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Villa Dálmine",
       "league": "Argentine Primera B",
       "sport": "soccer",
       "loc": "home",
-      "gf": 1,
-      "ga": 1,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
-      "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Excursionistas",
-      "league": "Argentine Primera B",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 5,
+      "gf": 0,
+      "ga": 2,
       "result": "L"
     }
   ],
@@ -80231,6 +80407,16 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Mushuc Runa",
+      "league": "LigaPro Ecuador",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Libertad (Ecuador)": [
@@ -87001,16 +87187,6 @@
   ],
   "Minnesota Lynx": [
     {
-      "date": "2026-07-08",
-      "opponent": "Connecticut Sun",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "away",
-      "gf": 86,
-      "ga": 80,
-      "result": "W"
-    },
-    {
       "date": "2026-07-11",
       "opponent": "New York Liberty",
       "league": "Women's National Basketball Association",
@@ -87198,6 +87374,16 @@
       "loc": "away",
       "gf": 77,
       "ga": 66,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Washington Mystics",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "away",
+      "gf": 94,
+      "ga": 84,
       "result": "W"
     }
   ],
@@ -87629,16 +87815,6 @@
   ],
   "Portland Fire": [
     {
-      "date": "2026-06-28",
-      "opponent": "Washington Mystics",
-      "league": "Women's National Basketball Association",
-      "sport": "basketball",
-      "loc": "away",
-      "gf": 123,
-      "ga": 124,
-      "result": "L"
-    },
-    {
       "date": "2026-07-05",
       "opponent": "Seattle Storm",
       "league": "Women's National Basketball Association",
@@ -87827,6 +88003,16 @@
       "gf": 88,
       "ga": 85,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Toronto Tempo",
+      "league": "Women's National Basketball Association",
+      "sport": "basketball",
+      "loc": "away",
+      "gf": 79,
+      "ga": 82,
+      "result": "L"
     }
   ],
   "TEAM COOP": [
@@ -95639,6 +95825,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "AEL",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Sadd": [
@@ -96077,46 +96275,6 @@
       "result": "D"
     },
     {
-      "date": "2026-08-06",
-      "opponent": "Uniao da Serra",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-06",
-      "opponent": "Uniao da Serra",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-06",
-      "opponent": "Uniao da Serra",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
-      "date": "2026-08-06",
-      "opponent": "Uniao da Serra",
-      "league": "Club Friendly",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-08-20",
       "opponent": "ES Setif",
       "league": "Club Friendly",
@@ -96173,6 +96331,54 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Home",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Gimnástica Torrelavega",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "US Pistoiese 1921",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Home",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -96359,6 +96565,18 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Aris Limassol",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Atromitos": [
@@ -106839,18 +107057,6 @@
   ],
   "Bristol City": [
     {
-      "date": "2024-03-29",
-      "opponent": "Leicester",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W",
-      "cf": 5,
-      "ca": 6
-    },
-    {
       "date": "2024-04-01",
       "opponent": "Plymouth",
       "league": "English League Championship",
@@ -107055,6 +107261,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Birmingham City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Walsall": [
@@ -108646,6 +108864,16 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "The Strongest",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 4,
       "result": "L"
     }
   ],
@@ -111673,6 +111901,26 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "UPNFM",
+      "league": "Honduran Liga Nacional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "UPNFM",
+      "league": "Honduran Liga Nacional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "CD FAS": [
@@ -112553,6 +112801,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Vissel Kobe",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Kashima Antlers": [
@@ -112634,6 +112894,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Avispa Fukuoka",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -112757,6 +113029,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Nagoya Grampus",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Urawa Red Diamonds": [
@@ -117951,6 +118235,18 @@
       "gf": 1,
       "ga": 5,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Las Palmas",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Fulham": [
@@ -118177,18 +118473,6 @@
   ],
   "Crystal Palace": [
     {
-      "date": "2024-02-24",
-      "opponent": "Burnley",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 0,
-      "result": "W",
-      "cf": 12,
-      "ca": 3
-    },
-    {
       "date": "2024-03-02",
       "opponent": "Tottenham",
       "league": "English Premier League",
@@ -118401,6 +118685,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Everton",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "SC Rheindorf Altach": [
@@ -118472,6 +118768,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TSV Hartberg",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -119481,6 +119789,18 @@
       "gf": 4,
       "ga": 6,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "NAC Breda",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "FC Emmen": [
@@ -119923,6 +120243,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Jong Ajax",
+      "league": "Dutch Keuken Kampioen Divisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Vitesse": [
@@ -120414,6 +120746,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Real Sociedad II",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -121555,30 +121899,6 @@
   ],
   "Estoril": [
     {
-      "date": "2024-03-10",
-      "opponent": "Benfica",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L",
-      "cf": 4,
-      "ca": 6
-    },
-    {
-      "date": "2024-03-15",
-      "opponent": "Portimonense",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W",
-      "cf": 2,
-      "ca": 7
-    },
-    {
       "date": "2024-03-30",
       "opponent": "Porto",
       "league": "Portuguese Primeira Liga",
@@ -121777,6 +122097,30 @@
       "result": "L",
       "cf": 4,
       "ca": 7
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rio Ave",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rio Ave",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Famalicao": [
@@ -122169,21 +122513,21 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
-    }
-  ],
-  "Millwall": [
+    },
     {
-      "date": "2024-03-02",
-      "opponent": "Watford",
+      "date": "2026-08-22",
+      "opponent": "Bolton Wanderers",
       "league": "English League Championship",
       "sport": "soccer",
       "loc": "home",
-      "gf": 1,
+      "gf": 0,
       "ga": 0,
-      "result": "W",
-      "cf": 4,
-      "ca": 3
-    },
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Millwall": [
     {
       "date": "2024-03-05",
       "opponent": "Blackburn",
@@ -122397,6 +122741,18 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Norwich City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "AFC Wimbledon": [
@@ -122489,21 +122845,21 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Reading",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Barnsley": [
-    {
-      "date": "2022-03-05",
-      "opponent": "Derby",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L",
-      "cf": 4,
-      "ca": 4
-    },
     {
       "date": "2022-03-08",
       "opponent": "Stoke",
@@ -122717,6 +123073,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Doncaster Rovers",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Wigan Athletic": [
@@ -122809,6 +123177,18 @@
       "gf": 3,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Leyton Orient",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Bradford City": [
@@ -123127,6 +123507,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Mansfield Town",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Bromley": [
@@ -123199,21 +123591,21 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cambridge United",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Reading": [
-    {
-      "date": "2023-03-11",
-      "opponent": "Millwall",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L",
-      "cf": 2,
-      "ca": 2
-    },
     {
       "date": "2023-03-15",
       "opponent": "Blackburn",
@@ -123422,6 +123814,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "AFC Wimbledon",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -123727,6 +124131,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Luton Town",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Burton Albion": [
@@ -123799,6 +124215,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Leicester City",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Blackburn Rovers": [
@@ -123871,6 +124299,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Middlesbrough",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Cardiff City": [
@@ -123912,6 +124352,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Derby County",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -124161,6 +124613,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cardiff City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Lincoln City": [
@@ -124232,6 +124696,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Portsmouth",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -124511,6 +124987,18 @@
       "gf": 4,
       "ga": 3,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Notts County",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Grimsby Town": [
@@ -124576,18 +125064,6 @@
     }
   ],
   "Blackpool": [
-    {
-      "date": "2023-02-25",
-      "opponent": "Reading",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 3,
-      "result": "L",
-      "cf": 8,
-      "ca": 3
-    },
     {
       "date": "2023-03-04",
       "opponent": "Burnley",
@@ -124801,6 +125277,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Stockport County",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Leicester City": [
@@ -124873,6 +125361,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Burton Albion",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Northampton Town": [
@@ -125047,6 +125547,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Stevenage",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Norwich City": [
@@ -125108,6 +125620,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Millwall",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -125181,6 +125705,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Huddersfield Town",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Preston North End": [
@@ -125242,6 +125778,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Wolverhampton Wanderers",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -125315,6 +125863,18 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Milton Keynes Dons",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Salford City": [
@@ -125623,6 +126183,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Queens Park Rangers",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Stockport County": [
@@ -125715,6 +126287,18 @@
       "gf": 6,
       "ga": 3,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Blackpool",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Doncaster Rovers": [
@@ -125787,6 +126371,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Barnsley",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Stoke City": [
@@ -125848,6 +126444,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Southampton",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -125973,6 +126581,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Sheffield United",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Birmingham City": [
@@ -126065,21 +126685,21 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Bristol City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Watford": [
-    {
-      "date": "2024-02-17",
-      "opponent": "Rotherham",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 0,
-      "result": "W",
-      "cf": 6,
-      "ca": 7
-    },
     {
       "date": "2024-02-24",
       "opponent": "Huddersfield",
@@ -126297,6 +126917,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Wrexham",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Crawley Town": [
@@ -126431,6 +127063,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Charlton Athletic",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Portsmouth": [
@@ -126515,6 +127159,18 @@
       "result": "L",
       "cf": 6,
       "ca": 3
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lincoln City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Cheltenham Town": [
@@ -126659,6 +127315,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "West Ham United",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Colchester United": [
@@ -126724,18 +127392,6 @@
     }
   ],
   "Southampton": [
-    {
-      "date": "2024-02-20",
-      "opponent": "Hull",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 4,
-      "ca": 2
-    },
     {
       "date": "2024-02-24",
       "opponent": "Millwall",
@@ -126953,6 +127609,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Stoke City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Rotherham United": [
@@ -131823,6 +132491,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": " Deportivo Alavés II",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Athletic Club B": [
@@ -132413,6 +133093,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Atlético Tordesillas",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Excelsior Maassluis": [
@@ -132729,6 +133421,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Manchester United",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Hamburg SV": [
@@ -133155,21 +133859,21 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Nottingham Forest",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "RB Leipzig": [
-    {
-      "date": "2024-02-17",
-      "opponent": "M'gladbach",
-      "league": "German Bundesliga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 2,
-      "ga": 0,
-      "result": "W",
-      "cf": 8,
-      "ca": 4
-    },
     {
       "date": "2024-02-24",
       "opponent": "Bayern Munich",
@@ -133383,6 +134087,18 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Eintracht Trier",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 6,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Bayer Leverkusen": [
@@ -133464,6 +134180,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "SV Wehen Wiesbaden",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -134109,6 +134837,18 @@
       "gf": 4,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Sunderland",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Rayo Vallecano": [
@@ -134254,18 +134994,6 @@
     }
   ],
   "Lens": [
-    {
-      "date": "2024-02-18",
-      "opponent": "Reims",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "result": "D",
-      "cf": 2,
-      "ca": 3
-    },
     {
       "date": "2024-02-25",
       "opponent": "Monaco",
@@ -134479,21 +135207,21 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "AJ Auxerre",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Sunderland": [
-    {
-      "date": "2024-02-24",
-      "opponent": "Swansea",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 4,
-      "ca": 11
-    },
     {
       "date": "2024-03-02",
       "opponent": "Norwich",
@@ -134707,6 +135435,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Ipswich Town",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Tottenham Hotspur": [
@@ -134819,21 +135559,21 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Brentford",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Werder Bremen": [
-    {
-      "date": "2024-02-10",
-      "opponent": "Heidenheim",
-      "league": "German Bundesliga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 5,
-      "ca": 10
-    },
     {
       "date": "2024-02-16",
       "opponent": "FC Koln",
@@ -135049,6 +135789,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lüneburger SK Hansa",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "SC Paderborn 07": [
@@ -135593,6 +136345,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Apoel Nicosia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "ALS OMONIA": [
@@ -136161,18 +136925,6 @@
   ],
   "Brentford": [
     {
-      "date": "2024-02-26",
-      "opponent": "West Ham",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 4,
-      "result": "L",
-      "cf": 7,
-      "ca": 1
-    },
-    {
       "date": "2024-03-02",
       "opponent": "Chelsea",
       "league": "English Premier League",
@@ -136385,6 +137137,18 @@
       "gf": 7,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Tottenham Hotspur",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "VfB Stuttgart": [
@@ -136491,21 +137255,19 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Hansa Rostock",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Everton": [
-    {
-      "date": "2024-04-06",
-      "opponent": "Burnley",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W",
-      "cf": 3,
-      "ca": 5
-    },
     {
       "date": "2024-04-15",
       "opponent": "Chelsea",
@@ -136709,6 +137471,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Crystal Palace",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Latte Dolce": [
@@ -137585,18 +138359,6 @@
   ],
   "Kasimpasa": [
     {
-      "date": "2024-02-09",
-      "opponent": "Ad. Demirspor",
-      "league": "Turkish Super Lig",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 3,
-      "ga": 1,
-      "result": "W",
-      "cf": 4,
-      "ca": 7
-    },
-    {
       "date": "2024-02-16",
       "opponent": "Karagumruk",
       "league": "Turkish Super Lig",
@@ -137813,21 +138575,21 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
-    }
-  ],
-  "Samsunspor": [
+    },
     {
-      "date": "2024-02-18",
-      "opponent": "Gaziantep",
+      "date": "2026-08-22",
+      "opponent": "Çorum FK",
       "league": "Turkish Super Lig",
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
-      "ga": 1,
-      "result": "D",
-      "cf": 4,
-      "ca": 2
-    },
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    }
+  ],
+  "Samsunspor": [
     {
       "date": "2024-02-23",
       "opponent": "Rizespor",
@@ -138043,6 +138805,18 @@
       "gf": 3,
       "ga": 3,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Caykur Rizespor",
+      "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Saumur": [
@@ -138413,6 +139187,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lens",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Carrarese": [
@@ -139429,6 +140215,18 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Kashima Antlers",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Vissel Kobe": [
@@ -139481,6 +140279,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Yokohama F. Marinos",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Cerezo Osaka": [
@@ -139533,6 +140343,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Shimizu S-Pulse",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Fagiano Okayama": [
@@ -139605,6 +140427,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Tokyo Verdy 1969",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "FC Tokyo": [
@@ -139913,6 +140747,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Kyoto Sanga",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Nagoya Grampus": [
@@ -139965,6 +140811,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Gamba Osaka",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Shimizu S-Pulse": [
@@ -140047,6 +140905,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cerezo Osaka",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sanfrecce Hiroshima": [
@@ -140119,6 +140989,18 @@
       "gf": 4,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Kawasaki Frontale",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "JEF United Ichihara-Chiba": [
@@ -140273,33 +141155,21 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Defensor Sporting",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Maritimo": [
-    {
-      "date": "2023-02-25",
-      "opponent": "Santa Clara",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W",
-      "cf": 9,
-      "ca": 4
-    },
-    {
-      "date": "2023-03-05",
-      "opponent": "Gil Vicente",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L",
-      "cf": 8,
-      "ca": 12
-    },
     {
       "date": "2023-03-12",
       "opponent": "Benfica",
@@ -140505,6 +141375,30 @@
       "result": "W",
       "cf": 1,
       "ca": 5
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Académico de Viseu",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Académico de Viseu",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Casa Pia": [
@@ -142633,6 +143527,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Atlético Saguntino",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "FC OSS": [
@@ -144223,6 +145129,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Oxford United",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Balingen": [
@@ -144403,6 +145321,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Preston North End",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Wycombe Wanderers": [
@@ -144495,21 +145425,21 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Plymouth Argyle",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Middlesbrough": [
-    {
-      "date": "2024-03-06",
-      "opponent": "Norwich",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W",
-      "cf": 2,
-      "ca": 2
-    },
     {
       "date": "2024-03-09",
       "opponent": "QPR",
@@ -144723,6 +145653,18 @@
       "result": "W",
       "cf": 5,
       "ca": 5
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Blackburn Rovers",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Wrexham": [
@@ -144776,6 +145718,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 1,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Watford",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -145071,21 +146025,21 @@
       "gf": 1,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Peterborough United",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sheffield United": [
-    {
-      "date": "2024-03-30",
-      "opponent": "Fulham",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 3,
-      "result": "D",
-      "cf": 2,
-      "ca": 15
-    },
     {
       "date": "2024-04-04",
       "opponent": "Liverpool",
@@ -145295,6 +146249,18 @@
       "result": "D",
       "cf": 2,
       "ca": 8
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Swansea City",
+      "league": "English League Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Dinamo Moscow": [
@@ -145679,6 +146645,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Fakel Voronezh",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Tokyo Verdy 1969": [
@@ -145751,6 +146729,18 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Fagiano Okayama",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Kawasaki Frontale": [
@@ -145802,6 +146792,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 2,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Sanfrecce Hiroshima",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -145947,6 +146949,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Mito Hollyhock",
+      "league": "Japanese J.League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Juticalpa FC": [
@@ -147133,6 +148147,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Augsburg",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Hannover 96": [
@@ -147195,6 +148221,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Hemelingen",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 9,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "St. Pauli": [
@@ -147361,6 +148399,16 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Liverpool",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Nacional": [
@@ -148831,30 +149879,6 @@
   ],
   "Rio Ave": [
     {
-      "date": "2024-03-02",
-      "opponent": "Moreirense",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D",
-      "cf": 2,
-      "ca": 6
-    },
-    {
-      "date": "2024-03-09",
-      "opponent": "Sp Braga",
-      "league": "Portuguese Primeira Liga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D",
-      "cf": 6,
-      "ca": 5
-    },
-    {
       "date": "2024-03-16",
       "opponent": "Farense",
       "league": "Portuguese Primeira Liga",
@@ -149055,6 +150079,30 @@
       "result": "L",
       "cf": 6,
       "ca": 6
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Estoril",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Estoril",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Moreirense": [
@@ -150349,6 +151397,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Club Atlético La Paz",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
     }
   ],
   "UPNFM": [
@@ -150481,6 +151539,26 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Motagua",
+      "league": "Honduran Liga Nacional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Motagua",
+      "league": "Honduran Liga Nacional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Olancho FC": [
@@ -151041,164 +152119,164 @@
       "result": "L"
     },
     {
-      "date": "2026-08-09",
-      "opponent": "Denver Summit FC",
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-15",
+      "opponent": "Bay FC",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "San Diego Wave FC",
       "league": "NWSL",
       "sport": "soccer",
       "loc": "away",
-      "gf": 1,
-      "ga": 2,
+      "gf": 2,
+      "ga": 4,
       "result": "L"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-15",
-      "opponent": "Bay FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 2,
-      "result": "W"
     }
   ],
   "Boston Legacy FC": [
@@ -152479,6 +153557,30 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "CSKA Moscow",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "CSKA Moscow",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Akron Tolyatti": [
@@ -152695,6 +153797,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Akhmat Grozny",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "FC Cajamarca": [
@@ -153009,6 +154123,18 @@
       "gf": 4,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Saarbrücken",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Guayaquil City FC": [
@@ -153198,18 +154324,6 @@
     }
   ],
   "Sparta Rotterdam": [
-    {
-      "date": "2024-02-17",
-      "opponent": "Excelsior",
-      "league": "Dutch Eredivisie",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 4,
-      "ga": 2,
-      "result": "W",
-      "cf": 4,
-      "ca": 4
-    },
     {
       "date": "2024-02-24",
       "opponent": "Nijmegen",
@@ -153427,6 +154541,18 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Utrecht",
+      "league": "Dutch Eredivisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Feyenoord Rotterdam": [
@@ -153539,6 +154665,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "AZ Alkmaar",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "FC Groningen": [
@@ -153723,6 +154861,30 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "PSV Eindhoven",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Sparta Rotterdam",
+      "league": "Dutch Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "PEC Zwolle": [
@@ -153835,6 +154997,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Ajax Amsterdam",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Arbroath": [
@@ -153857,6 +155031,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Greenock Morton",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Inverness Caledonian Thistle": [
@@ -154213,6 +155399,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Livingston",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Ayr United": [
@@ -154245,6 +155443,18 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Raith Rovers",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Queen's Park": [
@@ -154267,6 +155477,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Stenhousemuir",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Raith Rovers": [
@@ -154288,6 +155510,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Ayr United",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -154351,6 +155585,16 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Pérez Zeledón",
+      "league": "Costa Rican Primera Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "Stenhousemuir": [
@@ -154413,6 +155657,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Queen's Park",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Greenock Morton": [
@@ -154434,6 +155690,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Arbroath",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -155331,18 +156599,6 @@
   ],
   "Dundee": [
     {
-      "date": "2024-02-07",
-      "opponent": "St Mirren",
-      "league": "Scottish Premiership",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 2,
-      "result": "L",
-      "cf": 5,
-      "ca": 6
-    },
-    {
       "date": "2024-02-11",
       "opponent": "St Johnstone",
       "league": "Scottish Premiership",
@@ -155563,6 +156819,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Dundee United",
+      "league": "Scottish Premiership",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Aberdeen": [
@@ -158321,6 +159589,16 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Leones",
+      "league": "LigaPro Ecuador",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
+      "result": "W"
     }
   ],
   "Aucas": [
@@ -158405,6 +159683,16 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Independiente del Valle",
+      "league": "LigaPro Ecuador",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Kilmarnock": [
@@ -158863,18 +160151,6 @@
   ],
   "Dundee United": [
     {
-      "date": "2023-02-01",
-      "opponent": "Kilmarnock",
-      "league": "Scottish Premiership",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L",
-      "cf": 2,
-      "ca": 7
-    },
-    {
       "date": "2023-02-04",
       "opponent": "Hearts",
       "league": "Scottish Premiership",
@@ -159094,6 +160370,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Dundee",
+      "league": "Scottish Premiership",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -160731,18 +162019,6 @@
   ],
   "Livingston": [
     {
-      "date": "2024-01-02",
-      "opponent": "Hearts",
-      "league": "Scottish Premiership",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 2,
-      "ca": 3
-    },
-    {
       "date": "2024-01-27",
       "opponent": "Dundee",
       "league": "Scottish Premiership",
@@ -160965,6 +162241,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Dunfermline Athletic",
+      "league": "Scottish Championship",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Standard Liege": [
@@ -161094,6 +162382,16 @@
       "ga": 0,
       "cf": null,
       "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "RAAL La Louvière",
+      "league": "Belgian Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
       "result": "W"
     },
     {
@@ -163795,21 +165093,21 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
-    }
-  ],
-  "Metz": [
+    },
     {
-      "date": "2024-01-27",
-      "opponent": "Nice",
-      "league": "French Ligue 1",
+      "date": "2026-08-22",
+      "opponent": "Saint-Étienne",
+      "league": "French Ligue 2",
       "sport": "soccer",
       "loc": "away",
       "gf": 0,
-      "ga": 1,
-      "result": "L",
-      "cf": 2,
-      "ca": 5
-    },
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Metz": [
     {
       "date": "2024-02-04",
       "opponent": "Lorient",
@@ -164028,6 +165326,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Stade Laval",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -164411,18 +165721,6 @@
   ],
   "Nantes": [
     {
-      "date": "2024-02-11",
-      "opponent": "Toulouse",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 1,
-      "result": "W",
-      "cf": 0,
-      "ca": 12
-    },
-    {
       "date": "2024-02-17",
       "opponent": "Paris SG",
       "league": "French Ligue 1",
@@ -164636,6 +165934,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rodez Aveyron",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -164965,6 +166275,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Nantes",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 5,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Stade Laval": [
@@ -165027,6 +166349,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Metz",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Sochaux": [
@@ -165373,6 +166707,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "SK Sturm Graz",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "TSV Hartberg": [
@@ -165435,6 +166781,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "SC Rheindorf Altach",
+      "league": "Austrian Bundesliga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Comerciantes Unidos": [
@@ -166335,6 +167693,16 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Internacional Santa Tecla",
+      "league": "Salvadoran Primera Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Internacional Santa Tecla": [
@@ -166349,16 +167717,6 @@
       "result": "D"
     },
     {
-      "date": "2026-04-01",
-      "opponent": "C.D. Platense",
-      "league": "Salvadoran Primera Division",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 0,
-      "result": "D"
-    },
-    {
       "date": "2026-04-05",
       "opponent": "Isidro Metapán",
       "league": "Salvadoran Primera Division",
@@ -166536,6 +167894,16 @@
       "loc": "away",
       "gf": 1,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Inca Aruba",
+      "league": "Salvadoran Primera Division",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
       "result": "W"
     }
   ],
@@ -167649,6 +169017,18 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "SG Sonnenhof Großaspach",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "SV Darmstadt 98": [
@@ -167714,18 +169094,6 @@
     }
   ],
   "Holstein Kiel": [
-    {
-      "date": "2024-02-11",
-      "opponent": "Schalke 04",
-      "league": "German 2. Bundesliga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 0,
-      "result": "W",
-      "cf": 10,
-      "ca": 4
-    },
     {
       "date": "2024-02-17",
       "opponent": "Paderborn",
@@ -167945,6 +169313,18 @@
       "result": "D",
       "cf": 5,
       "ca": 5
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TSV 1860 Munich",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Kaiserslautern": [
@@ -168393,6 +169773,18 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Olympiakos Nicosia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Kifisia": [
@@ -168757,6 +170149,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Samsunspor",
+      "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Pyramids FC": [
@@ -169377,16 +170781,6 @@
       "result": "L"
     },
     {
-      "date": "2026-08-08",
-      "opponent": "Gotham FC",
-      "league": "NWSL",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Denver Summit FC",
       "league": "NWSL",
@@ -169535,6 +170929,16 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Utah Royals",
+      "league": "NWSL",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "result": "W"
     }
   ],
   "Washington Spirit": [
@@ -170459,33 +171863,21 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
-    }
-  ],
-  "AZ Alkmaar": [
-    {
-      "date": "2024-04-06",
-      "opponent": "PSV Eindhoven",
-      "league": "Dutch Eredivisie",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 5,
-      "result": "L",
-      "cf": 7,
-      "ca": 4
     },
     {
-      "date": "2024-04-13",
-      "opponent": "Waalwijk",
+      "date": "2026-08-22",
+      "opponent": "AZ Alkmaar",
       "league": "Dutch Eredivisie",
       "sport": "soccer",
       "loc": "home",
-      "gf": 3,
+      "gf": 0,
       "ga": 2,
-      "result": "W",
-      "cf": 8,
-      "ca": 1
-    },
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "AZ Alkmaar": [
     {
       "date": "2024-04-28",
       "opponent": "Nijmegen",
@@ -170676,6 +172068,30 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Feyenoord Rotterdam",
+      "league": "Dutch Vrouwen Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Fortuna Sittard",
+      "league": "Dutch Eredivisie",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -170885,6 +172301,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Gazovik Orenburg",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Akhmat Grozny": [
@@ -170937,6 +172365,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rostov",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Silkeborg IF": [
@@ -171991,6 +173431,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Aris",
+      "league": "Greek Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Plymouth Argyle": [
@@ -172083,6 +173535,18 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Wycombe Wanderers",
+      "league": "English League One",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Exeter City": [
@@ -172341,6 +173805,16 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Deportivo Cuenca",
+      "league": "LigaPro Ecuador",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Deportivo Maldonado": [
@@ -172436,6 +173910,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Hung Yen",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -173950,6 +175436,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rayo Cantabria",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "D"
     }
   ],
@@ -186927,6 +188425,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Portland",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Portland",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "California Baptist": [
@@ -191595,6 +193113,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Gimnastica Segoviana",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Texas": [
@@ -191887,6 +193417,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Home",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UAB": [
@@ -192601,6 +194143,18 @@
       "gf": 7,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Apollon Limassol",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Anorthosis": [
@@ -192743,6 +194297,18 @@
       "gf": 1,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Karmiotissa",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Omaha": [
@@ -193853,6 +195419,18 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Gimnàstic de Tarragona",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "CE Europa": [
@@ -193894,6 +195472,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Girona II",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -196579,21 +198169,21 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Leeds United",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Aris": [
-    {
-      "date": "2024-01-21",
-      "opponent": "Olympiakos",
-      "league": "Greek Super League",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 1,
-      "ca": 1
-    },
     {
       "date": "2024-01-27",
       "opponent": "Kifisia",
@@ -196817,6 +198407,18 @@
       "gf": 2,
       "ga": 6,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Kalamata",
+      "league": "Greek Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Nocerina": [
@@ -197933,6 +199535,26 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "California",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "California",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Colorado": [
@@ -198101,6 +199723,26 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "San José State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "San José State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
       "ga": 0,
       "result": "W"
     }
@@ -199685,6 +201327,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Ahli",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Al Hazem": [
@@ -199969,6 +201623,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Abha",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Al Shabab": [
@@ -200041,6 +201707,18 @@
       "gf": 2,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Khaleej",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Qadsiah": [
@@ -202025,6 +203703,26 @@
       "gf": 0,
       "ga": 9,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "La Salle",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "La Salle",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "result": "L"
     }
   ],
   "Neom SC": [
@@ -202293,6 +203991,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Fateh",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Al Riyadh": [
@@ -202633,18 +204343,6 @@
   ],
   "Marseille": [
     {
-      "date": "2024-02-18",
-      "opponent": "Brest",
-      "league": "French Ligue 1",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 1,
-      "result": "L",
-      "cf": 4,
-      "ca": 6
-    },
-    {
       "date": "2024-02-25",
       "opponent": "Montpellier",
       "league": "French Ligue 1",
@@ -202861,6 +204559,16 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Strasbourg",
+      "league": "French Ligue 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "NK Bjelovar": [
@@ -202959,6 +204667,18 @@
       "gf": 0,
       "ga": 4,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Omonia Aradippou",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "US Pistoiese 1921": [
@@ -202981,6 +204701,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Away",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "SD EIBAR III": [
@@ -204083,6 +205815,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Albacete",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Racing Club Portuense": [
@@ -204673,6 +206417,18 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Kholood",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Al Khaleej": [
@@ -204735,6 +206491,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Shabab",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Kholood": [
@@ -204796,6 +206564,18 @@
       "loc": "away",
       "gf": 5,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Taawoun",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -204993,6 +206773,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Al Ettifaq",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Betis Deportivo": [
@@ -205157,6 +206949,18 @@
       "gf": 2,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Sestao",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "CD Basconia": [
@@ -205209,6 +207013,18 @@
       "gf": 3,
       "ga": 3,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Real Valladolid II",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Arkansas-Pine Bluff": [
@@ -205861,6 +207677,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Erzgebirge Aue",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Konyaspor": [
@@ -206783,6 +208611,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Arenas Club",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "FC Martinenc": [
@@ -207189,6 +209029,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Leganés",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Granada": [
@@ -208503,6 +210355,16 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Brooklyn FC",
+      "league": "USL Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Carolina Ascent FC": [
@@ -213741,18 +215603,6 @@
   ],
   "Las Palmas": [
     {
-      "date": "2024-01-20",
-      "opponent": "Vallecano",
-      "league": "Spanish LaLiga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 2,
-      "ga": 0,
-      "result": "W",
-      "cf": 0,
-      "ca": 12
-    },
-    {
       "date": "2024-01-27",
       "opponent": "Real Madrid",
       "league": "Spanish LaLiga",
@@ -213974,6 +215824,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Ceuta",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -219731,6 +221593,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Atlètic Lleida",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "KSK Hasselt": [
@@ -219859,6 +221733,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "CD Basconia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "SANTOMERA": [
@@ -220001,6 +221887,16 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Doneztebe",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Spelle-Venhaus": [
@@ -220035,6 +221931,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Iraklis",
+      "league": "Greek Super League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Western Michigan": [
@@ -220453,16 +222361,6 @@
       "result": "L"
     },
     {
-      "date": "2026-03-15",
-      "opponent": "Águilas Doradas",
-      "league": "Colombian Primera A",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 1,
-      "result": "L"
-    },
-    {
       "date": "2026-03-18",
       "opponent": "Internacional de Bogotá",
       "league": "Colombian Primera A",
@@ -220641,6 +222539,16 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Alianza FC",
+      "league": "Colombian Primera A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
     }
   ],
   "Chatham Town": [
@@ -222923,6 +224831,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cong An Hanoi",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Red Arrows": [
@@ -222935,6 +224855,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "ZESCO United",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Power Dynamos": [
@@ -222979,6 +224911,54 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Away",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Arema Indonesia",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Osasuna II",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Away",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "CD San Ignacio": [
@@ -224299,6 +226279,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Alavés III",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Touring": [
@@ -224951,6 +226943,26 @@
       "gf": 0,
       "ga": 7,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lehigh",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Lehigh",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "result": "W"
     }
   ],
   "Girona II": [
@@ -224972,6 +226984,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 2,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "CE Europa",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -245475,18 +247499,6 @@
   ],
   "Hansa Rostock": [
     {
-      "date": "2024-02-04",
-      "opponent": "Hannover",
-      "league": "German 2. Bundesliga",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 6,
-      "ca": 6
-    },
-    {
       "date": "2024-02-11",
       "opponent": "Osnabruck",
       "league": "German 2. Bundesliga",
@@ -245696,6 +247708,16 @@
       "ga": 4,
       "cf": null,
       "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "VfB Stuttgart",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
       "result": "L"
     },
     {
@@ -250313,18 +252335,6 @@
   ],
   "Leganes": [
     {
-      "date": "2020-06-22",
-      "opponent": "Granada",
-      "league": "Spanish LaLiga",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 0,
-      "ga": 0,
-      "result": "D",
-      "cf": 4,
-      "ca": 2
-    },
-    {
       "date": "2020-06-27",
       "opponent": "Osasuna",
       "league": "Spanish LaLiga",
@@ -250527,6 +252537,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Real Oviedo",
+      "league": "Spanish LALIGA 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Fenix": [
@@ -256828,6 +258850,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Rayo Majadahonda",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -268843,143 +270877,145 @@
       "result": "W"
     },
     {
-      "date": "2026-08-10",
-      "opponent": "Gimnasia y Esgrima (Jujuy)",
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
       "league": "Argentine Nacional B",
       "sport": "soccer",
-      "loc": "away",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-16",
+      "opponent": "Almirante Brown",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Agropecuario",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "home",
       "gf": 2,
       "ga": 0,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
-      "result": "W"
-    },
-    {
-      "date": "2026-08-16",
-      "opponent": "Almirante Brown",
-      "league": "Argentine Nacional B",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 3,
-      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -273535,6 +275571,18 @@
       "gf": 4,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Viktoria Köln",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "SpVgg Greuther Furth": [
@@ -273659,6 +275707,30 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Maritimo",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Maritimo",
+      "league": "Portuguese Primeira Liga",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "CD Municipal Limeno": [
@@ -275105,6 +277177,18 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Grenoble",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Isidro Metapan": [
@@ -275551,6 +277635,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Juventud",
+      "league": "Liga AUF Uruguaya",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Atletic Lleida": [
@@ -275573,6 +277669,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Manresa",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Cerro Porteno": [
@@ -276197,6 +278305,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Away",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Avai": [
@@ -276419,6 +278539,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Espanyol B",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Atletico Sanluqueno CF": [
@@ -276689,6 +278821,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Roda",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Corum FK": [
@@ -276711,6 +278855,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Kasimpasa",
+      "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Cadiz II": [
@@ -277093,6 +279249,18 @@
       "gf": 4,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Cristo Atletico",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Pozuelo Alarcon": [
@@ -277164,6 +279332,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Real Ávila",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -278343,6 +280523,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "Amorebieta",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   " Deportivo Alavés II": [
@@ -278953,6 +281145,16 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Cayón",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
     }
   ],
   "Cayón": [
@@ -279005,9 +281207,29 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "Selaya FC",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "result": "W"
     }
   ],
   "RAAL La Louvière": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Standard Liege",
+      "league": "Belgian Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "result": "L"
+    },
     {
       "date": "2026-08-21",
       "opponent": "Standard Liege",
@@ -279123,6 +281345,560 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-21",
+      "opponent": "San Telmo",
+      "league": "Argentine Nacional B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "result": "D"
+    }
+  ],
+  "Estudiantes de Río Cuarto": [
+    {
+      "date": "2026-08-21",
+      "opponent": "San Lorenzo",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "CD UTIEL": [
+    {
+      "date": "2026-08-21",
+      "opponent": "VALL DE UXÓ",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "VALL DE UXÓ": [
+    {
+      "date": "2026-08-21",
+      "opponent": "CD UTIEL",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Doneztebe": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Mutilvera",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "Alianza Atlético": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Sporting Cristal",
+      "league": "Peruvian Liga 1",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Jaguares de Córdoba": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Boyacá Chicó FC",
+      "league": "Colombian Primera A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Boyacá Chicó FC": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Jaguares de Córdoba",
+      "league": "Colombian Primera A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Western Sydney Wanderers": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Macarthur FC",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "Macarthur FC": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Western Sydney Wanderers",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Brown de Adrogué": [
+    {
+      "date": "2026-08-21",
+      "opponent": "UAI Urquiza",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "Villa Dálmine": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Deportivo Laferrere",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "León": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Monterrey",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "result": "W"
+    }
+  ],
+  "América": [
+    {
+      "date": "2026-08-22",
+      "opponent": "FC Juarez",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "result": "W"
+    }
+  ],
+  "Querétaro": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Toluca",
+      "league": "Mexican Liga BBVA MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "result": "L"
+    }
+  ],
+  "Pérez Zeledón": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Puntarenas FC",
+      "league": "Costa Rican Primera Division",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "result": "L"
+    }
+  ],
+  "Anzoátegui FC": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Trujillanos",
+      "league": "Venezuelan Primera División",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Unión La Calera": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Audax Italiano",
+      "league": "Chilean Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Rubio Ñú": [
+    {
+      "date": "2026-08-21",
+      "opponent": "Sportivo Trinidense",
+      "league": "Paraguayan Primera División",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "result": "D"
+    }
+  ],
+  "Club Atlético La Paz": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Cruz Azul Hidalgo",
+      "league": "Mexican Liga de Expansión MX",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "result": "D"
+    }
+  ],
+  "San José State": [
+    {
+      "date": "2026-08-22",
+      "opponent": "UC Santa Barbara",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-22",
+      "opponent": "UC Santa Barbara",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "result": "L"
+    }
+  ],
+  "SV Wehen Wiesbaden": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Bayer Leverkusen",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "FC Erzgebirge Aue": [
+    {
+      "date": "2026-08-22",
+      "opponent": "TSG Hoffenheim",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Hemelingen": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Hannover 96",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 9,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Luneburger SK Hansa": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Werder Bremen",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "MSV Duisburg": [
+    {
+      "date": "2026-08-22",
+      "opponent": "SV Elversberg",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Saarbrucken": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Hertha Berlin",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Viktoria Koln": [
+    {
+      "date": "2026-08-22",
+      "opponent": "1. FC Nürnberg",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Eintracht Trier": [
+    {
+      "date": "2026-08-22",
+      "opponent": "RB Leipzig",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 6,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "SG Sonnenhof Großaspach": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Arminia Bielefeld",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "TSV 1860 Munich": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Holstein Kiel",
+      "league": "German Cup",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Iraklis": [
+    {
+      "date": "2026-08-22",
+      "opponent": "AEK Athens",
+      "league": "Greek Super League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Torrellano": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Real Murcia Imperial",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    }
+  ],
+  "Real Murcia Imperial": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Torrellano",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Alaves III": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Beasain",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "ZESCO United": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Red Arrows",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Omonia Aradippou": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Krasava",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Karmiotissa": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Anorthosis",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Arenas Club": [
+    {
+      "date": "2026-08-22",
+      "opponent": "CD Laredo",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Arema Indonesia": [
+    {
+      "date": "2026-08-22",
+      "opponent": "TBD Home",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    }
+  ],
+  "Real Avila": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Pozuelo Alarcón",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    }
+  ],
+  "Santomera": [
+    {
+      "date": "2026-08-22",
+      "opponent": "Cieza",
+      "league": "Club Friendly",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ]
 }
