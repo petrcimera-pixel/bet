@@ -421,6 +421,20 @@ tr.row-ok { background: var(--accent-glow); }
 .match-card .pick-badge .pl { font-size: 11px; color: var(--txt3); }
 .match-card .pick-badge .pv { font-size: 14px; font-weight: 700; }
 
+/* Odkaz na vyhledávání zápasu na Tipsportu – appka sama nesází, jen
+   otevře jejich vlastní vyhledávání s předvyplněným týmem (viz
+   tipsportSearchUrl v app.js). Drženo vizuálně jako "sekundární akce",
+   ne jako hlavní CTA (to zůstává tip/kurz appky samotné). */
+.tipsport-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; color: var(--txt2);
+  text-decoration: none; padding: 3px 8px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--panel-2);
+  transition: color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.tipsport-link:hover { color: var(--accent); border-color: var(--accent-dim); }
+
 /* sekundární pásmo: další trhy / zdůvodnění – vizuálně oddělené od hlavního řádku */
 .match-card .mc-extra { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
 .match-card .mc-markets { display: flex; flex-wrap: wrap; gap: 6px; }

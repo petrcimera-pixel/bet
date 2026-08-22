@@ -315,6 +315,7 @@ async function loadTipOfDay() {
         <span class="pick-name">${top.name}</span>
         <span class="odds-chip">${top.odds.toFixed(2)}</span>
         <span class="conf-chip">${Math.round(top.prob * 100)} % jistota</span>
+        ${top.home ? `<a class="tipsport-link" href="${tipsportSearchUrl(top.home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu">🔗 Tipsport</a>` : ''}
       </div>
       ${rest.length ? `
         <div class="tip-more">
@@ -1345,6 +1346,17 @@ function matchStateHtml(dateStr, timeStr, betStatus, result, liveResult, isLive)
   return '<span class="badge model">čeká na výsledek</span>';
 }
 
+// Odkaz na vyhledávání konkrétního zápasu na Tipsportu (appka žádné
+// zápasy tam nezadává ani nesází - jen otevře jejich vlastní vyhledávání
+// s předvyplněným názvem domácího týmu, ať uživatel nemusí zápas sám
+// hledat od nuly). Tipsport nemá stabilní/předvídatelné ID zápasu ve
+// vlastním datovém zdroji appky, takže přesný deep-link na konkrétní
+// zápas postavit nejde - hledání podle jednoho týmu ho ale spolehlivě
+// vyhodí mezi prvními výsledky.
+function tipsportSearchUrl(team) {
+  return `https://www.tipsport.cz/hledani?textsFilter=${encodeURIComponent(team)}&fullTextResultsType=MATCHES`;
+}
+
 function matchCardHtml(m, bet) {
   // POZOR: m.result je naplněné i u právě hraných zápasů (ESPN vrací průběžné
   // skóre a goals_model ho propíše do result), takže "má skóre" != "dohráno" –
@@ -1405,6 +1417,7 @@ function matchCardHtml(m, bet) {
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
           ${(!finished && !_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
+          ${!finished ? `<a class="tipsport-link" href="${tipsportSearchUrl(m.home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu (appka sama nesází, jen otevře jejich vyhledávání)">🔗 Tipsport</a>` : ''}
         </div>
       </div>
       ${hasExtra ? `

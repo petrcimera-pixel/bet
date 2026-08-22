@@ -1453,6 +1453,7 @@ def api_dashboard():
         for p, c in per_match[:5]:
             tips.append({
                 "match": f'{p["home"]} – {p["away"]}',
+                "home": p["home"], "away": p["away"],
                 "league": p.get("league"),
                 "date": p.get("date"), "time": p.get("time"),
                 "name": c["name"], "label": c["label"],
