@@ -371,7 +371,7 @@ function renderRecentBets(bets) {
       const whyId = `betWhy${i}`;
       return `
       <tr>
-        <td>${b.match || '—'}</td>
+        <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status)}</td>
         <td class="muted">${when}</td>
         <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result, b.live_result, b.live)}</td>
         <td>${b.label || '?'}</td>
@@ -387,7 +387,7 @@ function renderRecentBets(bets) {
         <td colspan="8" style="background:var(--panel-2);">
           ${b.outcome === 'acca'
             ? `<div style="font-size:12.5px; color:var(--txt2);"><strong>AKO tiket – nohy:</strong><ul style="margin:6px 0 0; padding-left:18px;">
-                ${(b.legs || []).map(l => `<li>${l.match}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
+                ${(b.legs || []).map(l => `<li>${l.match} ${tipsportBetLink(l.match, 'open')}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
               </ul></div>`
             : `<ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--txt2);">${(b.why || []).map(w => `<li>${w}</li>`).join('')}</ul>`}
         </td>
@@ -1357,6 +1357,17 @@ function tipsportSearchUrl(team) {
   return `https://www.tipsport.cz/hledani?textsFilter=${encodeURIComponent(team)}&fullTextResultsType=MATCHES`;
 }
 
+// Odkaz do Tipsport vyhledávání pro řádek sázky (tabulky sázek, tikety
+// AKO/kombo apod.) - bere domácí tým z řetězce "Domácí – Hosté". Ukazuje se
+// jen dokud je sázka otevřená, na vyřešenou sázku už zápas hledat netřeba.
+function tipsportBetLink(matchStr, status) {
+  if (status && status !== 'open') return '';
+  if (!matchStr || !matchStr.includes(' – ')) return '';
+  const home = matchStr.split(' – ')[0].trim();
+  if (!home) return '';
+  return `<a class="tipsport-link" href="${tipsportSearchUrl(home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu">🔗</a>`;
+}
+
 function matchCardHtml(m, bet) {
   // POZOR: m.result je naplněné i u právě hraných zápasů (ESPN vrací průběžné
   // skóre a goals_model ho propíše do result), takže "má skóre" != "dohráno" –
@@ -1482,7 +1493,7 @@ function renderBetsTable(bets) {
   if (!bets.length) { tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Zatím žádné sázky</td></tr>`; return; }
   tbody.innerHTML = bets.map(b => `
     <tr>
-      <td>${b.match || '—'}</td>
+      <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status)}</td>
       <td class="muted">${fmtWhen(b.match_date, b.match_time)}</td>
       <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result)}</td>
       <td>${b.label || '?'}</td>
@@ -2438,7 +2449,7 @@ async function toggleBettorDetail(id, sourceEl) {
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr${bt.legs ? ' class="ticket-row"' : ''}>
-          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match}</td>
+          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match} ${bt.legs ? '' : tipsportBetLink(bt.match, bt.status)}</td>
           <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
           <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status, bt.result)}</td>
           <td>${bt.label}</td>
@@ -2453,7 +2464,7 @@ async function toggleBettorDetail(id, sourceEl) {
           ${bt.legs.map(l => `<div class="leg">
               <span class="leg-res ${l.result || ''}">${l.result === 'won' ? '✓' : l.result === 'lost' ? '✕' : l.result === 'void' ? '∅' : '·'}</span>
               <strong>${l.label}</strong>
-              <span class="muted">${l.match}</span>
+              <span class="muted">${l.match}</span> ${tipsportBetLink(l.match, l.result ? 'settled' : 'open')}
               <span class="muted">${l.odds}×</span>
               ${l.score ? `<span class="muted">${l.score.home}:${l.score.away}</span>` : ''}
             </div>`).join('')}
