@@ -53,6 +53,7 @@ from engine import apifootball
 from engine import footballdata
 from engine import netdiag
 from engine import backtester
+from engine import tipsport_import
 
 # ML Learning (optional)
 try:
@@ -256,6 +257,10 @@ def api_matches():
         odds = {k: bets[k].get("odds") for k in keys if k in bets and bets[k].get("odds")}
         # Další trhy pro kartičku zápasu (víc typů tipů, ne jen jeden "best
         # value" pick) – vítěz, nejjistější góly O/U linie, BTTS.
+        # Ručně importovaná data z Tipsport.cz (viz engine/tipsport_import.py) -
+        # pokud pro tenhle zápas existují, appka je nabídne jako srovnání se
+        # svým modelem (skutečné kurzy sázkovky, ne archivní benchmark).
+        tp = tipsport_import.lookup(p["home"], p["away"], p.get("date") or "")
         best_goal_line = None
         for gl in p.get("goal_lines") or []:
             side = "over" if gl["over"]["prob"] >= gl["under"]["prob"] else "under"
@@ -293,6 +298,7 @@ def api_matches():
             "rating_confidence": p.get("rating_confidence"),
             "goal_lines": p.get("goal_lines", [])[:2],
             "top_scores": p.get("top_scores", [])[:3],
+            "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
         }
 
     slim_preds = [slim_prediction(p) for p in predictions]
@@ -1771,6 +1777,22 @@ def api_ratings_merge_duplicates():
         res = pred.merge_duplicate_team_names()
         _PRED_CACHE.clear()
         _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/tipsport/import", methods=["POST"])
+@login_required
+def api_tipsport_import():
+    """Import zápasů/kurzů nasbíraných z Tipsport.cz (viz engine/tipsport_import.py
+    - stahuje se ručně přes skutečný prohlížeč, appka si to sama tahat nemůže)."""
+    data = request.get_json(force=True, silent=True) or {}
+    matches = data.get("matches") or []
+    if not isinstance(matches, list):
+        return jsonify({"error": "matches musí být pole"}), 400
+    try:
+        res = tipsport_import.import_matches(matches)
         return jsonify(res)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

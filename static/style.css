@@ -434,6 +434,7 @@ tr.row-ok { background: var(--accent-glow); }
   white-space: nowrap;
 }
 .tipsport-link:hover { color: var(--accent); border-color: var(--accent-dim); }
+.badge.tipsport-odds { background: var(--panel-2); border: 1px solid var(--border); color: var(--txt2); }
 
 /* sekundární pásmo: další trhy / zdůvodnění – vizuálně oddělené od hlavního řádku */
 .match-card .mc-extra { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }

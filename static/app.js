@@ -1397,6 +1397,14 @@ function matchCardHtml(m, bet) {
     .map(x => `<span class="badge real" title="${x.side} ${x.line}">${x.side[0]}${x.line} · ${x.odds.toFixed(2)}× · ${Math.round((x.prob || 0) * 100)}%</span>`)
     .join('');
 
+  // Ručně importované kurzy z Tipsport.cz (viz tipsport_import.py) – reálná
+  // sázková kurzovka pro srovnání s vlastním modelem, ne archivní benchmark.
+  const tpOdds = m.tipsport?.odds;
+  const tipsportChip = tpOdds ? `<span class="badge tipsport-odds" title="Kurzy Tipsport.cz">🎯 ${
+    [tpOdds.home && `1: ${tpOdds.home}`, tpOdds.draw && `X: ${tpOdds.draw}`, tpOdds.away && `2: ${tpOdds.away}`]
+      .filter(Boolean).join(' · ')
+  }</span>` : '';
+
   const why = bet ? `
     <div class="why-box" style="display:none;">
       ${bet.ticket ? `Součást tiketu <strong>${bet.ticket}</strong> – tip <strong>${bet.label}</strong>.`
@@ -1404,7 +1412,8 @@ function matchCardHtml(m, bet) {
         : `Vsazeno na <strong>${bet.label}</strong>.`}
     </div>` : '';
 
-  const hasExtra = marketChips || bet;
+  const hasExtra = marketChips || bet || tipsportChip;
+  const tipsportUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
 
   return `
     <div class="match-card" data-match-id="${escAttr(m.id)}">
@@ -1428,12 +1437,12 @@ function matchCardHtml(m, bet) {
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
           ${(!finished && !_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
-          ${!finished ? `<a class="tipsport-link" href="${tipsportSearchUrl(m.home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu (appka sama nesází, jen otevře jejich vyhledávání)">🔗 Tipsport</a>` : ''}
+          ${!finished ? `<a class="tipsport-link" href="${tipsportUrl}" target="_blank" rel="noopener noreferrer" title="${m.tipsport?.url ? 'Otevřít tenhle zápas přímo na Tipsportu' : 'Najít tenhle zápas na Tipsportu (appka sama nesází, jen otevře jejich vyhledávání)'}">🔗 Tipsport</a>` : ''}
         </div>
       </div>
       ${hasExtra ? `
       <div class="mc-extra">
-        ${marketChips ? `<div class="mc-markets">${marketChips}</div>` : ''}
+        ${(marketChips || tipsportChip) ? `<div class="mc-markets">${marketChips}${tipsportChip}</div>` : ''}
         ${bet ? `
         <div class="mc-why-row">
           <button class="btn small why-toggle">💡 Proč vsazeno ▾</button>
