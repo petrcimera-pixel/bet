@@ -538,11 +538,11 @@
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
             <strong>▦ Dashboard</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, dlaždice <strong>„Dnes“</strong> (bilance jen z dnešních vyhodnocených sázek – celkový zisk se hýbe pomalu), tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
           </div>
           <div>
             <strong>⚽ Zápasy</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal) a filtr „Jen s kurzy“ – ten nechá jen zápasy, kde ESPN dalo reálný kurz, tedy ty, na kterých appka vůbec může sázet. U každého zápasu je datum a čas výkopu v místním čase, u probíhajících „🔴 ŽIVĚ“ s aktuální minutou a průběžným skóre (obnovuje se samo), u dohraných konečný výsledek. Dál dostupné reálné trhy (1X2 i gólové linie) a u vsazených zápasů zdůvodnění agenta nebo sázkaře.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr „💰 Jen s kurzy“ (jen zápasy, kde ESPN dalo reálný kurz – tedy ty, na kterých appka vůbec může sázet) a „🎫 Vsazené“ (jen zápasy, kde má agent sázku). Protože stránka běžně ukazuje přes 300 karet, je pod filtry ještě <strong>textové pole</strong> pro zúžení seznamu podle týmu, soutěže nebo země. U každého zápasu je datum a čas výkopu v místním čase, u probíhajících „🔴 ŽIVĚ“ s aktuální minutou a průběžným skóre (obnovuje se samo), u dohraných konečný výsledek. Dál dostupné reálné trhy (1X2 i gólové linie), u vsazených zápasů zdůvodnění agenta nebo sázkaře a odkaz <strong>🔗 Tipsport</strong> pro dohledání zápasu u sázkovky.</p>
           </div>
           <div>
             <strong>🔍 Hledat</strong>
@@ -550,19 +550,19 @@
           </div>
           <div>
             <strong>🎲 Sázkaři</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna 45 virtuálních sázkařů (15 v každé ze tří kategorií), každý s vlastním bankem 200 Kč a jinou strategií (viz níže), sázka omezená na 5–10 Kč na tiket – žebříček podle zisku v rámci kategorie, mini graf vývoje banku, rozklikávací detail historie a výkonu podle sportu/trhu/ligy, a graf kalibrace modelu. Tlačítko „🧬 Vygenerovat z dat“ postaví nového sázkaře podle statisticky nejvýnosnějšího segmentu (kurz/jistota/trh) z dosavadní historie celé arény.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna virtuálních sázkařů (15 v každé z kategorií jednotlivé/tikety/kombinace, plus kategorie AI), každý s vlastním bankem 200 Kč a jinou strategií (viz níže), sázka omezená na 5–10 Kč na tiket. Záložka <strong>„🏆 Vše“</strong> ukáže celkový žebříček napříč kategoriemi, jinak se řadí po kategoriích (porovnávat akumulátor s jednotlivou sázkou nedává smysl). Nad tabulkou je hledání podle jména i strategie a rychlé filtry (v plusu / ve ztrátě / rozehrané / bez sázek). Ve sloupcích je vedle zisku a ROI i <strong>CLV</strong> – na malém vzorku spolehlivější ukazatel než zisk. Kliknutím na řádek se rozbalí historie a výkon podle sportu/trhu/ligy, tlačítko „⋯“ nabídne reset, přetrénování a ruční vsazení. Kategorie AI má navíc <strong>AI turnaj</strong>: žebříček podle CLV a tlačítko, kterým se z vítěze vytvoří „AI Šampion“ s mírně pozměněnými parametry (běží i automaticky v denním retrainu). Karta <strong>„⏱️ Kdy aréna vydělává“</strong> rozkládá všechny sázky podle dne v týdnu a denní doby výkopu. Tlačítko „🧬 Vygenerovat z dat“ postaví nového sázkaře podle statisticky nejvýnosnějšího segmentu (kurz/jistota/trh) z dosavadní historie celé arény.</p>
           </div>
           <div>
             <strong>💰 Bankroll</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek. K tomu <strong>„📅 Zisk a ztráta po dnech“</strong> (odliší postupně narůstající ztrátu od jednoho špatného dne), <strong>„🏅 Rekordy a série“</strong> (nejvyšší/nejnižší stav banku, nejlepší a nejhorší den, nejdelší šňůry výher a proher) a <strong>„🎯 ROI podle výše kurzu“</strong> – ten ukáže, jestli ztráta pochází z konkrétního pásma kurzů, což je přímý návod, kde přitvrdit filtry.</p>
           </div>
           <div>
             <strong>🧠 ML Learning</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance, tlačítko pro ruční přetrénování a rozklad, kde agent vydělává/ztrácí podle sportu, typu trhu, ligy a pásma kurzu. Počet trénovacích vzorků roste jen tak rychle, jak reálně končí zápasy – hint u čísla ukazuje, kolik toho ještě čeká na výsledek.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance, tlačítko pro ruční přetrénování a rozklad, kde agent vydělává/ztrácí podle sportu, typu trhu, ligy a pásma kurzu. Počet trénovacích vzorků roste jen tak rychle, jak reálně končí zápasy – hint u čísla ukazuje, kolik toho ještě čeká na výsledek. Navíc <strong>„📉 Umí model něco navíc proti trhu?“</strong> – graf Brierova skóre proti zavíracímu kurzu Pinnacle v čase, tedy jestli se model zlepšuje nebo degraduje, a <strong>„⚖️ Rizikový profil agenta“</strong> s maximálním propadem banku a Sharpe ratiem.</p>
           </div>
           <div>
             <strong>⚙ Nastavení</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (výchozí 8, 12, 16, 20), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku, notifikace a diagnostika (vč. stavu kalibrace).</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (výchozí 8, 12, 16, 20), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku a notifikace (včetně hlavního vypínače – systémové oprávnění prohlížeče jednou udělené jinak odebrat nejde). Dál <strong>„Výkon a data“</strong> (počet paralelních dotazů na ESPN a jak daleko dopředu hledat zápasy, obojí bez restartu; mazání keše, reset databáze tipů, export a import zálohy) a <strong>pokročilá diagnostika</strong>: stav keše, běh background smyček, poslední benchmark, čerstvost Tipsport importu, velikosti datových souborů a stav zálohy do GitHub Gistu.</p>
           </div>
         </div>
       </div>
@@ -678,8 +678,9 @@
 
         <h3 style="margin-top:18px;">🎲 Kategorie sázkařů</h3>
         <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
-          Sázkaři jsou rozdělení do tří kategorií podle toho, jaký tiket skládají – každá má
+          Sázkaři jsou rozdělení do kategorií podle toho, jaký tiket skládají – každá má
           vlastní žebříček, protože porovnávat akumulátor s jednotlivou sázkou nedává smysl.
+          (Celkové pořadí napříč všemi je pod záložkou „🏆 Vše“.)
         </p>
         <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0 0 10px; padding-left:20px;">
           <li><strong>1️⃣ Jednotlivé sázky</strong> – jeden tip = jeden tiket. Základní srovnání strategií.</li>
@@ -688,7 +689,16 @@
           <li><strong>🔗 Kombinované zápasy</strong> – několik trhů <em>jednoho</em> zápasu na jednom tiketu
               (jako „kombi“ u sázkovek). Pravděpodobnost se počítá společně ze skóre gridu, ne součinem –
               trhy téhož zápasu spolu souvisí a součin by dal jiné číslo (u ověřovaných kombinací až o 12 p.b.).</li>
+          <li><strong>🤖 AI sázkaři</strong> – rozhodují se podle natrénovaného ML modelu, ne podle
+              Poissonova modelu jako ostatní. Bez natrénovaného modelu nesází vůbec, nehádají.
+              Kategorie se navíc sama vyvíjí přes „AI Šampiona“ (viz AI turnaj na stránce Sázkaři).</li>
         </ul>
+        <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
+          🔁 <strong>Žádné duplicity:</strong> jeden sázkař nikdy nevsadí na tentýž zápas dvakrát – ani
+          jednotlivou sázkou, ani jako nohu dalšího tiketu. Bez toho by „diverzifikovaný“ tiket ve
+          skutečnosti několikrát stál na stejném výsledku. Různí sázkaři na týž zápas sázet můžou –
+          to je záměr, aby se strategie porovnávaly na stejných příležitostech.
+        </p>
         <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
           ⚠️ Kurz kombinace vzniká vynásobením jednotlivých reálných kurzů. Tak se počítá akumulátor,
           ale skutečné sázkovky kombinace jednoho zápasu cení níž právě kvůli té korelaci. Výsledky
