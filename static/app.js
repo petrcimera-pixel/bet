@@ -3341,8 +3341,129 @@ async function loadMlLearning() {
     setText('mlAccuracy', s.model_accuracy ? pct(s.model_accuracy * 100) : '—');
     setText('mlAuc', s.model_auc ? s.model_auc.toFixed(3).replace('.', ',') : '—');
     renderMlFeatures(s.feature_importance || {});
+    loadBenchmarkTrend();
+    loadRiskProfile();
   } catch (e) {
     toast('Nepodařilo se načíst ML Learning.', 'err');
+  }
+}
+
+/** Vývoj Brierova skóre modelu proti zavíracímu kurzu trhu.
+ *  Endpoint /api/model/benchmark/history se plnil při každém benchmarku
+ *  (i z denního cronu), ale nikdy se nikde nezobrazoval – takže nebylo
+ *  poznat, jestli se model v čase zlepšuje, nebo degraduje. */
+async function loadBenchmarkTrend() {
+  const box = el('benchmarkTrend');
+  if (!box) return;
+  try {
+    const d = await api('/api/model/benchmark/history', { timeoutMs: 15000 });
+    const h = (d.history || []).filter(x => x.brier_model != null);
+    box.className = '';
+    if (h.length < 1) {
+      box.innerHTML = `<div class="empty-state">
+        Benchmark ještě neproběhl. Spustí se sám v denním retrainu, nebo ho
+        pustíš ručně v Nastavení → „Porovnat s trhem".</div>`;
+      return;
+    }
+    const posl = h[h.length - 1];
+    const lepsi = posl.brier_model < posl.brier_market;
+    // graf jen když je co srovnávat (aspoň dva body)
+    let graf = '';
+    if (h.length >= 2) {
+      const W = 760, H = 200, padX = 46, padY = 20;
+      const pw = W - 2 * padX, ph = H - 2 * padY;
+      const vals = h.flatMap(x => [x.brier_model, x.brier_market]);
+      const lo = Math.min(...vals), hi = Math.max(...vals);
+      const rozsah = (hi - lo) || 0.01;
+      const X = i => padX + (h.length === 1 ? pw / 2 : i * pw / (h.length - 1));
+      const Y = v => padY + ph - ((v - lo) / rozsah) * ph;
+      const cesta = (klic) => h.map((x, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(x[klic]).toFixed(1)}`).join('');
+      const body = (klic, barva) => h.map((x, i) =>
+        `<circle cx="${X(i).toFixed(1)}" cy="${Y(x[klic]).toFixed(1)}" r="3" fill="${barva}">
+           <title>${x.ts ? new Date(x.ts * 1000).toLocaleDateString('cs-CZ') : ''} · ${klic === 'brier_model' ? 'model' : 'trh'} ${czNum(x[klic], 3)}</title>
+         </circle>`).join('');
+      graf = `
+        <div class="chart-wrap"><svg viewBox="0 0 ${W} ${H}" class="chart">
+          <text x="${padX - 8}" y="${padY + 4}" text-anchor="end" font-size="10" fill="var(--txt3)">${czNum(hi, 3)}</text>
+          <text x="${padX - 8}" y="${padY + ph}" text-anchor="end" font-size="10" fill="var(--txt3)">${czNum(lo, 3)}</text>
+          <path d="${cesta('brier_market')}" stroke="var(--blue)" stroke-width="2" fill="none" stroke-dasharray="5,4"/>
+          <path d="${cesta('brier_model')}" stroke="${lepsi ? 'var(--pos)' : 'var(--bad)'}" stroke-width="2.5" fill="none"/>
+          ${body('brier_market', 'var(--blue)')}${body('brier_model', lepsi ? 'var(--pos)' : 'var(--bad)')}
+        </svg></div>
+        <div class="bench-legend">
+          <span><i style="background:${lepsi ? 'var(--pos)' : 'var(--bad)'}"></i> model</span>
+          <span><i class="dash" style="background:var(--blue)"></i> trh (Pinnacle)</span>
+          <span class="muted">${h.length} měření · níž = přesnější</span>
+        </div>`;
+    }
+    const rozdil = posl.brier_model - posl.brier_market;
+    box.innerHTML = `
+      ${graf}
+      <div class="rec-list" style="margin-top:${graf ? '12px' : '0'};">
+        <div class="rec-row">
+          <span class="rec-label">Poslední měření</span>
+          <span class="rec-val">model <b class="${lepsi ? 'pos' : 'bad'}">${czNum(posl.brier_model, 3)}</b>
+            <span class="muted" style="font-weight:400;">vs trh ${czNum(posl.brier_market, 3)}
+            (z ${fmt(posl.matches)} zápasů)</span></span>
+        </div>
+        <div class="rec-row">
+          <span class="rec-label">Rozdíl proti trhu</span>
+          <span class="rec-val ${lepsi ? 'pos' : 'bad'}">${rozdil >= 0 ? '+' : ''}${czNum(rozdil, 4)}</span>
+        </div>
+      </div>
+      <p class="muted" style="font-size:12px; margin:10px 0 0; max-width:82ch;">
+        ${lepsi
+          ? 'Model je přesnější než zavírací kurz trhu – to je vzácné a znamená to skutečnou výhodu.'
+          : 'Model je zatím <strong>méně přesný než trh</strong>. Value, kterou hlásí, je proto spíš šum než výhoda – dokud se rozdíl nesrovná, dává smysl držet přísné filtry a malé sázky.'}
+      </p>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Vývoj benchmarku se nepodařilo načíst.</div>';
+  }
+}
+
+/** Max. propad banku a Sharpe – kolik rizika si agent vybral za své ROI.
+ *  Data z /api/backtest/agent-vs-manual, které se dosud nikde nevolalo. */
+async function loadRiskProfile() {
+  const box = el('riskProfile');
+  if (!box) return;
+  try {
+    const d = await api('/api/backtest/agent-vs-manual', { timeoutMs: 20000 });
+    const a = (d.results || {}).agent || {};
+    box.className = '';
+    if (!a.total_bets) {
+      box.innerHTML = '<div class="empty-state">Zatím žádné vyhodnocené sázky agenta.</div>';
+      return;
+    }
+    const dd = a.max_drawdown || 0;
+    const sh = a.sharpe_ratio || 0;
+    box.innerHTML = `
+      <div class="grid-stats">
+        <div class="stat-tile">
+          <div class="label">Max. propad banku</div>
+          <div class="value ${dd > 30 ? 'bad' : ''}">${pct(dd)}</div>
+          <div class="hint">nejhorší pokles od vrcholu</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">Sharpe ratio</div>
+          <div class="value ${sh >= 0 ? 'pos' : 'bad'}">${czNum(sh, 2)}</div>
+          <div class="hint">výnos na jednotku kolísání</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">Vyhodnocených sázek</div>
+          <div class="value">${a.total_bets}</div>
+          <div class="hint">${a.wins || 0} výher · ${a.losses || 0} proher${a.voids ? ` · ${a.voids} void` : ''}</div>
+        </div>
+      </div>
+      <p class="muted" style="font-size:12px; margin:12px 0 0; max-width:82ch;">
+        <strong>Max. propad</strong> říká, o kolik bank spadl z nejvyššího bodu – ${pct(dd)}
+        ${dd > 30 ? 'je hodně, takový propad se těžko vysedí.' : 'je zvládnutelné.'}
+        <strong>Sharpe</strong> pod nulou znamená, že kolísání nebylo vykoupené výnosem;
+        nad 1 se považuje za dobrý poměr.
+      </p>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Rizikový profil se nepodařilo načíst.</div>';
   }
 }
 

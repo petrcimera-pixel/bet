@@ -301,6 +301,25 @@
       </div>
 
       <div class="card">
+        <h3>📉 Umí model něco navíc proti trhu?</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px; max-width:82ch;">
+          Porovnání se zavíracím kurzem Pinnacle – nejlepší veřejně dostupný odhad
+          pravděpodobnosti. <strong>Nižší Brierovo skóre = přesnější.</strong> Když je
+          model nad čarou trhu, neví nic navíc a sázet podle něj je proti přesile.
+          Graf ukazuje, jestli se to v čase zlepšuje, nebo zhoršuje.
+        </p>
+        <div id="benchmarkTrend" class="loading"><span class="spinner"></span></div>
+      </div>
+
+      <div class="card">
+        <h3>⚖️ Rizikový profil agenta</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px; max-width:82ch;">
+          Samotné ROI neřekne, kolik rizika si agent vybral. Tyhle dva ukazatele ano.
+        </p>
+        <div id="riskProfile" class="loading"><span class="spinner"></span></div>
+      </div>
+
+      <div class="card">
         <h3>Kde agent vydělává a kde ztrácí</h3>
         <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
           Rozbor už vyhodnocených sázek podle ligy, sportu, typu trhu a pásma kurzu – ukáže,

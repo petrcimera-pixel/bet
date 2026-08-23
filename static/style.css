@@ -664,6 +664,17 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 }
 th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
+/* legenda benchmark grafu (model vs trh) */
+.bench-legend {
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  font-size: 11.5px; color: var(--txt2); margin-top: 6px;
+}
+.bench-legend i {
+  display: inline-block; width: 14px; height: 3px; border-radius: 2px;
+  margin-right: 5px; vertical-align: 2px;
+}
+.bench-legend i.dash { opacity: 0.65; }
+
 /* Rekordy banku – dvousloupcový seznam popisek/hodnota */
 .rec-list { display: flex; flex-direction: column; }
 .rec-row {
