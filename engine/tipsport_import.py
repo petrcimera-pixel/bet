@@ -15,16 +15,27 @@ import time
 
 from engine import storage
 from engine.goals_model import _norm_team
+from engine import team_aliases
 
 _STORE_FILE = "tipsport_matches.json"
 _MAX_ENTRIES = 2000   # ať soubor neroste bez konce při opakovaných importech
 
 
+def _canon(name: str) -> str:
+    """Normalizovaný (bez diakritiky, malými písmeny) název přeložený přes
+    team_aliases na kanonickou (ESPN-styl) podobu - "Bayern München" i
+    "Bayern Munich" tak dají stejný klíč, ať zápas naimportuje kterýkoli
+    zdroj. _norm_team sama diakritiku ořízne, ale nepřevádí na malá písmena
+    (jinak by rozbila zobrazované jméno v ratingech) - tady na tom nezáleží,
+    jde jen o interní srovnávací klíč."""
+    return team_aliases.resolve(_norm_team(name).lower())
+
+
 def _key(home: str, away: str, date: str) -> str:
-    """Klíč pro spárování s vlastními zápasy - normalizovaný název + den
+    """Klíč pro spárování s vlastními zápasy - kanonický název + den
     (bez času, ten se mezi zdroji často liší o pár minut)."""
     day = (date or "")[:10]
-    return f"{_norm_team(home)}|{_norm_team(away)}|{day}"
+    return f"{_canon(home)}|{_canon(away)}|{day}"
 
 
 def _load() -> dict:
@@ -73,12 +84,11 @@ def lookup(home: str, away: str, date: str) -> dict | None:
     hit = store.get(_key(home, away, date))
     if hit:
         return hit
-    # Tipsport a ESPN často pojmenovávají tým jinak ("Dortmund" vs "Borussia
-    # Dortmund", "Thajsko" vs "Thailand" u národních týmů) - přesný klíč
-    # selže i na stejný zápas. Fallback: podřetězcová shoda obou týmů ve
-    # stejný den, oběma směry (kratší název bývá podřetězcem delšího).
+    # _canon (přes team_aliases) chytí známé přezdívky/exonyma; zbytek
+    # (neznámé zkratky, překlepy) dorazí podřetězcovou shodou nad kanonickými
+    # jmény, oběma směry (kratší název bývá podřetězcem delšího).
     day = (date or "")[:10]
-    nh, na = _norm_team(home), _norm_team(away)
+    nh, na = _canon(home), _canon(away)
 
     def _match(a: str, b: str) -> bool:
         return bool(a) and bool(b) and (a in b or b in a)
@@ -86,7 +96,7 @@ def lookup(home: str, away: str, date: str) -> dict | None:
     for key, entry in store.items():
         if not key.endswith(f"|{day}"):
             continue
-        eh, ea = _norm_team(entry.get("home", "")), _norm_team(entry.get("away", ""))
+        eh, ea = _canon(entry.get("home", "")), _canon(entry.get("away", ""))
         if _match(nh, eh) and _match(na, ea):
             return entry
     return None
