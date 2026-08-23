@@ -696,9 +696,41 @@ def api_team():
     })
 
 
+def _attach_tipsport(bets: list) -> list:
+    """Přidá bet["tipsport"] (kurzy/deep-link) k otevřeným sázkám podle
+    naimportovaných dat z Tipsportu (viz tipsport_import.py) - jen pro
+    zobrazení v UI, sázky samotné se tím nemění. Vrací mělké kopie, ať se
+    neupravuje stav uložený v bankroll.json/virtual_bettors.json."""
+    out = []
+    for b in bets:
+        b = dict(b)
+        match = b.get("match") or ""
+        if b.get("status") == "open" and " – " in match:
+            home, away = match.split(" – ", 1)
+            tp = tipsport_import.lookup(home.strip(), away.strip(), b.get("match_date") or "")
+            if tp and tp.get("odds"):
+                b["tipsport"] = {"odds": tp.get("odds"), "url": tp.get("url")}
+        if b.get("legs"):
+            legs = []
+            for l in b["legs"]:
+                l = dict(l)
+                lmatch = l.get("match") or ""
+                if not l.get("result") and " – " in lmatch:
+                    home, away = lmatch.split(" – ", 1)
+                    # legy nenesou vlastní datum - nejbližší odhad je datum
+                    # tiketu (obvykle nejstarší noha, viz bankroll.py:204)
+                    tp = tipsport_import.lookup(home.strip(), away.strip(), b.get("match_date") or "")
+                    if tp and tp.get("odds"):
+                        l["tipsport"] = {"odds": tp.get("odds"), "url": tp.get("url")}
+                legs.append(l)
+            b["legs"] = legs
+        out.append(b)
+    return out
+
+
 @app.route("/api/bankroll")
 def api_bankroll():
-    return jsonify({"stats": bankroll.stats(), "bets": bankroll.state()["bets"][:50]})
+    return jsonify({"stats": bankroll.stats(), "bets": _attach_tipsport(bankroll.state()["bets"][:50])})
 
 
 @app.route("/api/bankroll/settings", methods=["POST"])
@@ -1522,6 +1554,7 @@ def api_dashboard():
                 per_match.append((p, c))
         per_match.sort(key=lambda pc: pc[1].get("cal_prob", pc[1]["prob"]), reverse=True)
         for p, c in per_match[:5]:
+            tp = tipsport_import.lookup(p["home"], p["away"], p.get("date") or "")
             tips.append({
                 "match": f'{p["home"]} – {p["away"]}',
                 "home": p["home"], "away": p["away"],
@@ -1530,6 +1563,7 @@ def api_dashboard():
                 "name": c["name"], "label": c["label"],
                 "odds": c["odds"], "prob": c.get("cal_prob", c["prob"]),
                 "real": c["real"], "market": c["market"],
+                "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
             })
         tip = tips[0] if tips else None   # zpětná kompatibilita se starým polem "tip"
     except Exception:
@@ -1631,7 +1665,7 @@ def api_agent():
         "settings": app_settings.get_settings()["agent"],
         "stats": agent.agent_stats(),
         "league_stats": agent.league_stats(),
-        "bets": _attach_live_scores(agent.agent_bets()[:60]),
+        "bets": _attach_tipsport(_attach_live_scores(agent.agent_bets()[:60])),
         "balance": bankroll.state()["balance"],
     })
 
@@ -1760,6 +1794,8 @@ def api_bettor_detail(bid):
     detail = virtual_bettors.bettor_detail(bid)
     if not detail:
         return jsonify({"error": "not found"}), 404
+    if detail.get("bets"):
+        detail["bets"] = _attach_tipsport(detail["bets"])
     return jsonify(detail)
 
 

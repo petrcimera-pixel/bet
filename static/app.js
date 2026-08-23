@@ -322,7 +322,7 @@ async function loadTipOfDay() {
         <span class="pick-name">${top.name}</span>
         <span class="odds-chip">${top.odds.toFixed(2)}</span>
         <span class="conf-chip">${Math.round(top.prob * 100)} % jistota</span>
-        ${top.home ? `<a class="tipsport-link" href="${tipsportSearchUrl(top.home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu">🔗 Tipsport</a>` : ''}
+        ${tipsportBadge(top.home, top.tipsport)}
       </div>
       ${rest.length ? `
         <div class="tip-more">
@@ -378,7 +378,7 @@ function renderRecentBets(bets) {
       const whyId = `betWhy${i}`;
       return `
       <tr>
-        <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status)}</td>
+        <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status, b.tipsport)}</td>
         <td class="muted">${when}</td>
         <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result, b.live_result, b.live)}</td>
         <td>${b.label || '?'}</td>
@@ -394,7 +394,7 @@ function renderRecentBets(bets) {
         <td colspan="8" style="background:var(--panel-2);">
           ${b.outcome === 'acca'
             ? `<div style="font-size:12.5px; color:var(--txt2);"><strong>AKO tiket – nohy:</strong><ul style="margin:6px 0 0; padding-left:18px;">
-                ${(b.legs || []).map(l => `<li>${l.match} ${tipsportBetLink(l.match, 'open')}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
+                ${(b.legs || []).map(l => `<li>${l.match} ${tipsportBetLink(l.match, 'open', l.tipsport)}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
               </ul></div>`
             : `<ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--txt2);">${(b.why || []).map(w => `<li>${w}</li>`).join('')}</ul>`}
         </td>
@@ -776,6 +776,7 @@ async function openLeagueMatches(league, country) {
         <td><strong>${m.home}</strong> – ${m.away}</td>
         <td>${m.has_odds ? '<span class="badge real">kurzy</span>'
               : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává'}">jen model</span>`}</td>
+        <td>${tipsportBadge(m.home, m.tipsport, { short: true, stopPropagation: true })}</td>
         <td><button class="btn small">Rozbor →</button></td>
       </tr>`).join('');
     box.innerHTML = `
@@ -784,7 +785,7 @@ async function openLeagueMatches(league, country) {
       </div>
       <h4 style="margin:0 0 10px;">${d.flag || ''} ${d.league} <span class="muted">(${d.total} zápasů)</span></h4>
       ${rows ? `<div class="table-wrap"><table>
-        <thead><tr><th>Kdy</th><th>Zápas</th><th></th><th></th></tr></thead>
+        <thead><tr><th>Kdy</th><th>Zápas</th><th></th><th></th><th></th></tr></thead>
         <tbody>${rows}</tbody></table></div>`
         : '<div class="empty-state">V téhle soutěži teď nevidím žádný nadcházející zápas.</div>'}`;
     el('leaguesBackBtn').addEventListener('click', loadLeagues);
@@ -823,15 +824,12 @@ function renderSearchResults(d, box) {
     const badge = m.has_odds
       ? '<span class="badge real">kurzy</span>'
       : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
-    const tpOdds = m.tipsport?.odds;
-    const tpTitle = tpOdds ? `Tipsport: 1: ${tpOdds.home ?? '—'} · X: ${tpOdds.draw ?? '—'} · 2: ${tpOdds.away ?? '—'}` : 'Najít tenhle zápas na Tipsportu';
-    const tpUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
     return `<tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
       <td>${fmtWhen(m.date, m.time)}</td>
       <td><strong>${m.home}</strong> – ${m.away}</td>
       <td class="muted">${m.flag || ''} ${m.league}</td>
       <td>${badge}</td>
-      <td><a class="tipsport-link" href="${tpUrl}" target="_blank" rel="noopener noreferrer" title="${escAttr(tpTitle)}" onclick="event.stopPropagation()">🔗${tpOdds ? ' 🎯' : ''}</a></td>
+      <td>${tipsportBadge(m.home, m.tipsport, { short: true, stopPropagation: true })}</td>
       <td><button class="btn small">Rozbor →</button></td>
     </tr>`;
   }).join('');
@@ -916,10 +914,6 @@ function renderAnalysis(d, box) {
   const coldWarn = (conf != null && conf < 0.3)
     ? `<p class="muted">⚠️ Rating těchhle týmů stojí na málo odehraných zápasech (jistota ${Math.round(conf * 100)} %), takže je predikce zploštělá k průměru a míň rozhodná. To je záměr — model radši přizná nejistotu, než aby si vymyslel jistotu.</p>` : '';
 
-  const tpOdds = m.tipsport?.odds;
-  const tpUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
-  const tpTitle = tpOdds ? `Tipsport: 1: ${tpOdds.home ?? '—'} · X: ${tpOdds.draw ?? '—'} · 2: ${tpOdds.away ?? '—'}` : 'Najít tenhle zápas na Tipsportu';
-
   box.innerHTML = `
     <div class="card">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
@@ -927,7 +921,7 @@ function renderAnalysis(d, box) {
           <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
           <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
         </div>
-        <a class="tipsport-link" href="${tpUrl}" target="_blank" rel="noopener noreferrer" title="${escAttr(tpTitle)}">🔗${tpOdds ? ' 🎯 ' + [tpOdds.home, tpOdds.draw, tpOdds.away].filter(Boolean).join(' · ') : ' Tipsport'}</a>
+        ${tipsportBadge(m.home, m.tipsport)}
       </div>
       ${probRow}
       <p style="margin-top:10px;">
@@ -1377,15 +1371,37 @@ function tipsportSearchUrl(team) {
   return `https://www.tipsport.cz/hledani?textsFilter=${encodeURIComponent(team)}&fullTextResultsType=MATCHES`;
 }
 
-// Odkaz do Tipsport vyhledávání pro řádek sázky (tabulky sázek, tikety
-// AKO/kombo apod.) - bere domácí tým z řetězce "Domácí – Hosté". Ukazuje se
-// jen dokud je sázka otevřená, na vyřešenou sázku už zápas hledat netřeba.
-function tipsportBetLink(matchStr, status) {
+// Jednotný odznak/odkaz na Tipsport.cz - používá se na kartách zápasů,
+// v detailu (rozboru), na Hledat, v přehledu soutěže i u řádků sázek.
+// Bez naimportovaných dat (viz tipsport_import.py) je to prostý odkaz na
+// jejich vyhledávání s předvyplněným názvem domácího týmu (appka sama
+// nezadává žádné zápasy ani nesází - jen otevře jejich vyhledávání, ať
+// uživatel nemusí zápas sám hledat od nuly). S daty je to přímý deep-link
+// + zobrazené 1X2 kurzy pro srovnání s vlastním modelem.
+// opts.short: jen 🔗/🎯 bez odds textu vedle (pro úzké sloupce v tabulkách).
+function tipsportBadge(home, tipsport, opts = {}) {
+  if (!home) return '';
+  const odds = tipsport?.odds;
+  const url = tipsport?.url ? `https://www.tipsport.cz${tipsport.url}` : tipsportSearchUrl(home);
+  const title = odds
+    ? `Tipsport: 1: ${odds.home ?? '—'} · X: ${odds.draw ?? '—'} · 2: ${odds.away ?? '—'}`
+    : 'Najít tenhle zápas na Tipsportu (appka sama nesází, jen otevře jejich vyhledávání)';
+  const label = odds
+    ? `🔗 🎯${opts.short ? '' : ' ' + [odds.home, odds.draw, odds.away].filter(Boolean).join(' · ')}`
+    : (opts.short ? '🔗' : '🔗 Tipsport');
+  const stop = opts.stopPropagation ? ' onclick="event.stopPropagation()"' : '';
+  return `<a class="tipsport-link" href="${url}" target="_blank" rel="noopener noreferrer" title="${escAttr(title)}"${stop}>${label}</a>`;
+}
+
+// Odkaz/odznak pro řádek sázky (tabulky sázek, tikety AKO/kombo apod.) -
+// bere domácí tým z řetězce "Domácí – Hosté" a volitelná naimportovaná
+// data z bt.tipsport (viz app.py _attach_tipsport). Ukazuje se jen dokud
+// je sázka otevřená, na vyřešenou sázku už zápas hledat netřeba.
+function tipsportBetLink(matchStr, status, tipsport) {
   if (status && status !== 'open') return '';
   if (!matchStr || !matchStr.includes(' – ')) return '';
   const home = matchStr.split(' – ')[0].trim();
-  if (!home) return '';
-  return `<a class="tipsport-link" href="${tipsportSearchUrl(home)}" target="_blank" rel="noopener noreferrer" title="Najít tenhle zápas na Tipsportu">🔗</a>`;
+  return tipsportBadge(home, tipsport, { short: true });
 }
 
 function matchCardHtml(m, bet) {
@@ -1433,7 +1449,6 @@ function matchCardHtml(m, bet) {
     </div>` : '';
 
   const hasExtra = marketChips || bet || tipsportChip;
-  const tipsportUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
 
   return `
     <div class="match-card" data-match-id="${escAttr(m.id)}">
@@ -1457,7 +1472,7 @@ function matchCardHtml(m, bet) {
           ` : `<span class="badge model">model ${m.confidence || Math.round((m.probs?.[m.pick] || 0) * 100)}%</span>`}
           ${(!finished && !_coldstartIsNorm && m.rating_confidence != null && m.rating_confidence < 0.3) ? `<span class="badge coldstart" title="Rating týmu/týmů stojí na málo odehraných zápasech - predikce je míň spolehlivá">⚠️ nový tým</span>` : ''}
           ${bet ? `<span class="badge ${bet.status}">💰 ${(bet.status || 'open').toUpperCase()}</span>` : ''}
-          ${!finished ? `<a class="tipsport-link" href="${tipsportUrl}" target="_blank" rel="noopener noreferrer" title="${m.tipsport?.url ? 'Otevřít tenhle zápas přímo na Tipsportu' : 'Najít tenhle zápas na Tipsportu (appka sama nesází, jen otevře jejich vyhledávání)'}">🔗 Tipsport</a>` : ''}
+          ${!finished ? tipsportBadge(m.home, m.tipsport) : ''}
         </div>
       </div>
       ${hasExtra ? `
@@ -1522,7 +1537,7 @@ function renderBetsTable(bets) {
   if (!bets.length) { tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Zatím žádné sázky</td></tr>`; return; }
   tbody.innerHTML = bets.map(b => `
     <tr>
-      <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status)}</td>
+      <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status, b.tipsport)}</td>
       <td class="muted">${fmtWhen(b.match_date, b.match_time)}</td>
       <td>${matchStateHtml(b.match_date, b.match_time, b.status, b.result)}</td>
       <td>${b.label || '?'}</td>
@@ -2591,7 +2606,7 @@ async function toggleBettorDetail(id, sourceEl) {
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr${bt.legs ? ' class="ticket-row"' : ''}>
-          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match} ${bt.legs ? '' : tipsportBetLink(bt.match, bt.status)}</td>
+          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match} ${bt.legs ? '' : tipsportBetLink(bt.match, bt.status, bt.tipsport)}</td>
           <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
           <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status, bt.result)}</td>
           <td>${bt.label}</td>
@@ -2606,7 +2621,7 @@ async function toggleBettorDetail(id, sourceEl) {
           ${bt.legs.map(l => `<div class="leg">
               <span class="leg-res ${l.result || ''}">${l.result === 'won' ? '✓' : l.result === 'lost' ? '✕' : l.result === 'void' ? '∅' : '·'}</span>
               <strong>${l.label}</strong>
-              <span class="muted">${l.match}</span> ${tipsportBetLink(l.match, l.result ? 'settled' : 'open')}
+              <span class="muted">${l.match}</span> ${tipsportBetLink(l.match, l.result ? 'settled' : 'open', l.tipsport)}
               <span class="muted">${l.odds}×</span>
               ${l.score ? `<span class="muted">${l.score.home}:${l.score.away}</span>` : ''}
             </div>`).join('')}
