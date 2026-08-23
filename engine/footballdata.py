@@ -165,7 +165,9 @@ def backfill_ratings(seasons=None, codes=None, progress=None) -> dict:
             skipped += 1
     goals_model._save_ratings(batch_ratings)
     goals_model.storage.save(goals_model._HISTORY_FILE, batch_history)
-    goals_model.storage.save(goals_model._APPLIED_FILE, {"ids": sorted(batch_applied)[-20000:]})
+    # viz goals_model._mark_applied - abecední třídění před ořezem tu dřív
+    # systematicky vyhazovalo číselná ESPN ID ve prospěch "fd-" archivních
+    goals_model._save_applied(batch_applied)
 
     ratings = batch_ratings
     ns = sorted(v["n"] for v in ratings.values() if v.get("n", 0) > 0)

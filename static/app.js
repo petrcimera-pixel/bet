@@ -817,7 +817,12 @@ function renderSearchResults(d, box) {
     box.innerHTML = `<div class="card"><div class="empty-state">Pro „${d.query}" jsem v příštích ${d.days || 14} dnech nenašel žádný zápas.</div></div>`;
     return;
   }
-  const teams = (d.teams || []).map(t => `<span class="pill">${t.name} <span class="muted">(${t.matches})</span></span>`).join('');
+  // Klikatelné - zúží hledání na přesný název týmu (užitečné, když
+  // obecnější dotaz jako "real" najde desítky různých "Real X" klubů
+  // najednou a chceš zobrazit jen zápasy jednoho konkrétního).
+  const teams = (d.teams || []).map(t =>
+    `<button type="button" class="pill pill-team" data-team="${escAttr(t.name)}">${t.name} <span class="muted">(${t.matches})</span></button>`
+  ).join('');
   const rows = d.matches.map(m => {
     // Kurzy ESPN dává až blízko výkopu – u vzdálenějších zápasů řekni rovnou,
     // že půjde jen o odhad modelu, ať to není překvapení až v rozboru
@@ -847,6 +852,14 @@ function renderSearchResults(d, box) {
     </div>`;
   box.querySelectorAll('.search-row-item').forEach(tr => {
     tr.addEventListener('click', () => openMatchAnalysis(tr.dataset.id, tr.dataset.sport));
+  });
+  box.querySelectorAll('.pill-team').forEach(p => {
+    p.addEventListener('click', () => {
+      const team = p.dataset.team;
+      el('teamSearch').value = team;
+      clearTimeout(_searchTimer);
+      runTeamSearch(team);
+    });
   });
 }
 

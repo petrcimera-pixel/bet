@@ -1869,6 +1869,20 @@ def api_ratings_cleanup_empty():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/ratings/dedupe-history", methods=["POST"])
+@login_required
+def api_ratings_dedupe_history():
+    """Jednorázová oprava: odstraní duplicitní zápasy v team_history.json
+    (viz goals_model.dedupe_team_history) - způsobené chybou v ořezu
+    ratings_applied.json, kvůli které se stejný zápas mohl zapsat víckrát."""
+    try:
+        res = pred.dedupe_team_history()
+        _persist_push_safe()
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/ratings/merge-duplicates", methods=["POST"])
 @login_required
 def api_ratings_merge_duplicates():

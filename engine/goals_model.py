@@ -230,16 +230,40 @@ def rating_of(team: str) -> dict:
 
 
 _APPLIED_FILE = "ratings_applied.json"
+# Dost velký strop, ať se v běžném provozu prakticky nikdy nedosáhne - byl
+# 20000 a reálně se už vyčerpal (viz níže), takže tohle je hlavně pojistka
+# proti neomezenému růstu souboru, ne aktivně fungující limit.
+_APPLIED_MAX = 250_000
 
 
 def _applied_ids() -> set:
     return set((storage.load(_APPLIED_FILE, {}) or {}).get("ids") or [])
 
 
+def _save_applied(ids_set) -> None:
+    """Sdílená (opravená) capping logika pro dávkové volající (backfill_ratings
+    tady i ve footballdata.py) - viz vysvětlení v _mark_applied."""
+    cur = set(ids_set)
+    if len(cur) > _APPLIED_MAX:
+        cur = set(list(cur)[-_APPLIED_MAX:])
+    storage.save(_APPLIED_FILE, {"ids": sorted(cur)})
+
+
 def _mark_applied(ids) -> None:
     cur = _applied_ids() | set(ids)
-    # držet jen rozumné množství – starší zápasy se stejně znovu nestahují
-    storage.save(_APPLIED_FILE, {"ids": sorted(cur)[-20000:]})
+    # POZOR: dřív tu bylo `sorted(cur)[-20000:]` - abecední třídění před
+    # ořezem. ESPN živá ID jsou čísla ("401884817"...), archivní ID z
+    # football-data.co.uk mají prefix "fd-" - a 'f' > libovolná číslice v
+    # ASCII, takže "poslední (abecedně) N" systematicky vyhazovalo VŠECHNA
+    # číselná ESPN ID, jakmile archivních ID přibylo přes strop (což se
+    # reálně stalo - ratings_applied.json skončil composed ze 100 % "fd-"
+    # ID). Bez ochrany proti opakovanému započítání se živé zápasy
+    # (settle smyčka, ruční "Zkontrolovat teď") mohly zapsat do
+    # historie/ratingů víckrát - proto se ve "Forma" objevovaly duplicitní
+    # řádky a v H2H chyběly starší, vytlačené záznamy (viz
+    # _HISTORY_MAX_PER_TEAM). Ořez teď dělá jen pojistku proti neomezenému
+    # růstu, ne výběr podle abecedy.
+    _save_applied(cur)
 
 
 _HISTORY_FILE = "team_history.json"
@@ -442,6 +466,34 @@ def cleanup_empty_ratings() -> dict:
     return {"removed": len(dead), "remaining": len(ratings)}
 
 
+def dedupe_team_history() -> dict:
+    """Jednorázová oprava: kvůli chybě v ořezu ratings_applied.json (viz
+    _mark_applied/_save_applied) se stejný odehraný zápas mohl zapsat do
+    team_history.json víckrát - stejné datum/soupeř/skóre v řadě za sebou.
+    Projevovalo se to jako "Forma" plná stejného výsledku pětkrát dokola a
+    chybějící starší vzájemné zápasy (H2H), protože duplicity vytlačily
+    skutečnou historii z ořezaného stropu (_HISTORY_MAX_PER_TEAM).
+
+    Slučuje záznamy se stejným (date, opponent, gf, ga, loc) na jeden -
+    nedotýká se ratingů (a/d čísla), ta tahle oprava nevrací zpět."""
+    hist = _team_history()
+    removed = 0
+    for team, entries in hist.items():
+        seen = set()
+        deduped = []
+        for e in entries:
+            key = (e.get("date"), _norm_team(e.get("opponent", "")), e.get("gf"), e.get("ga"), e.get("loc"))
+            if key in seen:
+                removed += 1
+                continue
+            seen.add(key)
+            deduped.append(e)
+        hist[team] = deduped
+    if removed:
+        storage.save(_HISTORY_FILE, hist)
+    return {"removed": removed, "teams_checked": len(hist)}
+
+
 def reset_home_away_split() -> dict:
     """Jednorázová oprava: donedávna se a_home/d_home učily proti
     očekávání, které UŽ obsahovalo fixní HOME_ADV_FACTOR bonus (dvojité
@@ -573,7 +625,7 @@ def backfill_ratings(days_back: int = 60, sport: str = "soccer",
             skipped += 1
     _save_ratings(batch_ratings)
     storage.save(_HISTORY_FILE, batch_history)
-    storage.save(_APPLIED_FILE, {"ids": sorted(batch_applied)[-20000:]})
+    _save_applied(batch_applied)
 
     ratings = batch_ratings
     played = [v for v in ratings.values() if v.get("n", 0) > 0]

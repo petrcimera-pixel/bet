@@ -301,6 +301,7 @@ tr:hover td { background: var(--panel-2); }
 }
 .pill.info:hover { border-color: var(--border); }
 .pill.clickable { cursor: pointer; }
+.pill-team { cursor: pointer; font: inherit; -webkit-appearance: none; appearance: none; }
 
 /* dolní stavová lišta – kdy naposled proběhla kontrola výsledků */
 #statusBar {
