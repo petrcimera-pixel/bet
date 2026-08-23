@@ -5,5 +5,47 @@
     "brier_market": 0.607,
     "diff": -0.026,
     "matches": 1000
+  },
+  {
+    "ts": 1787432187,
+    "brier_model": 0.6458,
+    "brier_market": 0.6003,
+    "diff": -0.0455,
+    "matches": 1500
+  },
+  {
+    "ts": 1787476986,
+    "brier_model": 0.6546,
+    "brier_market": 0.6003,
+    "diff": -0.0543,
+    "matches": 1500
+  },
+  {
+    "ts": 1787501543,
+    "brier_model": 0.6828,
+    "brier_market": 0.6003,
+    "diff": -0.0825,
+    "matches": 1500
+  },
+  {
+    "ts": 1787503229,
+    "brier_model": 0.6869,
+    "brier_market": 0.6003,
+    "diff": -0.0866,
+    "matches": 1500
+  },
+  {
+    "ts": 1787521217,
+    "brier_model": 0.693,
+    "brier_market": 0.6003,
+    "diff": -0.0927,
+    "matches": 1500
+  },
+  {
+    "ts": 1787524733,
+    "brier_model": 0.6459,
+    "brier_market": 0.6003,
+    "diff": -0.0455,
+    "matches": 1500
   }
 ]

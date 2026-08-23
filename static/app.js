@@ -3537,8 +3537,24 @@ async function loadBenchmarkTrend() {
         </div>
         <div class="rec-row">
           <span class="rec-label">Rozdíl proti trhu</span>
-          <span class="rec-val ${lepsi ? 'pos' : 'bad'}">${rozdil >= 0 ? '+' : ''}${czNum(rozdil, 4)}</span>
+          <span class="rec-val ${lepsi ? 'pos' : 'bad'}">
+            ${czNum(Math.abs(rozdil), 4)} ${lepsi ? 'lepší' : 'horší'}
+          </span>
         </div>
+        ${h.length >= 2 ? (() => {
+          // Posun proti minulému měření. Menší Brier = lepší, takže záporná
+          // změna je dobrá zpráva – bez tohohle řádku by "-0,047" vypadalo
+          // jako zhoršení.
+          const zmena = posl.brier_model - h[h.length - 2].brier_model;
+          const lepsiNez = zmena < 0;
+          return `<div class="rec-row">
+            <span class="rec-label">Oproti minulému měření</span>
+            <span class="rec-val ${lepsiNez ? 'pos' : zmena > 0 ? 'bad' : ''}">
+              ${Math.abs(zmena) < 0.0005 ? 'beze změny'
+                : `${czNum(Math.abs(zmena), 4)} ${lepsiNez ? 'lepší ↓' : 'horší ↑'}`}
+            </span>
+          </div>`;
+        })() : ''}
       </div>
       <p class="muted" style="font-size:12px; margin:10px 0 0; max-width:82ch;">
         ${lepsi
