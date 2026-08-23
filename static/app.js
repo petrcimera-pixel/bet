@@ -916,10 +916,19 @@ function renderAnalysis(d, box) {
   const coldWarn = (conf != null && conf < 0.3)
     ? `<p class="muted">⚠️ Rating těchhle týmů stojí na málo odehraných zápasech (jistota ${Math.round(conf * 100)} %), takže je predikce zploštělá k průměru a míň rozhodná. To je záměr — model radši přizná nejistotu, než aby si vymyslel jistotu.</p>` : '';
 
+  const tpOdds = m.tipsport?.odds;
+  const tpUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
+  const tpTitle = tpOdds ? `Tipsport: 1: ${tpOdds.home ?? '—'} · X: ${tpOdds.draw ?? '—'} · 2: ${tpOdds.away ?? '—'}` : 'Najít tenhle zápas na Tipsportu';
+
   box.innerHTML = `
     <div class="card">
-      <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
-      <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+        <div>
+          <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
+          <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
+        </div>
+        <a class="tipsport-link" href="${tpUrl}" target="_blank" rel="noopener noreferrer" title="${escAttr(tpTitle)}">🔗${tpOdds ? ' 🎯 ' + [tpOdds.home, tpOdds.draw, tpOdds.away].filter(Boolean).join(' · ') : ' Tipsport'}</a>
+      </div>
       ${probRow}
       <p style="margin-top:10px;">
         Očekávané skóre <strong>${d.exp_goals ? `${czNum(d.exp_goals.home, 2)} : ${czNum(d.exp_goals.away, 2)}` : '—'}</strong>

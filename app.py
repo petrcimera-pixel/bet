@@ -554,12 +554,14 @@ def api_analysis(match_id):
 
     ranked = sorted(cands, key=lambda c: -(c.get("cal_prob") or c.get("prob") or 0))
 
+    tp = tipsport_import.lookup(p["home"], p["away"], p.get("date") or "")
     return jsonify({
         "match": {
             "id": p["id"], "home": p["home"], "away": p["away"],
             "date": p.get("date"), "time": p.get("time"),
             "league": p.get("league"), "country": p.get("country"),
             "flag": ds.flag(p.get("country", "")), "sport": sport,
+            "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
         },
         "probs": p.get("probs"), "pick": p.get("pick"),
         "confidence": p.get("confidence"),
