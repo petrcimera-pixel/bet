@@ -823,11 +823,15 @@ function renderSearchResults(d, box) {
     const badge = m.has_odds
       ? '<span class="badge real">kurzy</span>'
       : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
+    const tpOdds = m.tipsport?.odds;
+    const tpTitle = tpOdds ? `Tipsport: 1: ${tpOdds.home ?? '—'} · X: ${tpOdds.draw ?? '—'} · 2: ${tpOdds.away ?? '—'}` : 'Najít tenhle zápas na Tipsportu';
+    const tpUrl = m.tipsport?.url ? `https://www.tipsport.cz${m.tipsport.url}` : tipsportSearchUrl(m.home);
     return `<tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
       <td>${fmtWhen(m.date, m.time)}</td>
       <td><strong>${m.home}</strong> – ${m.away}</td>
       <td class="muted">${m.flag || ''} ${m.league}</td>
       <td>${badge}</td>
+      <td><a class="tipsport-link" href="${tpUrl}" target="_blank" rel="noopener noreferrer" title="${escAttr(tpTitle)}" onclick="event.stopPropagation()">🔗${tpOdds ? ' 🎯' : ''}</a></td>
       <td><button class="btn small">Rozbor →</button></td>
     </tr>`;
   }).join('');
@@ -839,7 +843,7 @@ function renderSearchResults(d, box) {
     <div class="card">
       <h3>Budoucí zápasy (${d.total}${d.total > d.matches.length ? `, zobrazeno ${d.matches.length}` : ''})</h3>
       <div class="table-wrap"><table>
-        <thead><tr><th>Kdy</th><th>Zápas</th><th>Soutěž</th><th></th><th></th></tr></thead>
+        <thead><tr><th>Kdy</th><th>Zápas</th><th>Soutěž</th><th></th><th></th><th></th></tr></thead>
         <tbody>${rows}</tbody>
       </table></div>
     </div>`;

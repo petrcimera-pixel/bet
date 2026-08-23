@@ -342,8 +342,16 @@ def api_matches():
     })
 
 
-SEARCH_DAYS = 14          # jak daleko dopředu hledat zápasy týmu
+SEARCH_DAYS = 14          # výchozí, přepsatelné v Nastavení → Výkon a data
 ODDS_HORIZON_DAYS = 4     # za tímhle horizontem ESPN kurzy prakticky nedává
+
+
+def _search_days() -> int:
+    try:
+        val = int(app_settings.get_settings().get("performance", {}).get("search_days") or 0)
+    except (TypeError, ValueError):
+        val = 0
+    return val if val > 0 else SEARCH_DAYS
 
 
 def _fold(s: str) -> str:
@@ -359,7 +367,7 @@ def _search_window(sport: str):
     celý rozsah (ne per den), takže je to stejně drahé jako běžný denní fetch
     a drží se to 12 h v keši."""
     today = ds.today_str()
-    return ds.fetch_range(today, ds.add_days(today, SEARCH_DAYS - 1), sport=sport)
+    return ds.fetch_range(today, ds.add_days(today, _search_days() - 1), sport=sport)
 
 
 @app.route("/api/search")
@@ -400,7 +408,7 @@ def api_search():
     team_list = [{"name": k, "matches": v} for k, v in
                  sorted(teams.items(), key=lambda kv: (-kv[1], kv[0]))]
     return jsonify({"query": q, "teams": team_list, "matches": hits[:60],
-                    "total": len(hits), "days": SEARCH_DAYS})
+                    "total": len(hits), "days": _search_days()})
 
 
 @app.route("/api/leagues")
@@ -443,13 +451,14 @@ def api_leagues():
         "total_leagues": len(out),
         "total_matches": sum(x["matches"] for x in out),
         "total_with_odds": sum(x["with_odds"] for x in out),
-        "days": SEARCH_DAYS,
+        "days": _search_days(),
         "odds_horizon": horizon,
         "apifootball": apifootball.usage_status(),
     })
 
 
 def _slim_search_match(m: dict, sport: str, horizon: str) -> dict:
+    tp = tipsport_import.lookup(m.get("home", ""), m.get("away", ""), m.get("date") or "")
     return {
         "id": m["id"], "sport": sport, "slug": m.get("slug", ""),
         "home": m.get("home", ""), "away": m.get("away", ""),
@@ -458,6 +467,7 @@ def _slim_search_match(m: dict, sport: str, horizon: str) -> dict:
         "flag": ds.flag(m.get("country", "")),
         "has_odds": bool((m.get("real_odds") or {}).get("odds")),
         "odds_expected": m.get("date", "") <= horizon,
+        "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
     }
 
 
