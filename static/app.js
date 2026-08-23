@@ -3391,8 +3391,15 @@ async function loadAgentBreakdown() {
 }
 
 async function loadMlLearning() {
+  // Každá karta se načítá samostatně. Dřív viselo všechno na jednom awaitu
+  // na /api/learning/stats – ten při větším množství sázek trvá přes 20 s,
+  // spadl na timeout a zbytek stránky (benchmark, rizikový profil) se pak
+  // nespustil vůbec a zůstaly tam navždy spinnery.
+  loadBenchmarkTrend();
+  loadRiskProfile();
   try {
-    const s = await api('/api/learning/stats', { timeoutMs: 20000 });
+    // 45 s: endpoint reálně běží ~25 s a s rostoucí historií to poroste
+    const s = await api('/api/learning/stats', { timeoutMs: 45000 });
     setText('mlStatus', ML_STATUS_CZ[s.model_status] || s.model_status || '—');
     setText('mlTotal', s.total_bets ?? 0);
     // Číslo roste jen tak rychle, jak reálně končí zápasy – většina fronty
@@ -3402,10 +3409,15 @@ async function loadMlLearning() {
     setText('mlAccuracy', s.model_accuracy ? pct(s.model_accuracy * 100) : '—');
     setText('mlAuc', s.model_auc ? s.model_auc.toFixed(3).replace('.', ',') : '—');
     renderMlFeatures(s.feature_importance || {});
-    loadBenchmarkTrend();
-    loadRiskProfile();
   } catch (e) {
-    toast('Nepodařilo se načíst ML Learning.', 'err');
+    // Ať po neúspěchu nezůstane věčný spinner – řekni, co se stalo.
+    const box = el('mlFeatures');
+    if (box) {
+      box.className = '';
+      box.innerHTML = '<div class="empty-state">Statistiky modelu se nepodařilo načíst (výpočet trvá dlouho). Zkus obnovit stránku.</div>';
+    }
+    ['mlStatus', 'mlTotal', 'mlAccuracy', 'mlAuc'].forEach(id => { if (el(id) && el(id).textContent === '—') setText(id, '—'); });
+    toast('Statistiky ML modelu se nepodařilo načíst.', 'err');
   }
 }
 
