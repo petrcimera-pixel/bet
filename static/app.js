@@ -2733,7 +2733,17 @@ const NOTIF_SEEN_BETS_KEY = 'kurzanalytik_notif_seen_bets';
 const NOTIF_LAST_TIP_KEY = 'kurzanalytik_notif_last_tip';
 const NOTIF_BETTOR_EXTREMES_KEY = 'kurzanalytik_notif_bettor_extremes';
 const NOTIF_AI_READY_KEY = 'kurzanalytik_notif_ai_ready';
+const NOTIF_ENABLED_KEY = 'kurzanalytik_notif_enabled';
 const NOTIF_POLL_MS = 3 * 60 * 1000;
+
+// Hlavní vypínač - nezávislý na oprávnění prohlížeče (to jednou udělené
+// jde odebrat jen v nastavení prohlížeče, appka to programově nezvládne).
+// Bez tohohle přepínače by appka i po "zablokování" dál sypala aspoň
+// záložní toast upozornění v okně - vypnuto/zapnuto default true, ať
+// stávající uživatelé nepřijdou o dosavadní chování beze změny.
+function notifikaceZapnute() {
+  return localStorage.getItem(NOTIF_ENABLED_KEY) !== 'false';
+}
 
 /** Systemove notifikace prohlizec pousti jen v "zabezpecenem kontextu",
  *  cili na HTTPS nebo na localhostu. Server v domaci siti bezi na http://
@@ -2746,7 +2756,16 @@ function systemNotifMozne() {
 function renderNotifStatus() {
   const box = el('notifStatus');
   const btn = el('notifEnableBtn');
+  const toggle = el('cfgNotifEnabled');
   if (!box) return;
+
+  if (toggle) toggle.checked = notifikaceZapnute();
+
+  if (!notifikaceZapnute()) {
+    box.innerHTML = '<span class="badge lost">VYPNUTO</span> Upozornění jsou vypnutá vypínačem výš – appka je nebude posílat, ani v okně.';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
 
   if (!('Notification' in window)) {
     box.textContent = 'Tenhle prohlížeč notifikace nepodporuje.';
@@ -2787,6 +2806,7 @@ function oznacTitulek() {
 }
 
 function notify(title, body) {
+  if (!notifikaceZapnute()) return;
   if (systemNotifMozne() && Notification.permission === 'granted') {
     try { new Notification(title, { body, icon: undefined }); return; } catch (e) { /* spadneme do zalozni cesty */ }
   }
@@ -2872,6 +2892,11 @@ async function pollForNotifications() {
 
 function setupNotifications() {
   renderNotifStatus();
+  el('cfgNotifEnabled')?.addEventListener('change', (e) => {
+    localStorage.setItem(NOTIF_ENABLED_KEY, String(e.target.checked));
+    renderNotifStatus();
+    toast(e.target.checked ? 'Upozornění zapnutá.' : 'Upozornění vypnutá.');
+  });
   el('notifEnableBtn')?.addEventListener('click', async () => {
     if (!('Notification' in window)) { toast('Prohlížeč notifikace nepodporuje.', 'err'); return; }
     const perm = await Notification.requestPermission();
