@@ -292,7 +292,31 @@ async function loadBankrollTiles() {
     setText('stWinRate', s.win_rate !== null ? pct(s.win_rate) : '—');
     setText('stWinHint', s.settled_count ? `${s.won_count || 0}/${s.settled_count} výher` : 'zatím žádná data');
     setText('stOpen', s.open_count ?? 0);
+    loadTodayTile();
   } catch (e) { /* tichý fallback – tiles zůstanou na — */ }
+}
+
+/** Dlaždice "Dnes" – bilance jen z dnešních vyhodnocených sázek.
+ *  Celkový zisk se hýbe pomalu, takže po jednom dni sázení není poznat,
+ *  jestli šlo o dobrý nebo špatný den. */
+async function loadTodayTile() {
+  try {
+    const d = await api('/api/bankroll/daily', { timeoutMs: 15000 });
+    const dnes = todayStr();
+    const z = (d.daily || {})[dnes];
+    if (!z || !z.bets) {
+      setText('stToday', '—');
+      setText('stTodayHint', 'dnes zatím nic vyhodnoceného');
+      el('stToday').className = 'value';
+      return;
+    }
+    const pnl = z.pnl || 0;
+    setText('stToday', `${pnl >= 0 ? '+' : ''}${fmt(pnl)} Kč`);
+    el('stToday').className = 'value ' + (pnl >= 0 ? 'pos' : 'bad');
+    setText('stTodayHint', `${z.wins || 0}/${z.bets} výher · ${pct(z.win_rate)}`);
+  } catch (e) {
+    setText('stTodayHint', '');
+  }
 }
 
 async function loadTipOfDay() {
@@ -2024,6 +2048,20 @@ async function loadAdvancedDiagnostics() {
   box.innerHTML = '<span class="muted">Načítám…</span>';
   try {
     const d = await api('/api/diagnostics/advanced');
+    // Stav zálohy do GitHub Gistu. Lokálně bývá vypnutá (token/gist id jsou
+    // env proměnné jen na Renderu) – a je dobré to vědět: bez ní je jediná
+    // záchrana dat commit v gitu, což dnešek ukázal až moc názorně.
+    let zaloha = '';
+    try {
+      const p = await api('/api/persist/status', { timeoutMs: 8000 });
+      const kdy = p.last_push ? new Date(p.last_push * 1000).toLocaleString('cs-CZ') : null;
+      zaloha = p.enabled
+        ? `<strong style="color:var(--txt2);">Záloha do Gistu:</strong> <span class="pos">zapnutá</span>
+           ${kdy ? `· naposledy ${kdy}` : '· zatím neproběhla'} (${(p.files || []).length} souborů)<br>`
+        : `<strong style="color:var(--txt2);">Záloha do Gistu:</strong> <span class="bad">vypnutá</span>
+           <span class="muted">– chybí GITHUB_TOKEN / GIST_ID, takže data téhle instance nikam mimo tenhle
+           počítač nechodí. Zálohou je jen commit v gitu.</span><br>`;
+    } catch (e) { /* nepovinné – diagnostika kvůli tomu nespadne */ }
     const cache = d.cache || {};
     const th = d.threads || {};
     const bench = d.benchmark?.last;
@@ -2033,6 +2071,7 @@ async function loadAdvancedDiagnostics() {
       .map(([name, kb]) => `<span class="muted">${name}: ${kb} KB</span>`)
       .join(' · ');
     box.innerHTML = `
+      ${zaloha}
       <strong style="color:var(--txt2);">Keš zápasů:</strong>
       ${cache.memory_entries ?? '—'}/${cache.memory_max_entries ?? '—'} v paměti,
       ${cache.disk_files ?? '—'} souborů na disku (${fmtBytes(cache.disk_bytes)})<br>
