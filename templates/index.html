@@ -121,8 +121,15 @@
           <div class="pill-row" id="statusStrip">
             <button class="pill active" data-status="all">Vše</button>
             <button class="pill" data-status="odds" title="Jen zápasy, kde ESPN dalo reálný kurz – na ostatních appka nesází">💰 Jen s kurzy</button>
+            <button class="pill" data-status="bet" title="Jen zápasy, na které agent skutečně vsadil">🎫 Vsazené</button>
           </div>
           <button class="btn small" id="refreshMatchesBtn">⟳ Obnovit</button>
+        </div>
+        <div class="toolbar-row" style="margin-top:10px;">
+          <input type="text" id="matchSearch" class="search-input"
+                 placeholder="🔍 Filtrovat v seznamu – tým nebo soutěž (diakritika nevadí)…"
+                 style="max-width:460px;">
+          <span id="matchSearchInfo" class="muted" style="font-size:12px;"></span>
         </div>
       </div>
 

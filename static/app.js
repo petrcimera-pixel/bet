@@ -183,6 +183,12 @@ function bindEvents() {
       }
     });
   });
+  // Hledání v už načteném seznamu zápasů – taky čistě klientské.
+  el('matchSearch')?.addEventListener('input', () => {
+    if (STATE.lastMatchesData) {
+      renderMatchesLeagues(STATE.lastMatchesData.leagues || [], el('matchesContainer'), STATE.lastBetMap);
+    }
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1319,14 +1325,30 @@ function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
   const pass = {
     odds: m => m.odds_source === 'real',
     live: m => !!m.live,
+    bet: m => !!betMap[m.id],
   }[STATE.statusFilter];
-  const leagues = (pass
-    ? leaguesIn.map(lg => ({ ...lg, matches: lg.matches.filter(pass) })).filter(lg => lg.matches.length)
-    : leaguesIn);
+  // Textový filtr nad už načteným seznamem – stránka běžně ukazuje přes 300
+  // zápasů a proklikat se k jednomu konkrétnímu jinak nešlo. Nejde o dotaz
+  // na server (to umí stránka Hledat), jen o zúžení toho, co je na obrazovce.
+  const dotaz = _fold((el('matchSearch')?.value || '').trim());
+  const projde = m => (!pass || pass(m)) &&
+    (!dotaz || _fold(m.home).includes(dotaz) || _fold(m.away).includes(dotaz)
+     || _fold(m.league || '').includes(dotaz) || _fold(m.country || '').includes(dotaz));
+
+  const vsechny = leaguesIn.flatMap(lg => lg.matches || []).length;
+  const leagues = leaguesIn
+    .map(lg => ({ ...lg, matches: (lg.matches || []).filter(projde) }))
+    .filter(lg => lg.matches.length);
+  const videt = leagues.reduce((a, lg) => a + lg.matches.length, 0);
+  setText('matchSearchInfo', (dotaz || pass)
+    ? `zobrazeno ${videt} z ${vsechny} zápasů`
+    : '');
 
   container.className = '';   // odstraní 'loading' padding po naplnění daty
   if (!leagues.length) {
-    container.innerHTML = '<div class="empty-state">Žádné zápasy pro tento filtr</div>';
+    container.innerHTML = `<div class="empty-state">
+      ${dotaz ? `Nic neodpovídá hledání „${escAttr((el('matchSearch')?.value || '').trim())}".`
+              : 'Žádné zápasy pro tento filtr'}</div>`;
     return;
   }
   container.innerHTML = leagues.map(lg => `
