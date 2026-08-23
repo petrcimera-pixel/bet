@@ -12,6 +12,7 @@ výsledky, co používá settle smyčka pro tipy/sázky.
 """
 
 import datetime
+import os
 import random
 import time
 import uuid
@@ -1756,6 +1757,16 @@ def _default_state():
 def load_state():
     st = storage.load(FILE, None)
     if st is None:
+        # Prázdný výchozí stav (60 sázkařů, žádné sázky) se smí vyrobit JEN
+        # když soubor opravdu neexistuje – tedy při úplně prvním spuštění.
+        # Pokud existuje, ale nešel načíst, storage.load() vyhodí
+        # PoskozenySoubor a sem se vůbec nedostaneme; kdyby přesto vrátil
+        # None u existujícího souboru, reset by zahodil celou historii
+        # arény a hned ji uložil na disk – radši spadnout než smazat data.
+        if os.path.exists(storage._path(FILE)):
+            raise RuntimeError(
+                f"{FILE} existuje, ale nepodařilo se ho načíst – "
+                f"odmítám ho přepsat prázdným výchozím stavem.")
         st = _default_state()
         storage.save(FILE, st)
     # doplní chybějící vestavěné sázkaře (když PROFILES přibydou), ale NE ty,

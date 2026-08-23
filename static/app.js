@@ -32,21 +32,29 @@ function addDays(dateStr, n) {
   d.setDate(d.getDate() + n);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
+/** Záporná nula na kladnou. Python posílá -0.0 (např. round(-0.001, 2)),
+ *  JSON ji zachová a Intl.NumberFormat ji vypíše jako "-0" – u sázkaře na
+ *  nule se pak zobrazovalo "+-0" a "-0 %". `-0 === 0` je true, takže
+ *  přiřazením literálu 0 se znaménko zahodí. */
+function bezZaporneNuly(num) {
+  return num === 0 ? 0 : num;
+}
 function fmt(num) {
   if (num === null || num === undefined || isNaN(num)) return '—';
-  return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(num);
+  return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(bezZaporneNuly(num));
 }
 function pct(num, digits = 1) {
   if (num === null || num === undefined || isNaN(num)) return '—';
   // cs-CZ: desetinná čárka + tenké mezerování před % kvůli konzistenci s fmt()
   return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits })
-    .format(num) + ' %';
+    .format(bezZaporneNuly(num)) + ' %';
 }
 /** Číslo s českou desetinnou čárkou bez jednotky – pro místa jako "p.b.",
  *  kde pct() by jednotku zdvojil. */
 function czNum(num, digits = 1) {
   if (num === null || num === undefined || isNaN(num)) return '—';
-  return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(num);
+  return new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: digits, maximumFractionDigits: digits })
+    .format(bezZaporneNuly(num));
 }
 /** České skloňování "gól" po čísle: 0/5+ gólů, 1 gól, 2–4 góly.
  *  Nečíselný vstup (např. "6+" bucket) vždy dá množné "gólů". */
@@ -2160,8 +2168,56 @@ async function loadBettors() {
     renderArenaHero(data.bettors || []);
     loadGroupCompare();
     drawCalibrationChart(calib.buckets || []);
+    loadArenaTimeBreakdown();
   } catch (e) {
     box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
+  }
+}
+
+/** Rozklad výkonu celé arény podle dne v týdnu / denní doby výkopu.
+ *  Endpoint /api/bettors/breakdown/time existoval, ale nikdo ho nevolal. */
+async function loadArenaTimeBreakdown() {
+  const box = el('arenaTimeBox');
+  if (!box) return;
+  try {
+    const d = await api('/api/bettors/breakdown/time', { timeoutMs: 20000 });
+    const bloky = [['weekday', 'Podle dne v týdnu'], ['hour', 'Podle denní doby výkopu']]
+      .map(([klic, nadpis]) => {
+        const rows = (d[klic] || []).filter(r => r.n > 0);
+        if (!rows.length) return '';
+        // Sloupce ROI se škálují proti nejsilnější hodnotě v bloku, ať je
+        // rozdíl vidět i když jsou všechny hodnoty malé.
+        const max = Math.max(...rows.map(r => Math.abs(r.roi || 0)), 1);
+        return `
+          <div class="perf-block">
+            <div class="perf-title">${nadpis}</div>
+            <div class="perf-rows">
+              ${rows.map(r => `
+                <div class="perf-row">
+                  <span class="perf-key">${r.key}</span>
+                  <span class="time-bar" title="ROI ${pct(r.roi)}">
+                    <i class="${(r.roi || 0) >= 0 ? 'pos' : 'bad'}"
+                       style="width:${(Math.abs(r.roi || 0) / max * 100).toFixed(0)}%"></i>
+                  </span>
+                  <span class="perf-nums">
+                    <span class="muted">${r.n}× · ${pct(r.win_rate)}</span>
+                    <strong class="${(r.pnl || 0) >= 0 ? 'pos' : 'bad'}">${(r.pnl || 0) >= 0 ? '+' : ''}${fmt(r.pnl)} Kč</strong>
+                    <span class="${(r.roi || 0) >= 0 ? 'pos' : 'bad'}">${pct(r.roi)}</span>
+                  </span>
+                </div>`).join('')}
+            </div>
+          </div>`;
+      }).join('');
+    box.className = '';
+    box.innerHTML = bloky
+      ? `<div class="perf-grid">${bloky}</div>
+         <p class="muted" style="font-size:11.5px; margin:10px 0 0;">
+           Pozor na malé vzorky – řádek s pár sázkami neznamená vzorec, jen náhodu.
+         </p>`
+      : '<div class="empty-state">Zatím není dost vyhodnocených sázek.</div>';
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Rozklad se nepodařilo načíst.</div>';
   }
 }
 
@@ -2295,18 +2351,21 @@ async function loadGroupCompare() {
 let _arenaAll = [];
 let _arenaGroup = 'single';
 let _arenaSort = { key: 'rank', dir: 1 };
+let _arenaHledani = '';        // text z vyhledávacího políčka nad tabulkou
+let _arenaFiltr = 'vse';       // vse | plus | minus | aktivni | bezSazek
 
 const ARENA_SLOUPCE = [
   { key: null,         label: '',          cls: 'arena-caret' },
-  { key: 'rank',       label: '#' },
+  { key: 'rank',       label: '#',         tip: 'Pořadí podle zisku. Klikni na jakýkoliv sloupec a seřadíš podle něj.' },
   { key: 'name',       label: 'Sázkař' },
-  { key: null,         label: 'Vývoj',     cls: 'hide-sm' },
-  { key: 'balance',    label: 'Zůstatek',  num: true },
-  { key: 'profit',     label: 'Zisk',      num: true },
-  { key: 'roi',        label: 'ROI',       num: true },
-  { key: 'win_rate',   label: 'Úspěšnost', num: true, cls: 'hide-md' },
-  { key: 'settled',    label: 'Sázek',     num: true, cls: 'hide-md' },
-  { key: 'open_stake', label: 'Ve hře',    num: true, cls: 'hide-sm' },
+  { key: null,         label: 'Vývoj',     cls: 'hide-sm', tip: 'Vývoj zůstatku v čase (posledních ~30 vyhodnocených sázek).' },
+  { key: 'balance',    label: 'Zůstatek',  num: true, tip: 'Aktuální bank sázkaře. Každý začíná na 200 Kč.' },
+  { key: 'profit',     label: 'Zisk',      num: true, tip: 'Realizovaný zisk – jen z vyhodnocených sázek, otevřené se nepočítají.' },
+  { key: 'roi',        label: 'ROI',       num: true, tip: 'Návratnost: zisk / celkem vsazeno. Nezávislé na velikosti sázek, takže se dá srovnávat mezi sázkaři.' },
+  { key: 'win_rate',   label: 'Úspěšnost', num: true, cls: 'hide-md', tip: 'Podíl vyhraných z vyhodnocených sázek. Vysoká úspěšnost ještě neznamená zisk – záleží na kurzech.' },
+  { key: 'avg_clv',    label: 'CLV',       num: true, cls: 'hide-md', tip: 'Closing Line Value: o kolik lepší kurz sázkař chytil oproti kurzu těsně před výkopem. Kladné = má skutečnou výhodu. Na malém vzorku spolehlivější než zisk, protože nezávisí na štěstí ve výsledcích.' },
+  { key: 'settled',    label: 'Sázek',     num: true, cls: 'hide-md', tip: 'Vyhodnocených / celkem vsazených. Rozdíl = sázky, které ještě čekají na výsledek.' },
+  { key: 'open_stake', label: 'Ve hře',    num: true, cls: 'hide-sm', tip: 'Kolik Kč má sázkař právě rozehráno v nevyhodnocených sázkách.' },
   { key: null,         label: '' },
 ];
 
@@ -2319,11 +2378,16 @@ function renderBettors(bettors) {
   const order = ['single', 'acca', 'combo', 'ai'];
   const pocty = {};
   _arenaAll.forEach(b => { const g = b.group || 'single'; pocty[g] = (pocty[g] || 0) + 1; });
-  if (!pocty[_arenaGroup]) _arenaGroup = order.find(g => pocty[g]) || 'single';
+  // "vse" je vždycky platná volba, i kdyby kategorie z dat zmizela
+  if (_arenaGroup !== 'vse' && !pocty[_arenaGroup]) _arenaGroup = order.find(g => pocty[g]) || 'single';
 
   box.className = '';
   box.innerHTML = `
     <div class="arena-tabs" id="arenaTabs">
+      <button data-group="vse" class="${_arenaGroup === 'vse' ? 'on' : ''}"
+              title="Všichni sázkaři napříč kategoriemi v jednom žebříčku">
+        🏆 Vše <span class="cnt">${_arenaAll.length}</span>
+      </button>
       ${order.filter(g => pocty[g]).map(g => {
         const info = groups[g] || { label: g, emoji: '' };
         return `<button data-group="${g}" class="${g === _arenaGroup ? 'on' : ''}">
@@ -2347,8 +2411,14 @@ function renderArenaBody() {
   const box = el('arenaBody');
   if (!box) return;
   const groups = _bettorGroups || {};
-  const info = groups[_arenaGroup] || {};
-  const list = _arenaAll.filter(b => (b.group || 'single') === _arenaGroup);
+  const vseRezim = _arenaGroup === 'vse';
+  const info = vseRezim
+    ? { desc: 'Všichni sázkaři arény v jednom žebříčku, napříč kategoriemi – rovnou je vidět, která strategie celkově vede.' }
+    : (groups[_arenaGroup] || {});
+  // Souhrnné dlaždice počítej z CELÉ kategorie, ne z vyfiltrovaného výběru –
+  // jinak by se "Zisk kategorie" měnil podle toho, co je zrovna napsané ve
+  // vyhledávání, což by bylo zavádějící.
+  const list = vseRezim ? _arenaAll : _arenaAll.filter(b => (b.group || 'single') === _arenaGroup);
 
   const zisk = list.reduce((a, x) => a + (x.profit || 0), 0);
   const veHre = list.reduce((a, x) => a + (x.open_stake || 0), 0);
@@ -2363,7 +2433,22 @@ function renderArenaBody() {
   const clvN = list.reduce((a, x) => a + (x.clv_n || 0), 0);
   const avgClv = clvN ? clvSum / clvN : null;
 
-  const razeno = [...list].sort((a, b) => {
+  // Hledání + rychlé filtry nad rámec kategorie (61 sázkařů se jinak
+  // proklikává těžko). Diakritika nevadí – _fold sjednotí obě strany.
+  const dotaz = _fold(_arenaHledani.trim());
+  const filtry = {
+    vse:      () => true,
+    plus:     b => (b.profit || 0) > 0,
+    minus:    b => (b.profit || 0) < 0,
+    aktivni:  b => (b.open_count || 0) > 0,
+    bezSazek: b => (b.placed || 0) === 0,
+  };
+  const projdeFiltrem = filtry[_arenaFiltr] || filtry.vse;
+  const videt = list.filter(b =>
+    projdeFiltrem(b) &&
+    (!dotaz || _fold(b.name).includes(dotaz) || _fold(b.tagline || '').includes(dotaz)));
+
+  const razeno = [...videt].sort((a, b) => {
     const k = _arenaSort.key;
     let va = a[k], vb = b[k];
     if (typeof va === 'string') return _arenaSort.dir * va.localeCompare(vb, 'cs');
@@ -2372,12 +2457,18 @@ function renderArenaBody() {
     return _arenaSort.dir * (va - vb);
   });
 
+  const pocetFiltru = k => list.filter(filtry[k]).length;
+  const FILTR_POPISKY = [
+    ['vse', 'Vše'], ['plus', 'V plusu'], ['minus', 'Ve ztrátě'],
+    ['aktivni', 'Rozehrané'], ['bezSazek', 'Bez sázek'],
+  ];
+
   box.innerHTML = `
     ${info.desc ? `<p class="arena-desc">${info.desc}</p>` : ''}
 
     <div class="grid-stats">
       <div class="stat-tile">
-        <div class="label">Zisk kategorie</div>
+        <div class="label">${vseRezim ? 'Zisk arény' : 'Zisk kategorie'}</div>
         <div class="value ${zisk >= 0 ? 'pos' : 'bad'}">${zisk >= 0 ? '+' : ''}${fmt(zisk)} Kč</div>
         <div class="hint">${vPlusu} z ${list.length} v plusu</div>
       </div>
@@ -2403,17 +2494,54 @@ function renderArenaBody() {
       </div>
     </div>
 
+    ${_arenaGroup === 'ai' ? '<div id="aiTurnajBox" class="card"><div class="loading"><span class="spinner"></span></div></div>' : ''}
+
     <div class="card">
+      <div class="arena-toolbar">
+        <input type="text" id="arenaSearch" class="search-input arena-search"
+               placeholder="🔍 Najít sázkaře podle jména nebo strategie…"
+               value="${escAttr(_arenaHledani)}">
+        <div class="arena-filters" id="arenaFilters">
+          ${FILTR_POPISKY.map(([k, popisek]) => `
+            <button class="pill clickable ${k === _arenaFiltr ? 'active' : ''}" data-filtr="${k}">
+              ${popisek} <span class="cnt">${pocetFiltru(k)}</span>
+            </button>`).join('')}
+        </div>
+      </div>
       <div class="table-wrap">
         <table class="arena-table">
           <thead><tr>${ARENA_SLOUPCE.map(c => `
             <th class="${c.num ? 'num ' : ''}${c.cls || ''} ${c.key ? 's' : ''} ${c.key && c.key === _arenaSort.key ? 'on' : ''}"
-                ${c.key ? `data-sort="${c.key}"` : ''}>${c.label}${c.key && c.key === _arenaSort.key ? (_arenaSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}
+                ${c.tip ? `title="${escAttr(c.tip)}"` : ''}
+                ${c.key ? `data-sort="${c.key}"` : ''}>${c.label}${c.tip ? '<span class="th-tip">?</span>' : ''}${c.key && c.key === _arenaSort.key ? (_arenaSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}
           </tr></thead>
-          <tbody>${razeno.map(b => arenaRadek(b, veHre)).join('')}</tbody>
+          <tbody>${razeno.length
+            ? razeno.map(b => arenaRadek(b, veHre, vseRezim)).join('')
+            : `<tr><td colspan="${ARENA_SLOUPCE.length}" class="empty-state">
+                 Nic neodpovídá ${dotaz ? `hledání „${escAttr(_arenaHledani)}"` : 'zvolenému filtru'}.
+               </td></tr>`}</tbody>
         </table>
       </div>
     </div>`;
+
+  // Hledání nepřekresluje celou stránku, jen tělo arény – a políčko si
+  // po překreslení vrátí kurzor, aby se dalo psát plynule.
+  const hledaci = el('arenaSearch');
+  if (hledaci) {
+    hledaci.addEventListener('input', () => {
+      _arenaHledani = hledaci.value;
+      const pozice = hledaci.selectionStart;
+      renderArenaBody();
+      const nove = el('arenaSearch');
+      if (nove) { nove.focus(); nove.setSelectionRange(pozice, pozice); }
+    });
+  }
+  box.querySelectorAll('#arenaFilters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      _arenaFiltr = btn.dataset.filtr;
+      renderArenaBody();
+    });
+  });
 
   box.querySelectorAll('th.s').forEach(th => {
     th.addEventListener('click', () => {
@@ -2425,9 +2553,93 @@ function renderArenaBody() {
     });
   });
   wireBettorCards(box);
+  if (_arenaGroup === 'ai') loadAiTurnaj();
 }
 
-function arenaRadek(b, veHreCelkem) {
+/** AI turnaj: žebříček AI sázkařů podle CLV + evoluce AI Šampiona.
+ *  Backend (/api/bettors/ai-tournament, /ai-champion/evolve) tohle uměl
+ *  odjakživa a denní retrain cron evoluci sám spouští – jen to nikde
+ *  nebylo vidět, takže uživatel netušil, že se AI kategorie sama vyvíjí. */
+async function loadAiTurnaj() {
+  const box = el('aiTurnajBox');
+  if (!box) return;
+  try {
+    const d = await api('/api/bettors/ai-tournament');
+    const rows = d.tournament || [];
+    if (!rows.length) { box.innerHTML = '<div class="empty-state">Zatím žádní AI sázkaři.</div>'; return; }
+    // Bez dost velkého vzorku CLV je pořadí jen podle zisku – ať je jasné,
+    // kterým řádkům se dá věřit a kterým ještě ne.
+    const radky = rows.map(r => {
+      const maClv = (r.clv_n || 0) >= 5 && r.avg_clv !== null && r.avg_clv !== undefined;
+      const sampion = r.id === 'ai_champion';
+      return `
+        <tr class="${sampion ? 'ai-champ-row' : ''}">
+          <td class="arena-rank ${r.rank <= 3 ? 'medal' : ''}">${r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : r.rank}</td>
+          <td><span class="face">${r.emoji}</span> <strong>${r.name}</strong>${sampion ? ' <span class="grp-badge">šampion</span>' : ''}</td>
+          <td class="num ${maClv ? (r.avg_clv >= 0 ? 'pos' : 'bad') : 'muted'}">
+            ${maClv ? (r.avg_clv >= 0 ? '+' : '') + pct(r.avg_clv) : '—'}
+          </td>
+          <td class="num muted">${r.clv_n || 0}</td>
+          <td class="num ${(r.profit || 0) >= 0 ? 'pos' : 'bad'}">${(r.profit || 0) >= 0 ? '+' : ''}${fmt(Math.round(r.profit))} Kč</td>
+          <td class="num muted">${r.settled || 0}</td>
+        </tr>`;
+    }).join('');
+    box.innerHTML = `
+      <h3>🤖 AI turnaj</h3>
+      <p class="muted" style="font-size:12.5px; margin:0 0 12px; max-width:78ch;">
+        AI sázkaři se řadí podle <strong>CLV</strong>, ne podle zisku – na malém vzorku je to
+        spolehlivější ukazatel skutečné výhody, protože nezávisí na tom, jestli zrovna padl gól.
+        Vítěz slouží jako předloha pro <strong>AI Šampiona</strong>: appka z něj vytvoří kopii
+        s mírně pozměněným prahem jistoty, takže se kategorie postupně sama vylepšuje.
+        Evoluce běží automaticky i v denním retrainu.
+      </p>
+      <div class="table-wrap"><table class="arena-table">
+        <thead><tr>
+          <th>#</th><th>AI sázkař</th>
+          <th class="num" title="Closing Line Value – o kolik lepší kurz sázkař chytil oproti kurzu těsně před výkopem">CLV<span class="th-tip">?</span></th>
+          <th class="num" title="Z kolika sázek/noh je CLV spočítané. Pod 5 vzorků se pořadí řídí ziskem.">Vzorků<span class="th-tip">?</span></th>
+          <th class="num">Zisk</th><th class="num">Vyřešeno</th>
+        </tr></thead>
+        <tbody>${radky}</tbody>
+      </table></div>
+      <div class="toolbar-row" style="margin-top:12px;">
+        <button class="btn" id="evolveAiBtn">🧬 Vyvinout AI Šampiona teď</button>
+        <span class="muted" style="font-size:11.5px;">Přepíše nastavení stávajícího šampiona podle aktuálního vítěze – bank a historii mu nechá.</span>
+      </div>`;
+    el('evolveAiBtn')?.addEventListener('click', evolveAiSampion);
+  } catch (e) {
+    box.innerHTML = '<div class="empty-state">AI turnaj se nepodařilo načíst.</div>';
+  }
+}
+
+async function evolveAiSampion() {
+  const btn = el('evolveAiBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Vyvíjím…'; }
+  try {
+    const r = await api('/api/bettors/ai-champion/evolve', { method: 'POST', timeoutMs: 30000 });
+    if (r.evolved) {
+      toast(`AI Šampion vyvinut podle „${r.source}".`);
+      loadBettors();          // překreslí i žebříček s novým taglinem šampiona
+    } else {
+      toast(r.reason === 'not_enough_data'
+        ? 'Zatím málo dat – AI sázkaři potřebují víc vyhodnocených sázek s CLV.'
+        : 'Evoluce neproběhla.', 'err');
+      loadAiTurnaj();
+    }
+  } catch (e) {
+    toast('Evoluce selhala.', 'err');
+    loadAiTurnaj();
+  }
+}
+
+/** Krátký popisek kategorie pro odznak v celkovém žebříčku. Bere ho ze
+ *  stejného zdroje jako záložky (/api/bettors/groups), ať se nerozejdou. */
+function arenaSkupinaPopisek(group) {
+  const g = (_bettorGroups || {})[group || 'single'];
+  return g ? `${g.emoji || ''} ${g.label}`.trim() : (group || 'single');
+}
+
+function arenaRadek(b, veHreCelkem, vseRezim) {
   const medaile = b.rank === 1 ? '🥇' : b.rank === 2 ? '🥈' : b.rank === 3 ? '🥉' : null;
   const tridaZisk = (b.profit || 0) >= 0 ? 'pos' : 'bad';
   const podil = veHreCelkem > 0 ? Math.min(100, (b.open_stake || 0) / veHreCelkem * 100) : 0;
@@ -2445,8 +2657,11 @@ function arenaRadek(b, veHreCelkem) {
         <div class="arena-who">
           <span class="face">${b.emoji}</span>
           <span>
-            <div class="nm">${b.name}${nesazi ? ' <span class="idle-badge" title="Strategie zatím nenašla vhodnou příležitost">bez sázek</span>' : ''}</div>
-            <div class="tg">${b.tagline}</div>
+            <div class="nm">${b.name}${nesazi ? ' <span class="idle-badge" title="Strategie zatím nenašla vhodnou příležitost">bez sázek</span>' : ''}${
+              // v celkovém žebříčku není z ničeho poznat, do jaké kategorie
+              // sázkař patří – odznak to doplní, aniž by zabral sloupec
+              vseRezim ? ` <span class="grp-badge">${arenaSkupinaPopisek(b.group)}</span>` : ''}</div>
+            <div class="tg" title="${escAttr(b.tagline || '')}">${b.tagline}</div>
           </span>
         </div>
       </td>
@@ -2458,6 +2673,10 @@ function arenaRadek(b, veHreCelkem) {
       <td class="num ${tridaZisk}" style="font-weight:600;">${(b.profit || 0) >= 0 ? '+' : ''}${fmt(Math.round(b.profit))}</td>
       <td class="num ${tridaZisk}">${fmt(b.roi)}&nbsp;%</td>
       <td class="num hide-md">${b.win_rate !== null ? fmt(b.win_rate) + '&nbsp;%' : '—'}</td>
+      <td class="num hide-md ${b.clv_n ? (b.avg_clv >= 0 ? 'pos' : 'bad') : ''}"
+          title="${b.clv_n ? `z ${b.clv_n} sázek/noh` : 'zatím žádná data pro CLV'}">
+        ${b.clv_n ? (b.avg_clv >= 0 ? '+' : '') + pct(b.avg_clv) : '—'}
+      </td>
       <td class="num hide-md">${b.settled}<span class="arena-sub"> / ${b.placed}</span></td>
       <td class="num hide-sm">
         <div class="arena-open">
@@ -2468,7 +2687,9 @@ function arenaRadek(b, veHreCelkem) {
       </td>
       <td class="arena-acts-cell">
         <div class="arena-acts">
-          <button class="btn small icon-only bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze">＋</button>
+          <button class="btn small icon-only bettor-deposit" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Vložit peníze do banku sázkaře">＋</button>
+          <button class="btn small icon-only bettor-more" data-id="${b.id}" data-name="${escAttr(b.name)}"
+                  title="Další akce – resetovat sázky, přetrénovat, vsadit teď">⋯</button>
           <button class="btn small icon-only bettor-delete" data-id="${b.id}" data-name="${escAttr(b.name)}" title="Smazat sázkaře">🗑</button>
         </div>
       </td>
@@ -2484,6 +2705,14 @@ function wireBettorCards(box) {
   });
   box.querySelectorAll('.bettor-delete').forEach(btn => {
     btn.addEventListener('click', (e) => { e.stopPropagation(); deleteBettor(btn.dataset.id, btn.dataset.name); });
+  });
+  // Stejné menu jako pravé tlačítko myši, ale objevitelné – na pravý klik
+  // nikdo sám od sebe nepřijde.
+  box.querySelectorAll('.bettor-more').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openBettorContextMenu(e, btn.dataset.id, btn.dataset.name);
+    });
   });
   // Celý řádek otevírá detail – kliknutí kdekoliv mimo akční tlačítka
   // (Vklad / Smazat) rozbalí historii sázek. Dřív bylo tlačítko 'Detail'

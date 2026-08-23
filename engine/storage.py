@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Jednoduché ukládání stavu do JSON souborů v ./data."""
 
-import os, json, glob, threading
+import os, json, glob, threading, time
 from collections import OrderedDict
 
 _DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
@@ -55,12 +55,22 @@ def _evict_if_needed() -> None:
 
 
 def load(name: str, default):
+    """Pozor na past, kvůli které appka přišla o celou historii arény:
+    když čtení selže (nejčastěji proto, že soubor zrovna někdo přepisuje a
+    načte se rozepsaný JSON), vrací se `default`. Volající, který si na
+    default odpovídá vytvořením prázdného výchozího stavu a hned ho uloží
+    (viz virtual_bettors.load_state), tím nenávratně smaže data.
+
+    Proto se tu čtení nejdřív pár × zopakuje a pak sáhne po poslední známé
+    dobré verzi z cache. Default se vrací až jako poslední možnost –
+    a stavoví volající si navíc musí sami ověřit, že soubor fakt
+    neexistuje, než na základě defaultu něco resetují."""
     path = _path(name)
     try:
         mtime = os.path.getmtime(path)
     except OSError:
         _CACHE.pop(name, None)
-        return default
+        return default          # soubor opravdu není – default je v pořádku
 
     cached = _CACHE.get(name)
     if cached and cached[0] == mtime:
@@ -68,10 +78,35 @@ def load(name: str, default):
         return cached[1]
 
     # utf-8-sig: soubory upravené externě (PowerShell) mohou mít BOM
-    try:
-        with open(path, encoding="utf-8-sig") as f:
-            data = json.load(f)
-    except Exception:
+    # Krátký retry: nejčastější příčina selhání je souběžný zápis (jiný
+    # proces/vlákno zrovna soubor přepisuje), což trvá desítky milisekund.
+    posledni_chyba = None
+    for pokus in range(3):
+        try:
+            with open(path, encoding="utf-8-sig") as f:
+                data = json.load(f)
+            break
+        except Exception as e:
+            posledni_chyba = e
+            if pokus < 2:
+                time.sleep(0.15)
+    else:
+        data = None
+
+    if posledni_chyba is not None and data is None:
+        # Radši vrátit poslední známou dobrou verzi než default – rozdíl
+        # mezi "trochu zastaralá data" a "smazaná historie" je zásadní.
+        if cached:
+            print(f"[storage] {name}: čtení selhalo ({posledni_chyba}), "
+                  f"používám poslední načtenou verzi z cache")
+            _CACHE.move_to_end(name)
+            return cached[1]
+        # Bez cache nezbývá než default. NEVYHAZUJEME výjimku – u kešovaných
+        # ESPN souborů je poškozený obsah běžná věc a znamená jen "načti
+        # znovu". Ochrana cenných stavových souborů proti přepsání prázdným
+        # výchozím stavem je u volajícího (viz virtual_bettors.load_state,
+        # který si existenci souboru ověřuje sám).
+        print(f"[storage] {name}: čtení selhalo ({posledni_chyba}), vracím default")
         return default
 
     _CACHE[name] = (mtime, data)

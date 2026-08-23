@@ -4,6 +4,7 @@ Správa banku (bankroll), Kelly kritérium a historie tipů + statistiky (ROI).
 Stav se ukládá do data/bankroll.json.
 """
 
+import os
 import time
 import uuid
 
@@ -28,6 +29,15 @@ _DEFAULT = {
 def state() -> dict:
     st = storage.load("bankroll.json", None)
     if st is None:
+        # Stejná past jako u virtual_bettors.load_state: když čtení selže
+        # (rozepsaný soubor při souběžném zápisu), storage.load vrátí None
+        # a bez téhle pojistky by se prázdný výchozí bank hned uložil na
+        # disk – tedy smazané VŠECHNY sázky agenta. Prázdný stav se smí
+        # vyrobit jedině tehdy, když soubor opravdu ještě neexistuje.
+        if os.path.exists(storage._path("bankroll.json")):
+            raise RuntimeError(
+                "bankroll.json existuje, ale nepodařilo se ho načíst – "
+                "odmítám ho přepsat prázdným bankem.")
         st = dict(_DEFAULT)
         storage.save("bankroll.json", st)
     return st

@@ -641,6 +641,40 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 
 .arena-desc { font-size: 12.5px; color: var(--txt2); margin: 0 0 14px; max-width: 70ch; }
 
+/* lišta nad žebříčkem: hledání + rychlé filtry */
+.arena-toolbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
+.arena-search { flex: 1 1 260px; min-width: 200px; max-width: 420px; }
+.arena-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.arena-filters .pill { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.arena-filters .pill .cnt {
+  font-size: 10.5px; font-weight: 700; padding: 1px 5px; border-radius: 20px;
+  background: var(--panel-2); color: var(--txt3);
+}
+.arena-filters .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
+.arena-filters .pill.active .cnt { background: var(--accent); color: var(--bg); }
+
+/* nápověda u hlavičky sloupce – celý th má title, tohle jen naznačí, že tam je */
+.th-tip {
+  display: inline-block; margin-left: 3px; font-size: 9px; font-weight: 700;
+  width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%;
+  background: var(--panel-2); color: var(--txt3); cursor: help; vertical-align: 1px;
+}
+th:hover .th-tip { background: var(--accent); color: var(--bg); }
+
+/* AI Šampion v turnajové tabulce – je to výsledek evoluce, ne běžný sázkař */
+.ai-champ-row { background: var(--accent-glow); }
+.ai-champ-row strong { color: var(--accent); }
+
+/* odznak kategorie v celkovém žebříčku ("Vše") */
+.grp-badge {
+  font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 20px;
+  background: var(--panel-2); color: var(--txt3); border: 1px solid var(--border);
+  white-space: nowrap; vertical-align: 1px;
+}
+
 /* žebříček */
 .arena-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .arena-table th {
@@ -663,7 +697,14 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 .arena-who { display: flex; align-items: center; gap: 10px; min-width: 210px; }
 .arena-who .face { font-size: 20px; line-height: 1; }
 .arena-who .nm { font-weight: 600; }
-.arena-who .tg { font-size: 11.5px; color: var(--txt3); margin-top: 1px; }
+/* Dlouhé taglines jinak roztáhnou sloupec se jménem tak, že se zbytek
+   tabulky (CLV, Sázek, Ve hře) vytlačí mimo viditelnou šířku. Ořez na
+   jeden řádek – celý text zůstává v title při najetí myší. */
+.arena-who > span { min-width: 0; }
+.arena-who .tg {
+  font-size: 11.5px; color: var(--txt3); margin-top: 1px;
+  max-width: 42ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 .arena-bal { font-weight: 700; font-size: 14px; white-space: nowrap; }
 .arena-sub { font-size: 11.5px; color: var(--txt3); white-space: nowrap; }
@@ -818,6 +859,16 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
   gap: 8px; font-size: 12.5px;
 }
 .perf-key { color: var(--txt); font-weight: 500; }
+/* proužek ROI v časovém rozkladu arény – rozdíl mezi řádky je vidět na první
+   pohled, i když jsou čísla malá (šířka se škáluje proti maximu v bloku) */
+.time-bar {
+  flex: 1 1 40px; min-width: 30px; max-width: 120px; height: 5px;
+  background: var(--panel-2); border-radius: 3px; overflow: hidden;
+  align-self: center;
+}
+.time-bar i { display: block; height: 100%; border-radius: 3px; }
+.time-bar i.pos { background: var(--pos); }
+.time-bar i.bad { background: var(--bad); }
 .perf-nums { display: flex; gap: 10px; font-size: 11.5px; white-space: nowrap; }
 .perf-nums strong { font-weight: 600; font-size: 12px; }
 .perf-blacklist {

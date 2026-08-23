@@ -17,6 +17,7 @@ Zásadní změna oproti staré verzi (engine/prediction.py):
 
 import datetime
 import math
+import os
 import unicodedata
 
 from . import storage
@@ -186,8 +187,22 @@ def base_goals(league: str, sport: str = "soccer", slug: str = ""):
 # ---------------------------------------------------------------------------
 # Rating: attack/defense multiplikátory, EMA update z odehraných zápasů
 # ---------------------------------------------------------------------------
+def _nesmi_byt_prazdne(name: str, data):
+    """Pojistka proti tichému smazání nasbíraných dat. storage.load() vrací
+    default i tehdy, když soubor EXISTUJE, ale zrovna se nedal přečíst
+    (typicky rozepsaný JSON při souběžném zápisu). Volající to pak vezme
+    jako "ještě nic nemáme", doplní pár záznamů a uloží – čímž z tisíců
+    naučených ratingů zbude hrstka. Když soubor existuje a přišlo prázdno,
+    je to chyba čtení, ne prázdná databáze."""
+    if not data and os.path.exists(storage._path(name)):
+        raise RuntimeError(
+            f"{name} existuje, ale načetl se prázdný – odmítám pokračovat, "
+            f"aby se nepřepsala nasbíraná data.")
+    return data
+
+
 def _ratings() -> dict:
-    return storage.load("team_ratings.json", {})
+    return _nesmi_byt_prazdne("team_ratings.json", storage.load("team_ratings.json", {}))
 
 
 def _save_ratings(r: dict) -> None:
@@ -271,7 +286,7 @@ _HISTORY_MAX_PER_TEAM = 20   # kolik posledních zápasů se drží na tým – 
 
 
 def _team_history() -> dict:
-    return storage.load(_HISTORY_FILE, {})
+    return _nesmi_byt_prazdne(_HISTORY_FILE, storage.load(_HISTORY_FILE, {}))
 
 
 def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
