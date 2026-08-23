@@ -2,19 +2,30 @@ name: Keep Render app awake + trigger settle
 
 on:
   schedule:
-    # Každých 10 minut. Zjištěno: interní background thready appky (settle
+    # Každých 20 minut. Zjištěno: interní background thready appky (settle
     # smyčka, prewarm, agent) se na Render free tieru NIKDY spolehlivě
     # nedokončí – proces se mezi příchozími requesty zřejmě zcela pozastaví
     # (ověřeno canary threadem: tikne přesně jednou, pak nikdy víc). Řešení
     # není appku jen "budit", ale PŘÍMO spouštět vyhodnocení skutečným HTTP
     # requestem přes /api/cron/settle (token-based, viz app.py).
     #
+    # PŮVODNĚ tu bylo "7,17,27,37,47,57" (každých 10 min, 144×/den) - appka
+    # kvůli tomu vyčerpala celý 5GB/měsíc free bandwidth limit na Renderu a
+    # byla pozastavená (viz billing: 6,25 GB "Service-Initiated" - odchozí
+    # volání appky na ESPN, ne návštěvníci). _settle_recent() (app.py) dělá
+    # ŽIVÝ, nekešovaný request na ESPN pro každý otevřený cíl (až 24 na
+    # průchod, viz _SETTLE_BATCH_TARGETS) - při 144 průchodech/den to samo
+    # o sobě tvořilo skoro celou spotřebu. Ořezáno na 3×/hod, ať se appka do
+    # limitu vejde s rezervou (odhad ~2 GB/měsíc místo ~6+ GB) - vyhodnocení
+    # sázek se zpozdí max o pár desítek minut místo desítek sekund, což u
+    # osobní appky nevadí.
+    #
     # Časy posunuté MIMO celé desítky minut (:00/:10/:20...) – GitHub
     # dokumentuje, že schedule běhy jsou "best effort" a nejvyšší zátěž
     # (tedy zpoždění) nastává právě na začátku každé hodiny a kolem kulatých
-    # čísel. Offset :07/:17/:27... se podle GitHubu i komunitních zkušeností
+    # čísel. Offset :07/:27/:47 se podle GitHubu i komunitních zkušeností
     # spouští spolehlivěji.
-    - cron: "7,17,27,37,47,57 * * * *"
+    - cron: "7,27,47 * * * *"
   workflow_dispatch: {}   # umožní i ruční spuštění z GitHub UI (tlačítko "Run workflow")
 
 jobs:
