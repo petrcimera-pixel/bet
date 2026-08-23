@@ -240,6 +240,35 @@
       </div>
 
       <div class="card">
+        <h3>📅 Zisk a ztráta po dnech</h3>
+        <p class="muted" style="font-size:12.5px; margin:0 0 12px; max-width:80ch;">
+          Kolik agent vydělal nebo prodělal každý den. Equity křivka výš ukazuje
+          celkový vývoj, tohle rozpad na jednotlivé dny – hned je vidět, jestli
+          ztráta narostla postupně, nebo ji způsobil jeden špatný den.
+        </p>
+        <div class="chart-wrap"><svg id="dailyPnlSVG" viewBox="0 0 800 220" class="chart"></svg></div>
+        <div id="dailyPnlHint" class="muted" style="font-size:11.5px; margin-top:8px;"></div>
+      </div>
+
+      <div class="arena-charts">
+        <div class="card">
+          <h3>🏅 Rekordy a série</h3>
+          <p class="muted" style="font-size:12.5px; margin:0 0 12px;">
+            Nejlepší a nejhorší okamžiky banku a jak dlouhé byly šňůry výher a proher.
+          </p>
+          <div id="bankRecords" class="loading"><span class="spinner"></span></div>
+        </div>
+        <div class="card">
+          <h3>🎯 ROI podle výše kurzu</h3>
+          <p class="muted" style="font-size:12.5px; margin:0 0 12px;">
+            Na kterých kurzech agent vydělává a na kterých tratí. Systematická
+            ztráta v jednom pásmu je návod, kde přitvrdit filtry.
+          </p>
+          <div id="roiByOdds" class="loading"><span class="spinner"></span></div>
+        </div>
+      </div>
+
+      <div class="card">
         <h3>Historie sázek</h3>
         <div class="table-wrap">
           <table>

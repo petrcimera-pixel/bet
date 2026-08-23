@@ -664,6 +664,16 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 }
 th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
+/* Rekordy banku – dvousloupcový seznam popisek/hodnota */
+.rec-list { display: flex; flex-direction: column; }
+.rec-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.rec-row:last-child { border-bottom: none; }
+.rec-label { color: var(--txt2); }
+.rec-val { font-weight: 600; white-space: nowrap; }
+
 /* AI Šampion v turnajové tabulce – je to výsledek evoluce, ne běžný sázkař */
 .ai-champ-row { background: var(--accent-glow); }
 .ai-champ-row strong { color: var(--accent); }

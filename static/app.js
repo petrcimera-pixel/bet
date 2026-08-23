@@ -1528,8 +1528,146 @@ async function loadBankroll() {
     setText('bWinRate', s.win_rate !== null ? pct(s.win_rate) : '—');
     if (s.equity && s.equity.length > 1) drawEquity(s.equity);
     renderBetsTable(data.bets || []);
+    // Rozšířené analýzy – backend je uměl odjakživa (/api/bankroll/daily,
+    // /summary, /streaks, /roi-by-odds), ale nic je nevolalo, takže stránka
+    // ukazovala jen zůstatek a seznam sázek.
+    loadBankrollAnalytics();
   } catch (e) {
     toast('Nepodařilo se načíst bankroll.', 'err');
+  }
+}
+
+async function loadBankrollAnalytics() {
+  loadDailyPnl();
+  loadBankRecords();
+  loadRoiByOdds();
+}
+
+/** Sloupcový graf denního zisku/ztráty. Equity křivka ukazuje součet,
+ *  tohle jednotlivé dny – pozná se, jestli ztráta narůstala postupně,
+ *  nebo za ni může jeden konkrétní den. */
+async function loadDailyPnl() {
+  const svg = el('dailyPnlSVG');
+  if (!svg) return;
+  try {
+    const d = await api('/api/bankroll/daily', { timeoutMs: 15000 });
+    const dny = Object.entries(d.daily || {}).sort((a, b) => a[0].localeCompare(b[0]));
+    if (!dny.length) {
+      svg.innerHTML = `<text x="400" y="110" text-anchor="middle" font-size="13" fill="var(--txt3)">Zatím žádné vyhodnocené sázky</text>`;
+      return;
+    }
+    const W = 800, H = 220, padX = 44, padY = 24;
+    const pw = W - 2 * padX, ph = H - 2 * padY;
+    const maxAbs = Math.max(...dny.map(([, v]) => Math.abs(v.pnl || 0)), 1);
+    const nula = padY + ph / 2;                       // nulová osa uprostřed
+    const barW = Math.max(2, Math.min(28, pw / dny.length * 0.7));
+    const krok = pw / dny.length;
+
+    const sloupce = dny.map(([den, v], i) => {
+      const pnl = v.pnl || 0;
+      const x = padX + i * krok + (krok - barW) / 2;
+      const vyska = Math.abs(pnl) / maxAbs * (ph / 2);
+      const y = pnl >= 0 ? nula - vyska : nula;
+      const barva = pnl >= 0 ? 'var(--pos)' : 'var(--bad)';
+      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}"
+                    height="${Math.max(1, vyska).toFixed(1)}" fill="${barva}" rx="2" opacity="0.9">
+                <title>${den}: ${pnl >= 0 ? '+' : ''}${fmt(pnl)} Kč · ${v.bets} sázek · ${pct(v.win_rate)}</title>
+              </rect>`;
+    }).join('');
+
+    // popisky jen u prvního a posledního dne, jinak by se slily
+    const popisek = (i) => {
+      const x = padX + i * krok + krok / 2;
+      return `<text x="${x.toFixed(1)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="var(--txt3)">${fmtDateShort(dny[i][0])}</text>`;
+    };
+    svg.innerHTML = `
+      <line x1="${padX}" y1="${nula}" x2="${W - padX}" y2="${nula}" stroke="var(--border)"/>
+      <text x="${padX - 6}" y="${padY + 4}" text-anchor="end" font-size="10" fill="var(--txt3)">+${fmt(maxAbs)}</text>
+      <text x="${padX - 6}" y="${H - padY}" text-anchor="end" font-size="10" fill="var(--txt3)">-${fmt(maxAbs)}</text>
+      ${sloupce}
+      ${popisek(0)}${dny.length > 1 ? popisek(dny.length - 1) : ''}`;
+
+    const plus = dny.filter(([, v]) => (v.pnl || 0) > 0).length;
+    const minus = dny.filter(([, v]) => (v.pnl || 0) < 0).length;
+    setText('dailyPnlHint', `${dny.length} dní se sázkami · ${plus} ziskových, ${minus} ztrátových · najeď myší na sloupec pro detail`);
+  } catch (e) {
+    svg.innerHTML = `<text x="400" y="110" text-anchor="middle" font-size="13" fill="var(--txt3)">Denní přehled se nepodařilo načíst</text>`;
+  }
+}
+
+/** Rekordy banku + série výher/proher (souhrn /summary a /streaks). */
+async function loadBankRecords() {
+  const box = el('bankRecords');
+  if (!box) return;
+  try {
+    const d = await api('/api/bankroll/summary', { timeoutMs: 15000 });
+    const s = d.summary || {};
+    const st = s.streak_info || {};
+    const akt = st.current_streak || {};
+    const radek = (popisek, hodnota, trida = '', hint = '') => `
+      <div class="rec-row">
+        <span class="rec-label">${popisek}</span>
+        <span class="rec-val ${trida}">${hodnota}${hint ? ` <span class="muted" style="font-weight:400;">${hint}</span>` : ''}</span>
+      </div>`;
+    box.className = '';
+    box.innerHTML = `
+      <div class="rec-list">
+        ${radek('Nejvyšší stav banku', `${fmt(s.peak_balance)} Kč`, 'pos')}
+        ${radek('Nejnižší stav banku', `${fmt(s.trough_balance)} Kč`, 'bad')}
+        ${radek('Nejlepší den', `${s.best_day_pnl >= 0 ? '+' : ''}${fmt(s.best_day_pnl)} Kč`, 'pos')}
+        ${radek('Nejhorší den', `${fmt(s.worst_day_pnl)} Kč`, 'bad')}
+        ${radek('Ziskové dny', `${s.winning_days || 0}`, 'pos', `+${fmt(s.winning_pnl)} Kč`)}
+        ${radek('Ztrátové dny', `${s.losing_days || 0}`, 'bad', `${fmt(s.losing_pnl)} Kč`)}
+        ${radek('Právě běží', akt.length
+            ? `${akt.length}× ${akt.type === 'win' ? 'výhra' : 'prohra'} v řadě`
+            : '—', akt.type === 'win' ? 'pos' : akt.type ? 'bad' : '',
+            akt.pnl != null ? `(${akt.pnl >= 0 ? '+' : ''}${fmt(akt.pnl)} Kč)` : '')}
+        ${radek('Nejdelší šňůra výher', `${st.longest_win_streak || 0}×`, 'pos')}
+        ${radek('Nejdelší šňůra proher', `${st.longest_loss_streak || 0}×`, 'bad')}
+        ${radek('Celkem vsazeno', `${fmt(s.total_staked)} Kč`, '', `z ${s.total_bets || 0} sázek`)}
+      </div>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Rekordy se nepodařilo načíst.</div>';
+  }
+}
+
+/** ROI podle pásma kurzu – ukáže, jestli ztráta pochází z konkrétního
+ *  typu sázek (typicky vysoké kurzy) místo aby byla rozprostřená. */
+async function loadRoiByOdds() {
+  const box = el('roiByOdds');
+  if (!box) return;
+  try {
+    const d = await api('/api/bankroll/roi-by-odds', { timeoutMs: 15000 });
+    const pasma = Object.entries(d.roi_by_odds || {}).filter(([, v]) => (v.bets || 0) > 0);
+    if (!pasma.length) {
+      box.className = '';
+      box.innerHTML = '<div class="empty-state">Zatím žádné vyhodnocené sázky.</div>';
+      return;
+    }
+    const max = Math.max(...pasma.map(([, v]) => Math.abs(v.roi || 0)), 1);
+    box.className = '';
+    box.innerHTML = `
+      <div class="perf-rows">
+        ${pasma.map(([pasmo, v]) => `
+          <div class="perf-row">
+            <span class="perf-key" style="min-width:74px;">${pasmo.replace('-', ' – ')}</span>
+            <span class="time-bar" title="ROI ${pct(v.roi)}">
+              <i class="${(v.roi || 0) >= 0 ? 'pos' : 'bad'}" style="width:${(Math.abs(v.roi || 0) / max * 100).toFixed(0)}%"></i>
+            </span>
+            <span class="perf-nums">
+              <span class="muted">${v.bets}× · ${pct(v.win_rate)}</span>
+              <strong class="${(v.pnl || 0) >= 0 ? 'pos' : 'bad'}">${(v.pnl || 0) >= 0 ? '+' : ''}${fmt(v.pnl)} Kč</strong>
+              <span class="${(v.roi || 0) >= 0 ? 'pos' : 'bad'}">${pct(v.roi)}</span>
+            </span>
+          </div>`).join('')}
+      </div>
+      <p class="muted" style="font-size:11.5px; margin:10px 0 0;">
+        Pásma s pár sázkami nic neříkají – rozdíl je vidět až u desítek.
+      </p>`;
+  } catch (e) {
+    box.className = '';
+    box.innerHTML = '<div class="empty-state">Rozbor se nepodařilo načíst.</div>';
   }
 }
 
