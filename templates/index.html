@@ -391,8 +391,39 @@
       </div>
 
       <div class="card">
-        <h3>Diagnostika</h3>
+        <h3>Výkon a data</h3>
+        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+          Řídí, jak rychle a jak daleko appka natahuje zápasy z ESPN. Změna se
+          projeví hned, bez restartu appky.
+        </p>
+        <div class="field-row">
+          <div class="field"><label>Paralelní ESPN dotazy</label>
+            <input type="number" id="cfgFetchWorkers" min="0" max="128" placeholder="0 = auto">
+          </div>
+          <div class="field"><label>Hledat zápasy X dní dopředu</label>
+            <input type="number" id="cfgSearchDays" min="3" max="60">
+          </div>
+        </div>
+        <button class="btn" id="savePerformanceBtn">Uložit</button>
+
+        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+          <div class="toolbar-row">
+            <button class="btn small" id="clearCacheBtn" title="Smaže keš rozpisů – další načtení natáhne čerstvá data z ESPN">Vymazat keš zápasů</button>
+            <button class="btn small" id="resetTipsBtn" title="Smaže uloženou databázi tipů modelu (ratingy a sázky zůstanou)">Resetovat databázi tipů</button>
+          </div>
+          <div class="toolbar-row" style="margin-top:8px;">
+            <button class="btn small" id="exportDataBtn">⬇️ Exportovat zálohu (JSON)</button>
+            <button class="btn small" id="importDataBtn">⬆️ Importovat zálohu</button>
+            <input type="file" id="importDataFile" accept="application/json" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Pokročilá diagnostika</h3>
         <div id="diagInfo" class="muted" style="font-size:12.5px; line-height:1.8;"></div>
+        <div id="diagAdvanced" class="muted" style="font-size:12.5px; line-height:1.8; margin-top:10px; padding-top:10px; border-top:1px solid var(--border);"></div>
+        <button class="btn small" id="refreshDiagBtn" style="margin-top:10px;">Obnovit</button>
       </div>
     </section>
 

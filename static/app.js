@@ -137,6 +137,13 @@ function bindEvents() {
   el('backfillBtn')?.addEventListener('click', runBackfill);
   el('backfillArchiveBtn')?.addEventListener('click', runBackfillArchive);
   el('benchmarkBtn')?.addEventListener('click', runBenchmark);
+  el('savePerformanceBtn')?.addEventListener('click', savePerformanceSettings);
+  el('clearCacheBtn')?.addEventListener('click', clearMatchCache);
+  el('resetTipsBtn')?.addEventListener('click', resetTipsDb);
+  el('exportDataBtn')?.addEventListener('click', exportBackup);
+  el('importDataBtn')?.addEventListener('click', () => el('importDataFile').click());
+  el('importDataFile')?.addEventListener('change', importBackup);
+  el('refreshDiagBtn')?.addEventListener('click', loadAdvancedDiagnostics);
   el('newBettorBtn')?.addEventListener('click', openBettorWizard);
   el('generateBettorBtn')?.addEventListener('click', generateBettorFromData);
   el('wizCancel')?.addEventListener('click', () => { el('bettorWizard').style.display = 'none'; });
@@ -1721,6 +1728,11 @@ async function loadSettings() {
     el('cfgStartBalance').value = bdata.stats.start_balance;
     el('cfgKellyFraction').value = bdata.stats.kelly_fraction || 0.25;
 
+    const allSettings = await api('/api/settings');
+    const perf = allSettings.performance || {};
+    el('cfgFetchWorkers').value = perf.fetch_workers || 0;
+    el('cfgSearchDays').value = perf.search_days || 14;
+
     const diag = await api('/api/settle/status');
     let calibHtml = '';
     try {
@@ -1738,8 +1750,116 @@ async function loadSettings() {
       Tipů čeká na vyhodnocení: ${diag.open_tips ?? '—'}<br>
       Sázek čeká na vyhodnocení: ${diag.open_bets ?? '—'}<br>
       ${diag.rss_mb != null ? `Paměť procesu: ${diag.rss_mb} MB<br>` : ''}${calibHtml}`;
+    loadAdvancedDiagnostics();
   } catch (e) {
     toast('Nepodařilo se načíst nastavení.', 'err');
+  }
+}
+
+async function savePerformanceSettings() {
+  const body = {
+    fetch_workers: Number(el('cfgFetchWorkers').value) || 0,
+    search_days: Number(el('cfgSearchDays').value) || 14,
+  };
+  try {
+    await api('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section: 'performance', values: body }) });
+    toast('Nastavení výkonu uloženo.');
+  } catch (e) {
+    toast('Uložení selhalo.', 'err');
+  }
+}
+
+async function clearMatchCache() {
+  try {
+    const r = await api('/api/data/clear-cache', { method: 'POST' });
+    toast(`Keš smazána (${r.cleared} souborů).`);
+  } catch (e) {
+    toast('Smazání keše selhalo.', 'err');
+  }
+}
+
+async function resetTipsDb() {
+  if (!confirm('Smazat celou databázi tipů modelu? Ratingy týmů a sázky zůstanou zachované.')) return;
+  try {
+    await api('/api/data/reset-tips', { method: 'POST' });
+    toast('Databáze tipů smazána.');
+  } catch (e) {
+    toast('Smazání selhalo.', 'err');
+  }
+}
+
+async function exportBackup() {
+  try {
+    const data = await api('/api/data/export');
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `kurzanalytik-zaloha-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast('Záloha stažena.');
+  } catch (e) {
+    toast('Export selhal.', 'err');
+  }
+}
+
+async function importBackup(ev) {
+  const file = ev.target.files?.[0];
+  ev.target.value = '';
+  if (!file) return;
+  if (!confirm(`Importovat zálohu ze souboru "${file.name}"? Přepíše aktuální nastavení, bankroll, tipy a ratingy.`)) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    await api('/api/data/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    toast('Záloha importována – appka se obnoví.');
+    setTimeout(() => location.reload(), 1200);
+  } catch (e) {
+    toast('Import selhal – zkontroluj, že je to platný soubor zálohy.', 'err');
+  }
+}
+
+function fmtBytes(b) {
+  if (b == null) return '—';
+  if (b < 1024) return `${b} B`;
+  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
+  return `${(b / 1024 / 1024).toFixed(1)} MB`;
+}
+
+async function loadAdvancedDiagnostics() {
+  const box = el('diagAdvanced');
+  if (!box) return;
+  box.innerHTML = '<span class="muted">Načítám…</span>';
+  try {
+    const d = await api('/api/diagnostics/advanced');
+    const cache = d.cache || {};
+    const th = d.threads || {};
+    const bench = d.benchmark?.last;
+    const tp = d.tipsport_import || {};
+    const filesHtml = Object.entries(d.data_files_kb || {})
+      .filter(([, kb]) => kb != null)
+      .map(([name, kb]) => `<span class="muted">${name}: ${kb} KB</span>`)
+      .join(' · ');
+    box.innerHTML = `
+      <strong style="color:var(--txt2);">Keš zápasů:</strong>
+      ${cache.memory_entries ?? '—'}/${cache.memory_max_entries ?? '—'} v paměti,
+      ${cache.disk_files ?? '—'} souborů na disku (${fmtBytes(cache.disk_bytes)})<br>
+      <strong style="color:var(--txt2);">Background smyčky:</strong>
+      ${th.canary_stale ? '<span class="bad">⚠️ NEODPOVÍDAJÍ</span>' : '<span class="pos">✓ běží</span>'}
+      (tick #${th.canary_ticks ?? '—'}, naposledy před ${th.canary_age_s != null ? Math.round(th.canary_age_s) + ' s' : '—'})<br>
+      <strong style="color:var(--txt2);">Benchmark vs. trh:</strong>
+      ${bench ? `Brier ${bench.brier_model?.toFixed(3)} (trh ${bench.brier_market?.toFixed(3)}), ${d.benchmark.runs_logged} běhů v historii` : 'zatím nespuštěno'}<br>
+      <strong style="color:var(--txt2);">Tipsport import:</strong>
+      ${tp.matches_stored ? `${tp.matches_stored} zápasů, poslední import před ${Math.round((tp.last_imported_age_s || 0) / 60)} min` : 'zatím nic naimportováno'}<br>
+      <strong style="color:var(--txt2);">Velikost datových souborů:</strong><br>${filesHtml}
+    `;
+  } catch (e) {
+    box.innerHTML = '<span class="muted">Nepodařilo se načíst.</span>';
   }
 }
 

@@ -50,6 +50,13 @@ _DEFAULTS = {
         "weekend_ticket": True,   # páteční velký tiket (4–6 tipů na víkend)
         "weekend_ticket_legs": 5, # max. tipů na víkendovém tiketu
     },
+    # --- Výkon/data (přepisuje výchozí hodnoty z env proměnných, bez
+    # restartu appky) ---
+    "performance": {
+        "fetch_workers": 0,       # 0 = použij výchozí (FETCH_WORKERS env / auto podle prostředí)
+        "search_days": 14,        # jak daleko dopředu appka hledá zápasy týmu (Hledat)
+        "cache_ttl_hours": 12,    # jak dlouho appka věří keši zápasů, než ji považuje za zastaralou
+    },
 }
 
 
@@ -93,6 +100,17 @@ def reset_settings() -> dict:
 # ---------------------------------------------------------------------------
 # Správa dat
 # ---------------------------------------------------------------------------
+def effective_fetch_workers(env_default: int) -> int:
+    """Kolik paralelních ESPN dotazů appka smí pustit najednou. 0/chybějící
+    nastavení = ponech env výchozí (viz data_sources._MAX_FETCH_WORKERS);
+    jinak přepiš uživatelskou hodnotou z Nastavení bez nutnosti restartu."""
+    try:
+        val = int(get_settings().get("performance", {}).get("fetch_workers") or 0)
+    except (TypeError, ValueError):
+        val = 0
+    return val if val > 0 else env_default
+
+
 def clear_prediction_cache() -> int:
     """Smaže keš stažených zápasů (cache_*.json) – další načtení natáhne čerstvá data z ESPN."""
     return storage.remove_matching("cache_*.json")

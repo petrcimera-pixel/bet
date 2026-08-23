@@ -1412,6 +1412,59 @@ def api_persist_status():
     return jsonify(persist.status())
 
 
+@app.route("/api/diagnostics/advanced")
+@login_required
+def api_diagnostics_advanced():
+    """Pokročilá diagnostika appky – doplňuje /api/boot-diag, /api/settle/status
+    a /api/server/info (ty appka volá zvlášť) o věci, co dřív vidět nebyly:
+    stav keše, velikost datových souborů na disku, "stáří" background threadů
+    (canary tick = univerzální heartbeat všech smyček) a poslední benchmark
+    modelu proti reálným kurzům."""
+    now = int(_time.time())
+
+    def _file_kb(name):
+        try:
+            return round(os.path.getsize(os.path.join("data", name)) / 1024, 1)
+        except OSError:
+            return None
+
+    data_files = {name: _file_kb(name) for name in (
+        "bankroll.json", "tips.json", "tips_archive.json", "team_ratings.json",
+        "team_history.json", "virtual_bettors.json", "tipsport_matches.json",
+        "calibration.json", "learning_metrics.json",
+    )}
+
+    canary_age_s = (now - _boot_diag["canary_last_tick_at"]
+                    if _boot_diag.get("canary_last_tick_at") else None)
+
+    bench_hist = footballdata.benchmark_history()
+    last_bench = bench_hist[-1] if bench_hist else None
+
+    tp_matches = tipsport_import.all_matches()
+    tp_last_ts = max((m.get("imported_ts", 0) for m in tp_matches), default=0)
+
+    return jsonify({
+        "now": now,
+        "rss_mb": _rss_mb(),
+        "cache": storage.cache_stats(),
+        "data_files_kb": data_files,
+        "threads": {
+            "canary_ticks": _boot_diag.get("canary_ticks", 0),
+            "canary_age_s": canary_age_s,
+            "canary_stale": canary_age_s is not None and canary_age_s > 90,
+        },
+        "benchmark": {
+            "runs_logged": len(bench_hist),
+            "last": last_bench,
+        },
+        "tipsport_import": {
+            "matches_stored": len(tp_matches),
+            "last_imported_ts": tp_last_ts or None,
+            "last_imported_age_s": (now - tp_last_ts) if tp_last_ts else None,
+        },
+    })
+
+
 @app.route("/api/calibration")
 def api_calibration():
     """Stav kalibrace pravděpodobností (kolik dat, jak křivka opravuje)."""

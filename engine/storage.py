@@ -112,6 +112,26 @@ def is_cache_stale(name: str, ttl_hours: int = 12) -> bool:
     return time.time() - mtime > ttl_hours * 3600
 
 
+def cache_stats() -> dict:
+    """Stav keše pro diagnostický panel: kolik souborů leží na disku (a
+    kolik místa zabírají) vs. kolik jich appka aktuálně drží v paměti
+    (LRU, viz _CACHE nahoře)."""
+    disk_files, disk_bytes = 0, 0
+    for pat in ("cache_*.json", "apif_*.json"):
+        for f in glob.glob(os.path.join(_DIR, pat)):
+            disk_files += 1
+            try:
+                disk_bytes += os.path.getsize(f)
+            except OSError:
+                pass
+    return {
+        "memory_entries": len(_CACHE),
+        "memory_max_entries": _CACHE_MAX_ENTRIES,
+        "disk_files": disk_files,
+        "disk_bytes": disk_bytes,
+    }
+
+
 def clear_match_caches() -> int:
     """Zahodí keše rozpisů zápasů. Volá se, když se změní zdroj dat – jinak by
     se nově dostupné ligy objevily až po vypršení 12h TTL."""

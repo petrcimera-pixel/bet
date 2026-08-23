@@ -28,6 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 
 from . import storage
+from . import settings as app_settings
 
 TIMEOUT = 8   # kratší timeout = rychlejší selhání jednotlivého požadavku
               # při síťových problémech, místo dlouhého blokování celé dávky
@@ -416,7 +417,8 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return []
 
     try:
-        with ThreadPoolExecutor(max_workers=_MAX_FETCH_WORKERS) as ex:
+        workers = app_settings.effective_fetch_workers(_MAX_FETCH_WORKERS)
+        with ThreadPoolExecutor(max_workers=workers) as ex:
             for res in ex.map(grab, league_slugs(sport)):
                 out.extend(res)
     except Exception:
