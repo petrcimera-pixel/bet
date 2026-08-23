@@ -209,9 +209,45 @@ def _build_ticket(pool, max_legs, min_total_odds, min_prob):
     return None
 
 
+def tickets_blocked_reason():
+    """Proč se teď nesmí skládat AKO tikety – nebo None, když se smí.
+
+    Tvrdá pojistka nad rámec nastavení. Důvod je čistě z naměřených dat:
+    akumulátor násobí chybu modelu. Nohy tiketů agenta vyhrávaly 52,6 %,
+    takže třínohý tiket měl reálnou šanci 0,526^3 = 14,6 % – a přesně tak
+    dopadl (14,3 %, 2 z 14). Model přitom sliboval 79 %. Výsledek: tikety
+    způsobily 92 z 98 Kč celkové ztráty agenta, zatímco jednotlivé sázky
+    byly zhruba na nule.
+
+    Skládat akumulátory má smysl teprve tehdy, když model prokazatelně ví
+    něco navíc proti trhu – měřeno Brierovým skóre proti zavíracímu kurzu
+    Pinnacle (viz footballdata.benchmark). Dokud je model horší než trh,
+    je každý další článek tiketu jen další násobení téže chyby."""
+    try:
+        from . import footballdata
+        hist = footballdata.benchmark_history()
+    except Exception:
+        return "benchmark proti trhu se nepodařilo načíst"
+    if not hist:
+        return ("model ještě nebyl porovnán s trhem – tikety zůstávají vypnuté, "
+                "dokud benchmark neproběhne")
+    posledni = hist[-1]
+    bm, bk = posledni.get("brier_model"), posledni.get("brier_market")
+    if bm is None or bk is None:
+        return "poslední benchmark nemá porovnatelné hodnoty"
+    if bm >= bk:
+        return (f"model je zatím méně přesný než trh (Brier {bm:.3f} vs {bk:.3f}) – "
+                f"akumulátor by tuhle chybu jen umocnil")
+    return None
+
+
 def _place_tickets(ticket_pool, cfg, balance):
     """Denní AKO (2–3 tutovky) + páteční víkendový tiket (4–6 tipů)."""
     placed = []
+    duvod = tickets_blocked_reason()
+    if duvod:
+        print(f"[agent] AKO tikety přeskočeny: {duvod}")
+        return placed
     # AKO tikety: stejný tvrdý strop 10 Kč jako u singlů – aby agent
     # nemohl obejít MAX_STAKE_PER_TICKET přes vyšší 'ticket_stake' v Nastavení.
     stake = min(float(cfg.get("ticket_stake", 20.0)), MAX_STAKE_PER_TICKET)
@@ -244,8 +280,13 @@ def _place_tickets(ticket_pool, cfg, balance):
     return placed
 
 
-def _attach_reasoning(bet_id, p, best):
-    """Uloží k sázce konkrétní zdůvodnění (proč agent tip vybral)."""
+def build_reasoning(p, best) -> list:
+    """Sestaví zdůvodnění tipu (proč zrovna tenhle) jako seznam vět.
+
+    Oddělené od ukládání, aby stejné vysvětlení šlo použít i tam, kde
+    žádná sázka nevzniká – hlavně u "tipu dne" na dashboardu, který se
+    vybírá stejnou logikou jako sázka agenta, ale dřív se zobrazoval
+    bez jediného slova o tom, proč ho appka vybrala."""
     why = []
     cal = best.get("cal_prob", best["prob"])
     if abs(cal - best["prob"]) >= 0.02:
@@ -272,7 +313,15 @@ def _attach_reasoning(bet_id, p, best):
         if abs(diff) >= 0.15:
             stronger = p["home"] if diff > 0 else p["away"]
             why.append(f'{stronger} má výrazně silnější útočný rating.')
-    why.append(f'Kurz {best["odds"]} je reálný kurz sázkovky – ne odhad modelu.')
+    why.append(f'Kurz {best["odds"]} je reálný kurz sázkovky – ne odhad modelu.'
+               if best.get("real")
+               else f'Kurz {best["odds"]} je jen odhad modelu, ne kurz sázkovky – proto se na tenhle trh nesází.')
+    return why
+
+
+def _attach_reasoning(bet_id, p, best):
+    """Uloží k sázce konkrétní zdůvodnění (proč agent tip vybral)."""
+    why = build_reasoning(p, best)
     st = bankroll.state()
     for b in st["bets"]:
         if b["id"] == bet_id:

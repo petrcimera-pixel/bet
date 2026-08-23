@@ -361,7 +361,19 @@ async function loadTipOfDay() {
         <span class="odds-chip">${top.odds.toFixed(2)}</span>
         <span class="conf-chip">${Math.round(top.prob * 100)} % jistota</span>
         ${tipsportBadge(top.home, top.tipsport)}
+        ${(top.why && top.why.length) ? '<button class="btn small tip-why-btn" id="tipWhyBtn">💡 Proč tenhle tip? ▾</button>' : ''}
       </div>
+      ${(top.why && top.why.length) ? `
+        <div class="tip-why" id="tipWhyBox" style="display:none;">
+          <ul>${top.why.map(w => `<li>${w}</li>`).join('')}</ul>
+          <div class="tip-why-meta">
+            ${top.from_candidates ? `Vybráno jako nejjistější z <strong>${top.from_candidates}</strong> dnešních zápasů, které prošly filtry.` : ''}
+            ${(top.raw_prob != null && Math.abs(top.raw_prob - top.prob) >= 0.02)
+              ? ` Syrový odhad modelu byl ${Math.round(top.raw_prob * 100)} %, kalibrace podle skutečné úspěšnosti ho posunula na ${Math.round(top.prob * 100)} %.`
+              : ''}
+            ${top.edge != null ? ` Náskok proti kurzu ${czNum(top.edge * 100)} p.b.${top.is_value ? ' – model vidí value.' : ''}` : ''}
+          </div>
+        </div>` : ''}
       ${rest.length ? `
         <div class="tip-more">
           ${rest.map(t => `
@@ -372,6 +384,12 @@ async function loadTipOfDay() {
               <span class="conf-chip small">${Math.round(t.prob * 100)} %</span>
             </div>`).join('')}
         </div>` : ''}`;
+    el('tipWhyBtn')?.addEventListener('click', () => {
+      const box = el('tipWhyBox');
+      const otevreno = box.style.display !== 'none';
+      box.style.display = otevreno ? 'none' : 'block';
+      el('tipWhyBtn').textContent = otevreno ? '💡 Proč tenhle tip? ▾' : '💡 Proč tenhle tip? ▴';
+    });
   } catch (e) {
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
@@ -390,13 +408,51 @@ async function loadAgentSummary() {
   try {
     const data = await api('/api/agent');
     const s = data.stats;
+    const cfg = data.settings || {};
+    STATE.agentCfg = cfg;
+
+    // Stav a rozvrh: bez tohohle nebylo z dashboardu poznat, jestli agent
+    // vůbec běží a kdy se chystá sázet – jen kolik už vsadil.
+    const hodiny = String(cfg.auto_run_hours || '').split(',').map(h => parseInt(h, 10)).filter(h => !isNaN(h)).sort((a, b) => a - b);
+    const ted = new Date();
+    const dalsi = hodiny.find(h => h > ted.getHours());
+    const rozvrh = !cfg.enabled ? 'agent je vypnutý'
+      : !cfg.auto_run ? 'jen ruční spouštění'
+      : hodiny.length ? `další kolo ${dalsi != null ? `dnes ${String(dalsi).padStart(2, '0')}:00` : `zítra ${String(hodiny[0]).padStart(2, '0')}:00`}`
+      : 'rozvrh není nastavený';
+
+    const radek = (popisek, hodnota, trida = '', tip = '') => `
+      <div class="ag-row"${tip ? ` title="${escAttr(tip)}"` : ''}>
+        <span class="muted">${popisek}</span><span class="${trida}">${hodnota}</span>
+      </div>`;
+
     el('agentSummary').className = '';   // odstraň 'loading' padding, jinak se rozjede layout
     el('agentSummary').innerHTML = `
-      <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
-        <div style="display:flex; justify-content:space-between;"><span class="muted">Umístěno</span><span>${s.placed}</span></div>
-        <div style="display:flex; justify-content:space-between;"><span class="muted">Vyřešeno</span><span>${s.settled} (${s.accuracy !== null ? pct(s.accuracy) : '—'})</span></div>
-        <div style="display:flex; justify-content:space-between;"><span class="muted">Zisk</span><span class="${s.profit >= 0 ? 'pos' : 'bad'}">${fmt(s.profit)} Kč</span></div>
-        <div style="display:flex; justify-content:space-between;"><span class="muted">ROI</span><span>${s.roi !== null ? pct(s.roi) : '—'}</span></div>
+      <div class="ag-state ${cfg.enabled ? 'on' : 'off'}">
+        <span class="ag-dot"></span>
+        <span><strong>${cfg.enabled ? 'Zapnutý' : 'Vypnutý'}</strong> <span class="muted">· ${rozvrh}</span></span>
+      </div>
+      ${s.profit_curve && s.profit_curve.length > 2
+        ? `<div class="ag-spark" title="Vývoj zisku agenta v pořadí vyhodnocení sázek">${sparklineSvg(s.profit_curve)}</div>` : ''}
+      <div class="ag-rows">
+        ${radek('Umístěno', s.placed, '', 'Kolik sázek agent celkem vytvořil')}
+        ${radek('Otevřené', s.open ?? 0, '', 'Sázky, které ještě čekají na výsledek')}
+        ${radek('Vyřešeno', `${s.settled} (${s.accuracy !== null ? pct(s.accuracy) : '—'})`, '', 'Vyhodnocené sázky a jejich úspěšnost')}
+        ${radek('Zisk', `${s.profit >= 0 ? '+' : ''}${fmt(s.profit)} Kč`, s.profit >= 0 ? 'pos' : 'bad')}
+        ${radek('ROI', s.roi !== null ? pct(s.roi) : '—', s.roi >= 0 ? 'pos' : 'bad', 'Zisk děleno celkem vsazeno')}
+        ${radek('Vsazeno dnes', `${fmt(s.staked_today || 0)} Kč`, '',
+                'Kolik agent prosázel dnes – proti dennímu stropu banku níž')}
+      </div>
+      ${data.tickets_blocked ? `
+        <div class="ag-block" title="Pojistka v enginu, nezávislá na nastavení">
+          🚫 <strong>AKO tikety pozastavené</strong><br>
+          <span class="muted">${data.tickets_blocked}</span>
+        </div>` : ''}
+      <div class="ag-cfg">
+        <span class="pill info" title="Minimální kalibrovaná jistota, aby agent tip vůbec zvážil">jistota ≥ ${Math.round((cfg.min_prob || 0) * 100)} %</span>
+        <span class="pill info" title="Minimální kurz – pod ním se sázka nevyplatí">kurz ≥ ${cfg.min_odds ?? '—'}</span>
+        <span class="pill info" title="Jak se počítá výše vkladu">${cfg.stake_mode === 'kelly' ? `Kelly ${cfg.kelly_fraction ?? ''}` : `plochých ${cfg.stake ?? ''} Kč`}</span>
+        <span class="pill info" title="Strop: nejvýš tolik procent banku smí agent prosázet za jeden den">denně ≤ ${Math.round((cfg.max_daily_stake_pct || 0) * 100)} % banku</span>
       </div>`;
     renderRecentBets(data.bets || []);
   } catch (e) {

@@ -39,10 +39,15 @@
       "hockey",
       "basketball"
     ],
-    "daily_ticket": true,
+    "daily_ticket": false,
     "daily_ticket_legs": 3,
     "ticket_stake": 10,
-    "weekend_ticket": true,
+    "weekend_ticket": false,
     "weekend_ticket_legs": 5
+  },
+  "performance": {
+    "fetch_workers": 0,
+    "search_days": 14,
+    "cache_ttl_hours": 12
   }
 }

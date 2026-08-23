@@ -1553,16 +1553,34 @@ def api_dashboard():
             if c:
                 per_match.append((p, c))
         per_match.sort(key=lambda pc: pc[1].get("cal_prob", pc[1]["prob"]), reverse=True)
-        for p, c in per_match[:5]:
+        for poradi, (p, c) in enumerate(per_match[:5]):
             tp = tipsport_import.lookup(p["home"], p["away"], p.get("date") or "")
+            # Zdůvodnění stejnou logikou, jakou si agent ukládá ke svým
+            # sázkám – tip dne se vybírá stejně, jen se z něj sázka nestane.
+            # Počítá se jen pro první tip (hero na dashboardu), ostatní jsou
+            # jen řádky pod ním a build_reasoning není zadarmo.
+            try:
+                why = agent.build_reasoning(p, c) if poradi == 0 else None
+            except Exception:
+                why = None
+            surova = c.get("prob")
+            kalibrovana = c.get("cal_prob", surova)
             tips.append({
                 "match": f'{p["home"]} – {p["away"]}',
                 "home": p["home"], "away": p["away"],
                 "league": p.get("league"),
                 "date": p.get("date"), "time": p.get("time"),
                 "name": c["name"], "label": c["label"],
-                "odds": c["odds"], "prob": c.get("cal_prob", c["prob"]),
+                "odds": c["odds"], "prob": kalibrovana,
                 "real": c["real"], "market": c["market"],
+                "why": why,
+                # Kontext, proč zrovna tenhle: kolik zápasů se posuzovalo,
+                # syrová vs. kalibrovaná jistota a náskok proti kurzu.
+                "raw_prob": surova,
+                "edge": c.get("edge"),
+                "is_value": bool(c.get("is_value")),
+                "from_candidates": len(per_match) if poradi == 0 else None,
+                "exp_goals": p.get("exp_goals") if poradi == 0 else None,
                 "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
             })
         tip = tips[0] if tips else None   # zpětná kompatibilita se starým polem "tip"
@@ -1667,6 +1685,9 @@ def api_agent():
         "league_stats": agent.league_stats(),
         "bets": _attach_tipsport(_attach_live_scores(agent.agent_bets()[:60])),
         "balance": bankroll.state()["balance"],
+        # Proč se teď neskládají AKO tikety (None = skládají se). Pojistka
+        # v enginu je nezávislá na nastavení, ať je z UI vidět, co se děje.
+        "tickets_blocked": agent.tickets_blocked_reason(),
     })
 
 
