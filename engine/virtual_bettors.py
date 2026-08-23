@@ -1943,7 +1943,20 @@ def _run_one_bettor(bid, b, pool, today_str: str, current_hour: int = None,
 
     # Nikdy dvakrát na stejný zápas – bez ohledu na to, kolikrát denně
     # sázkař běží, pool se mu vždy filtruje na zápasy, na které ještě nevsadil.
-    already = {bet["match_id"] for bet in b["bets"]}
+    #
+    # POZOR na tikety: ty mají match_id prázdné a skutečné zápasy schované
+    # v legs. Dřív se tu bralo jen bet["match_id"], takže se pro každý tiket
+    # přidalo "" a nohy se neevidovaly vůbec – sázkaři skládající AKO/kombi
+    # tak neměli ochranu proti duplicitě žádnou a týž zápas jim skončil
+    # klidně ve čtyřech tiketech za jeden den (30 z 61 sázkařů, 205
+    # nadbytečných sázek, než se to opravilo).
+    already = set()
+    for bet in b["bets"]:
+        legs = bet.get("legs")
+        if legs:
+            already.update(l["match_id"] for l in legs if l.get("match_id"))
+        elif bet.get("match_id"):
+            already.add(bet["match_id"])
     # Sport blacklist – přeskočí sporty, kde má tenhle sázkař ≥15 sázek
     # a záporné ROI. Automatická sebeobrana proti systematicky ztrátovým
     # oblastem, bez ručního zásahu.
