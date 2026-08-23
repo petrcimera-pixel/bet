@@ -688,6 +688,42 @@ def _score_grid(lh: float, la: float) -> dict:
     return {k: v / total for k, v in grid.items()}
 
 
+# --- Kalibrace 1X2 podle měření proti zavíracímu kurzu Pinnacle -----------
+# Změřeno na 1500 archivních zápasech (tools/experiment_model.py). Poissonův
+# model měl Brierovo skóre 0.693, což je HORŠÍ než rovnoměrné hádání (0.667)
+# i než prosté sázení základních četností (0.651) – dělal sebejisté chyby.
+# Dvě soustavné vady:
+#   1) podceňoval domácí (38,3 % vs skutečných 43,3 %) a přeceňoval hosty
+#      (36,2 % vs 30,0 %); trh to má správně
+#   2) byl jistější než trh (průměrná nejvyšší pravděpodobnost 0,583 vs
+#      0,514), přestože je méně přesný – a jistota nad 90 % vycházela
+#      reálně jen ve 33 % případů
+# Oprava: posun zpět k domácím a přimíchání základní četnosti. Míra krocení
+# není zvolená tak, aby minimalizovala Brier (to by vyšlo w=0,6, jenže pak
+# model nikdy nepřekročí 0,65 a přestane rozlišovat), ale tak, aby rozložení
+# jistoty odpovídalo trhu, který je dobře kalibrovaný:
+#   trh      nad 0,55: 509 zápasů | nad 0,65: 225 | nejvyšší 0,872
+#   w=0,35   nad 0,55: 523        | nad 0,65: 249 | nejvyšší 0,787
+# Výsledek: Brier 0.693 -> 0.646. Ověřeno i mimo trénovací data (naladěno na
+# první polovině, změřeno na druhé: 0.697 -> 0.636), takže nejde o přeučení.
+# Trh (0.600) model pořád neporáží – tohle je oprava, ne zázrak.
+_ZAKLAD_1X2 = {"home": 0.433, "draw": 0.267, "away": 0.300}
+_DOMACI_KOREKCE = 1.15   # posun zpět k domácím
+_KROCENI_1X2 = 0.35      # kolik základní četnosti přimíchat
+
+
+def _kalibruj_1x2(probs: dict) -> dict:
+    """Opraví soustavný posun a zkrotí přehnanou jistotu 1X2 predikce."""
+    p = dict(probs)
+    p["home"] = p.get("home", 0.0) * _DOMACI_KOREKCE
+    t = sum(p.values()) or 1.0
+    p = {k: v / t for k, v in p.items()}
+    w = _KROCENI_1X2
+    p = {k: (1 - w) * v + w * _ZAKLAD_1X2.get(k, 0.0) for k, v in p.items()}
+    t = sum(p.values()) or 1.0
+    return {k: round(v / t, 6) for k, v in p.items()}
+
+
 def _markets_1x2(grid: dict) -> dict:
     p_home = p_draw = p_away = 0.0
     for (i, j), p in grid.items():
@@ -700,8 +736,25 @@ def _markets_1x2(grid: dict) -> dict:
     return {"home": p_home, "draw": p_draw, "away": p_away}
 
 
+# Krocení gólových linií (Over/Under). Změřeno na 1500 archivních zápasech
+# proti zavíracímu kurzu Bet365 na O/U 2.5 (tools/experiment_totals.py):
+# model měl Brier 0.558, tedy HORŠÍ než hod mincí (0.500). Průměrná jistota
+# 0,694 proti 0,571 u trhu, nejvyšší dokonce 0,996 – odtud brala appka
+# nesmysly typu "Méně než 3,5 gólu na 98 %".
+# Poissonův model podceňuje rozptyl počtu gólů (skutečné zápasy jsou
+# nevyzpytatelnější než nezávislé Poissonovo losování), takže vychází
+# extrémní pravděpodobnosti. Přimíchání neutrálních 0,5 to srovná:
+#   w=0.6 -> Brier 0.493, nejvyšší jistota 0,726
+# Ověřeno mimo trénovací data (naladěno na 1. půlce, měřeno na 2.):
+# 0.565 -> 0.492 (trh 0.478). Krotí se k 0,5, ne k četnosti Over 2.5 –
+# rozdíl je pod 0,004 Brier a k 0,5 to platí pro každou linii, ne jen 2.5.
+_KROCENI_TOTALY = 0.6
+
+
 def _over_prob(grid: dict, line: float) -> float:
-    return sum(p for (i, j), p in grid.items() if i + j > line)
+    p = sum(p for (i, j), p in grid.items() if i + j > line)
+    w = _KROCENI_TOTALY
+    return (1 - w) * p + w * 0.5
 
 
 def _outcome_hits(outcome: str, i: int, j: int) -> bool:
@@ -1181,7 +1234,7 @@ def predict_match(m: dict) -> dict:
         lam_h = max(0.25, min(4.8, raw_h))
         lam_a = max(0.25, min(4.8, raw_a))
         grid = _score_grid(lam_h, lam_a)
-        probs = _markets_1x2(grid)
+        probs = _kalibruj_1x2(_markets_1x2(grid))
         exp_goals = {"home": round(lam_h, 2), "away": round(lam_a, 2)}
         exp_total = round(lam_h + lam_a, 2)
         top_scores = _top_scores(grid)

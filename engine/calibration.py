@@ -45,6 +45,16 @@ def market_of(outcome: str) -> str:
     return "other"
 
 
+# Kdy se změnil samotný model (viz goals_model._kalibruj_1x2 – oprava
+# posunu domácí/hosté a zkrocení přehnané jistoty). Vzorky vyhodnocené
+# DŘÍV nesou pravděpodobnosti starého, přeceněného modelu, takže křivka
+# postavená z nich by nový model krotila podruhé: jeho maximum 0,79 by
+# srazila na 0,58 a agent by přestal sázet úplně. Dokud se nenasbírá
+# _MIN_SAMPLES nových vzorků, calibrate() vrací hodnotu beze změny – což
+# je správně, protože nový model je kalibrovaný už u zdroje.
+_MODEL_ZMENA_TS = 1787529600   # 2026-08-24
+
+
 def _samples() -> list:
     """(model_prob, won, weight) trojice ze všech vyhodnocených trhů v tips.json
     PLUS ze settled sázek všech 10 virtuálních sázkařů (engine/virtual_bettors.py).
@@ -67,7 +77,7 @@ def _samples() -> list:
                                   ("dc_prob", "dc_result")):
             p = t.get(prob_key)
             r = t.get(res_key)
-            if p and r in ("won", "lost"):
+            if p and r in ("won", "lost") and (settled_epoch or 0) >= _MODEL_ZMENA_TS:
                 mk = {"pick_prob": market_of(t.get("pick")),
                       "goal_prob": "totals", "corner_prob": "other",
                       "dc_prob": "winner"}.get(prob_key, "other")
@@ -78,7 +88,8 @@ def _samples() -> list:
         for bettor in virtual_bettors.load_state().values():
             for bet in bettor.get("bets", []):
                 p = bet.get("prob")
-                if p and bet.get("status") in ("won", "lost"):
+                if (p and bet.get("status") in ("won", "lost")
+                        and (bet.get("settled_ts") or 0) >= _MODEL_ZMENA_TS):
                     w = _age_weight(bet.get("settled_ts"))
                     out.append((float(p), 1.0 if bet["status"] == "won" else 0.0, w,
                                 market_of(bet.get("outcome"))))
