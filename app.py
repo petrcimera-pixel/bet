@@ -1833,15 +1833,24 @@ def api_recommended():
     except (TypeError, ValueError):
         min_prob = DOP_MIN_PROB
     vcetne_live = (request.args.get("live") or "1") != "0"
+    try:
+        dnu = max(1, min(3, int(request.args.get("days") or 3)))
+    except (TypeError, ValueError):
+        dnu = 3
 
     today = ds.today_str()
     cfg = app_settings.get_settings()["agent"]
     chyba = None
     try:
-        preds = _predictions_multi_sport(today, days=1)
+        preds = _predictions_multi_sport(today, days=dnu)
     except Exception as e:
         preds, chyba = [], str(e)
 
+    # Trychtýř: kde se zápasy ztrácejí. Bez těchhle čísel vypadá prázdná
+    # karta jako porucha appky, přitom drtivá většina zápasů odpadá na tom,
+    # že pro ně ESPN nedává kurzy sázkovky (typicky univerzitní ligy) –
+    # a appka zásadně žádný kurz nevymýšlí.
+    n_neodehranych = n_s_kurzy = n_po_prob = 0
     zapasu = 0
     tipy = []
     for p in preds:
@@ -1850,13 +1859,14 @@ def api_recommended():
         je_live = bool(p.get("live"))
         if je_live and not vcetne_live:
             continue
-        if (p.get("date") or today) != today:
-            continue
         zapasu += 1
+        n_neodehranych += 1
         try:
             cands = agent._candidates(p, cfg)
         except Exception:
             continue
+        if cands:
+            n_s_kurzy += 1
         # Jeden nejlepší tip na zápas – víc trhů z jednoho utkání není
         # víc příležitostí, jen víc řádků korelovaných na stejný výsledek.
         nejlepsi = None
@@ -1867,6 +1877,8 @@ def api_recommended():
                 continue
             if nejlepsi is None or prob > nejlepsi[0]:
                 nejlepsi = (prob, ev, c)
+        if any(x.get("cal_prob", x["prob"]) >= min_prob for x in cands):
+            n_po_prob += 1
         if not nejlepsi:
             continue
         prob, ev, c = nejlepsi
@@ -1886,7 +1898,10 @@ def api_recommended():
             "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
         })
 
-    tipy.sort(key=lambda t: (-t["prob"], -t["ev"]))
+    # Dnešek napřed, pak podle času výkopu – na dnešní zápas se sází teď,
+    # na páteční je čas a kurz se ještě pohne.
+    tipy.sort(key=lambda t: (t.get("date") != today, t.get("date") or "",
+                             -t["prob"], -t["ev"]))
     return jsonify({
         "tips": tipy[:40],
         "posuzovano": zapasu,
@@ -1894,7 +1909,14 @@ def api_recommended():
         "min_prob": min_prob,
         "min_ev": DOP_MIN_EV,
         "live_zahrnuto": vcetne_live,
+        "dnu": dnu,
         "datum": today,
+        "trychtyr": {
+            "neodehranych": n_neodehranych,
+            "s_kurzy": n_s_kurzy,
+            "po_prob": n_po_prob,
+            "doporuceno": len(tipy),
+        },
         "error": chyba,
     })
 

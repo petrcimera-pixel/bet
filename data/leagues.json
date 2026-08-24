@@ -1,5 +1,5 @@
 {
-  "ts": 1786999023,
+  "ts": 1787603971,
   "slugs": [
     [
       "fifa.world",
@@ -126,10 +126,6 @@
       "Germany"
     ],
     [
-      "club.friendly",
-      "World"
-    ],
-    [
       "eng.w.1",
       "England"
     ],
@@ -160,6 +156,10 @@
     [
       "ksa.1",
       "Saudi Arabia"
+    ],
+    [
+      "club.friendly",
+      "World"
     ],
     [
       "conmebol.libertadores",
@@ -590,6 +590,10 @@
       "England"
     ],
     [
+      "eng.fa_qual",
+      "England"
+    ],
+    [
       "sco.1.promotion.relegation",
       "Scotland"
     ],
@@ -603,6 +607,10 @@
     ],
     [
       "sco.challenge",
+      "Scotland"
+    ],
+    [
+      "sco.tennents_qual",
       "Scotland"
     ],
     [

@@ -17895,18 +17895,6 @@
       "result": "D"
     },
     {
-      "date": "2026-05-09",
-      "opponent": "Liverpool",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 1,
-      "ga": 1,
-      "cf": 2,
-      "ca": 5,
-      "result": "D"
-    },
-    {
       "date": "2026-05-19",
       "opponent": "Tottenham",
       "league": "English Premier League",
@@ -18088,6 +18076,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Fulham",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -70099,6 +70099,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Fiorentina",
+      "league": "Italian Serie A",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Dinamo Zagreb": [
@@ -104679,6 +104691,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "AS Roma",
+      "league": "Italian Serie A",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Monaco": [
@@ -118939,18 +118963,6 @@
       "result": "L"
     },
     {
-      "date": "2026-05-02",
-      "opponent": "Arsenal",
-      "league": "English Premier League",
-      "sport": "soccer",
-      "loc": "away",
-      "gf": 0,
-      "ga": 3,
-      "cf": 4,
-      "ca": 3,
-      "result": "L"
-    },
-    {
       "date": "2026-05-09",
       "opponent": "Bournemouth",
       "league": "English Premier League",
@@ -119159,6 +119171,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Chelsea",
+      "league": "English Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Crystal Palace": [
@@ -148727,6 +148751,54 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "FC Baltika Kaliningrad",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "FC Baltika Kaliningrad",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "FC Baltika Kaliningrad",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "FC Baltika Kaliningrad",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Gazovik Orenburg": [
@@ -158465,6 +158537,54 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Rubin Kazan",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Rubin Kazan",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Rubin Kazan",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Rubin Kazan",
+      "league": "Russian Premier League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     },
     {
       "date": "2026-08-24",
@@ -176477,6 +176597,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Annecy",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Dunkerque": [
@@ -177645,6 +177777,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Stade de Reims",
+      "league": "French Ligue 2",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Rodez Aveyron": [
@@ -189486,6 +189630,42 @@
       "loc": "away",
       "gf": 1,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -223985,6 +224165,42 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Ittihad",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Ittihad",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Ittihad",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Al Diriyah": [
@@ -239831,6 +240047,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Amed SFK",
+      "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Al Bukayriyah": [
@@ -241017,6 +241245,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Kocaelispor",
+      "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Erzurum BB": [
@@ -289133,6 +289373,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Sportivo Luqueño",
+      "league": "Paraguayan Primera División",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Atletico Bucaramanga": [
@@ -300581,6 +300833,18 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Nacional Asunción",
+      "league": "Paraguayan Primera División",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
       "ga": 2,
       "cf": null,
       "ca": null,

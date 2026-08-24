@@ -1840,8 +1840,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3845
         },
-        "closing_odds": 1.714,
-        "clv": -0.0257
+        "closing_odds": 1.769,
+        "clv": -0.056
       },
       {
         "id": "fa79ba289d",
@@ -2688,9 +2688,9 @@
         "odds": 2.52,
         "prob": 0.9073,
         "stake": 5.48,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.48,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -2702,7 +2702,11 @@
           "edge": 0.5109
         },
         "closing_odds": 2.286,
-        "clv": 0.1024
+        "clv": 0.1024,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "c1ea387493",
@@ -3401,9 +3405,9 @@
       }
     ],
     "last_run_date": "2026-08-24",
-    "loss_streak": 0,
+    "loss_streak": 1,
     "ran_hours": [],
-    "win_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -4854,8 +4858,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3845
         },
-        "closing_odds": 1.714,
-        "clv": -0.0257
+        "closing_odds": 1.769,
+        "clv": -0.056
       },
       {
         "id": "47edb29a2a",
@@ -6140,7 +6144,7 @@
     "name": "Gólový Gustav",
     "emoji": "⚡",
     "tagline": "Jen Over linie – věří, že góly padnou.",
-    "balance": 182.79,
+    "balance": 195.93,
     "start_balance": 200.0,
     "bets": [
       {
@@ -6267,9 +6271,9 @@
         "odds": 1.91,
         "prob": 0.8549,
         "stake": 6.88,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 6.26,
+        "settled_ts": 1787604037,
         "ml_features": {
           "attack_home": 1.9692,
           "defense_home": 1.3208,
@@ -6281,7 +6285,11 @@
           "edge": 0.331
         },
         "closing_odds": 1.833,
-        "clv": 0.042
+        "clv": 0.042,
+        "result": {
+          "home": 4,
+          "away": 0
+        }
       },
       {
         "id": "c559b48648",
@@ -6901,8 +6909,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 2,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -7094,8 +7102,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3845
         },
-        "closing_odds": 1.714,
-        "clv": -0.0257
+        "closing_odds": 1.769,
+        "clv": -0.056
       },
       {
         "id": "0bd9941a85",
@@ -8060,8 +8068,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3845
         },
-        "closing_odds": 1.714,
-        "clv": -0.0257
+        "closing_odds": 1.769,
+        "clv": -0.056
       },
       {
         "id": "17785a5355",
@@ -9485,9 +9493,9 @@
         "odds": 1.65,
         "prob": 0.9324,
         "stake": 6.07,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -6.07,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -9499,7 +9507,11 @@
           "edge": 0.3264
         },
         "closing_odds": 1.537,
-        "clv": 0.0735
+        "clv": 0.0735,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "b6a70b3ecf",
@@ -9601,8 +9613,8 @@
           "rating_confidence": 1.0,
           "edge": 0.3845
         },
-        "closing_odds": 1.714,
-        "clv": -0.0257
+        "closing_odds": 1.769,
+        "clv": -0.056
       },
       {
         "id": "93cfe29949",
@@ -10378,8 +10390,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 3,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -11484,8 +11496,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -11788,8 +11800,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -12172,8 +12184,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -12794,9 +12806,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.537,
-            "clv": 0.0735
+            "clv": 0.0735,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           },
           {
             "match_id": "401841198",
@@ -12834,9 +12850,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.8404,
           "defense_home": 0.6665,
@@ -13418,7 +13434,7 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 2,
+    "loss_streak": 3,
     "win_streak": 0,
     "transactions": [
       {
@@ -13755,8 +13771,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -14227,9 +14243,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "ita.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.833,
-            "clv": 0.042
+            "clv": 0.042,
+            "score": {
+              "home": 4,
+              "away": 0
+            }
           },
           {
             "match_id": "401860294",
@@ -14956,8 +14976,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -15472,8 +15492,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -18062,9 +18082,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.537,
-            "clv": 0.0735
+            "clv": 0.0735,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           },
           {
             "match_id": "401888389",
@@ -18085,9 +18109,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -18129,8 +18153,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401874890",
@@ -18961,7 +18985,7 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -19084,9 +19108,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.831,
-            "clv": 0.0377
+            "clv": 0.0377,
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401876775",
@@ -19107,9 +19135,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603838,
         "ml_features": {
           "attack_home": 0.8444,
           "defense_home": 1.0175,
@@ -19835,7 +19863,7 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 3,
+    "loss_streak": 4,
     "win_streak": 0,
     "transactions": [
       {
@@ -19884,9 +19912,13 @@
             "time": "18:45",
             "sport": "soccer",
             "slug": "fra.2",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.831,
-            "clv": 0.0377
+            "clv": 0.0377,
+            "score": {
+              "home": 3,
+              "away": 1
+            }
           },
           {
             "match_id": "401876775",
@@ -19907,9 +19939,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603838,
         "ml_features": {
           "attack_home": 0.8444,
           "defense_home": 1.0175,
@@ -20413,8 +20445,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 2,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -21502,9 +21534,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.537,
-            "clv": 0.0735
+            "clv": 0.0735,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           },
           {
             "match_id": "401888389",
@@ -21525,9 +21561,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -21569,8 +21605,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401874890",
@@ -22105,8 +22141,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 3,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -22156,8 +22192,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -23102,8 +23138,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401850635",
@@ -23559,9 +23595,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 3.15,
-            "clv": 0.0635
+            "clv": 0.0635,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           },
           {
             "match_id": "401888389",
@@ -23582,9 +23622,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -23882,8 +23922,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 1,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -23998,8 +24038,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 6.5,
-            "clv": -0.1538
+            "closing_odds": 6.0,
+            "clv": -0.0833
           },
           {
             "match_id": "401874890",
@@ -24015,8 +24055,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           }
         ],
         "stake": 5.0,
@@ -25241,9 +25281,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.537,
-            "clv": 0.0735
+            "clv": 0.0735,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           },
           {
             "match_id": "401888389",
@@ -25264,9 +25308,9 @@
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -25308,8 +25352,8 @@
             "sport": "soccer",
             "slug": "ger.dfb_pokal",
             "result": null,
-            "closing_odds": 1.714,
-            "clv": -0.0257
+            "closing_odds": 1.769,
+            "clv": -0.056
           },
           {
             "match_id": "401874890",
@@ -26140,7 +26184,7 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -26638,9 +26682,9 @@
         "odds": 3.35,
         "prob": 0.6611,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -26652,7 +26696,11 @@
           "edge": 0.3626
         },
         "closing_odds": 3.15,
-        "clv": 0.0635
+        "clv": 0.0635,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "98e1eafd14",
@@ -27136,8 +27184,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 0,
-    "win_streak": 3,
+    "loss_streak": 1,
+    "win_streak": 0,
     "transactions": [
       {
         "ts": 1787337975,
@@ -27823,8 +27871,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401883252",
@@ -27840,8 +27888,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 1.374,
-            "clv": -0.0029
+            "closing_odds": 1.389,
+            "clv": -0.0137
           }
         ],
         "stake": 5.0,
@@ -28771,8 +28819,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401850635",
@@ -29037,10 +29085,10 @@
   "ai_champion": {
     "name": "AI Šampion",
     "emoji": "🤖🏆",
-    "tagline": "Evoluce AI kategorie – zdroj: AI Klára (CLV 0.71%, 8 vzorků), práh jistoty 0.592.",
+    "tagline": "Evoluce AI kategorie – zdroj: AI Trojkombinátor Tobiáš (CLV 0.81%, 15 vzorků), práh jistoty 0.586.",
     "group": "ai",
     "custom": true,
-    "ai_kind": "acca",
+    "ai_kind": "combo",
     "params": {
       "market": "any",
       "progression": "none",
@@ -29048,15 +29096,15 @@
       "min_prob": 0.6,
       "min_odds": 1.2,
       "max_odds": 10.0,
-      "stake_pct": 0.03,
+      "stake_pct": 0.015,
       "kelly_fraction": 0.25,
-      "max_bets": 3,
+      "max_bets": 2,
       "pause_after_losses": 0,
       "one_per_league": false,
-      "legs": 2,
+      "legs": 3,
       "leg_min_prob": 0.55,
       "require_positive_ev": false,
-      "ai_min_win_prob": 0.592
+      "ai_min_win_prob": 0.586
     },
     "balance": 180.0,
     "start_balance": 200.0,
@@ -29092,8 +29140,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401850635",
@@ -29357,7 +29405,7 @@
       "stake_pct": 0.035,
       "max_bets": 5
     },
-    "balance": 167.55,
+    "balance": 178.55,
     "start_balance": 200.0,
     "bets": [
       {
@@ -29451,9 +29499,9 @@
         "odds": 2.2,
         "prob": 0.7434,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 6.0,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -29465,7 +29513,11 @@
           "edge": -0.387
         },
         "closing_odds": 2.45,
-        "clv": -0.102
+        "clv": -0.102,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "6343be9570",
@@ -29530,8 +29582,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0795
         },
-        "closing_odds": 2.5,
-        "clv": 0.0
+        "closing_odds": 2.55,
+        "clv": -0.0196
       },
       {
         "id": "97bb805b68",
@@ -29898,8 +29950,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 1,
-    "win_streak": 0
+    "loss_streak": 0,
+    "win_streak": 1
   },
   "ai_model_conservative": {
     "name": "AI Opatrný Ota",
@@ -29977,8 +30029,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0795
         },
-        "closing_odds": 2.5,
-        "clv": 0.0
+        "closing_odds": 2.55,
+        "clv": -0.0196
       },
       {
         "id": "ee35c4a5f3",
@@ -30143,7 +30195,7 @@
       "kelly_fraction": 0.3,
       "max_bets": 3
     },
-    "balance": 134.36,
+    "balance": 152.27,
     "start_balance": 200.0,
     "bets": [
       {
@@ -30163,9 +30215,9 @@
         "odds": 2.2,
         "prob": 0.7434,
         "stake": 8.14,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 9.77,
+        "settled_ts": 1787603180,
         "ml_features": {
           "attack_home": 0.4616,
           "defense_home": 0.8747,
@@ -30177,7 +30229,11 @@
           "edge": -0.387
         },
         "closing_odds": 2.45,
-        "clv": -0.102
+        "clv": -0.102,
+        "result": {
+          "home": 2,
+          "away": 0
+        }
       },
       {
         "id": "d2ed802c06",
@@ -30242,8 +30298,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0795
         },
-        "closing_odds": 2.5,
-        "clv": 0.0
+        "closing_odds": 2.55,
+        "clv": -0.0196
       },
       {
         "id": "619b5c555c",
@@ -30466,8 +30522,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 3,
-    "win_streak": 0
+    "loss_streak": 0,
+    "win_streak": 1
   },
   "ai_model_ultra": {
     "name": "AI Ultra Jistý Umberto",
@@ -30545,8 +30601,8 @@
           "rating_confidence": 1.0,
           "edge": 0.0795
         },
-        "closing_odds": 2.5,
-        "clv": 0.0
+        "closing_odds": 2.55,
+        "clv": -0.0196
       },
       {
         "id": "8b179a1865",
@@ -31309,8 +31365,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401883252",
@@ -31326,8 +31382,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 1.374,
-            "clv": -0.0029
+            "closing_odds": 1.389,
+            "clv": -0.0137
           }
         ],
         "stake": 5.0,
@@ -31819,8 +31875,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401883252",
@@ -31836,8 +31892,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 1.374,
-            "clv": -0.0029
+            "closing_odds": 1.389,
+            "clv": -0.0137
           }
         ],
         "stake": 5.0,
@@ -32637,8 +32693,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401850635",
@@ -33248,8 +33304,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401850635",
@@ -33281,9 +33337,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 2.45,
-            "clv": -0.102
+            "clv": -0.102,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,
@@ -33521,8 +33581,8 @@
             "sport": "soccer",
             "slug": "esp.2",
             "result": null,
-            "closing_odds": 2.5,
-            "clv": 0.0
+            "closing_odds": 2.55,
+            "clv": -0.0196
           },
           {
             "match_id": "401850635",
@@ -33554,9 +33614,13 @@
             "time": "18:30",
             "sport": "soccer",
             "slug": "tur.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 2.45,
-            "clv": -0.102
+            "clv": -0.102,
+            "score": {
+              "home": 2,
+              "away": 0
+            }
           }
         ],
         "stake": 5.0,

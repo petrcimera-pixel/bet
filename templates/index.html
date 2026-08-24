@@ -122,6 +122,13 @@
       <div class="card">
         <div class="toolbar-row">
           <button class="btn small primary" id="dopReload">↻ Načíst znovu</button>
+          <label class="log-check" title="Jak daleko dopředu hledat zápasy">
+            <select id="dopDnu" class="search-input" style="max-width:150px;">
+              <option value="1">jen dnes</option>
+              <option value="2">dnes a zítra</option>
+              <option value="3" selected>nejbližší 3 dny</option>
+            </select>
+          </label>
           <label class="log-check" title="Zahrnout i zápasy, které už běží">
             <input type="checkbox" id="dopLive" checked> včetně live
           </label>
@@ -605,7 +612,7 @@
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
             <strong>⭐ Doporučené</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Nejsilnější tipy na dnešek napříč sporty, včetně <strong>rozehraných zápasů</strong> (badge 🔴 ŽIVĚ s minutou a průběžným skóre). Karta zámerně neukazuje všechno, co model spočítá – tip se zobrazí, jen když má pravděpodobnost nad zvolenou laťkou <em>a zároveň</em> nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez té druhé podmínky by se doporučovaly i tipy typu „favorit vyhraje @ 1,05“, které sice většinou vyjdou, ale dlouhodobě prodělávají. Z každého zápasu jde do výpisu jen jeden nejlepší tip. Pásma: <strong>Tutovka</strong> (nejvyšší jistota), <strong>Hodnota</strong> (kurz je štědřejší, než odpovídá odhadu), <strong>Solidní</strong>. Když neprojde nic, karta to napíše i s počtem posouzených zápasů – prázdno je poctivější než slabé doporučení.</p>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Nejsilnější tipy na dnešek napříč sporty, včetně <strong>rozehraných zápasů</strong> (badge 🔴 ŽIVĚ s minutou a průběžným skóre). Karta zámerně neukazuje všechno, co model spočítá – tip se zobrazí, jen když má pravděpodobnost nad zvolenou laťkou <em>a zároveň</em> nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez té druhé podmínky by se doporučovaly i tipy typu „favorit vyhraje @ 1,05“, které sice většinou vyjdou, ale dlouhodobě prodělávají. Z každého zápasu jde do výpisu jen jeden nejlepší tip. Pásma: <strong>Tutovka</strong> (nejvyšší jistota), <strong>Hodnota</strong> (kurz je štědřejší, než odpovídá odhadu), <strong>Solidní</strong>. Nahoře je <strong>trychtýř</strong>, který ukazuje, kde se zápasy ztrácejí – nejčastěji ne na přísné laťce, ale na chybějících kurzech sázkovky (appka žádný kurz nevymýšlí). Horizont se dá přepnout na dnes / dnes a zítra / 3 dny; jen na dnešek toho bývá málo, protože večer už je většina zápasů rozehraná nebo dohraná. Když neprojde nic, karta to napíše i s rozpisem – prázdno je poctivější než slabé doporučení.</p>
           </div>
           <div>
             <strong>▦ Dashboard</strong>

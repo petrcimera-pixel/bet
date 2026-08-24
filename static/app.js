@@ -3855,9 +3855,10 @@ async function loadDoporucene() {
   if (stav) stav.textContent = 'počítám…';
   const prah = el('dopPrah')?.value || '0.55';
   const live = el('dopLive')?.checked ? '1' : '0';
+  const dnu = el('dopDnu')?.value || '3';
   let d;
   try {
-    d = await api(`/api/recommended?min_prob=${prah}&live=${live}`, { timeoutMs: 120000 });
+    d = await api(`/api/recommended?min_prob=${prah}&live=${live}&days=${dnu}`, { timeoutMs: 180000 });
   } catch (e) {
     box.innerHTML = `<div class="card"><div class="empty-state">Nepodařilo se načíst doporučení: ${escAttr(e.message)}</div></div>`;
     if (stav) stav.textContent = '';
@@ -3877,18 +3878,20 @@ function vykresliDoporucene(d) {
     box.innerHTML = `<div class="card"><div class="empty-state">Predikce se nepodařilo spočítat: ${escAttr(d.error)}</div></div>`;
     return;
   }
+  const trychtyr = dopTrychtyrHtml(d);
   if (!tipy.length) {
-    // Prázdno je legitimní výsledek, ne chyba – ale musí být poznat, jestli
-    // model nic nenašel, nebo jestli dnes prostě žádné zápasy nejsou.
+    // Prázdno je legitimní výsledek, ne chyba – ale musí být poznat, kde
+    // přesně se zápasy ztratily, jinak to vypadá jako porucha appky.
     const duvod = d.posuzovano
-      ? `Z ${d.posuzovano} dnešních zápasů neprošel laťkou ${pct(d.min_prob * 100, 0)} ani jeden tip.
-         Model dnes nevidí nic, na co by stálo za to sázet – to je poctivější výsledek než doporučit něco slabého.`
-      : 'Na dnešek nejsou v datech žádné nadcházející zápasy.';
-    box.innerHTML = `<div class="card"><div class="empty-state">${duvod}</div></div>`;
+      ? `Ani jeden zápas neprošel až na konec. Nejčastější důvod není přísná laťka,
+         ale chybějící kurzy sázkovky – rozpis níž ukazuje, kde se to láme.`
+      : 'V tomhle okně nejsou žádné nadcházející zápasy. Zkus prodloužit horizont.';
+    box.innerHTML = `${trychtyr}<div class="card"><div class="empty-state">${duvod}</div></div>`;
     return;
   }
   const radky = tipy.map(dopKartaHtml).join('');
   box.innerHTML = `
+    ${trychtyr}
     <div class="card dop-legenda">
       <span class="muted">Zobrazují se jen tipy s pravděpodobností aspoň ${pct(d.min_prob * 100, 0)}
       a nezápornou očekávanou hodnotou. Jeden tip na zápas – víc trhů z jednoho utkání
@@ -3897,12 +3900,37 @@ function vykresliDoporucene(d) {
     <div class="dop-mrizka">${radky}</div>`;
 }
 
+/** Kam se poděly zápasy – bez tohohle rozpisu vypadá prázdná karta jako chyba. */
+function dopTrychtyrHtml(d) {
+  const t = d.trychtyr;
+  if (!t) return '';
+  const kroky = [
+    ['nadcházející zápasy', t.neodehranych, null],
+    ['mají kurzy sázkovky', t.s_kurzy, 'appka kurzy nikdy nevymýšlí – bez kurzu sázkovky se nedá spočítat výhodnost'],
+    [`šance ≥ ${pct(d.min_prob * 100, 0)}`, t.po_prob, 'model u zápasu nenašel dost pravděpodobný výsledek'],
+    ['a zároveň kladná hodnota', t.doporuceno, 'kurz nepokrývá riziko – dlouhodobě ztrátový tip'],
+  ];
+  const html = kroky.map(([jmeno, n, tip], i) => {
+    const pred = i > 0 ? kroky[i - 1][1] : null;
+    const ztrata = pred !== null && pred > n ? `<span class="dop-ztrata">−${pred - n}</span>` : '';
+    return `<div class="dop-krok"${tip ? ` title="${escAttr(tip)}"` : ''}>
+      <span class="dop-krok-n">${n}</span>
+      <span class="dop-krok-jmeno">${jmeno}</span>
+      ${ztrata}
+    </div>`;
+  }).join('<span class="dop-sipka">›</span>');
+  return `<div class="card dop-trychtyr"><div class="dop-kroky">${html}</div></div>`;
+}
+
 function dopKartaHtml(t) {
   const p = DOP_PASMA[t.pasmo] || DOP_PASMA.solidni;
   const zisk = ((t.odds - 1) * 100).toFixed(0);
+  const dnes = new Date().toISOString().slice(0, 10);
+  const den = t.date === dnes ? 'dnes'
+    : (t.date ? new Date(t.date + 'T00:00:00').toLocaleDateString('cs-CZ', { weekday: 'short', day: 'numeric', month: 'numeric' }) : '');
   const cas = t.live
     ? `<span class="dop-live">🔴 ŽIVĚ${t.minute ? ' ' + escAttr(t.minute) : ''}</span>`
-    : `<span class="muted">${escAttr(t.time || '')}</span>`;
+    : `<span class="muted">${escAttr(den)}${t.time ? ' ' + escAttr(t.time) : ''}</span>`;
   const skore = t.live && t.score ? ` <strong>${escAttr(t.score)}</strong>` : '';
   // EV nad 1 = dlouhodobě ziskový tip; pod 1 se sem vůbec nedostane.
   const evText = t.ev >= 1.06
@@ -3932,6 +3960,7 @@ function dopKartaHtml(t) {
 function setupDoporucene() {
   el('dopReload')?.addEventListener('click', loadDoporucene);
   el('dopPrah')?.addEventListener('change', loadDoporucene);
+  el('dopDnu')?.addEventListener('change', loadDoporucene);
   el('dopLive')?.addEventListener('change', loadDoporucene);
 }
 

@@ -1,6 +1,6 @@
 {
   "start_balance": 200.0,
-  "balance": 57.04,
+  "balance": 75.34,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
@@ -980,8 +980,8 @@
       "odds": 1.83,
       "prob": 0.7023,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 8.3,
       "clv": -0.0016,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -1005,7 +1005,12 @@
         "AS Roma má výrazně silnější útočný rating.",
         "Kurz 1.833 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.833
+      "closing_odds": 1.833,
+      "settled_ts": 1787604037,
+      "result": {
+        "home": 4,
+        "away": 0
+      }
     },
     {
       "id": "5f3187fd2e",

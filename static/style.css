@@ -1068,3 +1068,20 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .kal-preceni .kal-koment { color: #dc2626; font-weight: 600; }
 .kal-podceni .kal-koment { color: #2563eb; font-weight: 600; }
 .kal-sedi .kal-koment { color: #16a34a; font-weight: 600; }
+
+/* --- Doporučené: trychtýř (kam se poděly zápasy) ------------------------ */
+.dop-trychtyr { padding: 12px 16px; }
+.dop-kroky {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; font-size: 12px;
+}
+.dop-krok {
+  display: flex; align-items: baseline; gap: 6px;
+  padding: 4px 10px; border-radius: 8px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+}
+.dop-krok[title] { cursor: help; }
+.dop-krok-n { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dop-krok-jmeno { color: var(--txt2); }
+.dop-ztrata { color: #dc2626; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dop-sipka { color: var(--txt3); }
