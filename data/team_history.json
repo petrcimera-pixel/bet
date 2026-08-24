@@ -189501,6 +189501,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Hazem",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Marumo Gallants": [
@@ -223946,6 +223958,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-24",
+      "opponent": "Al Ittihad",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
       "cf": null,
       "ca": null,
       "result": "L"

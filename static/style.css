@@ -1040,3 +1040,31 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .dop-cislo { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dop-paticka { font-size: 12px; }
 .dop-ev-plus { color: #16a34a; font-weight: 600; }
+
+/* --- Kalibrace modelu ("Říká model pravdu?") ---------------------------- */
+.kal-era { margin-bottom: 16px; }
+.kal-era:last-child { margin-bottom: 0; }
+.kal-era-stara { opacity: .72; padding-top: 14px; border-top: 1px dashed var(--border); }
+.kal-hlava {
+  display: flex; align-items: baseline; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 8px; font-size: 13px;
+}
+.kal-hlava .muted { font-size: 12px; }
+.kal-cekani {
+  font-size: 13px; line-height: 1.6; padding: 12px 14px;
+  border-radius: 8px; background: var(--bg-soft); border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.kal-tabulka { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.kal-tabulka th {
+  text-align: left; font-weight: 600; color: var(--txt3);
+  font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+  padding: 4px 8px; border-bottom: 1px solid var(--border);
+}
+.kal-tabulka td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.kal-tabulka tr:last-child td { border-bottom: 0; }
+.kal-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kal-koment { font-size: 11.5px; }
+.kal-preceni .kal-koment { color: #dc2626; font-weight: 600; }
+.kal-podceni .kal-koment { color: #2563eb; font-weight: 600; }
+.kal-sedi .kal-koment { color: #16a34a; font-weight: 600; }

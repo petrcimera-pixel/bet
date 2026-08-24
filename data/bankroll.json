@@ -19,7 +19,7 @@
       "stake": 5.88,
       "status": "open",
       "pnl": 0.0,
-      "clv": null,
+      "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -41,7 +41,8 @@
         "Nejpravděpodobnější výsledek 0:0 (38 %).",
         "Tigre má výrazně silnější útočný rating.",
         "Kurz 2.45 je reálný kurz sázkovky – ne odhad modelu."
-      ]
+      ],
+      "closing_odds": 2.45
     },
     {
       "id": "5694e19fde",

@@ -1582,6 +1582,58 @@ def api_calibration_rebuild():
     return jsonify(calibration.rebuild())
 
 
+# Pásma pravděpodobnosti pro kontrolu kalibrace. Záměrně se NEváže na
+# min_prob z nastavení: práh se dá kdykoli posunout a statistika svázaná
+# s ním by pokaždé změnila význam, takže by nešla srovnávat v čase.
+_KAL_PASMA = ((0.50, 0.60), (0.60, 0.70), (0.70, 0.80), (0.80, 0.90), (0.90, 1.01))
+_KAL_MIN_PASMO = 3      # pod tolika sázkami je pásmo jen šum
+_KAL_MIN_CELKEM = 15    # pod tolika sázkami se závěr dělat nedá
+
+
+def _kalibrace_prehled(bets: list) -> dict:
+    """Říká model pravdu? Porovná, co model u sázky tvrdil, s tím, jak to
+    dopadlo – po pásmech pravděpodobnosti.
+
+    Dělí se podle ÉRY MODELU: sázky vsazené před přepočtem modelu jsou na
+    jiné škále (model byl přeceňující, tvrdil 90 % tam, kde realita byla
+    33 %), takže smíchat je s novými do jednoho čísla by dalo údaj, který
+    nepopisuje ani jeden z těch dvou modelů.
+    """
+    from engine.calibration import _MODEL_ZMENA_TS
+
+    singly = [b for b in bets
+              if b["status"] in ("won", "lost") and b.get("outcome") != "acca"
+              and b.get("prob")]
+
+    def ery(vyber):
+        g = [b for b in singly if vyber(b)]
+        pasma = []
+        for lo, hi in _KAL_PASMA:
+            v = [b for b in g if lo <= float(b["prob"]) < hi]
+            if len(v) < _KAL_MIN_PASMO:
+                continue
+            vyhry = sum(1 for b in v if b["status"] == "won")
+            pasma.append({
+                "od": lo, "do": hi, "n": len(v),
+                "tvrdil": round(sum(float(b["prob"]) for b in v) / len(v) * 100, 1),
+                "realne": round(vyhry / len(v) * 100, 1),
+                "vyhry": vyhry,
+            })
+        vyhry = sum(1 for b in g if b["status"] == "won")
+        return {
+            "n": len(g), "vyhry": vyhry,
+            "uspesnost": round(vyhry / len(g) * 100, 1) if g else None,
+            "pasma": pasma,
+            "dost_dat": len(g) >= _KAL_MIN_CELKEM,
+        }
+
+    return {
+        "aktualni": ery(lambda b: (b.get("ts") or 0) >= _MODEL_ZMENA_TS),
+        "predchozi": ery(lambda b: (b.get("ts") or 0) < _MODEL_ZMENA_TS),
+        "min_celkem": _KAL_MIN_CELKEM,
+    }
+
+
 @app.route("/api/dashboard")
 def api_dashboard():
     """Data pro dashboard: tip dne, dnešní tiket agenta, včerejší bilance,
@@ -1670,7 +1722,11 @@ def api_dashboard():
         "pnl": round(sum(b["pnl"] for b in y_bets), 2),
     }
 
-    # Úspěšnost tutovek (single tipy s prob >= min_prob)
+    # Úspěšnost tutovek (single tipy s prob >= min_prob).
+    # Drží se kvůli zpětné kompatibilitě API; pro dashboard ji nahradila
+    # kalibrace níž, protože jedno číslo svázané s nastavitelným prahem
+    # mění význam pokaždé, když se práh pohne, a nic neřekne o tom, jestli
+    # se dá vůbec věřit číslu, které appka u tipu ukazuje.
     min_prob = float(cfg.get("min_prob", 0.75))
     tut = [b for b in bets if b["status"] in ("won", "lost")
            and b.get("outcome") != "acca" and (b.get("prob") or 0) >= min_prob]
@@ -1679,6 +1735,7 @@ def api_dashboard():
         "settled": len(tut), "won": tut_won,
         "accuracy": round(tut_won / len(tut) * 100, 1) if tut else None,
     }
+    kalibrace = _kalibrace_prehled(bets)
 
     # Dnešní AKO tiket agenta
     ticket = None
@@ -1698,6 +1755,7 @@ def api_dashboard():
         "ticket": ticket,
         "yesterday": y_summary,
         "tutovka": tutovka_stats,
+        "kalibrace": kalibrace,
         "last_run": storage.load("agent_last_run.json", None),
     })
 

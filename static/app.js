@@ -337,6 +337,7 @@ async function loadDashboard() {
   loadAgentSummary();
   loadSettleStatus();
   loadStrategyInsight();
+  loadKalibrace();
 }
 
 async function loadStrategyInsight() {
@@ -3932,4 +3933,83 @@ function setupDoporucene() {
   el('dopReload')?.addEventListener('click', loadDoporucene);
   el('dopPrah')?.addEventListener('change', loadDoporucene);
   el('dopLive')?.addEventListener('change', loadDoporucene);
+}
+
+// ---------------------------------------------------------------------------
+// Kalibrace modelu na dashboardu – "říká model pravdu?"
+// ---------------------------------------------------------------------------
+async function loadKalibrace() {
+  const card = el('kalibraceCard');
+  const box = el('kalibraceContent');
+  if (!card || !box) return;
+  let d;
+  try {
+    d = await api('/api/dashboard', { timeoutMs: 60000 });
+  } catch (e) {
+    card.style.display = 'none';
+    return;
+  }
+  const k = d.kalibrace;
+  if (!k || (!k.aktualni.n && !k.predchozi.n)) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const casti = [];
+  if (k.aktualni.dost_dat) {
+    casti.push(kalibraceEraHtml(k.aktualni, 'Současný model', true));
+  } else {
+    // Malý vzorek se nesmí tvářit jako výsledek – jedna dvě sázky umí
+    // ukázat 0 % i 100 % a obojí neznamená nic.
+    casti.push(`<div class="kal-cekani">
+      Současný model má zatím <strong>${k.aktualni.n}</strong> ${czSazek(k.aktualni.n)}
+      z potřebných ${k.min_celkem}. Do té doby se o jeho poctivosti nedá říct nic –
+      jakékoli číslo z tak malého vzorku by bylo náhoda.
+    </div>`);
+  }
+  if (k.predchozi.n) {
+    casti.push(kalibraceEraHtml(k.predchozi, 'Předchozí model (vyřazený)', false));
+  }
+  box.innerHTML = casti.join('');
+}
+
+function czSazek(n) {
+  if (n === 1) return 'sázku';
+  if (n >= 2 && n <= 4) return 'sázky';
+  return 'sázek';
+}
+
+function kalibraceEraHtml(era, nadpis, aktualni) {
+  const radky = era.pasma.map(p => {
+    // Rozdíl proti realitě: kladný = model si věřil víc, než na co měl.
+    const rozdil = p.tvrdil - p.realne;
+    const smer = rozdil > 5 ? 'kal-preceni' : (rozdil < -5 ? 'kal-podceni' : 'kal-sedi');
+    const komentar = rozdil > 5 ? 'přeceňuje se' : (rozdil < -5 ? 'podceňuje se' : 'sedí');
+    return `
+      <tr class="${smer}">
+        <td>${Math.round(p.od * 100)}–${Math.round(p.do * 100)} %</td>
+        <td class="kal-num">${pct(p.tvrdil, 0)}</td>
+        <td class="kal-num">${pct(p.realne, 0)}</td>
+        <td class="kal-num muted">${p.vyhry}/${p.n}</td>
+        <td class="kal-koment">${komentar}</td>
+      </tr>`;
+  }).join('');
+
+  const shrnuti = era.uspesnost !== null
+    ? `${era.vyhry} z ${era.n} vyhráno (${pct(era.uspesnost, 1)})`
+    : 'zatím bez vyhodnocených sázek';
+
+  return `
+    <div class="kal-era ${aktualni ? 'kal-era-aktualni' : 'kal-era-stara'}">
+      <div class="kal-hlava">
+        <strong>${nadpis}</strong>
+        <span class="muted">${shrnuti}</span>
+      </div>
+      ${era.pasma.length ? `
+      <table class="kal-tabulka">
+        <thead><tr>
+          <th>pásmo</th><th class="kal-num">model tvrdil</th><th class="kal-num">reálně</th>
+          <th class="kal-num">poměr</th><th></th>
+        </tr></thead>
+        <tbody>${radky}</tbody>
+      </table>` : '<div class="muted" style="font-size:12px;">Žádné pásmo nemá dost sázek na vyhodnocení.</div>'}
+    </div>`;
 }
