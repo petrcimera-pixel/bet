@@ -17,7 +17,7 @@ import random
 import time
 import uuid
 
-from . import storage
+from . import live_log, storage
 from .bankroll import eval_outcome
 from .goals_model import cz_num, team_form
 
@@ -2035,6 +2035,10 @@ def _run_one_bettor(bid, b, pool, today_str: str, current_hour: int = None,
             }
         b["balance"] = round(b["balance"] - stake, 2)
         b["bets"].insert(0, bet)
+        live_log.zaznam(
+            f"{b.get('name') or b.get('id')} sází {stake} Kč · {bet['match']} · "
+            f"{bet['name']} @ {bet['odds']}× · zbývá {b['balance']} Kč",
+            kategorie="sázka arény")
         used_matches.update(ids)
         placed += 1
     if current_hour is not None and current_hour not in b.get("ran_hours", []):
@@ -2179,6 +2183,11 @@ def settle_all(results: dict) -> int:
             if res:
                 bet["result"] = {"home": res["home"], "away": res["away"]}
             n += 1
+            live_log.zaznam(
+                f"{b.get('name') or bid} {'✅' if r == 'won' else ('➖' if r == 'void' else '❌')} "
+                f"{bet.get('match', '?')} · {bet.get('name', bet.get('label', '?'))} · "
+                f"{'+' if bet['pnl'] > 0 else ''}{bet['pnl']} Kč · zůstatek {b['balance']} Kč",
+                kategorie="sázka arény", uroven="info")
             _record_ml_feedback(bid, bet, r)
         b["loss_streak"] = streak
         b["win_streak"] = wins

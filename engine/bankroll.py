@@ -8,7 +8,7 @@ import os
 import time
 import uuid
 
-from . import storage
+from . import live_log, storage
 
 # ML feedback logging (optional – jen pokud je ML dostupné)
 try:
@@ -166,6 +166,10 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)
     _save(st)
+    live_log.zaznam(
+        f"vsazeno {stake} Kč · {home} – {away} · tip {label} @ {odds}× "
+        f"· jistota {round(float(prob or 0) * 100)} % · zbývá {st['balance']} Kč",
+        kategorie="sázka agenta")
 
     # Record for ML learning (feedback loop)
     if ML_AVAILABLE and tag == "bet-agent":
@@ -231,6 +235,10 @@ def place_acca(legs, stake, tag=None, name=None):
     st["balance"] = round(st["balance"] - stake, 2)
     st["bets"].insert(0, bet)
     _save(st)
+    live_log.zaznam(
+        f"vsazen tiket {stake} Kč · {len(legs)} noh @ {round(odds, 2)}× "
+        f"· {' + '.join(l.get('match', '?') for l in legs)} · zbývá {st['balance']} Kč",
+        kategorie="sázka agenta")
     return bet
 
 
@@ -378,6 +386,13 @@ def settle_bet(bet_id, result, score=None):
             if score and score.get("home") is not None:
                 bet["result"] = {"home": score["home"], "away": score["away"]}
             _save(st)
+            _vysledek = {"won": "✅ vyhrála", "lost": "❌ prohrála"}.get(result, "➖ zrušena")
+            live_log.zaznam(
+                f"sázka {_vysledek} · {bet.get('match', '?')} · {bet.get('label', '?')} "
+                + (f"· {score['home']}:{score['away']} " if score and score.get("home") is not None else "")
+                + f"· {'+' if bet['pnl'] > 0 else ''}{bet['pnl']} Kč · zůstatek {st['balance']} Kč",
+                kategorie="sázka agenta",
+                uroven="info")
 
             # Update ML feedback with actual outcome
             if ML_AVAILABLE and bet.get("tag") == "bet-agent":

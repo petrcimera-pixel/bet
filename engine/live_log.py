@@ -21,7 +21,7 @@ import threading
 import time
 from collections import deque
 
-MAX_ZAZNAMU = 800          # ~pár hodin běžného provozu, strop kvůli paměti
+MAX_ZAZNAMU = 2500        # jedno kolo arény umí přidat pár set řádků, tak ať se vejde i historie
 _BUFFER: deque = deque(maxlen=MAX_ZAZNAMU)
 _LOCK = threading.Lock()
 _SEQ = 0                   # roste navždy, klient si podle něj řekne o nové
