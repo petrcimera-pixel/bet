@@ -1,0 +1,53 @@
+{
+  "Dortmund|Bayern Munchen|2026-08-22": {
+    "home": "Dortmund",
+    "away": "Bayern München",
+    "date": "2026-08-22T20:30:00.000+02:00",
+    "score": {
+      "home": "1",
+      "away": "2"
+    },
+    "odds": {
+      "home": 4.71,
+      "draw": 4.92,
+      "away": 1.54
+    },
+    "competition": "Německý superpohár",
+    "url": "/vysledky/zapas/fotbal-dortmund-bayern-munchen/8166553",
+    "imported_ts": 1787433527
+  },
+  "Thajsko|Vietnam|2026-08-22": {
+    "home": "Thajsko",
+    "away": "Vietnam",
+    "date": "2026-08-22T15:00:00.000+02:00",
+    "score": {
+      "home": "0",
+      "away": "2"
+    },
+    "odds": {
+      "home": 3.46,
+      "draw": 2.96,
+      "away": 2.26
+    },
+    "competition": "ASEAN Championship",
+    "url": "/vysledky/zapas/fotbal-thajsko-vietnam-1z/8440981",
+    "imported_ts": 1787433527
+  },
+  "Slavia Praha|Bohemians 1905|2026-08-22": {
+    "home": "Slavia Praha",
+    "away": "Bohemians 1905",
+    "date": "2026-08-22",
+    "score": {
+      "home": "2",
+      "away": "2"
+    },
+    "odds": {
+      "home": 1.25,
+      "draw": 6.07,
+      "away": 11.7
+    },
+    "competition": "Chance Liga",
+    "url": "/x",
+    "imported_ts": 1787433769
+  }
+}

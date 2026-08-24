@@ -27,6 +27,7 @@
     <div class="sidebar-brand"><span class="logo">⚽</span> KurzAnalytik <span class="ver">v3</span></div>
     <nav class="nav" id="nav">
       <button class="nav-btn active" data-page="dashboard"><span class="icon">▦</span> Dashboard</button>
+      <button class="nav-btn" data-page="doporucene"><span class="icon">⭐</span> Doporučené</button>
       <button class="nav-btn" data-page="matches"><span class="icon">⚽</span> Zápasy</button>
       <button class="nav-btn" data-page="search"><span class="icon">🔍</span> Hledat</button>
       <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
@@ -103,6 +104,36 @@
     </section>
 
     <!-- MATCHES -->
+    <section id="page-doporucene" class="page">
+      <div class="page-head">
+        <h1>Doporučené sázky</h1>
+        <p class="lead">Nejsilnější tipy na dnešek napříč sporty – včetně rozehraných zápasů. Neukazuje se všechno, co model spočítá, ale jen tipy s reálnou šancí, že vyjdou, a zároveň s nezápornou očekávanou hodnotou proti kurzu sázkovky.</p>
+      </div>
+
+      <div class="card">
+        <div class="toolbar-row">
+          <button class="btn small primary" id="dopReload">↻ Načíst znovu</button>
+          <label class="log-check" title="Zahrnout i zápasy, které už běží">
+            <input type="checkbox" id="dopLive" checked> včetně live
+          </label>
+          <span class="toolbar-sep"></span>
+          <label class="log-check" title="Minimální pravděpodobnost, aby se tip vůbec zobrazil">
+            laťka
+            <select id="dopPrah" class="search-input" style="max-width:130px;">
+              <option value="0.50">50 % a výš</option>
+              <option value="0.55" selected>55 % a výš</option>
+              <option value="0.60">60 % a výš</option>
+              <option value="0.68">jen tutovky</option>
+            </select>
+          </label>
+          <span id="dopStatus" class="muted" style="font-size:12px; margin-left:auto;"></span>
+        </div>
+      </div>
+
+      <div id="dopVypis"><div class="empty-state">Načítám…</div></div>
+    </section>
+
+    <!-- ZÁPASY -->
     <section id="page-matches" class="page">
       <div class="page-head">
         <h1>Zápasy</h1>
@@ -563,6 +594,10 @@
       <div class="card">
         <h3>🗺️ Stránky appky</h3>
         <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <strong>⭐ Doporučené</strong>
+            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Nejsilnější tipy na dnešek napříč sporty, včetně <strong>rozehraných zápasů</strong> (badge 🔴 ŽIVĚ s minutou a průběžným skóre). Karta zámerně neukazuje všechno, co model spočítá – tip se zobrazí, jen když má pravděpodobnost nad zvolenou laťkou <em>a zároveň</em> nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez té druhé podmínky by se doporučovaly i tipy typu „favorit vyhraje @ 1,05“, které sice většinou vyjdou, ale dlouhodobě prodělávají. Z každého zápasu jde do výpisu jen jeden nejlepší tip. Pásma: <strong>Tutovka</strong> (nejvyšší jistota), <strong>Hodnota</strong> (kurz je štědřejší, než odpovídá odhadu), <strong>Solidní</strong>. Když neprojde nic, karta to napíše i s počtem posouzených zápasů – prázdno je poctivější než slabé doporučení.</p>
+          </div>
           <div>
             <strong>▦ Dashboard</strong>
             <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, dlaždice <strong>„Dnes“</strong> (bilance jen z dnešních vyhodnocených sázek – celkový zisk se hýbe pomalu), tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>

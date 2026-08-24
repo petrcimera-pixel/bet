@@ -599,11 +599,49 @@ def api_form():
     away_id = request.args.get("away_id", "")
     home = request.args.get("home", "")
     away = request.args.get("away", "")
-    fh = ds.team_form(sport, slug, home_id)
-    fa = ds.team_form(sport, slug, away_id)
+    fh = ds.team_form(sport, slug, home_id) if (slug and home_id) else []
+    fa = ds.team_form(sport, slug, away_id) if (slug and away_id) else []
+    # ESPN cesta potřebuje slug + číselné team_id. Karta Hledat ani ruční
+    # dotaz je nemají – znají jen jména – a endpoint pak vracel prázdno,
+    # takže "Forma a vzájemné zápasy" zůstávaly u každého zápasu bez ESPN
+    # identifikátorů prázdné. Vlastní historie modelu (team_history.json,
+    # ~3600 týmů) tytéž zápasy zná a stačí ji převést do stejného tvaru.
+    if not fh:
+        fh = _form_z_historie(home)
+    if not fa:
+        fa = _form_z_historie(away)
     # H2H = zápasy domácích, kde soupeř byl tým hostů
     h2h = [g for g in fh if away and (away.lower() in g["opp"].lower() or g["opp"].lower() in away.lower())]
     return jsonify({"home": fh, "away": fa, "h2h": h2h})
+
+
+def _form_z_historie(team: str, n: int = 6) -> list:
+    """Posledních N zápasů z vlastní historie modelu, ve tvaru, jaký vrací
+    ds.team_form – ať frontend nemusí rozlišovat, odkud forma přišla."""
+    if not team:
+        return []
+    try:
+        hist = pred.team_history_for(team)
+    except Exception:
+        return []
+    # Historie umí mít tentýž zápas dvakrát (jednou bez rohů, podruhé s nimi),
+    # takže se duplicity vyhazují podle data + soupeře + skóre.
+    videne, out = set(), []
+    for e in reversed(hist):
+        klic = (e.get("date"), e.get("opponent"), e.get("gf"), e.get("ga"))
+        if klic in videne:
+            continue
+        videne.add(klic)
+        out.append({
+            "date": e.get("date", ""),
+            "opp": e.get("opponent", "?"),
+            "gf": e.get("gf"), "ga": e.get("ga"),
+            "res": e.get("result"), "completed": True,
+            "loc": e.get("loc"), "league": e.get("league", ""),
+        })
+        if len(out) >= n:
+            break
+    return out
 
 
 @app.route("/api/backtest")
@@ -1608,8 +1646,13 @@ def api_dashboard():
                 "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
             })
         tip = tips[0] if tips else None   # zpětná kompatibilita se starým polem "tip"
-    except Exception:
-        pass
+    except Exception as e:
+        # Dřív tady bylo tiché "pass": jakákoli chyba při stavbě tipů se
+        # projevila jen tím, že dashboard ukázal prázdno, a nešlo poznat,
+        # jestli model nic nenašel, nebo jestli to spadlo. Do živého logu
+        # to teď jde vždycky.
+        live_log.zaznam(f"tip dne se nepodařilo sestavit: {e!r}",
+                        kategorie="dashboard", uroven="chyba")
 
     bets = agent.agent_bets()
     yesterday = (_dt.date.today() - _dt.timedelta(days=1))
@@ -1698,6 +1741,104 @@ def _attach_live_scores(bets: list) -> list:
             b = {**b, "live_result": info["result"], "live": info["live"]}
         out.append(b)
     return out
+
+
+# Prahy pro kartu Doporučené sázky. Model po kalibraci (shrinkage směrem
+# k základním četnostem) skoro nikdy nevystoupá nad ~0,75 – prahy proto
+# nejsou "jistota", ale relativní síla tipu v rámci toho, co model umí.
+DOP_MIN_PROB = 0.55        # pod tím už to není "šance, že to vyjde"
+DOP_MIN_EV = 1.00          # tip nesmí mít zápornou očekávanou hodnotu
+DOP_TUTOVKA = 0.68         # nejvyšší pásmo
+
+
+def _dop_pasmo(prob: float, ev: float) -> str:
+    if prob >= DOP_TUTOVKA:
+        return "tutovka"
+    if ev >= 1.06:
+        return "hodnota"
+    return "solidni"
+
+
+@app.route("/api/recommended")
+@login_required
+def api_recommended():
+    """Doporučené sázky na dnešek – napříč sporty, včetně rozehraných zápasů.
+
+    Zámerně se NEvypisuje všechno, co model spočítá: projdou jen tipy, které
+    mají reálnou šanci vyjít (kalibrovaná pravděpodobnost nad prahem) a
+    zároveň nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez toho
+    druhého by karta doporučovala i tipy typu "favorit vyhraje @ 1,05",
+    které sice většinou vyjdou, ale dlouhodobě prodělávají.
+    """
+    try:
+        min_prob = max(0.30, min(0.95, float(request.args.get("min_prob") or DOP_MIN_PROB)))
+    except (TypeError, ValueError):
+        min_prob = DOP_MIN_PROB
+    vcetne_live = (request.args.get("live") or "1") != "0"
+
+    today = ds.today_str()
+    cfg = app_settings.get_settings()["agent"]
+    chyba = None
+    try:
+        preds = _predictions_multi_sport(today, days=1)
+    except Exception as e:
+        preds, chyba = [], str(e)
+
+    zapasu = 0
+    tipy = []
+    for p in preds:
+        if p.get("result") is not None:
+            continue                      # dohráno, není na co sázet
+        je_live = bool(p.get("live"))
+        if je_live and not vcetne_live:
+            continue
+        if (p.get("date") or today) != today:
+            continue
+        zapasu += 1
+        try:
+            cands = agent._candidates(p, cfg)
+        except Exception:
+            continue
+        # Jeden nejlepší tip na zápas – víc trhů z jednoho utkání není
+        # víc příležitostí, jen víc řádků korelovaných na stejný výsledek.
+        nejlepsi = None
+        for c in cands:
+            prob = c.get("cal_prob", c["prob"])
+            ev = prob * c["odds"]
+            if prob < min_prob or ev < DOP_MIN_EV:
+                continue
+            if nejlepsi is None or prob > nejlepsi[0]:
+                nejlepsi = (prob, ev, c)
+        if not nejlepsi:
+            continue
+        prob, ev, c = nejlepsi
+        tp = tipsport_import.lookup(p["home"], p["away"], p.get("date") or "")
+        tipy.append({
+            "match_id": p.get("id"), "match": f'{p["home"]} – {p["away"]}',
+            "home": p["home"], "away": p["away"],
+            "league": p.get("league"), "sport": p.get("sport", "soccer"),
+            "date": p.get("date"), "time": p.get("time"),
+            "live": je_live, "score": p.get("score") or p.get("live_score"),
+            "minute": p.get("minute") or p.get("clock"),
+            "label": c["label"], "name": c["name"], "market": c["market"],
+            "odds": round(c["odds"], 2),
+            "prob": round(prob, 4), "raw_prob": round(c["prob"], 4),
+            "ev": round(ev, 4), "edge": c.get("edge"),
+            "pasmo": _dop_pasmo(prob, ev),
+            "tipsport": {"odds": tp.get("odds"), "url": tp.get("url")} if tp and tp.get("odds") else None,
+        })
+
+    tipy.sort(key=lambda t: (-t["prob"], -t["ev"]))
+    return jsonify({
+        "tips": tipy[:40],
+        "posuzovano": zapasu,
+        "prosla": len(tipy),
+        "min_prob": min_prob,
+        "min_ev": DOP_MIN_EV,
+        "live_zahrnuto": vcetne_live,
+        "datum": today,
+        "error": chyba,
+    })
 
 
 @app.route("/api/agent")

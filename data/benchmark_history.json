@@ -47,5 +47,26 @@
     "brier_market": 0.6003,
     "diff": -0.0455,
     "matches": 1500
+  },
+  {
+    "ts": 1787525134,
+    "brier_model": 0.6459,
+    "brier_market": 0.6003,
+    "diff": -0.0455,
+    "matches": 1500
+  },
+  {
+    "ts": 1787582853,
+    "brier_model": 0.6459,
+    "brier_market": 0.6003,
+    "diff": -0.0455,
+    "matches": 1500
+  },
+  {
+    "ts": 1787596791,
+    "brier_model": 0.6455,
+    "brier_market": 0.6003,
+    "diff": -0.0452,
+    "matches": 1500
   }
 ]

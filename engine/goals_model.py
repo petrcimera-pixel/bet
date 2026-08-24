@@ -1428,3 +1428,13 @@ def apply_settings():
     přepsatelné z Nastavení. Nový model se učí přímo z reálných výsledků
     (goal-ratio rating), žádné ruční ladění není potřeba."""
     pass
+
+
+def team_history_for(team: str) -> list:
+    """Celá uložená historie zápasů jednoho týmu (nejstarší první).
+
+    Veřejný přístup k _team_history() pro vrstvy nad modelem – forma na
+    kartě Hledat a v detailu zápasu ji potřebuje i pro zápasy, u kterých
+    nemáme ESPN slug/team_id.
+    """
+    return _team_history().get(_norm_team(team), [])

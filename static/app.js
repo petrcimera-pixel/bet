@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNotifications();
   setupTeamSearch();
   setupLog();
+  setupDoporucene();
   setupStatusBar();
   // Po návratu na kartu dohnat skóre hned, ne až za celý interval
   document.addEventListener('visibilitychange', () => {
@@ -220,6 +221,7 @@ function setupNav() {
       if (page !== 'search') stopSearchPolling();
       if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
       if (page === 'log') startLogPolling();
+      if (page === 'doporucene') loadDoporucene();
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
       if (page === 'search') loadSearchPage();
@@ -3830,4 +3832,104 @@ function setupTheme() {
       applyTheme(mode);
     });
   });
+}
+
+// ---------------------------------------------------------------------------
+// Doporučené sázky
+// ---------------------------------------------------------------------------
+const DOP_PASMA = {
+  tutovka: { stitek: 'Tutovka', trida: 'dop-tutovka',
+             popis: 'Nejvyšší jistota, jakou model dnes nabízí.' },
+  hodnota: { stitek: 'Hodnota', trida: 'dop-hodnota',
+             popis: 'Kurz sázkovky je vyšší, než odpovídá odhadu modelu.' },
+  solidni: { stitek: 'Solidní', trida: 'dop-solidni',
+             popis: 'Nadprůměrná šance, ale bez výrazného náskoku proti kurzu.' },
+};
+
+async function loadDoporucene() {
+  const box = el('dopVypis');
+  const stav = el('dopStatus');
+  if (!box) return;
+  box.innerHTML = '<div class="empty-state">Načítám…</div>';
+  if (stav) stav.textContent = 'počítám…';
+  const prah = el('dopPrah')?.value || '0.55';
+  const live = el('dopLive')?.checked ? '1' : '0';
+  let d;
+  try {
+    d = await api(`/api/recommended?min_prob=${prah}&live=${live}`, { timeoutMs: 120000 });
+  } catch (e) {
+    box.innerHTML = `<div class="card"><div class="empty-state">Nepodařilo se načíst doporučení: ${escAttr(e.message)}</div></div>`;
+    if (stav) stav.textContent = '';
+    return;
+  }
+  vykresliDoporucene(d);
+}
+
+function vykresliDoporucene(d) {
+  const box = el('dopVypis');
+  const stav = el('dopStatus');
+  const tipy = d.tips || [];
+  if (stav) {
+    stav.textContent = `posouzeno ${d.posuzovano} zápasů · prošlo ${d.prosla}`;
+  }
+  if (d.error) {
+    box.innerHTML = `<div class="card"><div class="empty-state">Predikce se nepodařilo spočítat: ${escAttr(d.error)}</div></div>`;
+    return;
+  }
+  if (!tipy.length) {
+    // Prázdno je legitimní výsledek, ne chyba – ale musí být poznat, jestli
+    // model nic nenašel, nebo jestli dnes prostě žádné zápasy nejsou.
+    const duvod = d.posuzovano
+      ? `Z ${d.posuzovano} dnešních zápasů neprošel laťkou ${pct(d.min_prob * 100, 0)} ani jeden tip.
+         Model dnes nevidí nic, na co by stálo za to sázet – to je poctivější výsledek než doporučit něco slabého.`
+      : 'Na dnešek nejsou v datech žádné nadcházející zápasy.';
+    box.innerHTML = `<div class="card"><div class="empty-state">${duvod}</div></div>`;
+    return;
+  }
+  const radky = tipy.map(dopKartaHtml).join('');
+  box.innerHTML = `
+    <div class="card dop-legenda">
+      <span class="muted">Zobrazují se jen tipy s pravděpodobností aspoň ${pct(d.min_prob * 100, 0)}
+      a nezápornou očekávanou hodnotou. Jeden tip na zápas – víc trhů z jednoho utkání
+      není víc příležitostí, jen víc řádků na tentýž výsledek.</span>
+    </div>
+    <div class="dop-mrizka">${radky}</div>`;
+}
+
+function dopKartaHtml(t) {
+  const p = DOP_PASMA[t.pasmo] || DOP_PASMA.solidni;
+  const zisk = ((t.odds - 1) * 100).toFixed(0);
+  const cas = t.live
+    ? `<span class="dop-live">🔴 ŽIVĚ${t.minute ? ' ' + escAttr(t.minute) : ''}</span>`
+    : `<span class="muted">${escAttr(t.time || '')}</span>`;
+  const skore = t.live && t.score ? ` <strong>${escAttr(t.score)}</strong>` : '';
+  // EV nad 1 = dlouhodobě ziskový tip; pod 1 se sem vůbec nedostane.
+  const evText = t.ev >= 1.06
+    ? `<span class="dop-ev-plus">EV ${czNum(t.ev, 2)}× – kurz je štědřejší, než odpovídá odhadu</span>`
+    : `<span class="muted">EV ${czNum(t.ev, 2)}×</span>`;
+  return `
+    <div class="card dop-karta ${p.trida}">
+      <div class="dop-hlava">
+        <span class="dop-pasmo" title="${escAttr(p.popis)}">${p.stitek}</span>
+        ${cas}${skore}
+        ${tipsportBadge(t.home, t.tipsport, { short: true })}
+      </div>
+      <div class="dop-zapas">${escAttr(t.match)}</div>
+      <div class="dop-liga muted">${escAttr(t.league || '')}</div>
+      <div class="dop-tip">
+        <span class="dop-nazev">${escAttr(t.name)}</span>
+        <span class="dop-kurz">@ ${czNum(t.odds, 2)}</span>
+      </div>
+      <div class="dop-metriky">
+        <div><span class="dop-cislo">${pct(t.prob * 100, 0)}</span><span class="muted">šance dle modelu</span></div>
+        <div><span class="dop-cislo">+${zisk} %</span><span class="muted">výnos při výhře</span></div>
+      </div>
+      <div class="dop-paticka">${evText}</div>
+    </div>`;
+}
+
+function setupDoporucene() {
+  el('dopReload')?.addEventListener('click', loadDoporucene);
+  el('dopPrah')?.addEventListener('change', loadDoporucene);
+  el('dopLive')?.addEventListener('change', loadDoporucene);
 }

@@ -53,6 +53,11 @@ def market_of(outcome: str) -> str:
 # _MIN_SAMPLES nových vzorků, calibrate() vrací hodnotu beze změny – což
 # je správně, protože nový model je kalibrovaný už u zdroje.
 _MODEL_ZMENA_TS = 1787529600   # 2026-08-24
+# POZOR: porovnává se s časem VZNIKU predikce (kdy model tu pravděpodobnost
+# spočítal), ne s časem vyhodnocení. Sázka vsazená starým modelem se může
+# vyhodnotit až o několik dní později – filtrovat podle settled_ts znamená
+# pustit do kalibrace přesně ta čísla, kvůli kterým se model měnil, a pak
+# jimi srážet už jednou sražené pravděpodobnosti nového modelu.
 
 
 def _samples() -> list:
@@ -71,13 +76,17 @@ def _samples() -> list:
         except (TypeError, ValueError):
             settled_epoch = None
         w = _age_weight(settled_epoch)
+        try:
+            vznik = datetime.datetime.fromisoformat(t.get("saved_at")).timestamp()
+        except (TypeError, ValueError):
+            vznik = 0
         for prob_key, res_key in (("pick_prob", "pick_result"),
                                   ("goal_prob", "goal_result"),
                                   ("corner_prob", "corner_result"),
                                   ("dc_prob", "dc_result")):
             p = t.get(prob_key)
             r = t.get(res_key)
-            if p and r in ("won", "lost") and (settled_epoch or 0) >= _MODEL_ZMENA_TS:
+            if p and r in ("won", "lost") and vznik >= _MODEL_ZMENA_TS:
                 mk = {"pick_prob": market_of(t.get("pick")),
                       "goal_prob": "totals", "corner_prob": "other",
                       "dc_prob": "winner"}.get(prob_key, "other")
@@ -89,7 +98,7 @@ def _samples() -> list:
             for bet in bettor.get("bets", []):
                 p = bet.get("prob")
                 if (p and bet.get("status") in ("won", "lost")
-                        and (bet.get("settled_ts") or 0) >= _MODEL_ZMENA_TS):
+                        and (bet.get("ts") or 0) >= _MODEL_ZMENA_TS):
                     w = _age_weight(bet.get("settled_ts"))
                     out.append((float(p), 1.0 if bet["status"] == "won" else 0.0, w,
                                 market_of(bet.get("outcome"))))

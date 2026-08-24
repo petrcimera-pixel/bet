@@ -1,9 +1,171 @@
 {
   "start_balance": 200.0,
-  "balance": 48.78,
+  "balance": 48.21,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "5694e19fde",
+      "ts": 1787597213,
+      "match_id": "401857173",
+      "match": "Connecticut Sun – Chicago Sky",
+      "match_date": "2026-08-25",
+      "match_time": "23:00",
+      "league": "Women's National Basketball Association",
+      "outcome": "under169.5",
+      "label": "Méně 169,5",
+      "odds": 1.91,
+      "prob": 0.6631,
+      "stake": 6.21,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": 0.0005,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "basketball",
+      "slug": "wnba",
+      "ml_features": {
+        "edge": 0.2992,
+        "attack_home": 0.862,
+        "defense_home": 1.0989,
+        "attack_away": 1.1497,
+        "defense_away": 1.3169,
+        "exp_goals_home": 82.34,
+        "exp_goals_away": 74.59,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 66 % (model říká 82 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 82.34 : 74.59 gólů (celkem 156.93).",
+        "Chicago Sky má výrazně silnější útočný rating.",
+        "Kurz 1.909 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.909
+    },
+    {
+      "id": "2b744dcfdf",
+      "ts": 1787596715,
+      "match_id": "401857172",
+      "match": "Los Angeles Sparks – Atlanta Dream",
+      "match_date": "2026-08-25",
+      "match_time": "02:00",
+      "league": "Women's National Basketball Association",
+      "outcome": "under181.5",
+      "label": "Méně 181,5",
+      "odds": 1.91,
+      "prob": 0.7577,
+      "stake": 6.42,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0083,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "basketball",
+      "slug": "wnba",
+      "ml_features": {
+        "edge": 0.4033,
+        "attack_home": 1.2392,
+        "defense_home": 1.2423,
+        "attack_away": 1.2243,
+        "defense_away": 1.1601,
+        "exp_goals_home": 85.0,
+        "exp_goals_away": 76.47,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Kalibrovaná jistota 76 % (model říká 93 %, korekce podle skutečné historické úspěšnosti) – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 85.0 : 76.47 gólů (celkem 161.48).",
+        "Kurz 1.909 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.926
+    },
+    {
+      "id": "5d12f4feb9",
+      "ts": 1787525012,
+      "match_id": "401900391",
+      "match": "Al Ittihad – Al Hazem",
+      "match_date": "2026-08-24",
+      "match_time": "18:00",
+      "league": "Saudi Pro League",
+      "outcome": "home",
+      "label": "1",
+      "odds": 1.51,
+      "prob": 0.6763,
+      "stake": 9.74,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": -0.0491,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "ksa.1",
+      "ml_features": {
+        "edge": 0.0153,
+        "attack_home": 1.5158,
+        "defense_home": 0.5112,
+        "attack_away": 0.989,
+        "defense_away": 1.1659,
+        "exp_goals_home": 2.53,
+        "exp_goals_away": 0.59,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Model dává 68% šanci – nejjistější tip zápasu napříč trhy (vítěz 1X2).",
+        "Očekávané skóre 2.53 : 0.59 gólů (celkem 3.12).",
+        "Nejpravděpodobnější výsledek 2:0 (14 %).",
+        "Al Ittihad má výrazně silnější útočný rating.",
+        "Kurz 1.513 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.588
+    },
+    {
+      "id": "db2ff9519d",
+      "ts": 1787525012,
+      "match_id": "401900392",
+      "match": "Neom SC – Al Qadsiah",
+      "match_date": "2026-08-24",
+      "match_time": "16:40",
+      "league": "Saudi Pro League",
+      "outcome": "under3.5",
+      "label": "Méně 3,5",
+      "odds": 1.59,
+      "prob": 0.656,
+      "stake": 9.77,
+      "status": "won",
+      "pnl": 5.76,
+      "clv": 0.0013,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "ksa.1",
+      "ml_features": {
+        "edge": 0.0263,
+        "attack_home": 1.2512,
+        "defense_home": 0.4616,
+        "attack_away": 2.0048,
+        "defense_away": 0.403,
+        "exp_goals_home": 0.72,
+        "exp_goals_away": 1.09,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Model dává 66% šanci – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.72 : 1.09 gólů (celkem 1.81).",
+        "Nejpravděpodobnější výsledek 0:0 (18 %).",
+        "Al Qadsiah má výrazně silnější útočný rating.",
+        "Kurz 1.588 je reálný kurz sázkovky – ne odhad modelu."
+      ],
+      "closing_odds": 1.588,
+      "settled_ts": 1787596720,
+      "result": {
+        "home": 0,
+        "away": 2
+      }
+    },
     {
       "id": "8006393fb2",
       "ts": 1787479270,
@@ -16,8 +178,8 @@
       "odds": 5.73,
       "prob": 0.7818,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": null,
       "tag": "bet-agent",
       "legs": [
@@ -38,7 +200,7 @@
           "match_id": "401857170",
           "outcome": "under180.5",
           "prob": 0.9243,
-          "result": null,
+          "result": "won",
           "odds": 1.87,
           "date": "2026-08-23",
           "time": "23:00"
@@ -49,13 +211,14 @@
           "match_id": "401874505",
           "outcome": "under3.5",
           "prob": 0.903,
-          "result": null,
+          "result": "lost",
           "odds": 1.606,
           "date": "2026-08-24",
           "time": "17:00"
         }
       ],
-      "ticket_kind": "daily"
+      "ticket_kind": "daily",
+      "settled_ts": 1787597727
     },
     {
       "id": "019f50ce32",
@@ -70,8 +233,8 @@
       "odds": 1.87,
       "prob": 0.7599,
       "stake": 8.58,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 7.46,
       "clv": 0.0,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -94,7 +257,12 @@
         "Las Vegas Aces má výrazně silnější útočný rating.",
         "Kurz 1.87 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.87
+      "closing_odds": 1.87,
+      "settled_ts": 1787583399,
+      "result": {
+        "home": 78,
+        "away": 88
+      }
     },
     {
       "id": "3d991365d0",
@@ -109,8 +277,8 @@
       "odds": 1.61,
       "prob": 0.7497,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": -0.0092,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -134,7 +302,12 @@
         "Brøndby IF má výrazně silnější útočný rating.",
         "Kurz 1.606 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.625
+      "closing_odds": 1.625,
+      "settled_ts": 1787597727,
+      "result": {
+        "home": 3,
+        "away": 1
+      }
     },
     {
       "id": "9c962222e5",
@@ -415,7 +588,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": -0.0204,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -438,7 +611,7 @@
         "Bodo/Glimt má výrazně silnější útočný rating.",
         "Kurz 1.87 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.87
+      "closing_odds": 1.909
     },
     {
       "id": "315715dd17",
@@ -764,7 +937,7 @@
       "stake": 10.0,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0414,
+      "clv": -0.0016,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -787,7 +960,7 @@
         "AS Roma má výrazně silnější útočný rating.",
         "Kurz 1.833 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.909
+      "closing_odds": 1.833
     },
     {
       "id": "5f3187fd2e",
@@ -901,8 +1074,8 @@
       "odds": 1.74,
       "prob": 0.98,
       "stake": 10.0,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "lost",
+      "pnl": -10.0,
       "clv": 0.1694,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -926,7 +1099,12 @@
         "Stade Rennais má výrazně silnější útočný rating.",
         "Kurz 1.741 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.488
+      "closing_odds": 1.488,
+      "settled_ts": 1787517512,
+      "result": {
+        "home": 2,
+        "away": 2
+      }
     },
     {
       "id": "e101244203",
