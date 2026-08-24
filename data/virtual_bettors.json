@@ -1700,7 +1700,7 @@
     "name": "Konzervativní Klára",
     "emoji": "🛡️",
     "tagline": "Jen tutovky nad 80 % jistoty, flat 3 % banku – málo sázek, málo rizika.",
-    "balance": 200.84,
+    "balance": 206.64,
     "start_balance": 200.0,
     "bets": [
       {
@@ -1720,9 +1720,9 @@
         "odds": 1.16,
         "prob": 0.9419,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 0.8,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.5158,
           "defense_home": 0.5112,
@@ -1734,7 +1734,11 @@
           "edge": 0.0769
         },
         "closing_odds": 1.16,
-        "clv": 0.0
+        "clv": 0.0,
+        "result": {
+          "home": 3,
+          "away": 2
+        }
       },
       {
         "id": "6374415c3b",
@@ -2612,7 +2616,7 @@
     "last_run_date": "2026-08-24",
     "loss_streak": 0,
     "ran_hours": [],
-    "win_streak": 4,
+    "win_streak": 5,
     "transactions": [
       {
         "ts": 1787337975,
@@ -5314,7 +5318,7 @@
     "name": "Domácí Dalibor",
     "emoji": "🏠",
     "tagline": "Vždy na domácí tým – sází čistě na výhodu domácího prostředí.",
-    "balance": 204.52,
+    "balance": 212.7,
     "start_balance": 200.0,
     "bets": [
       {
@@ -5408,9 +5412,9 @@
         "odds": 1.51,
         "prob": 0.7846,
         "stake": 5.42,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.76,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.5158,
           "defense_home": 0.5112,
@@ -5422,7 +5426,11 @@
           "edge": 0.1237
         },
         "closing_odds": 1.588,
-        "clv": -0.0491
+        "clv": -0.0491,
+        "result": {
+          "home": 3,
+          "away": 2
+        }
       },
       {
         "id": "c2fb0c8a98",
@@ -6117,7 +6125,7 @@
     "last_run_date": "2026-08-24",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 2,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -12218,9 +12226,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.16,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401888614",
@@ -12744,9 +12756,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.16,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401888614",
@@ -13772,9 +13788,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.16,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401888614",
@@ -14587,9 +14607,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.588,
-            "clv": -0.0491
+            "clv": -0.0491,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401875965",
@@ -14824,7 +14848,7 @@
     "name": "Dvojitý Drahoš",
     "emoji": "♊",
     "tagline": "Dvě dvojky místo jedné čtyřky – rozloží riziko.",
-    "balance": 196.25,
+    "balance": 205.65,
     "start_balance": 200.0,
     "bets": [
       {
@@ -14878,15 +14902,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.16,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 4.4,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.0,
           "defense_home": 1.0,
@@ -15395,7 +15423,7 @@
     "last_run_date": "2026-08-24",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 2,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,
@@ -16342,9 +16370,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.588,
-            "clv": -0.0491
+            "clv": -0.0491,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401900391",
@@ -16359,15 +16391,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "lost",
             "closing_odds": 1.556,
-            "clv": 0.0219
+            "clv": 0.0219,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "lost",
+        "pnl": -5.0,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.5158,
           "defense_home": 0.5112,
@@ -16809,7 +16845,7 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 1,
+    "loss_streak": 2,
     "win_streak": 0,
     "transactions": [
       {
@@ -20894,8 +20930,8 @@
             "sport": "soccer",
             "slug": "bra.2",
             "result": null,
-            "closing_odds": 1.625,
-            "clv": -0.0215
+            "closing_odds": 1.645,
+            "clv": -0.0334
           }
         ],
         "stake": 5.0,
@@ -26120,7 +26156,7 @@
     "emoji": "🎲",
     "tagline": "Čtyři trhy jednoho zápasu naráz – extrémně agresivní, drobný vklad.",
     "group": "combo",
-    "balance": 194.3,
+    "balance": 207.65,
     "start_balance": 200.0,
     "bets": [
       {
@@ -26137,7 +26173,7 @@
         "outcome": "combo",
         "label": "KOMBI 4",
         "name": "Al Ittihad nebo remíza + Al Ittihad (remíza zpět) + Padne vítěz (bez remízy) + 1 · Al Ittihad",
-        "odds": 2.65,
+        "odds": 2.67,
         "prob": 0.7862,
         "legs": [
           {
@@ -26153,9 +26189,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.16,
-            "clv": 0.0
+            "clv": 0.0,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401900391",
@@ -26170,9 +26210,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.318,
-            "clv": -0.0212
+            "clv": -0.0212,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401900391",
@@ -26187,9 +26231,13 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.205,
-            "clv": -0.0207
+            "clv": -0.0207,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           },
           {
             "match_id": "401900391",
@@ -26204,15 +26252,19 @@
             "time": "18:00",
             "sport": "soccer",
             "slug": "ksa.1",
-            "result": null,
+            "result": "won",
             "closing_odds": 1.588,
-            "clv": -0.0491
+            "clv": -0.0491,
+            "score": {
+              "home": 3,
+              "away": 2
+            }
           }
         ],
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 8.35,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.5158,
           "defense_home": 0.5112,
@@ -26550,8 +26602,8 @@
     ],
     "last_run_date": "2026-08-24",
     "ran_hours": [],
-    "loss_streak": 2,
-    "win_streak": 0,
+    "loss_streak": 0,
+    "win_streak": 1,
     "transactions": [
       {
         "ts": 1787337975,
@@ -26566,7 +26618,7 @@
     "emoji": "📶",
     "tagline": "Sází na tým v citelně lepší formě (posledních 5 zápasů) než soupeř – ale jen když k tomu kurz dává i value.",
     "group": "single",
-    "balance": 196.05,
+    "balance": 203.6,
     "start_balance": 200.0,
     "bets": [
       {
@@ -26656,9 +26708,9 @@
         "odds": 1.51,
         "prob": 0.7846,
         "stake": 5.0,
-        "status": "open",
-        "pnl": 0.0,
-        "settled_ts": null,
+        "status": "won",
+        "pnl": 2.55,
+        "settled_ts": 1787601810,
         "ml_features": {
           "attack_home": 1.5158,
           "defense_home": 0.5112,
@@ -26670,7 +26722,11 @@
           "edge": 0.1237
         },
         "closing_odds": 1.588,
-        "clv": -0.0491
+        "clv": -0.0491,
+        "result": {
+          "home": 3,
+          "away": 2
+        }
       },
       {
         "id": "7bcec41f64",
@@ -27081,7 +27137,7 @@
     "last_run_date": "2026-08-24",
     "ran_hours": [],
     "loss_streak": 0,
-    "win_streak": 2,
+    "win_streak": 3,
     "transactions": [
       {
         "ts": 1787337975,

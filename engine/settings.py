@@ -34,7 +34,10 @@ _DEFAULTS = {
         "auto_retrain": True,     # automaticky přetrénovat ML po X nových settled sázkách
         "auto_retrain_threshold": 10,  # kolik nových settled sázek spustí retrain
         # --- Tutovka strategie (multi-market) ---
-        "min_prob": 0.75,         # minimální pravděpodobnost tipu (tutovka = 75 %+)
+        # Laťka odpovídá ŠKÁLE MODELU, ne intuici. Po zavedení shrinkage
+        # (viz _KROCENI_1X2 v goals_model.py) se model skoro nikdy nedostane
+        # nad ~0,6 – původních 0,75 by znamenalo, že agent nevsadí nikdy.
+        "min_prob": 0.55,         # minimální pravděpodobnost tipu
         "min_odds": 1.20,         # minimální kurz (pod 1.20 se sázka nevyplatí)
         "markets": {              # které trhy agent analyzuje
             "winner": True,       # vítěz 1X2 (resp. 1/2 u two-way sportů)

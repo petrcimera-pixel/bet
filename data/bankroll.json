@@ -1,9 +1,48 @@
 {
   "start_balance": 200.0,
-  "balance": 48.21,
+  "balance": 57.04,
   "currency": "Kč",
   "kelly_fraction": 0.25,
   "bets": [
+    {
+      "id": "478535603d",
+      "ts": 1787602144,
+      "match_id": "401841521",
+      "match": "Tigre – Central Córdoba (Santiago del Estero)",
+      "match_date": "2026-08-24",
+      "match_time": "22:00",
+      "league": "Argentine Liga Profesional de Fútbol",
+      "outcome": "under1.5",
+      "label": "Méně 1,5",
+      "odds": 2.45,
+      "prob": 0.5886,
+      "stake": 5.88,
+      "status": "open",
+      "pnl": 0.0,
+      "clv": null,
+      "tag": "bet-agent",
+      "odds_source": "real",
+      "market": "score",
+      "sport": "soccer",
+      "slug": "arg.1",
+      "ml_features": {
+        "edge": 0.1805,
+        "attack_home": 0.8672,
+        "defense_home": 0.5916,
+        "attack_away": 0.5619,
+        "defense_away": 1.124,
+        "exp_goals_home": 0.61,
+        "exp_goals_away": 0.4,
+        "rating_confidence": 1.0
+      },
+      "why": [
+        "Model dává 59% šanci – nejjistější tip zápasu napříč trhy (góly O/U).",
+        "Očekávané skóre 0.61 : 0.4 gólů (celkem 1.01).",
+        "Nejpravděpodobnější výsledek 0:0 (38 %).",
+        "Tigre má výrazně silnější útočný rating.",
+        "Kurz 2.45 je reálný kurz sázkovky – ne odhad modelu."
+      ]
+    },
     {
       "id": "5694e19fde",
       "ts": 1787597213,
@@ -94,8 +133,8 @@
       "odds": 1.51,
       "prob": 0.6763,
       "stake": 9.74,
-      "status": "open",
-      "pnl": 0.0,
+      "status": "won",
+      "pnl": 4.97,
       "clv": -0.0491,
       "tag": "bet-agent",
       "odds_source": "real",
@@ -119,7 +158,12 @@
         "Al Ittihad má výrazně silnější útočný rating.",
         "Kurz 1.513 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.588
+      "closing_odds": 1.588,
+      "settled_ts": 1787601810,
+      "result": {
+        "home": 3,
+        "away": 2
+      }
     },
     {
       "id": "db2ff9519d",

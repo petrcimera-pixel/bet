@@ -26,7 +26,7 @@
     "auto_run_hours": "8,12,16,20",
     "auto_retrain": true,
     "auto_retrain_threshold": 10,
-    "min_prob": 0.65,
+    "min_prob": 0.55,
     "min_odds": 1.2,
     "markets": {
       "winner": true,
