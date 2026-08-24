@@ -32,6 +32,7 @@
       <button class="nav-btn" data-page="bettors"><span class="icon">🎲</span> Sázkaři</button>
       <button class="nav-btn" data-page="bankroll"><span class="icon">💰</span> Bankroll</button>
       <button class="nav-btn" data-page="learning"><span class="icon">🧠</span> ML Learning</button>
+      <button class="nav-btn" data-page="log"><span class="icon">📡</span> Živý log</button>
       <button class="nav-btn" data-page="settings"><span class="icon">⚙</span> Nastavení</button>
       <button class="nav-btn" data-page="guide"><span class="icon">📖</span> Návod</button>
     </nav>
@@ -227,6 +228,32 @@
       </div>
 
       <div id="bettorsContainer" class="loading"><span class="spinner"></span> Načítání sázkařů…</div>
+    </section>
+
+    <!-- ŽIVÝ LOG -->
+    <section id="page-log" class="page">
+      <div class="page-head">
+        <h1>Živý log</h1>
+        <p class="lead">Co appka právě dělá – vyhodnocování výsledků, kola sázkařů, trénování modelu, zálohy i požadavky z prohlížeče.</p>
+      </div>
+
+      <div class="card log-toolbar-card">
+        <div class="toolbar-row">
+          <button class="btn small primary" id="logPauseBtn">⏸ Pozastavit</button>
+          <button class="btn small" id="logClearBtn" title="Vyprázdní jen tenhle pohled, ne log v appce">Vyčistit pohled</button>
+          <label class="log-check" title="Držet pohled u nejnovějšího řádku">
+            <input type="checkbox" id="logAutoScroll" checked> držet dole
+          </label>
+          <span class="toolbar-sep"></span>
+          <input type="text" id="logSearch" class="search-input" placeholder="🔍 Filtrovat text…" style="max-width:240px;">
+          <span id="logStatus" class="muted" style="font-size:12px; margin-left:auto;"></span>
+        </div>
+        <div class="pill-row" id="logKategorie" style="margin:10px 0 0;"></div>
+      </div>
+
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div id="logVypis" class="log-vypis"><div class="empty-state">Čekám na první záznamy…</div></div>
+      </div>
     </section>
 
     <!-- BANKROLL -->

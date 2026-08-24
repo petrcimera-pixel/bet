@@ -38,6 +38,9 @@ _ensure()
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 from functools import wraps
 
+from engine import live_log
+live_log.zapni()      # co nejdřív, ať se zachytí i hlášky ze startu appky
+
 from engine import storage
 from engine import data_sources as ds
 from engine import goals_model as pred
@@ -1190,6 +1193,13 @@ def _settle_recent(allow_slugless_fallback=False):
         _settle_status["last_error"] = None
     _save_settle_status()
 
+    live_log.zaznam(
+        f"kontrola výsledků hotová za {round(_time.time() - _pass_t0, 1)} s – "
+        f"prošlo {len(batch)} liga-dnů, nalezeno {len(results)} výsledků"
+        + (f", {remaining} ještě čeká" if remaining else "")
+        + (f", {n_stuck} požadavků nestihlo limit" if n_stuck else ""),
+        kategorie="vyhodnocení")
+
     return results, corner_results, remaining > 0
 
 
@@ -1454,6 +1464,20 @@ def api_settle_status():
 def api_persist_status():
     """Stav zálohování dat do GitHub Gistu (persistence na Renderu)."""
     return jsonify(persist.status())
+
+
+@app.route("/api/log")
+@login_required
+def api_log():
+    """Živý log – co appka právě dělá. Klient posílá `od`, dostane jen
+    novější záznamy, takže polling je levný i při rychlém obnovování."""
+    try:
+        od = int(request.args.get("od") or 0)
+    except (TypeError, ValueError):
+        od = 0
+    d = live_log.zaznamy(od_seq=od)
+    d["kategorie"] = live_log.kategorie()
+    return jsonify(d)
 
 
 @app.route("/api/diagnostics/advanced")
@@ -2643,6 +2667,11 @@ def _run_virtual_bettors_if_due():
             "active": sum(1 for n in (placed or {}).values() if n),
             "eligible": len(st),
         })
+        live_log.zaznam(
+            f"kolo arény v {now.hour}:00 – sázelo "
+            f"{sum(1 for n in (placed or {}).values() if n)} z {len(st)} sázkařů, "
+            f"celkem {sum((placed or {}).values())} tipů",
+            kategorie="sázkaři")
         return {"ran": True, "placed": placed}
     except Exception as e:
         return {"ran": False, "reason": "error", "error": str(e)}

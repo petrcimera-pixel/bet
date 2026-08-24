@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDashboard();
   setupNotifications();
   setupTeamSearch();
+  setupLog();
   setupStatusBar();
   // Po návratu na kartu dohnat skóre hned, ne až za celý interval
   document.addEventListener('visibilitychange', () => {
@@ -97,6 +98,112 @@ function toast(msg, kind = 'ok', ms = 4000) {
 }
 
 // ---------------------------------------------------------------------------
+// Živý log – co appka právě dělá
+// ---------------------------------------------------------------------------
+const LOG_INTERVAL_MS = 2000;
+let _logTimer = null;
+let _logSeq = 0;               // poslední viděné číslo záznamu
+let _logZaznamy = [];          // co držíme v pohledu
+let _logPozastaveno = false;
+let _logSkryteKat = new Set(); // kategorie, které uživatel vypnul
+const LOG_MAX_V_POHLEDU = 1000;
+
+function startLogPolling() {
+  if (_logTimer) return;
+  nactiLog();
+  _logTimer = setInterval(() => {
+    if (STATE.page === 'log' && !_logPozastaveno && document.visibilityState === 'visible') {
+      nactiLog();
+    }
+  }, LOG_INTERVAL_MS);
+}
+
+function stopLogPolling() {
+  if (_logTimer) { clearInterval(_logTimer); _logTimer = null; }
+}
+
+async function nactiLog() {
+  try {
+    const d = await api(`/api/log?od=${_logSeq}`, { timeoutMs: 10000 });
+    const nove = d.zaznamy || [];
+    if (nove.length) {
+      _logSeq = d.posledni_seq || _logSeq;
+      _logZaznamy.push(...nove);
+      if (_logZaznamy.length > LOG_MAX_V_POHLEDU) {
+        _logZaznamy = _logZaznamy.slice(-LOG_MAX_V_POHLEDU);
+      }
+      vykresliKategorie(d.kategorie || []);
+      vykresliLog(nove.length);
+    }
+    setText('logStatus', `${d.v_bufferu || 0} záznamů v paměti (strop ${d.strop || 0})`
+      + (_logPozastaveno ? ' · pozastaveno' : ''));
+  } catch (e) {
+    setText('logStatus', 'log se nepodařilo načíst');
+  }
+}
+
+function vykresliKategorie(vsechny) {
+  const box = el('logKategorie');
+  if (!box) return;
+  // překreslit jen když přibyla nová kategorie, ať neblikají
+  const soucasne = [...box.querySelectorAll('button')].map(b => b.dataset.kat).sort();
+  if (JSON.stringify(soucasne) === JSON.stringify([...vsechny].sort())) return;
+  box.innerHTML = vsechny.map(k => `
+    <button class="pill clickable ${_logSkryteKat.has(k) ? '' : 'active'}" data-kat="${escAttr(k)}">
+      ${k}
+    </button>`).join('');
+  box.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => {
+      const k = b.dataset.kat;
+      if (_logSkryteKat.has(k)) _logSkryteKat.delete(k); else _logSkryteKat.add(k);
+      b.classList.toggle('active', !_logSkryteKat.has(k));
+      vykresliLog();
+    });
+  });
+}
+
+function vykresliLog() {
+  const box = el('logVypis');
+  if (!box) return;
+  const dotaz = _fold((el('logSearch')?.value || '').trim());
+  const videt = _logZaznamy.filter(z =>
+    !_logSkryteKat.has(z.kat) && (!dotaz || _fold(z.text).includes(dotaz) || _fold(z.kat).includes(dotaz)));
+
+  if (!videt.length) {
+    box.innerHTML = `<div class="empty-state">${_logZaznamy.length
+      ? 'Nic neodpovídá filtru.' : 'Zatím žádné záznamy.'}</div>`;
+    return;
+  }
+  // Poznat, jestli byl uživatel dole PŘED překreslením – když si odscrolloval
+  // nahoru číst starší řádek, nesmí ho nový záznam odtrhnout.
+  const drzetDole = el('logAutoScroll')?.checked
+    && (box.scrollHeight - box.scrollTop - box.clientHeight < 60 || box.scrollTop === 0);
+
+  box.innerHTML = videt.map(z => `
+    <div class="log-radek ${z.uroven}">
+      <span class="log-cas">${new Date(z.ts * 1000).toLocaleTimeString('cs-CZ')}</span>
+      <span class="log-kat">${z.kat}</span>
+      <span class="log-text">${escAttr(z.text)}</span>
+    </div>`).join('');
+  if (drzetDole) box.scrollTop = box.scrollHeight;
+}
+
+function setupLog() {
+  el('logPauseBtn')?.addEventListener('click', () => {
+    _logPozastaveno = !_logPozastaveno;
+    const b = el('logPauseBtn');
+    b.textContent = _logPozastaveno ? '▶ Pokračovat' : '⏸ Pozastavit';
+    b.classList.toggle('primary', !_logPozastaveno);
+    if (!_logPozastaveno) nactiLog();
+  });
+  el('logClearBtn')?.addEventListener('click', () => {
+    _logZaznamy = [];       // jen pohled; v paměti appky log zůstává
+    vykresliLog();
+  });
+  el('logSearch')?.addEventListener('input', () => vykresliLog());
+}
+
+// ---------------------------------------------------------------------------
 // nav
 // ---------------------------------------------------------------------------
 function setupNav() {
@@ -111,6 +218,8 @@ function setupNav() {
       closeMobileMenu();
       if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
       if (page !== 'search') stopSearchPolling();
+      if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
+      if (page === 'log') startLogPolling();
       if (page === 'dashboard') loadDashboard();
       if (page === 'matches') loadMatches();
       if (page === 'search') loadSearchPage();

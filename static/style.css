@@ -664,6 +664,37 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 }
 th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
+/* ---------------------------------------------------------------------- */
+/* Živý log                                                                */
+/* ---------------------------------------------------------------------- */
+.log-toolbar-card { margin-bottom: 16px; }
+.log-check {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; color: var(--txt2); cursor: pointer; white-space: nowrap;
+}
+.log-vypis {
+  max-height: 62vh; overflow-y: auto; overflow-x: hidden;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px; line-height: 1.55;
+}
+.log-radek {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 3px 14px; border-bottom: 1px solid var(--border);
+}
+.log-radek:hover { background: var(--panel-2); }
+.log-cas { color: var(--txt3); flex: none; font-variant-numeric: tabular-nums; }
+.log-kat {
+  flex: none; min-width: 84px; font-weight: 600; color: var(--txt2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.log-text { color: var(--txt); word-break: break-word; }
+/* Barví se levý okraj, ne celý řádek – u stovek řádků by plné podbarvení
+   bylo nečitelné. */
+.log-radek.chyba { border-left: 3px solid var(--bad); }
+.log-radek.chyba .log-text { color: var(--bad); }
+.log-radek.varovani { border-left: 3px solid var(--warn); }
+.log-radek.info { border-left: 3px solid transparent; }
+
 /* "Proč tenhle tip?" v kartě Tip dne */
 .tip-why-btn { margin-left: auto; }
 .tip-why {
