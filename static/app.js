@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTeamSearch();
   setupLog();
   setupDoporucene();
+  setupSbalitelneKarty();
+  setupKlavesoveZkratky();
   setupStatusBar();
   // Po návratu na kartu dohnat skóre hned, ne až za celý interval
   document.addEventListener('visibilitychange', () => {
@@ -183,7 +185,7 @@ function vykresliLog() {
   box.innerHTML = videt.map(z => `
     <div class="log-radek ${z.uroven}">
       <span class="log-cas">${new Date(z.ts * 1000).toLocaleTimeString('cs-CZ')}</span>
-      <span class="log-kat">${z.kat}</span>
+      <span class="log-kat">${esc(z.kat)}</span>
       <span class="log-text">${escAttr(z.text)}</span>
     </div>`).join('');
   if (drzetDole) box.scrollTop = box.scrollHeight;
@@ -207,29 +209,67 @@ function setupLog() {
 // ---------------------------------------------------------------------------
 // nav
 // ---------------------------------------------------------------------------
+/* Přepnutí stránky. Vytažené z click handleru, aby na stejnou cestu mohly
+   i klávesové zkratky, odkazy ze zdravotního panelu a obnovení z URL. */
+function goToPage(page) {
+  const btn = document.querySelector(`.nav-btn[data-page="${page}"]`);
+  if (!btn) return;
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-current', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-current', 'page');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  el(`page-${page}`).classList.add('active');
+  STATE.page = page;
+  closeMobileMenu();
+
+  // Stránka v URL: dřív se po F5 uživatel vždycky vrátil na Dashboard
+  // a nešlo si uložit ani poslat odkaz na konkrétní kartu.
+  if (location.hash !== `#${page}`) history.replaceState(null, '', `#${page}`);
+
+  if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
+  if (page !== 'search') stopSearchPolling();
+  if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
+  if (page === 'log') startLogPolling();
+  if (page === 'doporucene') loadDoporucene();
+  if (page === 'dashboard') loadDashboard();
+  if (page === 'matches') loadMatches();
+  if (page === 'search') loadSearchPage();
+  if (page === 'bettors') loadBettors();
+  if (page === 'bankroll') { loadBankroll(); loadLigyVykon(); }
+  if (page === 'learning') { loadMlLearning(); loadBacktest(); loadAgentBreakdown(); }
+  if (page === 'settings') loadSettings();
+}
+
 function setupNav() {
   document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const page = btn.dataset.page;
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      el(`page-${page}`).classList.add('active');
-      STATE.page = page;
-      closeMobileMenu();
-      if (page !== 'matches') stopLivePolling();   // poller běží jen na Zápasech
-      if (page !== 'search') stopSearchPolling();
-      if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
-      if (page === 'log') startLogPolling();
-      if (page === 'doporucene') loadDoporucene();
-      if (page === 'dashboard') loadDashboard();
-      if (page === 'matches') loadMatches();
-      if (page === 'search') loadSearchPage();
-      if (page === 'bettors') loadBettors();
-      if (page === 'bankroll') loadBankroll();
-      if (page === 'learning') { loadMlLearning(); loadBacktest(); loadAgentBreakdown(); }
-      if (page === 'settings') loadSettings();
-    });
+    btn.addEventListener('click', () => goToPage(btn.dataset.page));
+  });
+  // Stránka z URL má přednost před výchozím Dashboardem.
+  const zHash = (location.hash || '').replace('#', '');
+  if (zHash && document.querySelector(`.nav-btn[data-page="${zHash}"]`)) goToPage(zHash);
+}
+
+/* Klávesové zkratky: 1-9 a 0 přepnou stránku v pořadí sidebaru,
+   "?" ukáže nápovědu. Ve formulářových polích se ignorují, jinak by
+   nešlo napsat číslo do filtru. */
+function setupKlavesoveZkratky() {
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+
+    const strany = Array.from(document.querySelectorAll('.nav-btn')).map(b => b.dataset.page);
+    if (/^[1-9]$/.test(e.key)) {
+      const i = parseInt(e.key, 10) - 1;
+      if (strany[i]) { e.preventDefault(); goToPage(strany[i]); }
+    } else if (e.key === '0' && strany[9]) {
+      e.preventDefault(); goToPage(strany[9]);
+    } else if (e.key === '?') {
+      e.preventDefault(); toast(`Zkratky: 1–9 a 0 přepínají stránky v pořadí menu (${strany.length} stránek).`);
+    }
   });
 }
 
@@ -259,6 +299,7 @@ function bindEvents() {
   el('savePerformanceBtn')?.addEventListener('click', savePerformanceSettings);
   el('clearCacheBtn')?.addEventListener('click', clearMatchCache);
   el('resetTipsBtn')?.addEventListener('click', resetTipsDb);
+  el('exportSazekBtn')?.addEventListener('click', exportSazekCsv);
   el('exportDataBtn')?.addEventListener('click', exportBackup);
   el('importDataBtn')?.addEventListener('click', () => el('importDataFile').click());
   el('importDataFile')?.addEventListener('change', importBackup);
@@ -338,6 +379,7 @@ async function loadDashboard() {
   loadSettleStatus();
   loadStrategyInsight();
   loadKalibrace();
+  loadZdravi();
 }
 
 async function loadStrategyInsight() {
@@ -361,7 +403,7 @@ async function loadStrategyInsight() {
       <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
         <span style="font-size:24px;">${d.emoji}</span>
         <div style="flex:1; min-width:200px;">
-          <div style="font-weight:700;">${d.name}</div>
+          <div style="font-weight:700;">${esc(d.name)}</div>
           <div style="font-size:12px; color:var(--txt2);">${d.tagline}</div>
         </div>
         <div style="text-align:right;">
@@ -452,7 +494,7 @@ async function loadTipOfDay() {
   const t2 = setTimeout(() => { loadingEl.innerHTML = '<span class="spinner"></span> Pořád stahuji – po delší neaktivitě appky to bývá pomalejší…'; }, 20000);
 
   try {
-    const data = await api('/api/dashboard', { timeoutMs: 90000 });
+    const data = await dashboardData();
     loadingEl.style.display = 'none';
     contentEl.style.display = 'block';
     const tips = (data.tips && data.tips.length) ? data.tips : (data.tip ? [data.tip] : []);
@@ -569,6 +611,8 @@ async function loadAgentSummary() {
     renderRecentBets(data.bets || []);
   } catch (e) {
     el('agentSummary').innerHTML = `<div class="empty-state" style="padding:10px 0;">Chyba načítání</div>`;
+    // Bez tohohle zůstane karta "Poslední tipy agenta" na věčném spinneru.
+    chybaKarty('recentBets', 'Sázky agenta se nepodařilo načíst.', loadAgentSummary);
   }
 }
 
@@ -600,7 +644,7 @@ function renderRecentBets(bets) {
         <td colspan="8" style="background:var(--panel-2);">
           ${b.outcome === 'acca'
             ? `<div style="font-size:12.5px; color:var(--txt2);"><strong>AKO tiket – nohy:</strong><ul style="margin:6px 0 0; padding-left:18px;">
-                ${(b.legs || []).map(l => `<li>${l.match} ${tipsportBetLink(l.match, 'open', l.tipsport)}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
+                ${(b.legs || []).map(l => `<li>${esc(l.match)} ${tipsportBetLink(l.match, 'open', l.tipsport)}: <strong>${l.name}</strong> @ ${l.odds}× (${Math.round((l.prob || 0) * 100)}%)</li>`).join('')}
               </ul></div>`
             : `<ul style="margin:0; padding-left:18px; font-size:12.5px; color:var(--txt2);">${(b.why || []).map(w => `<li>${w}</li>`).join('')}</ul>`}
         </td>
@@ -1041,6 +1085,49 @@ function escAttr(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')
     .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+/* Kratší alias – escapuje & " < >, takže je bezpečný i pro textový obsah,
+   ne jen pro atributy. Jméno sázkaře si uživatel zadává sám, názvy týmů
+   a lig chodí z cizího API; obojí patří do šablony jen přes tuhle funkci. */
+const esc = escAttr;
+
+/* Jednotný chybový stav karty. Dřív si každá karta řešila chybu po svém
+   a některé vůbec: když spadlo /api/agent, zůstala karta "Poslední tipy
+   agenta" napořád na točícím se spinneru z index.html, protože její
+   render se volal až PO úspěchu. Vedle sebe pak svítilo "Chyba načítání"
+   a věčné kolečko. */
+/* Sbalitelné karty si pamatují stav mezi návštěvami.
+   Bez paměti by uživatel zavíral tutéž dlouhou kartu při každém otevření
+   stránky, což je horší než ji nesbalovat vůbec. */
+const SBALENO_KEY = 'sbaleneKarty';
+
+function nactiSbaleni() {
+  try { return JSON.parse(localStorage.getItem(SBALENO_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+
+function setupSbalitelneKarty() {
+  const stav = nactiSbaleni();
+  document.querySelectorAll('details.card[id]').forEach(d => {
+    if (d.id in stav) d.open = stav[d.id];
+    d.addEventListener('toggle', () => {
+      const s = nactiSbaleni();
+      s[d.id] = d.open;
+      try { localStorage.setItem(SBALENO_KEY, JSON.stringify(s)); } catch (e) {}
+    });
+  });
+}
+
+function chybaKarty(id, zprava, znovu) {
+  const box = el(id);
+  if (!box) return;
+  box.className = '';
+  const btnId = `retry_${id}`;
+  box.innerHTML = `<div class="empty-state">
+      ${esc(zprava)}
+      ${znovu ? `<button class="btn small" id="${btnId}" style="margin-top:10px;">Zkusit znovu</button>` : ''}
+    </div>`;
+  if (znovu) el(btnId)?.addEventListener('click', znovu);
+}
 
 /** Rozkliknutá soutěž – nahradí seznam soutěží jejími zápasy. */
 async function openLeagueMatches(league, country) {
@@ -1053,7 +1140,7 @@ async function openLeagueMatches(league, country) {
     const rows = (d.matches || []).map(m => `
       <tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
         <td>${fmtWhen(m.date, m.time)}</td>
-        <td><strong>${m.home}</strong> – ${m.away}</td>
+        <td><strong>${esc(m.home)}</strong> – ${esc(m.away)}</td>
         <td>${m.has_odds ? '<span class="badge real">kurzy</span>'
               : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává'}">jen model</span>`}</td>
         <td>${tipsportBadge(m.home, m.tipsport, { short: true, stopPropagation: true })}</td>
@@ -1094,7 +1181,7 @@ async function runTeamSearch(q) {
 
 function renderSearchResults(d, box) {
   if (!d.matches || !d.matches.length) {
-    box.innerHTML = `<div class="card"><div class="empty-state">Pro „${d.query}" jsem v příštích ${d.days || 14} dnech nenašel žádný zápas.</div></div>`;
+    box.innerHTML = `<div class="card"><div class="empty-state">Pro „${escAttr(d.query)}" jsem v příštích ${d.days || 14} dnech nenašel žádný zápas.</div></div>`;
     return;
   }
   // Klikatelné - zúží hledání na přesný název týmu (užitečné, když
@@ -1111,7 +1198,7 @@ function renderSearchResults(d, box) {
       : `<span class="badge model" title="${m.odds_expected ? 'Kurzy se obvykle objeví krátce před výkopem' : 'Takhle daleko dopředu ESPN kurzy nedává – bude jen odhad modelu'}">jen model</span>`;
     return `<tr class="search-row-item" data-id="${escAttr(m.id)}" data-sport="${escAttr(m.sport)}">
       <td>${fmtWhen(m.date, m.time)}</td>
-      <td><strong>${m.home}</strong> – ${m.away}</td>
+      <td><strong>${esc(m.home)}</strong> – ${esc(m.away)}</td>
       <td class="muted">${m.flag || ''} ${m.league}</td>
       <td>${badge}</td>
       <td>${tipsportBadge(m.home, m.tipsport, { short: true, stopPropagation: true })}</td>
@@ -1211,7 +1298,7 @@ function renderAnalysis(d, box) {
     <div class="card">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
         <div>
-          <h2 style="margin:0 0 4px;">${m.home} – ${m.away}</h2>
+          <h2 style="margin:0 0 4px;">${esc(m.home)} – ${esc(m.away)}</h2>
           <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
         </div>
         ${tipsportBadge(m.home, m.tipsport)}
@@ -1267,11 +1354,11 @@ function renderFormAndH2H(d, m) {
       <h3>Forma a vzájemné zápasy</h3>
       <div class="perf-grid">
         <div class="perf-block">
-          <div class="perf-title">Forma – ${m.home}</div>
+          <div class="perf-title">Forma – ${esc(m.home)}</div>
           <div class="form-row">${formIcons(fh)}</div>
         </div>
         <div class="perf-block">
-          <div class="perf-title">Forma – ${m.away}</div>
+          <div class="perf-title">Forma – ${esc(m.away)}</div>
           <div class="form-row">${formIcons(fa)}</div>
         </div>
         <div class="perf-block" style="grid-column: span 2;">
@@ -1326,8 +1413,8 @@ function renderExtraMarkets(em, topScores, m) {
         <div class="perf-block">
           <div class="perf-title">Kdo dá první gól</div>
           <div class="perf-rows">
-            <div class="perf-row"><span class="perf-key">${m.home}</span><span class="perf-nums"><strong>${pct((fts.home || 0) * 100)}</strong></span></div>
-            <div class="perf-row"><span class="perf-key">${m.away}</span><span class="perf-nums"><strong>${pct((fts.away || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.home)}</span><span class="perf-nums"><strong>${pct((fts.home || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.away)}</span><span class="perf-nums"><strong>${pct((fts.away || 0) * 100)}</strong></span></div>
             <div class="perf-row"><span class="perf-key">Bez gólů</span><span class="perf-nums"><strong>${pct((fts.no_goals || 0) * 100)}</strong></span></div>
           </div>
         </div>
@@ -1369,9 +1456,9 @@ function renderExtraMarkets(em, topScores, m) {
           <div class="perf-title">Přesný počet gólů týmu</div>
           <div class="perf-rows">
             ${(em.exact_team_goals?.home || []).slice(0, 3).map(x => `
-              <div class="perf-row"><span class="perf-key">${m.home}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+              <div class="perf-row"><span class="perf-key">${esc(m.home)}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
             ${(em.exact_team_goals?.away || []).slice(0, 3).map(x => `
-              <div class="perf-row"><span class="perf-key">${m.away}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
+              <div class="perf-row"><span class="perf-key">${esc(m.away)}: ${x.goals}</span><span class="perf-nums"><strong>${pct(x.prob * 100)}</strong></span></div>`).join('')}
           </div>
         </div>
 
@@ -1388,25 +1475,25 @@ function renderExtraMarkets(em, topScores, m) {
         <div class="perf-block">
           <div class="perf-title">Výsledek + počet gólů (přes 2,5)</div>
           <div class="perf-rows">
-            <div class="perf-row"><span class="perf-key">${m.home} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.home_over25 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.home)} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.home_over25 || 0) * 100)}</strong></span></div>
             <div class="perf-row"><span class="perf-key">Remíza a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.draw_over25 || 0) * 100)}</strong></span></div>
-            <div class="perf-row"><span class="perf-key">${m.away} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.away_over25 || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.away)} a přes</span><span class="perf-nums"><strong>${pct((em.winner_and_total?.away_over25 || 0) * 100)}</strong></span></div>
           </div>
         </div>
 
         <div class="perf-block">
-          <div class="perf-title">Výsledek + ${m.home} nad 1,5 gólu</div>
+          <div class="perf-title">Výsledek + ${esc(m.home)} nad 1,5 gólu</div>
           <div class="perf-rows">
-            <div class="perf-row"><span class="perf-key">${m.home} vyhraje a nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.home_home_over || 0) * 100)}</strong></span></div>
-            <div class="perf-row"><span class="perf-key">Remíza a ${m.home} nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.draw_home_over || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.home)} vyhraje a nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.home_home_over || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">Remíza a ${esc(m.home)} nad 1,5</span><span class="perf-nums"><strong>${pct((em.winner_and_team_goals?.draw_home_over || 0) * 100)}</strong></span></div>
           </div>
         </div>
 
         <div class="perf-block">
           <div class="perf-title">Výsledek + kdo dal první gól <span class="muted" title="Aproximace – grid nezachycuje časové pořadí gólů, spočítáno jako P(výsledek) × P(první gól)">ⓘ</span></div>
           <div class="perf-rows">
-            <div class="perf-row"><span class="perf-key">${m.home} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.home_home_first || 0) * 100)}</strong></span></div>
-            <div class="perf-row"><span class="perf-key">${m.away} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.away_away_first || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.home)} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.home_home_first || 0) * 100)}</strong></span></div>
+            <div class="perf-row"><span class="perf-key">${esc(m.away)} vyhraje a skóruje první</span><span class="perf-nums"><strong>${pct((em.winner_and_first_scorer?.away_away_first || 0) * 100)}</strong></span></div>
           </div>
         </div>
       </div>
@@ -1595,7 +1682,7 @@ function renderMatchesLeagues(leaguesIn, container, betMap = {}) {
   }
   container.innerHTML = leagues.map(lg => `
     <div class="league-group">
-      <div class="league-head"><span class="flag">${lg.flag || ''}</span> ${lg.league} <span class="count">${lg.matches.length}</span></div>
+      <div class="league-head"><span class="flag">${lg.flag || ''}</span> ${esc(lg.league)} <span class="count">${lg.matches.length}</span></div>
       ${lg.matches.map(m => matchCardHtml(m, betMap[m.id])).join('')}
     </div>`).join('');
 
@@ -1768,8 +1855,8 @@ function matchCardHtml(m, bet) {
           <span>${startLabel}</span>
         </div>
         <div class="teams">
-          <div class="team-row"><span>${m.home}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.home}</span>` : ''}</div>
-          <div class="team-row"><span>${m.away}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
+          <div class="team-row"><span>${esc(m.home)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.home}</span>` : ''}</div>
+          <div class="team-row"><span>${esc(m.away)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
         </div>
         <div class="pick-col">
           ${finished ? '' : hasPick ? `
@@ -1814,8 +1901,36 @@ async function loadBankroll() {
     setText('bProfitHint', `z ${s.settled_count || 0} vyhodnocených`);
     setText('bRoi', s.roi !== null && s.roi !== undefined ? pct(s.roi) : '—');
     setText('bWinRate', s.win_rate !== null ? pct(s.win_rate) : '—');
-    if (s.equity && s.equity.length > 1) drawEquity(s.equity);
-    renderBetsTable(data.bets || []);
+
+    // CLV se počítá v bankroll.stats() a posílá při každém požadavku, ale
+    // zobrazovalo se jen u virtuálních sázkařů. U agenta je přitom
+    // vypovídavější než zisk: na stovce sázek je zisk šum, CLV ne.
+    const clvEl = el('bClv');
+    if (clvEl) {
+      if (s.avg_clv === null || s.avg_clv === undefined) {
+        clvEl.textContent = '—';
+        clvEl.className = 'value';
+        setText('bClvHint', 'zatím bez uzavíracích kurzů');
+      } else {
+        const nad = s.avg_clv >= 1;
+        clvEl.textContent = `${czNum(s.avg_clv, 2)}×`;
+        clvEl.className = `value ${nad ? 'pos' : 'bad'}`;
+        setText('bClvHint', nad
+          ? 'bereme lepší cenu než trh'
+          : 'sázíme za horší cenu, než má trh před výkopem');
+      }
+    }
+
+    if (s.equity && s.equity.length > 1) {
+      drawEquity(s.equity);
+    } else {
+      // Bez prázdného stavu zůstal rámeček 800×260 bez jediného slova
+      // a vypadalo to jako rozbitý graf.
+      const svg = el('equitySVG');
+      if (svg) svg.innerHTML = `<text x="400" y="130" text-anchor="middle"
+        fill="var(--txt3)" font-size="14">Zatím není z čeho kreslit – potřeba aspoň dvě vyhodnocené sázky</text>`;
+    }
+    renderBetsTable(data.bets || [], data.total);
     // Rozšířené analýzy – backend je uměl odjakživa (/api/bankroll/daily,
     // /summary, /streaks, /roi-by-odds), ale nic je nevolalo, takže stránka
     // ukazovala jen zůstatek a seznam sázek.
@@ -1979,9 +2094,17 @@ function drawEquity(equity) {
     <path d="${path}" stroke="${color}" stroke-width="2.5" fill="none"/>`;
 }
 
-function renderBetsTable(bets) {
+function renderBetsTable(bets, celkem) {
   const tbody = el('betsTable');
   if (!bets.length) { tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Zatím žádné sázky</td></tr>`; return; }
+  // Když se historie ořízne, musí to být napsané – dřív uživatel se 108
+  // sázkami viděl 50 a nikde se to nedozvěděl.
+  const info = el('betsTableInfo');
+  if (info) {
+    info.textContent = (celkem && celkem > bets.length)
+      ? `Zobrazeno ${bets.length} z ${celkem} sázek (nejnovější první).`
+      : `${bets.length} ${bets.length === 1 ? 'sázka' : (bets.length < 5 ? 'sázky' : 'sázek')} celkem.`;
+  }
   tbody.innerHTML = bets.map(b => `
     <tr>
       <td>${b.match || '—'} ${tipsportBetLink(b.match, b.status, b.tipsport)}</td>
@@ -2538,7 +2661,7 @@ async function refreshWizPreview() {
     });
     const custom = el('wizName').value.trim();
     el('wizPreview').innerHTML =
-      `<div style="font-size:15px; font-weight:700;">${d.emoji} ${custom || d.name}</div>
+      `<div style="font-size:15px; font-weight:700;">${d.emoji} ${esc(custom || d.name)}</div>
        <div style="font-size:12.5px; color:var(--txt2); margin-top:4px;">${d.tagline}</div>`;
     el('wizPreview').dataset.emoji = d.emoji;
     el('wizPreview').dataset.name = d.name;
@@ -2584,7 +2707,7 @@ async function createBettor() {
     });
     el('bettorWizard').style.display = 'none';
     el('wizName').value = '';
-    toast(`Sázkař ${b.emoji} ${b.name} vytvořen.`);
+    toast(`Sázkař ${b.emoji} ${esc(b.name)} vytvořen.`);
     loadBettors();
   } catch (e) {
     toast('Vytvoření se nepovedlo: ' + e.message, 'err');
@@ -3099,7 +3222,7 @@ function arenaRadek(b, veHreCelkem, vseRezim) {
         <div class="arena-who">
           <span class="face">${b.emoji}</span>
           <span>
-            <div class="nm">${b.name}${nesazi ? ' <span class="idle-badge" title="Strategie zatím nenašla vhodnou příležitost">bez sázek</span>' : ''}${
+            <div class="nm">${esc(b.name)}${nesazi ? ' <span class="idle-badge" title="Strategie zatím nenašla vhodnou příležitost">bez sázek</span>' : ''}${
               // v celkovém žebříčku není z ničeho poznat, do jaké kategorie
               // sázkař patří – odznak to doplní, aniž by zabral sloupec
               vseRezim ? ` <span class="grp-badge">${arenaSkupinaPopisek(b.group)}</span>` : ''}</div>
@@ -3290,7 +3413,7 @@ async function toggleBettorDetail(id, sourceEl) {
       <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Kurz</th><th>Vklad</th><th>Sázka</th><th>P&L</th></tr></thead>
       <tbody>${bets.map(bt => `
         <tr${bt.legs ? ' class="ticket-row"' : ''}>
-          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${bt.match} ${bt.legs ? '' : tipsportBetLink(bt.match, bt.status, bt.tipsport)}</td>
+          <td>${bt.legs ? `<span class="muted">${bt.kind === 'combo' ? '🔗' : '🎫'}</span> ` : ''}${esc(bt.match)} ${bt.legs ? '' : tipsportBetLink(bt.match, bt.status, bt.tipsport)}</td>
           <td class="muted">${fmtWhen(bt.match_date, bt.match_time)}</td>
           <td>${matchStateHtml(bt.match_date, bt.match_time, bt.status, bt.result)}</td>
           <td>${bt.label}</td>
@@ -3305,7 +3428,7 @@ async function toggleBettorDetail(id, sourceEl) {
           ${bt.legs.map(l => `<div class="leg">
               <span class="leg-res ${l.result || ''}">${l.result === 'won' ? '✓' : l.result === 'lost' ? '✕' : l.result === 'void' ? '∅' : '·'}</span>
               <strong>${l.label}</strong>
-              <span class="muted">${l.match}</span> ${tipsportBetLink(l.match, l.result ? 'settled' : 'open', l.tipsport)}
+              <span class="muted">${esc(l.match)}</span> ${tipsportBetLink(l.match, l.result ? 'settled' : 'open', l.tipsport)}
               <span class="muted">${l.odds}×</span>
               ${l.score ? `<span class="muted">${l.score.home}:${l.score.away}</span>` : ''}
             </div>`).join('')}
@@ -3331,7 +3454,7 @@ function renderRoundResult(data) {
     return;
   }
   const rows = (data.detail || []).map(d =>
-    `<span class="pill info">${d.name} <strong>${d.count}×</strong> · ${fmt(d.staked)} Kč</span>`).join('');
+    `<span class="pill info">${esc(d.name)} <strong>${d.count}×</strong> · ${fmt(d.staked)} Kč</span>`).join('');
   box.innerHTML = `
     <div style="font-size:12.5px; color:var(--txt2); margin-bottom:8px;">
       Poslední kolo (${fmtTime(Date.now() / 1000)}): vsazeno <strong>${n}</strong>
@@ -3490,12 +3613,16 @@ function notify(title, body) {
 }
 
 async function pollForNotifications() {
+  // Skrytá karta = neplýtvat ESPN. Tenhle poller je nejdražší v appce
+  // (čtyři requesty co 3 minuty) a jako jediný si viditelnost nehlídal,
+  // takže zapomenutá karta na pozadí tahala data donekonečna.
+  if (document.visibilityState !== 'visible') return;
   // Bez podminky na opravneni - kdyz systemove notifikace nejdou,
   // notify() to zobrazi v okne aplikace.
 
   // Nový tip dne
   try {
-    const d = await api('/api/dashboard', { timeoutMs: 20000 });
+    const d = await dashboardData();
     if (d.tip) {
       const key = `${d.tip.match}|${d.tip.name}`;
       if (localStorage.getItem(NOTIF_LAST_TIP_KEY) !== key) {
@@ -3536,11 +3663,11 @@ async function pollForNotifications() {
         continue;
       }
       if (b.balance > prev.max) {
-        notify('📈 Nové maximum banku', `${b.emoji} ${b.name} – ${fmt(b.balance)} Kč (dřívější max ${fmt(prev.max)} Kč)`);
+        notify('📈 Nové maximum banku', `${b.emoji} ${esc(b.name)} – ${fmt(b.balance)} Kč (dřívější max ${fmt(prev.max)} Kč)`);
         prev.max = b.balance;
         changed = true;
       } else if (b.balance < prev.min) {
-        notify('📉 Nové minimum banku', `${b.emoji} ${b.name} – ${fmt(b.balance)} Kč (dřívější min ${fmt(prev.min)} Kč)`);
+        notify('📉 Nové minimum banku', `${b.emoji} ${esc(b.name)} – ${fmt(b.balance)} Kč (dřívější min ${fmt(prev.min)} Kč)`);
         prev.min = b.balance;
         changed = true;
       }
@@ -4042,13 +4169,32 @@ function setupDoporucene() {
 // ---------------------------------------------------------------------------
 // Kalibrace modelu na dashboardu – "říká model pravdu?"
 // ---------------------------------------------------------------------------
+/* Sdílená odpověď /api/dashboard.
+   Endpoint umí při studené keši stahovat ESPN synchronně (viz komentář
+   u api_dashboard v app.py), takže se nesmí volat víckrát za sebou. Tip
+   dne, kalibrace i notifikační poller ho chtějí ve stejnou chvíli – tahle
+   promise-keš zajistí, že po síti odejde jen jeden požadavek. */
+let _dashboardPromise = null;
+let _dashboardTs = 0;
+const DASHBOARD_TTL_MS = 30 * 1000;
+
+function dashboardData({ force = false } = {}) {
+  const ted = Date.now();
+  if (force || !_dashboardPromise || ted - _dashboardTs > DASHBOARD_TTL_MS) {
+    _dashboardTs = ted;
+    _dashboardPromise = api('/api/dashboard', { timeoutMs: 90000 })
+      .catch(e => { _dashboardPromise = null; throw e; });
+  }
+  return _dashboardPromise;
+}
+
 async function loadKalibrace() {
   const card = el('kalibraceCard');
   const box = el('kalibraceContent');
   if (!card || !box) return;
   let d;
   try {
-    d = await api('/api/dashboard', { timeoutMs: 60000 });
+    d = await dashboardData();
   } catch (e) {
     card.style.display = 'none';
     return;
@@ -4116,4 +4262,258 @@ function kalibraceEraHtml(era, nadpis, aktualni) {
         <tbody>${radky}</tbody>
       </table>` : '<div class="muted" style="font-size:12px;">Žádné pásmo nemá dost sázek na vyhodnocení.</div>'}
     </div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Zdraví appky – jedno místo, kde je vidět, že se něco pokazilo
+// ---------------------------------------------------------------------------
+/* Appka umí tiše prodělávat: bank spadl z 200 na 57 Kč a model se proti trhu
+   zhoršoval několik měření po sobě, aniž by na to rozhraní kdekoli upozornilo.
+   Uživatel si to musel poskládat z pěti různých stránek. Tenhle panel dělá
+   tu skládačku za něj – čistě nad daty, která dashboard stahuje tak jako tak,
+   takže nepřidává jediný požadavek navíc. */
+
+const ZDRAVI_KONTROLY = [
+  {
+    id: 'model-horsi-nez-trh',
+    test: ({ bench }) => {
+      if (!bench || bench.length < 1) return null;
+      const p = bench[bench.length - 1];
+      if (p.brier_model == null || p.brier_market == null) return null;
+      const rozdil = p.brier_model - p.brier_market;
+      if (rozdil <= 0) return null;   // model je lepší než trh – v pořádku
+      // Zhoršuje se, když poslední tři měření rostou (vyšší Brier = horší).
+      const posledni = bench.slice(-3).map(x => x.brier_model).filter(v => v != null);
+      const zhorsuje = posledni.length === 3 && posledni[0] < posledni[1] && posledni[1] < posledni[2];
+      return {
+        vazne: zhorsuje,
+        nadpis: zhorsuje
+          ? 'Model se proti trhu zhoršuje'
+          : 'Model je méně přesný než sázkovka',
+        popis: `Brierovo skóre modelu ${czNum(p.brier_model, 3)} proti ${czNum(p.brier_market, 3)} u trhu`
+          + (zhorsuje ? ' – a poslední tři měření se zhoršují.' : '.')
+          + ' Dokud je model horší než trh, jsou akumulátory vypnuté, protože by chybu jen umocnily.',
+        akce: 'Ukázat benchmark', kam: 'learning',
+      };
+    },
+  },
+  {
+    id: 'agent-nesazi',
+    test: ({ agent }) => {
+      const st = agent?.stats || {};
+      if (agent?.settings?.enabled === false) {
+        return { vazne: false, nadpis: 'Agent je vypnutý',
+                 popis: 'Nesází a nesbírá data. Zapnout jde v Nastavení.',
+                 akce: 'Otevřít nastavení', kam: 'settings' };
+      }
+      if (!st.open && !st.placed) {
+        return { vazne: false, nadpis: 'Agent zatím nevsadil nic',
+                 popis: 'Buď nic neprošlo filtry, nebo chybí zápasy s reálnými kurzy.',
+                 akce: 'Zjistit proč', kam: 'doporucene' };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'bank-pod-polovinou',
+    test: ({ agent }) => {
+      const st = agent?.stats || {};
+      const bal = agent?.balance;
+      const start = agent?.settings?.start_balance ?? bal?.start_balance;
+      const ted = bal?.balance ?? bal?.current;
+      if (start == null || ted == null || start <= 0) return null;
+      const podil = ted / start;
+      if (podil >= 0.5) return null;
+      return {
+        vazne: podil < 0.25,
+        nadpis: `Bank je na ${Math.round(podil * 100)} % počátečního stavu`,
+        popis: `Zbývá ${czNum(ted, 2)} Kč z ${czNum(start, 2)} Kč`
+          + (st.roi != null ? `, ROI ${pct(st.roi)}` : '') + '.',
+        akce: 'Rozebrat, kde se ztrácí', kam: 'bankroll',
+      };
+    },
+  },
+  {
+    id: 'vyhodnocovani-chyba',
+    test: ({ settle }) => {
+      if (!settle?.last_error) return null;
+      return {
+        vazne: true, nadpis: 'Vyhodnocování výsledků hlásí chybu',
+        popis: String(settle.last_error).split('\n')[0].slice(0, 160),
+        akce: 'Otevřít živý log', kam: 'log',
+      };
+    },
+  },
+  {
+    id: 'model-netrenovan',
+    test: ({ ml }) => {
+      const kdy = ml?.last_trained;
+      if (!kdy) return null;
+      const dnu = (Date.now() - new Date(kdy).getTime()) / 86400000;
+      if (!(dnu > 7)) return null;
+      return {
+        vazne: false, nadpis: `ML model se netrénoval ${Math.floor(dnu)} dní`,
+        popis: 'Nové vyhodnocené sázky se do něj zatím nepromítly.',
+        akce: 'Přetrénovat', kam: 'learning',
+      };
+    },
+  },
+];
+
+async function loadZdravi() {
+  const card = el('zdraviCard');
+  const box = el('zdraviContent');
+  if (!card || !box) return;
+
+  // Vše z endpointů, které dashboard volá tak jako tak – žádný požadavek navíc.
+  const [agent, settle, bench, ml] = await Promise.all([
+    api('/api/agent', { timeoutMs: 30000 }).catch(() => null),
+    api('/api/settle/status', { timeoutMs: 15000 }).catch(() => null),
+    api('/api/model/benchmark/history', { timeoutMs: 15000 }).catch(() => null),
+    api('/api/learning/stats', { timeoutMs: 45000 }).catch(() => null),
+  ]);
+
+  const kontext = { agent, settle, ml, bench: bench?.history || bench };
+  const nalezy = [];
+  for (const k of ZDRAVI_KONTROLY) {
+    try {
+      const r = k.test(kontext);
+      if (r) nalezy.push({ ...r, id: k.id });
+    } catch (e) { /* jedna vadná kontrola nesmí shodit celý panel */ }
+  }
+
+  if (!nalezy.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  card.classList.toggle('je-vazne', nalezy.some(n => n.vazne));
+
+  box.innerHTML = nalezy.map(n => `
+    <div class="zdravi-radek">
+      <span class="zdravi-ikona">${n.vazne ? '🔴' : '🟡'}</span>
+      <div class="zdravi-text">
+        <div class="zdravi-nadpis">${esc(n.nadpis)}</div>
+        <div class="zdravi-popis">${esc(n.popis)}</div>
+        ${n.kam ? `<button class="zdravi-akce" data-kam="${esc(n.kam)}">${esc(n.akce)} →</button>` : ''}
+      </div>
+    </div>`).join('');
+
+  box.querySelectorAll('.zdravi-akce').forEach(b => {
+    b.addEventListener('click', () => goToPage(b.dataset.kam));
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Výkon agenta po ligách (data z /api/agent → league_stats)
+// ---------------------------------------------------------------------------
+/* Backend tuhle tabulku počítal a posílal při KAŽDÉM volání /api/agent
+   (což je pětkrát na různých místech), ale frontend ji nikdy nevykreslil –
+   řetězec 'league_stats' se v app.js nevyskytoval ani jednou. */
+const LIGY_MIN_VZOREK = 5;   // pod tímhle je ROI náhoda, ne vzorec
+
+async function loadLigyVykon() {
+  const box = el('ligyVykon');
+  if (!box) return;
+  let d;
+  try {
+    d = await api('/api/agent', { timeoutMs: 30000 });
+  } catch (e) {
+    chybaKarty('ligyVykon', 'Výkon po ligách se nepodařilo načíst.', loadLigyVykon);
+    return;
+  }
+  const ligy = Object.entries(d.league_stats || {})
+    .filter(([, v]) => v.settled > 0)
+    .sort((a, b) => b[1].pnl - a[1].pnl);
+
+  box.className = '';
+  if (!ligy.length) {
+    box.innerHTML = '<div class="empty-state">Zatím žádné vyhodnocené sázky.</div>';
+    setText('ligySouhrn', '');
+    return;
+  }
+
+  const ztratove = ligy.filter(([, v]) => v.settled >= LIGY_MIN_VZOREK && v.roi < 0);
+  setText('ligySouhrn', ztratove.length
+    ? `${ztratove.length} ligy ke zvážení`
+    : `${ligy.length} soutěží`);
+
+  box.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Soutěž</th><th class="num">Vyhodnoceno</th><th class="num">Úspěšnost</th>
+          <th class="num">P&amp;L</th><th class="num">ROI</th><th></th>
+        </tr></thead>
+        <tbody>${ligy.map(([jm, v]) => {
+          const slabá = v.settled >= LIGY_MIN_VZOREK && v.roi < 0;
+          return `<tr>
+            <td>${esc(jm)}</td>
+            <td class="num">${v.settled}</td>
+            <td class="num">${pct(v.win_rate)}</td>
+            <td class="num ${v.pnl >= 0 ? 'pos' : 'bad'}">${v.pnl >= 0 ? '+' : ''}${czNum(v.pnl, 2)}&nbsp;Kč</td>
+            <td class="num ${v.roi >= 0 ? 'pos' : 'bad'}">${pct(v.roi)}</td>
+            <td>${slabá ? '<span class="pill warn" title="Aspoň 5 vyhodnocených sázek a záporné ROI – zvaž vypnutí této ligy">zvaž vypnout</span>' : ''}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Export do CSV
+// ---------------------------------------------------------------------------
+/* Záloha do JSON je na obnovu, ne na práci s daty. Kdo si chce sázky
+   prohnat Excelem, potřeboval dosud opisovat z obrazovky.
+   Středník jako oddělovač a BOM na začátku jsou kvůli českému Excelu –
+   bez nich rozhodí diakritiku a všechno nacpe do jednoho sloupce. */
+function stahniCsv(nazev, sloupce, radky) {
+  const uvozovka = v => {
+    const s = String(v ?? '');
+    return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const obsah = '\uFEFF'
+    + sloupce.map(c => uvozovka(c.nadpis)).join(';') + '\n'
+    + radky.map(r => sloupce.map(c => uvozovka(c.hodnota(r))).join(';')).join('\n');
+  const blob = new Blob([obsah], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nazev;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast(`Staženo: ${nazev}`);
+}
+
+/* České datum z unixového času – v CSV nemá smysl posílat epoch. */
+function csvDatum(ts) {
+  if (!ts) return '';
+  const d = new Date(ts * 1000);
+  return d.toLocaleString('cs-CZ', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+async function exportSazekCsv() {
+  let d;
+  try {
+    d = await api('/api/bankroll?limit=0', { timeoutMs: 60000 });
+  } catch (e) {
+    toast('Export selhal: ' + e.message, 'err');
+    return;
+  }
+  const bets = d.bets || [];
+  if (!bets.length) { toast('Není co exportovat.', 'err'); return; }
+  stahniCsv('kurzanalytik-sazky.csv', [
+    { nadpis: 'Vsazeno',   hodnota: b => csvDatum(b.ts) },
+    { nadpis: 'Zápas',     hodnota: b => b.match },
+    { nadpis: 'Soutěž',    hodnota: b => b.league },
+    { nadpis: 'Sport',     hodnota: b => b.sport },
+    { nadpis: 'Výkop',     hodnota: b => `${b.match_date || ''} ${b.match_time || ''}`.trim() },
+    { nadpis: 'Tip',       hodnota: b => b.label },
+    { nadpis: 'Trh',       hodnota: b => b.market },
+    { nadpis: 'Kurz',      hodnota: b => b.odds },
+    { nadpis: 'Jistota %', hodnota: b => b.prob != null ? Math.round(b.prob * 100) : '' },
+    { nadpis: 'Vklad Kč',  hodnota: b => b.stake },
+    { nadpis: 'Stav',      hodnota: b => ({ won: 'výhra', lost: 'prohra', open: 'otevřená', void: 'zrušená' }[b.status] || b.status) },
+    { nadpis: 'P&L Kč',    hodnota: b => b.pnl },
+    { nadpis: 'CLV',       hodnota: b => b.clv ?? '' },
+    { nadpis: 'Vyhodnoceno', hodnota: b => csvDatum(b.settled_ts) },
+  ], bets);
 }

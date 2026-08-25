@@ -55,10 +55,19 @@
         <p class="lead">Přehled výkonu a dnešního tipu</p>
       </div>
 
+      <!-- Zdravotní panel: appka umí tiše prodělávat týdny a nikde na to
+           neupozorní. Všechna data pro tyhle kontroly už frontend stahuje,
+           jen se nikde nevyhodnocovala pohromadě. Karta se ukáže jen tehdy,
+           když je co hlásit – zdravý stav nemá zabírat místo. -->
+      <div id="zdraviCard" class="card zdravi-card" style="display:none;">
+        <h3>Na co si dát pozor</h3>
+        <div id="zdraviContent"></div>
+      </div>
+
       <div class="grid-stats" id="statTiles">
         <div class="stat-tile"><div class="label">Zůstatek banku</div><div class="value" id="stBalance">—</div><div class="hint" id="stBalanceHint"></div></div>
         <div class="stat-tile"><div class="label">Celkový zisk</div><div class="value" id="stProfit">—</div><div class="hint" id="stProfitHint"></div></div>
-        <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="stWinRate">—</div><div class="hint" id="stWinHint"></div></div>
+        <div class="stat-tile"><div class="label">Úspěšnost</div><div class="value" id="stWinRate">—</div><div class="hint" id="stWinHint"></div></div>
         <div class="stat-tile"><div class="label">Otevřené sázky</div><div class="value" id="stOpen">—</div><div class="hint">čeká na vyhodnocení</div></div>
         <div class="stat-tile" title="Zisk nebo ztráta jen z dnešních vyhodnocených sázek – celkový zisk vlevo se mění pomalu, tohle ukáže, jak dopadl právě dnešek.">
           <div class="label">Dnes</div><div class="value" id="stToday">—</div><div class="hint" id="stTodayHint"></div>
@@ -69,8 +78,8 @@
            liště (ta je vidět na všech stránkách, tahle karta jen na
            Dashboardu). Dřív tu bylo druhé tlačítko volající identický
            endpoint, jen matlo, kam kliknout. -->
-      <div id="settleBar" class="card" style="display:none; margin-bottom:16px;">
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div id="settleBar" class="card" style="display:none;">
+        <div class="row">
           <span id="settleSpinner" class="spinner" style="width:16px;height:16px; display:none;"></span>
           <span id="settleText" style="flex:1; font-size:13px; color:var(--txt2);"></span>
           <span class="muted" style="font-size:12px;">Kontrola dole ve stavové liště ↓</span>
@@ -88,21 +97,21 @@
         <div class="card">
           <h3>Agent</h3>
           <div id="agentSummary" class="loading"><span class="spinner"></span></div>
-          <button class="btn primary" id="runAgentBtn" style="width:100%; justify-content:center; margin-top:12px;">Spustit agenta teď</button>
+          <button class="btn primary btn-block" id="runAgentBtn" style="margin-top:12px;">Spustit agenta teď</button>
         </div>
       </div>
 
-      <div id="kalibraceCard" class="card" style="display:none; margin-top:16px;">
-        <h3>🎯 Říká model pravdu?</h3>
-        <p class="muted" style="font-size:12.5px; margin:0 0 12px; line-height:1.6;">
+      <div id="kalibraceCard" class="card" style="display:none;">
+        <h3>Říká model pravdu?</h3>
+        <p class="card-sub">
           Porovnání toho, co model u sázky tvrdil, s tím, jak to dopadlo. Kdyby byl model
           poctivý, obě čísla v každém pásmu by seděla na sobě.
         </p>
         <div id="kalibraceContent"></div>
       </div>
 
-      <div id="insightCard" class="card" style="display:none; margin-top:16px;">
-        <h3>📊 Vedoucí strategie v aréně</h3>
+      <div id="insightCard" class="card" style="display:none;">
+        <h3>Vedoucí strategie v aréně</h3>
         <div id="insightContent"></div>
       </div>
 
@@ -205,7 +214,7 @@
 
       <div class="card">
         <h3>Dostupné soutěže</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <p class="card-sub">
           Soutěže, ve kterých appka vidí nadcházející zápasy, a kolik jich v nabídce je.
         </p>
         <div id="leaguesSummary"></div>
@@ -250,14 +259,14 @@
       <div class="arena-charts">
         <div class="card">
           <h3>Srovnání kategorií</h3>
-          <p class="muted" style="font-size:12.5px; margin:0 0 12px;">
+          <p class="card-sub">
             Vyplácí se skládat tikety, nebo sázet po jedné? Křivka ukazuje vývoj realizovaného zisku.
           </p>
           <div id="groupCompare" class="loading"><span class="spinner"></span></div>
         </div>
         <div class="card">
           <h3>Kalibrace modelu</h3>
-          <p class="muted" style="font-size:12.5px; margin:0 0 10px;">
+          <p class="card-sub">
             Když model řekne "75 % jistota", vyhrává napříč sázkami skutečně ~75 %? Modrá čára = ideální.
           </p>
           <div class="chart-wrap"><svg id="calibrationSVG" viewBox="0 0 700 260" class="chart"></svg></div>
@@ -265,8 +274,8 @@
       </div>
 
       <div class="card">
-        <h3>⏱️ Kdy aréna vydělává</h3>
-        <p class="muted" style="font-size:12.5px; margin:0 0 12px; max-width:80ch;">
+        <h3>Kdy aréna vydělává</h3>
+        <p class="card-sub">
           Rozklad všech vyhodnocených sázek arény podle dne v týdnu a denní doby výkopu.
           Velký vzorek napříč všemi strategiemi, takže případný vzorec ukazuje na model
           samotný, ne na šum jedné strategie.
@@ -315,17 +324,20 @@
         <div class="stat-tile"><div class="label">Aktuální zůstatek</div><div class="value" id="bCurrent">—</div><div class="hint" id="bOpenStake"></div></div>
         <div class="stat-tile"><div class="label">Realizovaný zisk</div><div class="value" id="bProfit">—</div><div class="hint" id="bProfitHint"></div></div>
         <div class="stat-tile"><div class="label">ROI</div><div class="value" id="bRoi">—</div></div>
-        <div class="stat-tile"><div class="label">Win rate</div><div class="value" id="bWinRate">—</div></div>
+        <div class="stat-tile"><div class="label">Úspěšnost</div><div class="value" id="bWinRate">—</div></div>
+        <div class="stat-tile" title="Closing Line Value: bereme lepší kurz, než jaký má trh těsně před výkopem? Na malém vzorku je to spolehlivější ukazatel než zisk, protože nezávisí na tom, jestli zrovna padl gól.">
+          <div class="label">CLV</div><div class="value" id="bClv">—</div><div class="hint" id="bClvHint"></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Equity Curve</h3>
+        <h3>Vývoj banku v čase</h3>
         <div class="chart-wrap"><svg id="equitySVG" viewBox="0 0 800 260" class="chart"></svg></div>
       </div>
 
       <div class="card">
-        <h3>📅 Zisk a ztráta po dnech</h3>
-        <p class="muted" style="font-size:12.5px; margin:0 0 12px; max-width:80ch;">
+        <h3>Zisk a ztráta po dnech</h3>
+        <p class="card-sub">
           Kolik agent vydělal nebo prodělal každý den. Equity křivka výš ukazuje
           celkový vývoj, tohle rozpad na jednotlivé dny – hned je vidět, jestli
           ztráta narostla postupně, nebo ji způsobil jeden špatný den.
@@ -336,15 +348,15 @@
 
       <div class="arena-charts">
         <div class="card">
-          <h3>🏅 Rekordy a série</h3>
-          <p class="muted" style="font-size:12.5px; margin:0 0 12px;">
+          <h3>Rekordy a série</h3>
+          <p class="card-sub">
             Nejlepší a nejhorší okamžiky banku a jak dlouhé byly šňůry výher a proher.
           </p>
           <div id="bankRecords" class="loading"><span class="spinner"></span></div>
         </div>
         <div class="card">
-          <h3>🎯 ROI podle výše kurzu</h3>
-          <p class="muted" style="font-size:12.5px; margin:0 0 12px;">
+          <h3>ROI podle výše kurzu</h3>
+          <p class="card-sub">
             Na kterých kurzech agent vydělává a na kterých tratí. Systematická
             ztráta v jednom pásmu je návod, kde přitvrdit filtry.
           </p>
@@ -352,8 +364,24 @@
         </div>
       </div>
 
+      <details class="card" id="ligyKarta">
+        <summary>Kde agent vydělává a kde tratí <span class="card-shrnuti" id="ligySouhrn"></span></summary>
+        <div class="card-telo">
+          <p class="card-sub">
+            Výkon agenta po jednotlivých soutěžích. Ligy s aspoň pěti vyhodnocenými
+            sázkami a záporným ROI jsou kandidáti na vyřazení – u menšího vzorku
+            jde spíš o náhodu než o vzorec.
+          </p>
+          <div id="ligyVykon" class="loading"><span class="spinner"></span></div>
+        </div>
+      </details>
+
       <div class="card">
-        <h3>Historie sázek</h3>
+        <div class="row-between" style="margin-bottom:var(--space-3);">
+          <h3 style="margin:0;">Historie sázek</h3>
+          <button class="btn small" id="exportSazekBtn" title="Stáhne všechny sázky jako CSV pro Excel nebo Sheets">⬇ CSV</button>
+        </div>
+        <p class="card-sub" id="betsTableInfo"></p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Zápas</th><th>Kdy</th><th>Zápas stav</th><th>Tip</th><th>Vklad</th><th>Kurz</th><th>Sázka</th><th>P&L</th></tr></thead>
@@ -370,8 +398,8 @@
         <p class="lead">Druhý, nezávislý model se učí z vyhodnocených sázek agenta i celé arény sázkařů – umí tip agenta vetovat, pokud mu nevěří.</p>
       </div>
 
-      <div class="card" style="margin-bottom:16px;">
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div class="card">
+        <div class="row">
           <span style="font-size:13px; color:var(--txt2); flex:1;">Trénuje se na settled sázkách agenta i všech sázkařů z arény (mnohem větší vzorek). Přetrénuje se i automaticky po každých pár nových vyhodnocených sázkách.</span>
           <button class="btn primary" id="retrainMlBtn">Přetrénovat teď</button>
         </div>
@@ -385,8 +413,8 @@
       </div>
 
       <div class="card">
-        <h3>📉 Umí model něco navíc proti trhu?</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px; max-width:82ch;">
+        <h3>Umí model něco navíc proti trhu?</h3>
+        <p class="card-sub">
           Porovnání se zavíracím kurzem Pinnacle – nejlepší veřejně dostupný odhad
           pravděpodobnosti. <strong>Nižší Brierovo skóre = přesnější.</strong> Když je
           model nad čarou trhu, neví nic navíc a sázet podle něj je proti přesile.
@@ -396,8 +424,8 @@
       </div>
 
       <div class="card">
-        <h3>⚖️ Rizikový profil agenta</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px; max-width:82ch;">
+        <h3>Rizikový profil agenta</h3>
+        <p class="card-sub">
           Samotné ROI neřekne, kolik rizika si agent vybral. Tyhle dva ukazatele ano.
         </p>
         <div id="riskProfile" class="loading"><span class="spinner"></span></div>
@@ -405,7 +433,7 @@
 
       <div class="card">
         <h3>Kde agent vydělává a kde ztrácí</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <p class="card-sub">
           Rozbor už vyhodnocených sázek podle ligy, sportu, typu trhu a pásma kurzu – ukáže,
           jestli ztráta pochází z konkrétní soutěže nebo z určitého typu kurzu.
         </p>
@@ -414,8 +442,8 @@
       </div>
 
       <div class="card">
-        <h3>Feature importance</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">Které vstupy model při rozhodování považuje za nejdůležitější.</p>
+        <h3>Které signály model nejvíc váží</h3>
+        <p class="card-sub">Které vstupy model při rozhodování považuje za nejdůležitější.</p>
         <div id="mlFeatures" class="loading"><span class="spinner"></span></div>
       </div>
     </section>
@@ -474,7 +502,7 @@
 
       <div class="card">
         <h3>Notifikace</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">Appka musí zůstat otevřená v prohlížeči (běží lokálně, žádný server push) – upozorní tě na nový tip dne a na vyhodnocené sázky.</p>
+        <p class="card-sub">Appka musí zůstat otevřená v prohlížeči (běží lokálně, žádný server push) – upozorní tě na nový tip dne a na vyhodnocené sázky.</p>
         <div class="field" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
           <label style="margin:0;">Upozornění zapnutá</label>
           <label class="toggle"><input type="checkbox" id="cfgNotifEnabled"><span class="slider"></span></label>
@@ -484,8 +512,8 @@
       </div>
 
       <div class="card">
-        <h3>🌐 Vzdálený přístup</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <h3>Vzdálený přístup</h3>
+        <p class="card-sub">
           Adresy, na kterých je tenhle server dostupný z ostatních zařízení v domácí síti
           (počítač, mobil, tablet). Přihlašovací údaje jsou stejné jako sem.
         </p>
@@ -494,7 +522,7 @@
 
       <div class="card">
         <h3>Znalost týmů (ratingy)</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <p class="card-sub">
           Model se sám učí jen z toho, co si vyhodnotí, takže po čerstvém startu o týmech
           skoro nic neví a predikce jsou ploché. Tímhle se doženou z odehrané historie,
           kterou ESPN dává zdarma. Běží to i několik minut a jde to kdykoliv zopakovat –
@@ -523,7 +551,7 @@
 
       <div class="card">
         <h3>Doplňkové ligy (API-Football)</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <p class="card-sub">
           ESPN nevede některé evropské ligy vůbec – českou, polskou, slovenskou, ukrajinskou,
           chorvatskou ani srbskou. Bezplatný klíč z <strong>api-football.com</strong> je doplní.
           Ve free tarifu jdou stáhnout jen rozpisy a výsledky, ne kurzy, takže tyhle zápasy
@@ -538,7 +566,7 @@
 
       <div class="card">
         <h3>Výkon a data</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 12px;">
+        <p class="card-sub">
           Řídí, jak rychle a jak daleko appka natahuje zápasy z ESPN. Změna se
           projeví hned, bez restartu appky.
         </p>
@@ -580,9 +608,10 @@
         <p class="lead">Co appka dělá, jak funguje predikční model a co znamená každá stránka</p>
       </div>
 
-      <div class="card">
-        <h3>🎯 Co appka dělá</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+      <details class="card" id="navod-co-appka-d-l" open>
+        <summary>Co appka dělá</summary>
+        <div class="card-telo">
+        <p class="prose">
           KurzAnalytik stahuje zápasy a reálné kurzy sázkových kanceláří (přes veřejné ESPN API, zdarma),
           spočítá vlastní odhad pravděpodobnosti výsledku a porovná ho s kurzem sázkovky. Když model
           věří ve výsledek víc, než kurz naznačuje, jde o potenciálně výhodnou sázku ("value"). Appka
@@ -590,64 +619,118 @@
           appka sleduje, jak si vede – vše je <strong>virtuální/papírové sázení</strong>, žádné skutečné peníze.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🧮 Predikční model</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7;">
+      <details class="card" id="navod-predik-n-model">
+        <summary>Predikční model</summary>
+        <div class="card-telo">
+        <p class="prose">
           Model počítá <strong>očekávané góly</strong> obou týmů (Poissonovo rozdělení s Dixon-Coles
           korekcí nízkých skóre) a z nich pravděpodobnosti výsledku (1X2), gólových linií (Over/Under)
           a dalších trhů. Síla týmu se měří <strong>attack/defense ratingem</strong> – poměrem skutečně
           daných/obdržených gólů oproti očekávání, který se po každém odehraném a vyhodnoceném zápase
           automaticky aktualizuje (učí se z reálných výsledků, ne z ručního zásahu).
         </p>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin-bottom:0;">
+        <p class="prose">
           <strong>Důležité:</strong> appka pracuje jen se <strong>skutečnými kurzy sázkovek</strong> z ESPN.
           Pokud pro zápas/trh nejsou reálné kurzy k dispozici, appka nikdy kurz nevymýšlí ani
           nesimuluje – ukáže jen odhad modelu (badge "MODEL"), bez porovnání s trhem a bez EV.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🗺️ Stránky appky</h3>
+      <details class="card" id="navod-str-nky-appky">
+        <summary>Stránky appky</summary>
+        <div class="card-telo">
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
             <strong>⭐ Doporučené</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Nejsilnější tipy na dnešek napříč sporty, včetně <strong>rozehraných zápasů</strong> (badge 🔴 ŽIVĚ s minutou a průběžným skóre). Karta zámerně neukazuje všechno, co model spočítá – tip se zobrazí, jen když má pravděpodobnost nad zvolenou laťkou <em>a zároveň</em> nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez té druhé podmínky by se doporučovaly i tipy typu „favorit vyhraje @ 1,05“, které sice většinou vyjdou, ale dlouhodobě prodělávají. Z každého zápasu jde do výpisu jen jeden nejlepší tip. Pásma: <strong>Tutovka</strong> (nejvyšší jistota), <strong>Hodnota</strong> (kurz je štědřejší, než odpovídá odhadu), <strong>Solidní</strong>. Nahoře je <strong>trychtýř</strong>, který ukazuje, kde se zápasy ztrácejí – nejčastěji ne na přísné laťce, ale na chybějících kurzech sázkovky (appka žádný kurz nevymýšlí). Horizont se dá přepnout na dnes / dnes a zítra / 3 dny; jen na dnešek toho bývá málo, protože večer už je většina zápasů rozehraná nebo dohraná. Když neprojde nic, karta to napíše i s rozpisem – prázdno je poctivější než slabé doporučení.</p>
+            <p class="item-desc">Nejsilnější tipy na dnešek napříč sporty, včetně <strong>rozehraných zápasů</strong> (badge 🔴 ŽIVĚ s minutou a průběžným skóre). Karta zámerně neukazuje všechno, co model spočítá – tip se zobrazí, jen když má pravděpodobnost nad zvolenou laťkou <em>a zároveň</em> nezápornou očekávanou hodnotu proti kurzu sázkovky. Bez té druhé podmínky by se doporučovaly i tipy typu „favorit vyhraje @ 1,05“, které sice většinou vyjdou, ale dlouhodobě prodělávají. Z každého zápasu jde do výpisu jen jeden nejlepší tip. Pásma: <strong>Tutovka</strong> (nejvyšší jistota), <strong>Hodnota</strong> (kurz je štědřejší, než odpovídá odhadu), <strong>Solidní</strong>. Nahoře je <strong>trychtýř</strong>, který ukazuje, kde se zápasy ztrácejí – nejčastěji ne na přísné laťce, ale na chybějících kurzech sázkovky (appka žádný kurz nevymýšlí). Horizont se dá přepnout na dnes / dnes a zítra / 3 dny; jen na dnešek toho bývá málo, protože večer už je většina zápasů rozehraná nebo dohraná. Když neprojde nic, karta to napíše i s rozpisem – prázdno je poctivější než slabé doporučení.</p>
           </div>
           <div>
             <strong>▦ Dashboard</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Přehled: zůstatek banku, celkový zisk, win rate, dlaždice <strong>„Dnes“</strong> (bilance jen z dnešních vyhodnocených sázek – celkový zisk se hýbe pomalu), tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta <strong>„🎯 Říká model pravdu?“</strong> (porovnání toho, co model u sázky tvrdil, s tím, jak to dopadlo, po pásmech pravděpodobnosti a odděleně za současný a vyřazený model – nesváže se s nastavitelným prahem, takže jde srovnávat v čase), karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
+            <p class="item-desc">Přehled: zůstatek banku, celkový zisk, win rate, dlaždice <strong>„Dnes“</strong> (bilance jen z dnešních vyhodnocených sázek – celkový zisk se hýbe pomalu), tip dne (nejjistější sázka na reálný kurz dnes), stav agenta, karta <strong>„🎯 Říká model pravdu?“</strong> (porovnání toho, co model u sázky tvrdil, s tím, jak to dopadlo, po pásmech pravděpodobnosti a odděleně za současný a vyřazený model – nesváže se s nastavitelným prahem, takže jde srovnávat v čase), karta "📊 Vedoucí strategie v aréně" (srovnání s nejlepším sázkařem + volitelné převzetí jeho nastavení) a posledních 12 tipů agenta s časem začátku a rozbalitelným zdůvodněním ("💡 Proč vsazeno").</p>
           </div>
           <div>
             <strong>⚽ Zápasy</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr „💰 Jen s kurzy“ (jen zápasy, kde ESPN dalo reálný kurz – tedy ty, na kterých appka vůbec může sázet) a „🎫 Vsazené“ (jen zápasy, kde má agent sázku). Protože stránka běžně ukazuje přes 300 karet, je pod filtry ještě <strong>textové pole</strong> pro zúžení seznamu podle týmu, soutěže nebo země. U každého zápasu je datum a čas výkopu v místním čase, u probíhajících „🔴 ŽIVĚ“ s aktuální minutou a průběžným skóre (obnovuje se samo), u dohraných konečný výsledek. Dál dostupné reálné trhy (1X2 i gólové linie), u vsazených zápasů zdůvodnění agenta nebo sázkaře a odkaz <strong>🔗 Tipsport</strong> pro dohledání zápasu u sázkovky.</p>
+            <p class="item-desc">Všechny zápasy vybraného dne a sportu, seskupené podle lig. Filtr sportu (fotbal/hokej/basketbal/am. fotbal), filtr „💰 Jen s kurzy“ (jen zápasy, kde ESPN dalo reálný kurz – tedy ty, na kterých appka vůbec může sázet) a „🎫 Vsazené“ (jen zápasy, kde má agent sázku). Protože stránka běžně ukazuje přes 300 karet, je pod filtry ještě <strong>textové pole</strong> pro zúžení seznamu podle týmu, soutěže nebo země. U každého zápasu je datum a čas výkopu v místním čase, u probíhajících „🔴 ŽIVĚ“ s aktuální minutou a průběžným skóre (obnovuje se samo), u dohraných konečný výsledek. Dál dostupné reálné trhy (1X2 i gólové linie), u vsazených zápasů zdůvodnění agenta nebo sázkaře a odkaz <strong>🔗 Tipsport</strong> pro dohledání zápasu u sázkovky.</p>
           </div>
           <div>
             <strong>🔍 Hledat</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vyhledání týmu podle názvu (stačí část, diakritika nevadí) – vypíše jeho nadcházející zápasy na 14 dní dopředu a po rozkliknutí ukáže kompletní rozbor: pravděpodobnosti, očekávané skóre, všechny spočítané trhy a co by na zápas vsadil agent. Pod tím je přehled všech soutěží, ve kterých appka právě vidí zápasy, s počtem zápasů a kolik z nich má reálné kurzy.</p>
+            <p class="item-desc">Vyhledání týmu podle názvu (stačí část, diakritika nevadí) – vypíše jeho nadcházející zápasy na 14 dní dopředu a po rozkliknutí ukáže kompletní rozbor: pravděpodobnosti, očekávané skóre, všechny spočítané trhy a co by na zápas vsadil agent. Pod tím je přehled všech soutěží, ve kterých appka právě vidí zápasy, s počtem zápasů a kolik z nich má reálné kurzy.</p>
           </div>
           <div>
             <strong>🎲 Sázkaři</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Aréna virtuálních sázkařů (15 v každé z kategorií jednotlivé/tikety/kombinace, plus kategorie AI), každý s vlastním bankem 200 Kč a jinou strategií (viz níže), sázka omezená na 5–10 Kč na tiket. Záložka <strong>„🏆 Vše“</strong> ukáže celkový žebříček napříč kategoriemi, jinak se řadí po kategoriích (porovnávat akumulátor s jednotlivou sázkou nedává smysl). Nad tabulkou je hledání podle jména i strategie a rychlé filtry (v plusu / ve ztrátě / rozehrané / bez sázek). Ve sloupcích je vedle zisku a ROI i <strong>CLV</strong> – na malém vzorku spolehlivější ukazatel než zisk. Kliknutím na řádek se rozbalí historie a výkon podle sportu/trhu/ligy, tlačítko „⋯“ nabídne reset, přetrénování a ruční vsazení. Kategorie AI má navíc <strong>AI turnaj</strong>: žebříček podle CLV a tlačítko, kterým se z vítěze vytvoří „AI Šampion“ s mírně pozměněnými parametry (běží i automaticky v denním retrainu). Karta <strong>„⏱️ Kdy aréna vydělává“</strong> rozkládá všechny sázky podle dne v týdnu a denní doby výkopu. Tlačítko „🧬 Vygenerovat z dat“ postaví nového sázkaře podle statisticky nejvýnosnějšího segmentu (kurz/jistota/trh) z dosavadní historie celé arény.</p>
+            <p class="item-desc">Aréna virtuálních sázkařů (15 v každé z kategorií jednotlivé/tikety/kombinace, plus kategorie AI), každý s vlastním bankem 200 Kč a jinou strategií (viz níže), sázka omezená na 5–10 Kč na tiket. Záložka <strong>„🏆 Vše“</strong> ukáže celkový žebříček napříč kategoriemi, jinak se řadí po kategoriích (porovnávat akumulátor s jednotlivou sázkou nedává smysl). Nad tabulkou je hledání podle jména i strategie a rychlé filtry (v plusu / ve ztrátě / rozehrané / bez sázek). Ve sloupcích je vedle zisku a ROI i <strong>CLV</strong> – na malém vzorku spolehlivější ukazatel než zisk. Kliknutím na řádek se rozbalí historie a výkon podle sportu/trhu/ligy, tlačítko „⋯“ nabídne reset, přetrénování a ruční vsazení. Kategorie AI má navíc <strong>AI turnaj</strong>: žebříček podle CLV a tlačítko, kterým se z vítěze vytvoří „AI Šampion“ s mírně pozměněnými parametry (běží i automaticky v denním retrainu). Karta <strong>„⏱️ Kdy aréna vydělává“</strong> rozkládá všechny sázky podle dne v týdnu a denní doby výkopu. Tlačítko „🧬 Vygenerovat z dat“ postaví nového sázkaře podle statisticky nejvýnosnějšího segmentu (kurz/jistota/trh) z dosavadní historie celé arény.</p>
           </div>
           <div>
             <strong>💰 Bankroll</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek. K tomu <strong>„📅 Zisk a ztráta po dnech“</strong> (odliší postupně narůstající ztrátu od jednoho špatného dne), <strong>„🏅 Rekordy a série“</strong> (nejvyšší/nejnižší stav banku, nejlepší a nejhorší den, nejdelší šňůry výher a proher) a <strong>„🎯 ROI podle výše kurzu“</strong> – ten ukáže, jestli ztráta pochází z konkrétního pásma kurzů, což je přímý návod, kde přitvrdit filtry.</p>
+            <p class="item-desc">Vývoj hlavního banku agenta – equity křivka, ROI, win rate a kompletní historie všech jeho sázek. K tomu <strong>„📅 Zisk a ztráta po dnech“</strong> (odliší postupně narůstající ztrátu od jednoho špatného dne), <strong>„🏅 Rekordy a série“</strong> (nejvyšší/nejnižší stav banku, nejlepší a nejhorší den, nejdelší šňůry výher a proher) a <strong>„🎯 ROI podle výše kurzu“</strong> – ten ukáže, jestli ztráta pochází z konkrétního pásma kurzů, což je přímý návod, kde přitvrdit filtry.</p>
           </div>
           <div>
             <strong>🧠 ML Learning</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance, tlačítko pro ruční přetrénování a rozklad, kde agent vydělává/ztrácí podle sportu, typu trhu, ligy a pásma kurzu. Počet trénovacích vzorků roste jen tak rychle, jak reálně končí zápasy – hint u čísla ukazuje, kolik toho ještě čeká na výsledek. Navíc <strong>„📉 Umí model něco navíc proti trhu?“</strong> – graf Brierova skóre proti zavíracímu kurzu Pinnacle v čase, tedy jestli se model zlepšuje nebo degraduje, a <strong>„⚖️ Rizikový profil agenta“</strong> s maximálním propadem banku a Sharpe ratiem.</p>
+            <p class="item-desc">Druhý, nezávislý model (gradient boosting), který se učí ze settled sázek agenta i celé arény a umí tip agenta vetovat, když mu nevěří. Stav, přesnost, feature importance, tlačítko pro ruční přetrénování a rozklad, kde agent vydělává/ztrácí podle sportu, typu trhu, ligy a pásma kurzu. Počet trénovacích vzorků roste jen tak rychle, jak reálně končí zápasy – hint u čísla ukazuje, kolik toho ještě čeká na výsledek. Navíc <strong>„📉 Umí model něco navíc proti trhu?“</strong> – graf Brierova skóre proti zavíracímu kurzu Pinnacle v čase, tedy jestli se model zlepšuje nebo degraduje, a <strong>„⚖️ Rizikový profil agenta“</strong> s maximálním propadem banku a Sharpe ratiem.</p>
           </div>
           <div>
             <strong>⚙ Nastavení</strong>
-            <p style="font-size:12.5px; color:var(--txt2); margin:4px 0 0;">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (výchozí 8, 12, 16, 20), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku a notifikace (včetně hlavního vypínače – systémové oprávnění prohlížeče jednou udělené jinak odebrat nejde). Dál <strong>„Výkon a data“</strong> (počet paralelních dotazů na ESPN a jak daleko dopředu hledat zápasy, obojí bez restartu; mazání keše, reset databáze tipů, export a import zálohy) a <strong>pokročilá diagnostika</strong>: stav keše, běh background smyček, poslední benchmark, čerstvost Tipsport importu, velikosti datových souborů a stav zálohy do GitHub Gistu.</p>
+            <p class="item-desc">Zapnutí/vypnutí agenta, automatický běh podle rozvrhu (výchozí 8, 12, 16, 20), minimální jistota a kurz pro tutovku, způsob výpočtu vkladu (Kelly/plochá částka), denní strop banku a notifikace (včetně hlavního vypínače – systémové oprávnění prohlížeče jednou udělené jinak odebrat nejde). Dál <strong>„Výkon a data“</strong> (počet paralelních dotazů na ESPN a jak daleko dopředu hledat zápasy, obojí bez restartu; mazání keše, reset databáze tipů, export a import zálohy) a <strong>pokročilá diagnostika</strong>: stav keše, běh background smyček, poslední benchmark, čerstvost Tipsport importu, velikosti datových souborů a stav zálohy do GitHub Gistu.</p>
           </div>
         </div>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>📊 Stavová lišta (dole na každé stránce)</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+      <details class="card" id="navod-ovladani">
+        <summary>Ovládání a zkratky</summary>
+        <div class="card-telo">
+          <p class="prose">
+            <strong>Klávesy 1–9 a 0</strong> přepínají stránky v pořadí, v jakém jsou v menu –
+            1 je Dashboard, 2 Doporučené a tak dál. Ve formulářových polích se ignorují,
+            takže se dá normálně psát do filtrů. <strong>?</strong> připomene, kolik stránek appka má.
+          </p>
+          <p class="prose">
+            <strong>Stránka je v adrese.</strong> Po obnovení stránky (F5) zůstaneš tam, kde jsi byl,
+            a odkaz na konkrétní kartu jde uložit do záložek nebo poslat.
+          </p>
+          <p class="prose">
+            <strong>Sbalitelné karty</strong> (Návod, výkon po ligách) si pamatují, jestli jsi je nechal
+            otevřené nebo zavřené, a takhle je najdeš i příště. Zavřená karta pořád nese
+            souhrn napravo v nadpisu, ať je vidět, jestli má smysl ji otevírat.
+          </p>
+          <p class="prose">
+            <strong>⬇ CSV</strong> u historie sázek stáhne všechny sázky do tabulkového procesoru.
+            Oddělovač je středník a soubor začíná BOM značkou, takže ho český Excel otevře
+            rovnou správně i s diakritikou.
+          </p>
+        </div>
+      </details>
+
+      <details class="card" id="navod-zdravi">
+        <summary>Na co si dát pozor (panel na dashboardu)</summary>
+        <div class="card-telo">
+          <p class="prose">
+            Appka umí tiše prodělávat – bank klesá a model se proti trhu zhoršuje, aniž by
+            se o tom kdekoli psalo. Tenhle panel tu skládačku dělá za tebe a ukáže se
+            <strong>jen když je co hlásit</strong>; když je vše v pořádku, nezabírá místo.
+          </p>
+          <p class="prose">Kontroluje pět věcí:
+            <strong>model je horší než trh</strong> (a zvlášť varuje, když se tři měření po sobě zhoršují),
+            <strong>agent nesází</strong> (vypnutý, nebo nic neprošlo filtry),
+            <strong>bank pod polovinou</strong> počátečního stavu,
+            <strong>vyhodnocování hlásí chybu</strong> a
+            <strong>ML model se dlouho netrénoval</strong>.
+            Každý řádek má odkaz na stránku, kde se to dá řešit.
+          </p>
+          <p class="prose">
+            Žlutý puntík = stojí za pozornost, červený = řeš to. Data si panel bere
+            z endpointů, které dashboard stahuje tak jako tak, takže appku nezpomaluje.
+          </p>
+        </div>
+      </details>
+
+      <details class="card" id="navod-stavov-li-ta-dole-na-ka-d-st">
+        <summary>Stavová lišta (dole na každé stránce)</summary>
+        <div class="card-telo">
+        <p class="prose">
           Vždy vidět, ať jsi na kterékoli kartě. Dva progres bary se objeví, jen když se zrovna něco
           děje: <strong>📥 Načítání zápasů</strong> (kolik z ~218 lig už appka stáhla z ESPN) a
           <strong>✅ Vyhodnocování</strong> (postup právě běžící kontroly výsledků). Vpravo běží
@@ -656,10 +739,12 @@
           appky to nic nemění.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🤖 Automatický agent</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+      <details class="card" id="navod-automatick-agent">
+        <summary>Automatický agent</summary>
+        <div class="card-telo">
+        <p class="prose">
           Když je v Nastavení zapnutý "Auto-run", agent automaticky vsadí nejjistější tip každého
           zápasu, který splňuje prahy jistoty a kurzu – vždy jen na trhy s reálným kurzem sázkovky,
           nikdy dvakrát na stejný zápas a nikdy na zápas, který už začal nebo skončil. Trhy s marží
@@ -669,7 +754,7 @@
           (podíl banku úměrný matematické výhodě sázky) nebo plochou částkou, podle nastavení, vždy
           v rozsahu 5–10 Kč na tiket. Denní strop hlídá, aby agent neprosázel celý bank najednou.
         </p>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:8px 0 0;">
+        <p class="prose">
           Sází podle rozvrhu (výchozí 8, 12, 16, 20 hodin) – <strong>víckrát denně</strong>, ne jen
           jednou. Auto-run i vyhodnocování výsledků běží přes stejný externí "budík" – appka na
           Renderu neběží nepřetržitě na pozadí, takže se obojí spouští při pravidelných kontrolách
@@ -677,10 +762,12 @@
           dopředu, ať má agent i pozdější běh v ten samý den reálně na co sázet.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>📈 Kalibrace a zpětná vazba</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+      <details class="card" id="navod-kalibrace-a-zp-tn-vazba">
+        <summary>Kalibrace a zpětná vazba</summary>
+        <div class="card-telo">
+        <p class="prose">
           Model je ze své podstaty systematicky mírně nepřesný (řekne třeba 78 % jistoty, realita je
           jinde). Appka porovnává modelovou pravděpodobnost se skutečnou úspěšností napříč všemi
           settled sázkami (agent + celá aréna – mnohem větší vzorek než jen agentovy vlastní opatrné
@@ -689,16 +776,18 @@
           graf srovnání modelu se skutečností na stránce Sázkaři.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🌍 Které ligy appka vidí</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
+      <details class="card" id="navod-kter-ligy-appka-vid">
+        <summary>Které ligy appka vidí</summary>
+        <div class="card-telo">
+        <p class="prose">
           Hlavní zdroj je ESPN, který vede 220 fotbalových soutěží zdarma a jako jediný dodává
           i reálné kurzy. Některé evropské ligy v něm ale nejsou vůbec – <strong>česká, polská,
           slovenská, ukrajinská, chorvatská ani srbská</strong>. České týmy se proto objeví jen
           přes evropské poháry.
         </p>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+        <p class="prose">
           Doplnit je jde bezplatným klíčem z api-football.com (Nastavení → Doplňkové ligy).
           Ve free tarifu z něj jdou stáhnout rozpisy a výsledky, ale ne kurzy, takže tyhle zápasy
           budou mít jen odhad modelu s badge „MODEL“ – agent na ně sázet nebude, protože appka
@@ -706,45 +795,49 @@
           normálně, takže ratingy těch týmů porostou.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🔔 Notifikace</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+      <details class="card" id="navod-notifikace">
+        <summary>Notifikace</summary>
+        <div class="card-telo">
+        <p class="prose">
           Appka běží lokálně bez serverového push – notifikace fungují jen přes prohlížeč (Notification
           API) a jen dokud je appka otevřená v kartě. Po zapnutí v Nastavení appka každé 3 minuty
           zkontroluje nový tip dne a nově vyhodnocené sázky agenta a upozorní tě.
         </p>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>🎯 Na co se sází</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 8px;">
+      <details class="card" id="navod-na-co-se-s-z">
+        <summary>Na co se sází</summary>
+        <div class="card-telo">
+        <p class="prose">
           Appka sází jen na trhy, kde má <strong>skutečný kurz sázkovky</strong>. ESPN dává zdarma
           čtyři: výsledek zápasu (1/X/2), jednu gólovou linii (Více/Méně) a handicap. Z kurzů na
           1/X/2 se navíc přesným přepočtem odvodí dvojtipy a „remíza zpět“ – nejsou to nové ceny
           od sázkovky, jen jiné poskládání týchž vzájemně se vylučujících výsledků, takže marže
           zůstává stejná. Dohromady <strong>12 příležitostí na zápas</strong>.
         </p>
-        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0 0 10px; padding-left:20px;">
+        <ul class="prose">
           <li><strong>1 / X / 2</strong> – výsledek zápasu</li>
           <li><strong>Více / Méně</strong> – gólová linie (jen jedna na zápas, tu určuje sázkovka)</li>
           <li><strong>Hendikep</strong> – asijský, linie −1,5 / −0,5 / +0,5</li>
           <li><strong>1X / 12 / X2</strong> – dvojtip, pokrývá dva výsledky ze tří</li>
           <li><strong>Remíza zpět</strong> – při remíze se vrací vklad</li>
         </ul>
-        <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
+        <p class="card-sub">
           Co naopak <strong>nejde</strong>: střelci, karty ani rohy – appka na ně nemá vůbec žádná
           data (ESPN je neposkytuje, ani na vstupu). Stejně tak existuje jen <em>jedna</em>
           gólová linie na zápas u reálných kurzů, i když model počítá i ostatní.
         </p>
 
         <h3 style="margin-top:18px;">📐 Rozšířené odhady modelu (nesázatelné)</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
+        <p class="prose">
           V detailu zápasu (Hledat → rozklik) appka navíc <strong>zobrazuje</strong> – ale nikdy
           nesází – co model spočítá ze scoreline gridu nad rámec ESPN nabídky. Vždy s odznakem
           „jen model, nesázet“, protože pro ně žádný reálný kurz neexistuje:
         </p>
-        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0 0 10px; padding-left:20px;">
+        <ul class="prose">
           <li><strong>Oba dají gól</strong> (BTTS) a <strong>přesný výsledek</strong> (skóre jako 1:1, 2:0…)</li>
           <li><strong>Gólový náskok vítěze</strong> – remíza / 1 gól / 2 góly / 3 a víc</li>
           <li><strong>Kdo dá první gól</strong> – aproximace, grid nezachycuje časové pořadí gólů</li>
@@ -758,7 +851,7 @@
         </ul>
 
         <h3 style="margin-top:18px;">📊 Forma a vzájemné zápasy</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 14px;">
+        <p class="prose">
           Appka si vede historii posledních ~20 zápasů každého týmu (odděleně od ratingu). V detailu
           zápasu se z ní ukazuje <strong>forma</strong> obou týmů (V/R/P za posledních 5 zápasů) a
           tabulka <strong>posledních vzájemných zápasů</strong>. Ratingy navíc rozlišují, jak tým hraje
@@ -767,12 +860,12 @@
         </p>
 
         <h3 style="margin-top:18px;">🎲 Kategorie sázkařů</h3>
-        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0 0 10px;">
+        <p class="prose">
           Sázkaři jsou rozdělení do kategorií podle toho, jaký tiket skládají – každá má
           vlastní žebříček, protože porovnávat akumulátor s jednotlivou sázkou nedává smysl.
           (Celkové pořadí napříč všemi je pod záložkou „🏆 Vše“.)
         </p>
-        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0 0 10px; padding-left:20px;">
+        <ul class="prose">
           <li><strong>1️⃣ Jednotlivé sázky</strong> – jeden tip = jeden tiket. Základní srovnání strategií.</li>
           <li><strong>🎫 Více sázek na tiketu</strong> – akumulátor z několika <em>zápasů</em>. Musí vyjít
               všechny, kurzy se násobí. Zrušená noha se počítá jako kurz 1,0, prohraná shodí celý tiket.</li>
@@ -783,20 +876,20 @@
               Poissonova modelu jako ostatní. Bez natrénovaného modelu nesází vůbec, nehádají.
               Kategorie se navíc sama vyvíjí přes „AI Šampiona“ (viz AI turnaj na stránce Sázkaři).</li>
         </ul>
-        <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
+        <p class="card-sub">
           🔁 <strong>Žádné duplicity:</strong> jeden sázkař nikdy nevsadí na tentýž zápas dvakrát – ani
           jednotlivou sázkou, ani jako nohu dalšího tiketu. Bez toho by „diverzifikovaný“ tiket ve
           skutečnosti několikrát stál na stejném výsledku. Různí sázkaři na týž zápas sázet můžou –
           to je záměr, aby se strategie porovnávaly na stejných příležitostech.
         </p>
-        <p style="font-size:12.5px; color:var(--txt3); line-height:1.7; margin:0 0 14px;">
+        <p class="card-sub">
           ⚠️ Kurz kombinace vzniká vynásobením jednotlivých reálných kurzů. Tak se počítá akumulátor,
           ale skutečné sázkovky kombinace jednoho zápasu cení níž právě kvůli té korelaci. Výsledky
           kategorie „Kombinované zápasy“ proto ber jako teoretické, ne jako to, co bys reálně dostal.
         </p>
 
         <h3 style="margin-top:18px;">Strategie sázkařů</h3>
-        <p style="font-size:12.5px; color:var(--txt2); margin:0 0 10px;">
+        <p class="card-sub">
           Sází podle stejného rozvrhu jako agent, víckrát denně, ale nikdy dvakrát na stejný zápas
           a jen na zápasy, které ještě nezačaly. Nový sázkař si troufne jen na zlomek vypočtené
           sázky (podle nasbírané zkušenosti a dosavadního ROI), po sérii 3 proher v řadě si dá
@@ -824,16 +917,19 @@
           </table>
         </div>
       </div>
+      </details>
 
-      <div class="card">
-        <h3>⚠️ Na co si dát pozor</h3>
-        <ul style="font-size:13px; color:var(--txt2); line-height:1.8; margin:0; padding-left:20px;">
+      <details class="card" id="navod-na-co-si-d-t-pozor">
+        <summary>Na co si dát pozor</summary>
+        <div class="card-telo">
+        <ul class="prose">
           <li>Vše je <strong>virtuální sázení</strong> – appka nikdy nesází skutečné peníze, žádná sázková kancelář o ní neví.</li>
           <li>Model je založen na statistice, ne na jistotě – i "tutovka" s 90% jistotou prohraje jednou z deseti.</li>
           <li>Reálné kurzy z ESPN nemusí být dostupné pro každý zápas/trh – bez nich appka nenabízí žádné doporučení, jen odhad ("MODEL").</li>
           <li>Rating týmů se učí postupně – u nových/málo sledovaných týmů je model zpočátku méně přesný.</li>
         </ul>
       </div>
+      </details>
     </section>
 
   </main>
@@ -868,7 +964,7 @@
 <div id="bettorWizard" class="modal-backdrop" style="display:none;">
   <div class="modal">
     <h3 style="margin:0 0 4px;">Nový sázkař</h3>
-    <p style="font-size:12.5px; color:var(--txt2); margin:0 0 16px;">
+    <p class="card-sub">
       Nastav, jak má sázet. Jméno i popis se vygenerují podle povahy strategie.
     </p>
 

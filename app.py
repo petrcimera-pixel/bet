@@ -606,60 +606,6 @@ def api_analysis(match_id):
 
 
 
-@app.route("/api/form")
-def api_form():
-    """Skutečná forma + vzájemné zápasy (H2H) z ESPN – on-demand pro detail zápasu."""
-    sport = request.args.get("sport", "soccer")
-    slug = request.args.get("slug", "")
-    home_id = request.args.get("home_id", "")
-    away_id = request.args.get("away_id", "")
-    home = request.args.get("home", "")
-    away = request.args.get("away", "")
-    fh = ds.team_form(sport, slug, home_id) if (slug and home_id) else []
-    fa = ds.team_form(sport, slug, away_id) if (slug and away_id) else []
-    # ESPN cesta potřebuje slug + číselné team_id. Karta Hledat ani ruční
-    # dotaz je nemají – znají jen jména – a endpoint pak vracel prázdno,
-    # takže "Forma a vzájemné zápasy" zůstávaly u každého zápasu bez ESPN
-    # identifikátorů prázdné. Vlastní historie modelu (team_history.json,
-    # ~3600 týmů) tytéž zápasy zná a stačí ji převést do stejného tvaru.
-    if not fh:
-        fh = _form_z_historie(home)
-    if not fa:
-        fa = _form_z_historie(away)
-    # H2H = zápasy domácích, kde soupeř byl tým hostů
-    h2h = [g for g in fh if away and (away.lower() in g["opp"].lower() or g["opp"].lower() in away.lower())]
-    return jsonify({"home": fh, "away": fa, "h2h": h2h})
-
-
-def _form_z_historie(team: str, n: int = 6) -> list:
-    """Posledních N zápasů z vlastní historie modelu, ve tvaru, jaký vrací
-    ds.team_form – ať frontend nemusí rozlišovat, odkud forma přišla."""
-    if not team:
-        return []
-    try:
-        hist = pred.team_history_for(team)
-    except Exception:
-        return []
-    # Historie umí mít tentýž zápas dvakrát (jednou bez rohů, podruhé s nimi),
-    # takže se duplicity vyhazují podle data + soupeře + skóre.
-    videne, out = set(), []
-    for e in reversed(hist):
-        klic = (e.get("date"), e.get("opponent"), e.get("gf"), e.get("ga"))
-        if klic in videne:
-            continue
-        videne.add(klic)
-        out.append({
-            "date": e.get("date", ""),
-            "opp": e.get("opponent", "?"),
-            "gf": e.get("gf"), "ga": e.get("ga"),
-            "res": e.get("result"), "completed": True,
-            "loc": e.get("loc"), "league": e.get("league", ""),
-        })
-        if len(out) >= n:
-            break
-    return out
-
-
 @app.route("/api/backtest")
 def api_backtest():
     """Zpětný test modelu na historickém okně: přesnost, Brier score, kalibrace, ROI value sázek."""
@@ -787,7 +733,24 @@ def _attach_tipsport(bets: list) -> list:
 
 @app.route("/api/bankroll")
 def api_bankroll():
-    return jsonify({"stats": bankroll.stats(), "bets": _attach_tipsport(bankroll.state()["bets"][:50])})
+    """Stav banku + historie sázek.
+
+    Dřív se vracelo natvrdo prvních 50 sázek, takže uživatel se 108 sázkami
+    fyzicky neviděl polovinu vlastní historie a nikde to nebylo napsané.
+    Teď se posílá 200 (limit=0 = vše) a k tomu celkový počet, ať jde v UI
+    napsat "zobrazeno X ze Y".
+    """
+    vse = bankroll.state()["bets"]
+    try:
+        limit = int(request.args.get("limit", 200))
+    except (TypeError, ValueError):
+        limit = 200
+    vyber = vse if limit <= 0 else vse[:limit]
+    return jsonify({
+        "stats": bankroll.stats(),
+        "bets": _attach_tipsport(vyber),
+        "total": len(vse),
+    })
 
 
 @app.route("/api/bankroll/settings", methods=["POST"])
@@ -850,40 +813,6 @@ def api_kelly():
     stake = bankroll.kelly_stake(prob, odds, st["balance"], st["kelly_fraction"])
     return jsonify({"stake": stake, "balance": st["balance"],
                     "fraction": st["kelly_fraction"]})
-
-
-@app.route("/api/bet", methods=["POST"])
-def api_bet():
-    d = request.get_json(force=True)
-    try:
-        bet = bankroll.place_bet(
-            d["match_id"], d["label"], d["outcome"], d["odds"],
-            d["prob"], d["stake"], d["home"], d["away"],
-            consensus_odds=d.get("consensus_odds"),
-            match_date=d.get("match_date"), match_time=d.get("match_time"))
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-    return jsonify({"bet": bet, "stats": bankroll.stats()})
-
-
-@app.route("/api/bet/acca", methods=["POST"])
-def api_acca():
-    d = request.get_json(force=True)
-    try:
-        bet = bankroll.place_acca(d["legs"], d["stake"])
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-    return jsonify({"bet": bet, "stats": bankroll.stats()})
-
-
-@app.route("/api/bet/settle", methods=["POST"])
-def api_settle():
-    d = request.get_json(force=True)
-    try:
-        bet = bankroll.settle_bet(d["bet_id"], d["result"])
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-    return jsonify({"bet": bet, "stats": bankroll.stats()})
 
 
 _ON_RENDER = bool(os.environ.get("RENDER"))
@@ -1278,20 +1207,6 @@ def _settle_recent(allow_slugless_fallback=False):
     return results, corner_results, remaining > 0
 
 
-@app.route("/api/bet/autosettle", methods=["POST"])
-def api_autosettle():
-    """Vyhodnotí otevřené SÁZKY (bank) – natáhne čerstvé výsledky z ESPN (stejná
-    robustní logika jako /api/tips/settle), takže funguje i po restartu appky
-    nebo když zápas mezitím doběhl a nebyl v paměťové keši predikcí."""
-    results, corner_results, more_pending = _settle_recent()
-    tips_db.settle_tips(results, corner_results)   # ať zůstane synchronní s tipy
-    n = bankroll.auto_settle(results, corner_results)
-    virtual_bettors.settle_all(results)
-    _persist_push_safe()
-    return jsonify({"settled": n, "stats": bankroll.stats(),
-                    "bets": bankroll.state()["bets"][:50], "more_pending": more_pending})
-
-
 # ---------------------------------------------------------------------------
 # API – databáze tipů modelu
 # ---------------------------------------------------------------------------
@@ -1505,16 +1420,6 @@ def api_settle_diag():
         ],
         "oldest_slugless_dates_sample": oldest_slugless_dates,
     })
-
-
-@app.route("/api/boot-diag")
-def api_boot_diag():
-    """Diagnostika bootu bez nutnosti Render logů: kdy se který background
-    thread reálně spustil (nebo vůbec ne), navíc přidá čas 'teď' aby šlo
-    přímo vypočítat stáří (kolik s uplynulo od boot)."""
-    out = dict(_boot_diag)
-    out["now"] = int(_time.time())
-    return jsonify(out)
 
 
 @app.route("/api/settle/status")
@@ -2166,25 +2071,6 @@ def api_ratings_backfill_archive():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/ratings/backfill-corners", methods=["POST"])
-@login_required
-def api_ratings_backfill_corners():
-    """Doplní rohy (cf/ca) do UŽ zapsané historie - backfill_ratings() je
-    kvůli dedupu znovu nesahne (viz footballdata.backfill_corners_only)."""
-    d = request.get_json(force=True) or {}
-    try:
-        seasons = int(d.get("seasons") or 8)
-    except (TypeError, ValueError):
-        seasons = 8
-    try:
-        res = footballdata.backfill_corners_only(seasons=footballdata.seasons_back(max(1, min(8, seasons))))
-        _PRED_CACHE.clear()
-        _persist_push_safe()
-        return jsonify(res)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
 @app.route("/api/ratings/cleanup-empty", methods=["POST"])
 @login_required
 def api_ratings_cleanup_empty():
@@ -2615,14 +2501,6 @@ def api_settings_save():
     return jsonify(st)
 
 
-@app.route("/api/settings/reset", methods=["POST"])
-def api_settings_reset():
-    st = app_settings.reset_settings()
-    pred.apply_settings()
-    _PRED_CACHE.clear()
-    return jsonify(st)
-
-
 @app.route("/api/data/clear-cache", methods=["POST"])
 def api_data_clear_cache():
     n = app_settings.clear_prediction_cache()
@@ -2651,33 +2529,6 @@ def api_data_import():
     pred.apply_settings()
     _PRED_CACHE.clear()
     return jsonify({"ok": True})
-
-
-@app.route("/api/result", methods=["POST"])
-def api_result():
-    """Zadání reálného výsledku – engine aktualizuje Elo ratingy (učí se)."""
-    d = request.get_json(force=True)
-    pred.update_from_result(d["home"], d["away"], d.get("league", ""),
-                            int(d["home_score"]), int(d["away_score"]),
-                            d.get("sport", "soccer"), d.get("slug", ""))
-    _PRED_CACHE.clear()
-    return jsonify({"ok": True})
-
-
-@app.route("/api/analytics")
-def api_analytics():
-    """Vrátí profesionální metriky: unit_count, sharpe_ratio, monthly_pnl, by_league."""
-    s = bankroll.stats()
-    return jsonify({
-        "unit_count": s.get("unit_count"),
-        "sharpe_ratio": s.get("sharpe_ratio"),
-        "monthly_pnl": s.get("monthly_pnl", {}),
-        "by_league": s.get("by_league", {}),
-        "equity": s.get("equity", []),
-        "profit": s.get("profit"),
-        "roi": s.get("roi"),
-        "win_rate": s.get("win_rate"),
-    })
 
 
 # Příprava na nasazení jako web: adresa/port jdou přepsat proměnnými prostředí
@@ -3059,19 +2910,6 @@ def api_record_feedback():
 
 # ============ BACKTESTING API ============
 
-@app.route("/api/backtest/league", methods=["GET"])
-@login_required
-def api_backtest_league():
-    """Backtest performance by league."""
-    try:
-        bt = backtester.Backtester()
-        bets = bankroll.state()["bets"]
-        results = bt.backtest_by_league(bets)
-        return jsonify({"success": True, "results": results})
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
-
-
 @app.route("/api/backtest/agent-vs-manual", methods=["GET"])
 @login_required
 def api_backtest_agent_vs_manual():
@@ -3132,52 +2970,7 @@ def api_backtest_odds():
 
 
 
-@app.route("/api/feature-importance", methods=["GET"])
-@login_required
-def api_feature_importance():
-    """Get global feature importance."""
-    try:
-        _l = _ml()
-        if not _l:
-            return jsonify({"success": False, "error": "ML not available"}), 500
-
-        stats = _l.get_learning_stats()
-        importance = stats.get("feature_importance", {})
-
-        return jsonify({
-            "success": True,
-            "feature_importance": importance,
-            "top_features": sorted(importance.items(), key=lambda x: x[1], reverse=True)[:8]
-        })
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
-
-
 # ============ ADVANCED ANALYTICS API ============
-
-@app.route("/api/analytics/summary", methods=["GET"])
-@login_required
-def api_analytics_summary():
-    """Get comprehensive analytics summary."""
-    try:
-        stats = bankroll.stats()
-        bt = backtester.Backtester()
-        bets = bankroll.state()["bets"]
-
-        league_perf = bt.backtest_by_league(bets)
-        agent_vs_manual = bt.backtest_agent_vs_manual(bets)
-        best_leagues = bt.get_best_leagues(bets, 5)
-
-        return jsonify({
-            "success": True,
-            "bankroll_stats": stats,
-            "league_performance": league_perf,
-            "agent_vs_manual": agent_vs_manual,
-            "best_leagues": best_leagues,
-        })
-    except Exception as e:
-        return jsonify({"error": str(e), "success": False}), 500
-
 
 # ============ MONITORING API ============
 

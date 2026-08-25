@@ -1311,10 +1311,12 @@ def predict_match(m: dict) -> dict:
                 "first_half": _half_exact_goals_probs(h1_lam),
             },
         }
-        if sport == "soccer":
-            corners = expected_corners(m["home"], m["away"])
-            if corners:
-                extra_markets["corners"] = corners
+        # Trh "rohy" je odpojený na obou koncích: frontend slovo "corners"
+        # nikdy nepoužije a vyhodnocovací cesta dostává vždy prázdný
+        # corner_results, takže sázka na rohy by stejně nikdy nešla uzavřít.
+        # Výpočet přesto běžel u KAŽDÉHO fotbalového zápasu při každé
+        # predikci – čistá práce navíc. Odpojeno; funkce expected_corners()
+        # zůstává, protože rohové statistiky se pořád sbírají do historie.
 
     # Dvojtip a "remíza zpět" – nejsou to nové kurzy od sázkovky, ale PŘESNÝ
     # přepočet z reálných kurzů na 1/X/2. Jsou to vzájemně se vylučující

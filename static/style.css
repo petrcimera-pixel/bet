@@ -27,10 +27,40 @@
   --bad-glow: rgba(255, 63, 102, 0.28);
   --warn: #ffcc33;
   --blue: #5b7dff;
-  --radius: 14px;
+  --bg-soft: #1c1c30;   /* jemné podbarvení uvnitř karet (pilulky, řádky, tracky) */
+  --ls-caps: 0.04em;    /* prostrkání verzálkových popisků */
+  --sb-space: 96px;     /* rezerva pod obsahem na fixní stavovou lištu */
+  --radius-xs: 4px;
   --radius-sm: 9px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
   --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+
+  /* --- Škála odsazení -------------------------------------------------
+     Appka měla 15 různých hodnot gap a mezery mezi bloky vycházely na
+     0 / 16 / 20 / 22 px podle toho, jaké dva prvky se zrovna potkaly
+     (naměřeno v prohlížeči). Odsud dál platí jediná řada – násobky 4 –
+     a nic se nepíše natvrdo v px. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* --- Typografická škála ---------------------------------------------
+     Bylo 19 velikostí písma (12 z nich reálně vykreslených), včetně
+     půlpixelových odchylek typu 12,5 vs 13 px, které nic nesdělují a jen
+     rozbíjejí rytmus. Sedm kroků pokryje všechno, co appka potřebuje. */
+  --fs-xs: 11px;     /* popisky dlaždic, jemné poznámky */
+  --fs-sm: 12px;     /* sekundární text, hinty */
+  --fs-base: 13px;   /* běžný text v kartách, tabulky, tlačítka */
+  --fs-md: 14px;     /* zvýrazněný text */
+  --fs-lg: 16px;     /* nadpis karty */
+  --fs-xl: 22px;     /* nadpis stránky */
+  --fs-2xl: 26px;    /* velká čísla v dlaždicích */
 }
 
 /* Světlé téma. Drží se dvou pravidel:
@@ -52,6 +82,7 @@
     --pos: #05875a; --pos-glow: rgba(5, 135, 90, 0.14);
     --bad: #c01038; --bad-glow: rgba(192, 16, 56, 0.14);
     --warn: #8a5200; --blue: #1d4ed8;
+    --bg-soft: #eef1f7;
   }
 }
 
@@ -65,17 +96,18 @@
   --pos: #05875a; --pos-glow: rgba(5, 135, 90, 0.14);
   --bad: #c01038; --bad-glow: rgba(192, 16, 56, 0.14);
   --warn: #8a5200; --blue: #1d4ed8;
+    --bg-soft: #eef1f7;
 }
 
 :root[data-theme="dark"] { color-scheme: dark; }
 
 /* přepínač témat v Nastavení */
-.theme-pick { display: flex; gap: 8px; flex-wrap: wrap; }
+.theme-pick { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .theme-pick button {
   flex: 1; min-width: 110px; padding: 10px 12px;
   background: var(--panel-2); color: var(--txt2);
   border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-size: 13px; transition: color .12s, border-color .12s;
+  font-size: var(--fs-base); transition: color .12s, border-color .12s;
 }
 .theme-pick button:hover { color: var(--txt); }
 .theme-pick button.on {
@@ -89,14 +121,14 @@ body {
   background: var(--bg);
   color: var(--txt);
   font-family: var(--font);
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
 button { font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-xs); }
 
 /* ---------------------------------------------------------------------- */
 /* App shell */
@@ -118,17 +150,17 @@ button { font-family: inherit; cursor: pointer; }
   height: 100vh;
 }
 .sidebar-brand {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 8px 24px; font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: 0 8px 24px; font-weight: 700; font-size: var(--fs-lg);
 }
-.sidebar-brand .logo { font-size: 22px; }
-.sidebar-brand .ver { color: var(--txt3); font-size: 11px; font-weight: 500; margin-left: auto; }
+.sidebar-brand .logo { font-size: var(--fs-xl); }
+.sidebar-brand .ver { color: var(--txt3); font-size: var(--fs-xs); font-weight: 500; margin-left: auto; }
 
-.nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.nav { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; }
 .nav-btn {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: var(--space-3);
   padding: 10px 12px; border: none; background: transparent; color: var(--txt2);
-  border-radius: var(--radius-sm); text-align: left; font-size: 13.5px; font-weight: 500;
+  border-radius: var(--radius-sm); text-align: left; font-size: var(--fs-base); font-weight: 500;
   transition: background 0.15s, color 0.15s;
 }
 .nav-btn:hover { background: var(--panel-2); color: var(--txt); }
@@ -136,26 +168,47 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--accent-glow); color: var(--accent);
   box-shadow: inset 2px 0 0 var(--accent), 0 0 16px -4px var(--accent-glow);
 }
-.nav-btn .icon { font-size: 16px; width: 18px; text-align: center; }
+.nav-btn .icon { font-size: var(--fs-lg); width: 18px; text-align: center; }
 
 .sidebar-foot { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 12px; }
-.sidebar-foot .who { display: flex; flex-direction: column; gap: 2px; padding: 0 8px 10px; }
-.sidebar-foot .who .name { font-weight: 600; font-size: 13px; }
-.sidebar-foot .who .role { font-size: 11.5px; color: var(--txt3); }
-.sidebar-foot a { display: block; padding: 8px; font-size: 12.5px; color: var(--txt3); text-decoration: none; }
+.sidebar-foot .who { display: flex; flex-direction: column; gap: var(--space-1); padding: 0 8px 10px; }
+.sidebar-foot .who .name { font-weight: 600; font-size: var(--fs-base); }
+.sidebar-foot .who .role { font-size: var(--fs-xs); color: var(--txt3); }
+.sidebar-foot a { display: block; padding: 8px; font-size: var(--fs-sm); color: var(--txt3); text-decoration: none; }
 .sidebar-foot a:hover { color: var(--bad); }
 
 .mobile-topbar { display: none; }
 
-.main { padding: 28px 32px 60px; max-width: 1280px; width: 100%; }
+/* Spodní odsazení drží proměnná, ne tři různá pravidla – jinak ho
+   mobilní zkratka "padding: … 40px" přebije a poslední karta skončí
+   pod fixní stavovou lištou. */
+/* justify-self: center – bez něj se obsah s max-width usadí na začátek
+   grid tracku a na širokém monitoru zůstane vpravo velká prázdná plocha. */
+.main {
+  padding: var(--space-6) var(--space-6) var(--sb-space);
+  max-width: 1280px; width: 100%; justify-self: center;
+}
 
 .page { display: none; }
-.page.active { display: block; animation: fadein 0.2s ease; }
+/* Stránka je svislý stack s JEDNOU mezerou mezi bloky.
+   Dřív se odsazení řešilo marginy mezi sousedy (.card + .card apod.), což
+   fungovalo jen mezi dvěma kartami – jakmile mezi ně přišel .two-col nebo
+   .dop-mrizka, mezera vyšla na 0 px a bloky se dotýkaly (naměřeno). Různá
+   místa si to pak látala inline marginy, odtud většina ze 124 inline stylů
+   v šabloně. S gapem je rytmus jednotný sám od sebe a skryté karty
+   (display:none) nezanechají díru. */
+.page.active {
+  display: flex; flex-direction: column; gap: var(--space-4);
+  animation: fadein 0.2s ease;
+}
 @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-.page-head { margin-bottom: 22px; }
-.page-head h1, .page-head h2 { margin: 0 0 4px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
-.page-head .lead { color: var(--txt2); font-size: 13.5px; margin: 0; }
+/* Hlavička stránky dostává větší odstup než běžné bloky – opticky odděluje
+   "kdo jsem" od obsahu. Řeší se marginem, ne gapem, ať zůstane u nadpisu
+   i na stránkách, které stack nepoužívají. */
+.page-head { margin-bottom: var(--space-2); }
+.page-head h1, .page-head h2 { margin: 0 0 var(--space-1); font-size: var(--fs-xl); font-weight: 700; letter-spacing: -0.01em; }
+.page-head .lead { color: var(--txt2); font-size: var(--fs-base); margin: 0; max-width: 90ch; }
 
 /* ---------------------------------------------------------------------- */
 /* Cards / grids */
@@ -167,14 +220,23 @@ button { font-family: inherit; cursor: pointer; }
   padding: 20px;
   transition: border-color 0.15s;
 }
-.card + .card { margin-top: 16px; }
-.card h3 { margin: 0 0 14px; font-size: 14.5px; font-weight: 600; }
+/* .card + .card margin zrušen – odsazení dělá gap na .page.active.
+   Ponechaný by se s gapem sčítal a rytmus by se zase rozjel. */
+.card h3 {
+  margin: 0 0 var(--space-3); font-size: var(--fs-lg); font-weight: 600;
+  display: flex; align-items: center; gap: var(--space-2);
+}
+/* Podtitulek karty – jednotná náhrada za desítky inline
+   <p style="font-size: var(--fs-sm); color:var(--txt2); margin:0 0 12px"> */
+.card-sub {
+  margin: -6px 0 var(--space-3); font-size: var(--fs-sm);
+  color: var(--txt2); line-height: 1.6; max-width: 88ch;
+}
 
 .grid-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: var(--space-3);
 }
 .stat-tile {
   background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
@@ -194,22 +256,47 @@ button { font-family: inherit; cursor: pointer; }
 }
 .stat-tile:has(.value.pos)::before { background: var(--pos); }
 .stat-tile:has(.value.bad)::before { background: var(--bad); }
-.stat-tile .label { font-size: 11.5px; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-.stat-tile .value { font-size: 24px; font-weight: 700; margin-top: 6px; letter-spacing: -0.01em; }
-.stat-tile .hint { font-size: 11.5px; color: var(--txt2); margin-top: 4px; }
+.stat-tile .label { font-size: var(--fs-xs); color: var(--txt3); text-transform: uppercase; letter-spacing: var(--ls-caps); font-weight: 600; }
+.stat-tile .value { font-size: var(--fs-2xl); font-weight: 700; margin-top: 6px; letter-spacing: -0.01em; }
+.stat-tile .hint { font-size: var(--fs-xs); color: var(--txt2); margin-top: 4px; }
 .stat-tile .value.pos { color: var(--pos); }
 .stat-tile .value.bad { color: var(--bad); }
 
-.two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; align-items: start; }
+.two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-4); align-items: start; }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------------- */
+/* Utility třídy                                                            */
+/* Vznikly z reálného měření: tyhle čtyři vzory se v šabloně opakovaly     */
+/* dohromady ~30× jako inline style. Jako třídy drží jednu hodnotu na     */
+/* jednom místě, takže změna velikosti písma nevyžaduje 30 editací.        */
+/* ---------------------------------------------------------------------- */
+
+/* Souvislý text v kartě (Návod, vysvětlivky). */
+.prose { font-size: var(--fs-base); color: var(--txt2); line-height: 1.75; margin: 0; max-width: 88ch; }
+.prose + .prose { margin-top: var(--space-2); }
+.prose strong { color: var(--txt); }
+ul.prose, ol.prose { padding-left: var(--space-5); }
+ul.prose li, ol.prose li { margin-bottom: var(--space-1); }
+
+/* Vodorovná řada prvků – nahrazuje inline display:flex;align-items:center. */
+.row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.row-end { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2); }
+
+/* Popisek pod položkou seznamu (Návod – "Stránky appky"). */
+.item-desc { font-size: var(--fs-sm); color: var(--txt2); line-height: 1.65; margin: var(--space-1) 0 0; }
+
+/* Tlačítko přes celou šířku karty. */
+.btn-block { width: 100%; justify-content: center; }
 
 /* ---------------------------------------------------------------------- */
 /* Buttons / inputs */
 /* ---------------------------------------------------------------------- */
 .btn {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: var(--space-2);
   background: var(--panel-2); color: var(--txt); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 9px 16px; font-size: 13px; font-weight: 600;
+  border-radius: var(--radius-sm); padding: 9px 16px; font-size: var(--fs-base); font-weight: 600;
   transition: background 0.15s, transform 0.1s;
 }
 .btn:hover { background: var(--border); }
@@ -221,22 +308,22 @@ button { font-family: inherit; cursor: pointer; }
 .btn.primary:hover { background: var(--accent-dim); box-shadow: 0 0 26px -2px var(--accent-glow); }
 .btn.danger { background: transparent; color: var(--bad); border-color: var(--bad); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn.small { padding: 6px 11px; font-size: 12px; }
+.btn.small { padding: 6px 11px; font-size: var(--fs-sm); }
 .btn.icon-only { padding: 8px; width: 34px; justify-content: center; }
 
 input[type="text"], input[type="password"], input[type="number"], select {
   background: var(--bg-alt); border: 1px solid var(--border); color: var(--txt);
-  border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13px; width: 100%;
+  border-radius: var(--radius-sm); padding: 9px 12px; font-size: var(--fs-base); width: 100%;
 }
 input:focus, select:focus { outline: none; border-color: var(--accent); }
-label { font-size: 12.5px; color: var(--txt2); font-weight: 600; display: block; margin-bottom: 5px; }
+label { font-size: var(--fs-sm); color: var(--txt2); font-weight: 600; display: block; margin-bottom: 5px; }
 .field { margin-bottom: 14px; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
 
 .toggle { position: relative; display: inline-block; width: 40px; height: 22px; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle .slider {
-  position: absolute; inset: 0; background: var(--border); border-radius: 22px; transition: 0.2s; cursor: pointer;
+  position: absolute; inset: 0; background: var(--border); border-radius: var(--radius-lg); transition: 0.2s; cursor: pointer;
 }
 .toggle .slider::before {
   content: ""; position: absolute; height: 16px; width: 16px; left: 3px; top: 3px;
@@ -249,9 +336,9 @@ label { font-size: 12.5px; color: var(--txt2); font-weight: 600; display: block;
 /* Tables */
 /* ---------------------------------------------------------------------- */
 .table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; color: var(--txt3); font-weight: 600; font-size: 11px; text-transform: uppercase;
-     letter-spacing: 0.03em; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-base); }
+th { text-align: left; color: var(--txt3); font-weight: 600; font-size: var(--fs-xs); text-transform: uppercase;
+     letter-spacing: var(--ls-caps); padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--panel-2); }
@@ -263,7 +350,7 @@ tr:hover td { background: var(--panel-2); }
 /* ---------------------------------------------------------------------- */
 .loading, .empty-state {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 10px; padding: 50px 20px; color: var(--txt2); font-size: 13.5px; text-align: center;
+  gap: var(--space-3); padding: 50px 20px; color: var(--txt2); font-size: var(--fs-base); text-align: center;
 }
 .spinner {
   width: 22px; height: 22px; border: 2.5px solid var(--border); border-top-color: var(--accent);
@@ -275,20 +362,20 @@ tr:hover td { background: var(--panel-2); }
 /* Badges / pills */
 /* ---------------------------------------------------------------------- */
 .badge {
-  display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px;
-  font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+  display: inline-flex; align-items: center; padding: 2px 9px; border-radius: var(--radius-lg);
+  font-size: var(--fs-xs); font-weight: 700; letter-spacing: var(--ls-caps); text-transform: uppercase;
 }
 .badge.open { background: rgba(91, 125, 255, 0.16); color: var(--blue); }
 .badge.won { background: var(--pos-glow); color: var(--pos); box-shadow: 0 0 10px -3px var(--pos-glow); }
 .badge.lost { background: var(--bad-glow); color: var(--bad); }
 .badge.real { background: var(--accent-glow); color: var(--accent); }
 .badge.model { background: rgba(255, 204, 51, 0.15); color: var(--warn); }
-.badge.coldstart { background: rgba(255, 204, 51, 0.1); color: var(--warn); font-size: 11px; }
+.badge.coldstart { background: rgba(255, 204, 51, 0.1); color: var(--warn); font-size: var(--fs-xs); }
 
-.pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.pill-row { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: 16px; }
 .pill {
-  padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--panel);
-  font-size: 12.5px; font-weight: 600; color: var(--txt2); white-space: nowrap;
+  padding: 7px 14px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--panel);
+  font-size: var(--fs-sm); font-weight: 600; color: var(--txt2); white-space: nowrap;
 }
 .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
 .pill:hover { border-color: var(--accent-dim); }
@@ -309,12 +396,12 @@ tr:hover td { background: var(--panel-2); }
   display: flex; flex-direction: column;
   padding: 6px 16px; background: var(--bg-alt);
   border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--txt2);
+  font-size: var(--fs-sm); color: var(--txt2);
 }
-#statusBar .sb-main-row { display: flex; align-items: center; gap: 14px; padding: 1px 0; }
+#statusBar .sb-main-row { display: flex; align-items: center; gap: var(--space-4); padding: 1px 0; }
 #statusBar .sb-spacer { flex: 1; }
 #statusBar .sb-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#statusBar .btn { padding: 4px 10px; font-size: 11.5px; }
+#statusBar .btn { padding: 4px 10px; font-size: var(--fs-xs); }
 #statusBar .sb-dot {
   display: inline-block; width: 7px; height: 7px; border-radius: 50%;
   background: var(--pos); margin-right: 6px; vertical-align: middle;
@@ -325,35 +412,33 @@ tr:hover td { background: var(--panel-2); }
 /* Progress bary – jen pro Načítání zápasů / Vyhodnocování, viditelné jen
    dokud appka to konkrétní probíhá (jinak by lišta zbytečně bobtnala). */
 .sb-progress-row {
-  display: flex; gap: 20px; flex-wrap: wrap;
+  display: flex; gap: var(--space-5); flex-wrap: wrap;
   padding: 4px 0 5px; border-bottom: 1px solid var(--border);
   margin-bottom: 3px;
 }
-.sb-progress { display: flex; align-items: center; gap: 8px; min-width: 220px; flex: 1; }
-.sb-progress-label { white-space: nowrap; font-size: 11.5px; color: var(--txt2); }
+.sb-progress { display: flex; align-items: center; gap: var(--space-2); min-width: 220px; flex: 1; }
+.sb-progress-label { white-space: nowrap; font-size: var(--fs-xs); color: var(--txt2); }
 .sb-progress-track {
-  flex: 1; height: 6px; min-width: 60px; border-radius: 999px;
+  flex: 1; height: 6px; min-width: 60px; border-radius: var(--radius-pill);
   background: var(--bg-soft); border: 1px solid var(--border); overflow: hidden;
 }
 .sb-progress-fill {
   height: 100%; width: 0%; background: var(--blue);
-  transition: width .4s ease; border-radius: 999px;
+  transition: width .4s ease; border-radius: var(--radius-pill);
 }
 .sb-progress-num {
-  font-size: 11px; color: var(--txt3); white-space: nowrap;
+  font-size: var(--fs-xs); color: var(--txt3); white-space: nowrap;
   font-variant-numeric: tabular-nums; min-width: 44px; text-align: right;
 }
 
 /* Systémové metriky (RAM / CPU / síť) */
-.sb-sys { display: flex; align-items: center; gap: 10px; font-variant-numeric: tabular-nums; }
+.sb-sys { display: flex; align-items: center; gap: var(--space-3); font-variant-numeric: tabular-nums; }
 .sb-sys .sb-sys-warn { color: var(--warn); font-weight: 600; }
 
-/* lišta překrývá spodek stránky – obsah musí mít kam doskrolovat */
-.main { padding-bottom: 84px; }
 @media (max-width: 700px) {
-  #statusBar { gap: 4px; padding: 5px 10px; font-size: 11px; }
+  #statusBar { gap: var(--space-1); padding: 5px 10px; font-size: var(--fs-xs); }
   #statusBar #sbAgent, #statusBar .sb-sys { display: none; }
-  .sb-progress-row { gap: 10px; }
+  .sb-progress-row { gap: var(--space-3); }
   .sb-progress { min-width: 140px; }
 }
 
@@ -364,17 +449,17 @@ tr:hover td { background: var(--panel-2); }
   z-index: 200; padding: 20px; overflow-y: auto;
 }
 .modal {
-  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 22px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto;
 }
-.wiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
 @media (max-width: 620px) { .wiz-grid { grid-template-columns: 1fr; } }
 .modal select, .modal input[type="number"], .modal input[type="text"] {
-  width: 100%; padding: 8px 12px; border-radius: 8px;
+  width: 100%; padding: 8px 12px; border-radius: var(--radius-sm);
   border: 1px solid var(--border); background: var(--bg-alt);
-  color: var(--txt); font-size: 13px; font-family: inherit;
+  color: var(--txt); font-size: var(--fs-base); font-family: inherit;
 }
-.modal .field label { display: block; font-size: 12px; color: var(--txt2); margin-bottom: 5px; }
+.modal .field label { display: block; font-size: var(--fs-sm); color: var(--txt2); margin-bottom: 5px; }
 /* krátké zvýraznění zápasu, na který se skočilo z pilulky s tipem dne */
 .match-card.flash { animation: card-flash 1.6s ease-out; }
 @keyframes card-flash {
@@ -385,12 +470,14 @@ tr:hover td { background: var(--panel-2); }
 /* Zápasy – filtr toolbar (datum + sport + status pohromadě v jedné kartě) */
 .matches-toolbar { margin-bottom: 16px; padding: 14px 16px; }
 .matches-toolbar #dateStrip { margin-bottom: 12px; }
-.matches-toolbar .toolbar-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+/* Řada ovládacích prvků. Musí být globální – používá se i na
+   Doporučených, v Hledat, v Živém logu, v Nastavení a v modálech. */
+.toolbar-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .matches-toolbar .toolbar-row .pill-row { margin-bottom: 0; }
-.matches-toolbar .toolbar-sep { width: 1px; align-self: stretch; background: var(--border); min-height: 20px; }
+.toolbar-sep { width: 1px; align-self: stretch; background: var(--border); min-height: 20px; }
 .matches-toolbar #refreshMatchesBtn { margin-left: auto; }
 @media (max-width: 760px) {
-  .matches-toolbar .toolbar-sep { display: none; }
+  .toolbar-sep { display: none; }
   .matches-toolbar #refreshMatchesBtn { margin-left: 0; }
 }
 
@@ -399,26 +486,26 @@ tr:hover td { background: var(--panel-2); }
 /* ---------------------------------------------------------------------- */
 .league-group { margin-bottom: 18px; }
 .league-head {
-  display: flex; align-items: center; gap: 8px; padding: 8px 4px; font-weight: 600; font-size: 13px;
+  display: flex; align-items: center; gap: var(--space-2); padding: 8px 4px; font-weight: 600; font-size: var(--fs-base);
   color: var(--txt2);
 }
-.league-head .flag { font-size: 15px; }
-.league-head .count { margin-left: auto; color: var(--txt3); font-weight: 500; font-size: 12px; }
+.league-head .flag { font-size: var(--fs-lg); }
+.league-head .count { margin-left: auto; color: var(--txt3); font-weight: 500; font-size: var(--fs-sm); }
 
 .match-card {
   background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 12px 16px; margin-bottom: 8px;
 }
 .match-card .mc-row {
-  display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 14px;
+  display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: var(--space-4);
 }
-.match-card .time { font-size: 11px; color: var(--txt3); font-weight: 600; text-align: center; line-height: 1.5; }
+.match-card .time { font-size: var(--fs-xs); color: var(--txt3); font-weight: 600; text-align: center; line-height: 1.5; }
 .match-card .time .status { display: block; }
 .match-card .time.live .status { color: var(--bad); animation: live-pulse 2s ease-in-out infinite; }
 .match-card .time .live-min { display: block; color: var(--bad); font-weight: 700; }
 @keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
-.match-card .teams { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.match-card .team-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; font-weight: 500; }
+.match-card .teams { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.match-card .team-row { display: flex; justify-content: space-between; gap: var(--space-3); font-size: var(--fs-base); font-weight: 500; }
 .match-card .team-row span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .match-card .score { font-weight: 700; color: var(--txt2); flex-shrink: 0; }
 .match-card .score.live { color: var(--bad); }
@@ -435,31 +522,31 @@ tr:hover td { background: var(--panel-2); }
 /* vyhledávání týmu */
 .search-row { margin-top: 10px; }
 .search-input {
-  flex: 1; min-width: 0; padding: 9px 14px; border-radius: 8px;
+  flex: 1; min-width: 0; padding: 9px 14px; border-radius: var(--radius-sm);
   border: 1px solid var(--border); background: var(--panel);
-  color: var(--txt); font-size: 13.5px; font-family: inherit;
+  color: var(--txt); font-size: var(--fs-base); font-family: inherit;
 }
 .search-input:focus { outline: none; border-color: var(--accent); }
 .search-input::placeholder { color: var(--txt3); }
 tr.search-row-item { cursor: pointer; }
 tr.search-row-item:hover { background: var(--panel-2); }
 tr.row-ok { background: var(--accent-glow); }
-.match-card .pick-col { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.match-card .pick-col { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-1); }
 .match-card .pick-badge {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: var(--space-2);
   background: var(--panel-2); border-radius: var(--radius-sm); padding: 6px 12px; min-width: 64px;
 }
-.match-card .pick-badge .pl { font-size: 11px; color: var(--txt3); }
-.match-card .pick-badge .pv { font-size: 14px; font-weight: 700; }
+.match-card .pick-badge .pl { font-size: var(--fs-xs); color: var(--txt3); }
+.match-card .pick-badge .pv { font-size: var(--fs-md); font-weight: 700; }
 
 /* Odkaz na vyhledávání zápasu na Tipsportu – appka sama nesází, jen
    otevře jejich vlastní vyhledávání s předvyplněným týmem (viz
    tipsportSearchUrl v app.js). Drženo vizuálně jako "sekundární akce",
    ne jako hlavní CTA (to zůstává tip/kurz appky samotné). */
 .tipsport-link {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11px; font-weight: 600; color: var(--txt2);
-  text-decoration: none; padding: 3px 8px; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  font-size: var(--fs-xs); font-weight: 600; color: var(--txt2);
+  text-decoration: none; padding: 3px 8px; border-radius: var(--radius-lg);
   border: 1px solid var(--border); background: var(--panel-2);
   transition: color 0.12s, border-color 0.12s;
   white-space: nowrap;
@@ -469,10 +556,10 @@ tr.row-ok { background: var(--accent-glow); }
 
 /* sekundární pásmo: další trhy / zdůvodnění – vizuálně oddělené od hlavního řádku */
 .match-card .mc-extra { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-.match-card .mc-markets { display: flex; flex-wrap: wrap; gap: 6px; }
+.match-card .mc-markets { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .match-card .mc-markets .badge { margin: 0; }
-.match-card .mc-why-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-.match-card .why-box { font-size: 12.5px; color: var(--txt2); background: var(--panel-2);
+.match-card .mc-why-row { display: flex; align-items: center; gap: var(--space-2); margin-top: 8px; }
+.match-card .why-box { font-size: var(--fs-sm); color: var(--txt2); background: var(--panel-2);
   border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 8px; }
 .match-card .why-box ul { margin: 6px 0 0; padding-left: 18px; }
 
@@ -489,16 +576,16 @@ tr.row-ok { background: var(--accent-glow); }
   content: ""; position: absolute; top: -40%; right: -10%; width: 260px; height: 260px;
   background: var(--accent-glow); border-radius: 50%; filter: blur(50px);
 }
-.tip-hero .kicker { font-size: 11.5px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-.tip-hero .match { font-size: 19px; font-weight: 700; margin: 8px 0 4px; position: relative; }
-.tip-hero .meta { color: var(--txt2); font-size: 12.5px; position: relative; }
-.tip-hero .pick-line { display: flex; align-items: center; gap: 14px; margin-top: 16px; position: relative; }
-.tip-hero .pick-name { font-size: 15px; font-weight: 600; }
+.tip-hero .kicker { font-size: var(--fs-xs); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: var(--ls-caps); }
+.tip-hero .match { font-size: var(--fs-xl); font-weight: 700; margin: 8px 0 4px; position: relative; }
+.tip-hero .meta { color: var(--txt2); font-size: var(--fs-sm); position: relative; }
+.tip-hero .pick-line { display: flex; align-items: center; gap: var(--space-4); margin-top: 16px; position: relative; }
+.tip-hero .pick-name { font-size: var(--fs-lg); font-weight: 600; }
 .tip-hero .odds-chip {
   background: var(--accent); color: #1a1200; font-weight: 700; padding: 5px 12px;
-  border-radius: 8px; font-size: 14px; box-shadow: 0 0 16px -4px var(--accent-glow);
+  border-radius: var(--radius-sm); font-size: var(--fs-md); box-shadow: 0 0 16px -4px var(--accent-glow);
 }
-.tip-hero .conf-chip { color: var(--txt2); font-size: 13px; }
+.tip-hero .conf-chip { color: var(--txt2); font-size: var(--fs-base); }
 
 /* ---------------------------------------------------------------------- */
 /* Charts (SVG) */
@@ -512,12 +599,12 @@ tr.row-ok { background: var(--accent-glow); }
 .ctx-menu {
   position: fixed; z-index: 1000; min-width: 200px;
   background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  box-shadow: var(--shadow); padding: 4px; display: flex; flex-direction: column; gap: 2px;
+  box-shadow: var(--shadow); padding: 4px; display: flex; flex-direction: column; gap: var(--space-1);
   animation: toastin 0.12s ease;
 }
 .ctx-menu button {
-  all: unset; cursor: pointer; padding: 8px 10px; border-radius: 6px;
-  font-size: 13px; color: var(--txt); white-space: nowrap;
+  all: unset; cursor: pointer; padding: 8px 10px; border-radius: var(--radius-sm);
+  font-size: var(--fs-base); color: var(--txt); white-space: nowrap;
 }
 .ctx-menu button:hover { background: var(--panel-2); }
 
@@ -525,12 +612,12 @@ tr.row-ok { background: var(--accent-glow); }
 /* Toast */
 /* ---------------------------------------------------------------------- */
 #toast {
-  position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 8px;
+  position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: var(--space-2);
 }
 .toast-item {
   background: var(--panel); border: 1px solid var(--border); color: var(--txt);
   padding: 12px 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow);
-  font-size: 13px; max-width: 320px; animation: toastin 0.2s ease;
+  font-size: var(--fs-base); max-width: 320px; animation: toastin 0.2s ease;
 }
 .toast-item.ok { border-color: var(--accent-dim); }
 .toast-item.err { border-color: var(--bad); }
@@ -551,17 +638,17 @@ tr.row-ok { background: var(--accent-glow); }
   .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
   .sidebar-overlay.show { display: block; }
   .mobile-topbar {
-    display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+    display: flex; align-items: center; gap: var(--space-3); padding: 14px 16px;
     border-bottom: 1px solid var(--border); background: var(--bg-alt); position: sticky; top: 0; z-index: 50;
   }
-  .mobile-topbar button { background: none; border: none; color: var(--txt); font-size: 20px; padding: 4px; }
+  .mobile-topbar button { background: none; border: none; color: var(--txt); font-size: var(--fs-xl); padding: 4px; }
   .mobile-topbar .brand { font-weight: 700; }
-  .main { padding: 18px 16px 40px; }
+  .main { padding: var(--space-5) var(--space-4) var(--sb-space); }
   .grid-stats { grid-template-columns: repeat(2, 1fr); }
   .field-row { grid-template-columns: 1fr; }
   .match-card { padding: 10px 12px; }
-  .match-card .mc-row { grid-template-columns: 40px 1fr auto; gap: 10px; }
-  table { font-size: 12px; }
+  .match-card .mc-row { grid-template-columns: 40px 1fr auto; gap: var(--space-3); }
+  table { font-size: var(--fs-sm); }
   th, td { padding: 8px 6px; }
   button, .btn, .nav-btn { min-height: 40px; }
 }
@@ -588,17 +675,17 @@ tr.row-ok { background: var(--accent-glow); }
 @keyframes loginin { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
 
 .login-card .mark {
-  width: 52px; height: 52px; margin: 0 auto 18px; border-radius: 16px;
+  width: 52px; height: 52px; margin: 0 auto 18px; border-radius: var(--radius);
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
-  display: flex; align-items: center; justify-content: center; font-size: 26px;
+  display: flex; align-items: center; justify-content: center; font-size: var(--fs-2xl);
   box-shadow: 0 8px 24px var(--accent-glow);
 }
-.login-card .brand { text-align: center; font-size: 21px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.01em; }
-.login-card .tagline { text-align: center; color: var(--txt2); font-size: 12.5px; margin-bottom: 28px; }
+.login-card .brand { text-align: center; font-size: var(--fs-xl); font-weight: 700; margin-bottom: 4px; letter-spacing: -0.01em; }
+.login-card .tagline { text-align: center; color: var(--txt2); font-size: var(--fs-sm); margin-bottom: 28px; }
 .login-card .error {
   background: rgba(255,93,122,0.1); color: var(--bad); border: 1px solid rgba(255,93,122,0.25);
-  border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12.5px; margin-bottom: 16px;
-  text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: var(--radius-sm); padding: 10px 12px; font-size: var(--fs-sm); margin-bottom: 16px;
+  text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--space-2);
   animation: shake 0.35s;
 }
 @keyframes shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
@@ -606,40 +693,40 @@ tr.row-ok { background: var(--accent-glow); }
 .login-card .field { position: relative; }
 .login-card .pw-toggle {
   position: absolute; right: 10px; top: 33px; background: none; border: none; color: var(--txt3);
-  font-size: 15px; padding: 4px; line-height: 1;
+  font-size: var(--fs-lg); padding: 4px; line-height: 1;
 }
 .login-card .pw-toggle:hover { color: var(--txt2); }
 .login-card input { padding-right: 38px; }
 
 .login-card .submit-btn {
-  width: 100%; justify-content: center; padding: 11px; margin-top: 4px; font-size: 13.5px;
+  width: 100%; justify-content: center; padding: 11px; margin-top: 4px; font-size: var(--fs-base);
   position: relative;
 }
 .login-card .submit-btn .spinner { display: none; width: 15px; height: 15px; border-width: 2px; }
 .login-card .submit-btn.loading .spinner { display: inline-block; }
 .login-card .submit-btn.loading .btn-label { opacity: 0.6; }
 
-.login-card .foot { text-align: center; color: var(--txt3); font-size: 11px; margin-top: 22px;
+.login-card .foot { text-align: center; color: var(--txt3); font-size: var(--fs-xs); margin-top: 22px;
   padding-top: 16px; border-top: 1px solid var(--border); }
 
 /* nohy tiketu (akumulátor / kombinace) v detailu sázkaře */
 tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
-.leg { display: flex; gap: 10px; align-items: center; font-size: 12px; padding: 2px 0 2px 18px; }
+.leg { display: flex; gap: var(--space-3); align-items: center; font-size: var(--fs-sm); padding: 2px 0 2px 18px; }
 .leg-res { width: 14px; text-align: center; color: var(--txt3); }
 .leg-res.won { color: var(--pos); }
 .leg-res.lost { color: var(--bad); }
 .leg-res.void { color: var(--warn); }
 
 /* vzdaleny pristup - seznam adres serveru */
-.srv-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.srv-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-bottom: 8px; }
 .srv-url {
-  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px;
-  padding: 6px 10px; font-size: 13px; font-family: ui-monospace, Consolas, monospace;
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-size: var(--fs-base); font-family: ui-monospace, Consolas, monospace;
   color: var(--txt); user-select: all;
 }
 .srv-diag {
   background: rgba(255,181,71,0.08); border: 1px solid var(--warn);
-  border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 12.5px;
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 12px; font-size: var(--fs-sm);
 }
 .srv-diag.ok { background: var(--accent-glow); border-color: var(--accent-dim); }
 
@@ -655,32 +742,32 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
   overflow: hidden; margin-bottom: 14px; flex-wrap: wrap;
 }
 .arena-tabs button {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: var(--space-2);
   padding: 9px 16px; background: transparent; color: var(--txt2);
   border: none; border-right: 1px solid var(--border);
-  font-size: 13px; font-weight: 600; transition: background .12s, color .12s;
+  font-size: var(--fs-base); font-weight: 600; transition: background .12s, color .12s;
 }
 .arena-tabs button:last-child { border-right: none; }
 .arena-tabs button:hover { color: var(--txt); background: var(--panel-2); }
 .arena-tabs button.on { background: var(--accent-glow); color: var(--accent); }
 .arena-tabs .cnt {
-  font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 20px;
+  font-size: var(--fs-xs); font-weight: 700; padding: 1px 6px; border-radius: var(--radius-lg);
   background: var(--panel-2); color: var(--txt3);
 }
 .arena-tabs button.on .cnt { background: var(--accent); color: var(--bg); }
 
-.arena-desc { font-size: 12.5px; color: var(--txt2); margin: 0 0 14px; max-width: 70ch; }
+.arena-desc { font-size: var(--fs-sm); color: var(--txt2); margin: 0 0 14px; max-width: 70ch; }
 
 /* lišta nad žebříčkem: hledání + rychlé filtry */
 .arena-toolbar {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
   margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
 }
 .arena-search { flex: 1 1 260px; min-width: 200px; max-width: 420px; }
-.arena-filters { display: flex; gap: 6px; flex-wrap: wrap; }
-.arena-filters .pill { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.arena-filters { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.arena-filters .pill { display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; }
 .arena-filters .pill .cnt {
-  font-size: 10.5px; font-weight: 700; padding: 1px 5px; border-radius: 20px;
+  font-size: var(--fs-xs); font-weight: 700; padding: 1px 5px; border-radius: var(--radius-lg);
   background: var(--panel-2); color: var(--txt3);
 }
 .arena-filters .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
@@ -688,7 +775,7 @@ tr.ticket-legs td { padding-top: 0; border-bottom: 1px solid var(--border); }
 
 /* nápověda u hlavičky sloupce – celý th má title, tohle jen naznačí, že tam je */
 .th-tip {
-  display: inline-block; margin-left: 3px; font-size: 9px; font-weight: 700;
+  display: inline-block; margin-left: 3px; font-size: var(--fs-xs); font-weight: 700;
   width: 12px; height: 12px; line-height: 12px; text-align: center; border-radius: 50%;
   background: var(--panel-2); color: var(--txt3); cursor: help; vertical-align: 1px;
 }
@@ -699,16 +786,16 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 /* ---------------------------------------------------------------------- */
 .log-toolbar-card { margin-bottom: 16px; }
 .log-check {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12.5px; color: var(--txt2); cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--fs-sm); color: var(--txt2); cursor: pointer; white-space: nowrap;
 }
 .log-vypis {
   max-height: 62vh; overflow-y: auto; overflow-x: hidden;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 12px; line-height: 1.55;
+  font-size: var(--fs-sm); line-height: 1.55;
 }
 .log-radek {
-  display: flex; gap: 10px; align-items: baseline;
+  display: flex; gap: var(--space-3); align-items: baseline;
   padding: 3px 14px; border-bottom: 1px solid var(--border);
 }
 .log-radek:hover { background: var(--panel-2); }
@@ -729,17 +816,17 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .tip-why-btn { margin-left: auto; }
 .tip-why {
   margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-  font-size: 12.5px; color: var(--txt2); line-height: 1.7;
+  font-size: var(--fs-sm); color: var(--txt2); line-height: 1.7;
 }
 .tip-why ul { margin: 0; padding-left: 18px; }
 .tip-why-meta {
   margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
-  color: var(--txt3); font-size: 12px;
+  color: var(--txt3); font-size: var(--fs-sm);
 }
 
 /* karta Agenta na dashboardu */
 .ag-state {
-  display: flex; align-items: center; gap: 8px; font-size: 13px;
+  display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-base);
   padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 10px;
   background: var(--panel-2); border: 1px solid var(--border);
 }
@@ -747,27 +834,27 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .ag-state.on .ag-dot { background: var(--pos); box-shadow: 0 0 8px var(--pos-glow); }
 .ag-state.off .ag-dot { background: var(--txt3); }
 .ag-spark { margin-bottom: 8px; opacity: 0.9; }
-.ag-rows { display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
-.ag-row { display: flex; justify-content: space-between; gap: 10px; }
+.ag-rows { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--fs-base); }
+.ag-row { display: flex; justify-content: space-between; gap: var(--space-3); }
 .ag-block {
   margin-top: 12px; padding: 9px 11px; border-radius: var(--radius-sm);
-  font-size: 12px; line-height: 1.6;
+  font-size: var(--fs-sm); line-height: 1.6;
   background: color-mix(in srgb, var(--warn) 10%, var(--panel));
   border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--border));
 }
 .ag-cfg {
-  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px;
+  display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: 12px;
   padding-top: 10px; border-top: 1px solid var(--border);
 }
-.ag-cfg .pill { font-size: 11px; padding: 3px 9px; }
+.ag-cfg .pill { font-size: var(--fs-xs); padding: 3px 9px; }
 
 /* legenda benchmark grafu (model vs trh) */
 .bench-legend {
-  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
-  font-size: 11.5px; color: var(--txt2); margin-top: 6px;
+  display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap;
+  font-size: var(--fs-xs); color: var(--txt2); margin-top: 6px;
 }
 .bench-legend i {
-  display: inline-block; width: 14px; height: 3px; border-radius: 2px;
+  display: inline-block; width: 14px; height: 3px; border-radius: var(--radius-xs);
   margin-right: 5px; vertical-align: 2px;
 }
 .bench-legend i.dash { opacity: 0.65; }
@@ -775,8 +862,8 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 /* Rekordy banku – dvousloupcový seznam popisek/hodnota */
 .rec-list { display: flex; flex-direction: column; }
 .rec-row {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-  padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3);
+  padding: 7px 0; border-bottom: 1px solid var(--border); font-size: var(--fs-base);
 }
 .rec-row:last-child { border-bottom: none; }
 .rec-label { color: var(--txt2); }
@@ -788,16 +875,16 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
 /* odznak kategorie v celkovém žebříčku ("Vše") */
 .grp-badge {
-  font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 20px;
+  font-size: var(--fs-xs); font-weight: 600; padding: 1px 7px; border-radius: var(--radius-lg);
   background: var(--panel-2); color: var(--txt3); border: 1px solid var(--border);
   white-space: nowrap; vertical-align: 1px;
 }
 
 /* žebříček */
-.arena-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.arena-table { width: 100%; border-collapse: collapse; font-size: var(--fs-base); }
 .arena-table th {
-  text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .04em; color: var(--txt3); padding: 0 10px 8px;
+  text-align: left; font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase;
+  letter-spacing: var(--ls-caps); color: var(--txt3); padding: 0 10px 8px;
   border-bottom: 1px solid var(--border); white-space: nowrap;
 }
 .arena-table th.s { cursor: pointer; user-select: none; }
@@ -809,31 +896,31 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .arena-table tbody tr.row:hover { background: var(--panel-2); }
 .arena-table td { padding: 9px 10px; vertical-align: middle; }
 
-.arena-rank { font-size: 13px; font-weight: 700; color: var(--txt3); width: 34px; text-align: center; }
-.arena-rank.medal { font-size: 17px; }
+.arena-rank { font-size: var(--fs-base); font-weight: 700; color: var(--txt3); width: 34px; text-align: center; }
+.arena-rank.medal { font-size: var(--fs-lg); }
 
-.arena-who { display: flex; align-items: center; gap: 10px; min-width: 210px; }
-.arena-who .face { font-size: 20px; line-height: 1; }
+.arena-who { display: flex; align-items: center; gap: var(--space-3); min-width: 210px; }
+.arena-who .face { font-size: var(--fs-xl); line-height: 1; }
 .arena-who .nm { font-weight: 600; }
 /* Dlouhé taglines jinak roztáhnou sloupec se jménem tak, že se zbytek
    tabulky (CLV, Sázek, Ve hře) vytlačí mimo viditelnou šířku. Ořez na
    jeden řádek – celý text zůstává v title při najetí myší. */
 .arena-who > span { min-width: 0; }
 .arena-who .tg {
-  font-size: 11.5px; color: var(--txt3); margin-top: 1px;
+  font-size: var(--fs-xs); color: var(--txt3); margin-top: 1px;
   max-width: 42ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-.arena-bal { font-weight: 700; font-size: 14px; white-space: nowrap; }
-.arena-sub { font-size: 11.5px; color: var(--txt3); white-space: nowrap; }
+.arena-bal { font-weight: 700; font-size: var(--fs-md); white-space: nowrap; }
+.arena-sub { font-size: var(--fs-xs); color: var(--txt3); white-space: nowrap; }
 
 /* mikro-pruh vytíženosti banku */
-.arena-open { display: flex; align-items: center; gap: 7px; justify-content: flex-end; }
-.arena-open .bar { width: 42px; height: 5px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.arena-open { display: flex; align-items: center; gap: var(--space-2); justify-content: flex-end; }
+.arena-open .bar { width: 42px; height: 5px; border-radius: var(--radius-xs); background: var(--panel-2); overflow: hidden; }
 .arena-open .bar i { display: block; height: 100%; background: var(--warn); }
 
-.arena-acts { display: flex; gap: 5px; justify-content: flex-end; white-space: nowrap; }
-.arena-acts .btn { padding: 5px 9px; font-size: 12px; }
+.arena-acts { display: flex; gap: var(--space-1); justify-content: flex-end; white-space: nowrap; }
+.arena-acts .btn { padding: 5px 9px; font-size: var(--fs-sm); }
 
 .arena-detail td { background: var(--bg-alt); padding: 0 14px 16px; }
 
@@ -857,7 +944,7 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .arena-hero {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 24px;
+  gap: var(--space-5);
   align-items: center;
   background: linear-gradient(135deg,
     color-mix(in srgb, var(--accent) 8%, var(--panel)) 0%,
@@ -869,29 +956,29 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
   margin-bottom: 20px;
 }
 .arena-hero-left h1 {
-  margin: 0 0 4px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em;
+  margin: 0 0 4px; font-size: var(--fs-xl); font-weight: 700; letter-spacing: -0.01em;
 }
 .arena-hero-left p {
-  margin: 0 0 14px; color: var(--txt2); font-size: 13px; max-width: 60ch;
+  margin: 0 0 14px; color: var(--txt2); font-size: var(--fs-base); max-width: 60ch;
 }
 .arena-hero-kpis {
-  display: flex; flex-wrap: wrap; gap: 4px 28px;
+  display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-6);
 }
 .arena-hero-kpi {
-  display: flex; flex-direction: column; gap: 1px; min-width: 92px;
+  display: flex; flex-direction: column; gap: var(--space-1); min-width: 92px;
 }
 .arena-hero-kpi b {
-  font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--txt);
+  font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.01em; color: var(--txt);
 }
 .arena-hero-kpi em {
-  font-size: 10.5px; font-style: normal; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--txt2); font-weight: 600;
+  font-size: var(--fs-xs); font-style: normal; text-transform: uppercase;
+  letter-spacing: var(--ls-caps); color: var(--txt2); font-weight: 600;
 }
 .arena-hero-kpi b.pos { color: var(--pos); }
 .arena-hero-kpi b.bad { color: var(--bad); }
 
 .arena-hero-acts {
-  display: flex; flex-direction: column; gap: 8px; min-width: 170px;
+  display: flex; flex-direction: column; gap: var(--space-2); min-width: 170px;
 }
 .arena-hero-acts .btn { width: 100%; justify-content: center; }
 .arena-hero-acts .btn svg { flex-shrink: 0; }
@@ -903,7 +990,7 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
 /* Grafy vedle sebe */
 .arena-charts {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: 20px;
 }
 .arena-charts .card { margin-top: 0; }
 .arena-charts .card + .card { margin-top: 0; }
@@ -941,7 +1028,7 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 
 /* akční ikony vpravo – ať se malé pořád vejdou */
 .arena-table td.arena-acts-cell { padding-right: 6px; }
-.btn.small.icon-only { padding: 4px 6px; width: 26px; height: 26px; font-size: 13px; }
+.btn.small.icon-only { padding: 4px 6px; width: 26px; height: 26px; font-size: var(--fs-base); }
 
 /* Sázkař bez sázek: ztlumit řádek + drobný odznak "bez sázek", aby uživatel
    viděl, že aplikace funguje, jen strategie žádnou vhodnou příležitost
@@ -950,9 +1037,9 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .arena-table tr.bettor-row.idle:hover { opacity: 1; }
 .idle-badge {
   display: inline-block; margin-left: 8px;
-  padding: 1px 7px; border-radius: 20px;
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.03em;
+  padding: 1px 7px; border-radius: var(--radius-lg);
+  font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
   background: var(--panel-2); color: var(--txt3);
   border: 1px solid var(--border);
 }
@@ -961,114 +1048,114 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
    kde ztrácí. Sport blacklist v run_all se opírá o totéž. */
 .perf-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px; margin: 0 0 14px;
+  gap: var(--space-3); margin: 0 0 14px;
 }
 .perf-block {
   background: var(--panel-2); border: 1px solid var(--border);
-  border-radius: 9px; padding: 12px 14px;
+  border-radius: var(--radius-sm); padding: 12px 14px;
 }
 .perf-title {
-  font-size: 10.5px; font-weight: 700; letter-spacing: .05em;
+  font-size: var(--fs-xs); font-weight: 700; letter-spacing: var(--ls-caps);
   text-transform: uppercase; color: var(--txt3); margin-bottom: 8px;
 }
-.perf-rows { display: flex; flex-direction: column; gap: 4px; }
+.perf-rows { display: flex; flex-direction: column; gap: var(--space-1); }
 .perf-row {
   display: flex; justify-content: space-between; align-items: baseline;
-  gap: 8px; font-size: 12.5px;
+  gap: var(--space-2); font-size: var(--fs-sm);
 }
 .perf-key { color: var(--txt); font-weight: 500; }
 /* proužek ROI v časovém rozkladu arény – rozdíl mezi řádky je vidět na první
    pohled, i když jsou čísla malá (šířka se škáluje proti maximu v bloku) */
 .time-bar {
   flex: 1 1 40px; min-width: 30px; max-width: 120px; height: 5px;
-  background: var(--panel-2); border-radius: 3px; overflow: hidden;
+  background: var(--panel-2); border-radius: var(--radius-xs); overflow: hidden;
   align-self: center;
 }
-.time-bar i { display: block; height: 100%; border-radius: 3px; }
+.time-bar i { display: block; height: 100%; border-radius: var(--radius-xs); }
 .time-bar i.pos { background: var(--pos); }
 .time-bar i.bad { background: var(--bad); }
-.perf-nums { display: flex; gap: 10px; font-size: 11.5px; white-space: nowrap; }
-.perf-nums strong { font-weight: 600; font-size: 12px; }
+.perf-nums { display: flex; gap: var(--space-3); font-size: var(--fs-xs); white-space: nowrap; }
+.perf-nums strong { font-weight: 600; font-size: var(--fs-sm); }
 .perf-blacklist {
   background: color-mix(in srgb, var(--warn) 8%, var(--panel));
   border: 1px solid color-mix(in srgb, var(--warn) 30%, var(--border));
-  border-radius: 9px; padding: 10px 14px; margin-bottom: 14px;
-  font-size: 12.5px; color: var(--txt2);
+  border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 14px;
+  font-size: var(--fs-sm); color: var(--txt2);
 }
 .perf-blacklist b { color: var(--warn); }
 .perf-clv {
   background: var(--panel-2); border: 1px solid var(--border);
-  border-radius: 9px; padding: 10px 14px; margin-bottom: 14px;
-  font-size: 12.5px; color: var(--txt2);
+  border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 14px;
+  font-size: var(--fs-sm); color: var(--txt2);
 }
 
 /* Další tipy dne (2.-5.) – menší řádky pod hlavním zvýrazněným tipem */
 .tip-hero .tip-more {
   margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: var(--space-2);
 }
 .tip-hero .tip-more-row {
-  display: flex; align-items: center; gap: 10px; font-size: 12.5px;
+  display: flex; align-items: center; gap: var(--space-3); font-size: var(--fs-sm);
 }
 .tip-hero .tip-more-match { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--txt2); }
 .tip-hero .tip-more-pick { font-weight: 600; white-space: nowrap; }
-.tip-hero .odds-chip.small { padding: 2px 8px; font-size: 11.5px; border-radius: 6px; }
-.tip-hero .conf-chip.small { font-size: 11px; }
+.tip-hero .odds-chip.small { padding: 2px 8px; font-size: var(--fs-xs); border-radius: var(--radius-sm); }
+.tip-hero .conf-chip.small { font-size: var(--fs-xs); }
 
 /* Forma týmu – V/R/P kroužky v detailu zápasu */
-.form-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.form-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .form-dot {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 50%;
   background: var(--panel-2); color: var(--txt2);
-  font-size: 11px; font-weight: 700;
+  font-size: var(--fs-xs); font-weight: 700;
   border: 1px solid var(--border);
 }
 .form-dot.pos { background: color-mix(in srgb, var(--pos) 18%, var(--panel-2)); color: var(--pos); border-color: color-mix(in srgb, var(--pos) 40%, var(--border)); }
 .form-dot.bad { background: color-mix(in srgb, var(--bad) 18%, var(--panel-2)); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }
 
 /* --- Doporučené sázky --------------------------------------------------- */
-.dop-legenda { padding: 12px 16px; font-size: 13px; line-height: 1.5; }
+.dop-legenda { padding: 12px 16px; font-size: var(--fs-base); line-height: 1.5; }
 .dop-mrizka {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 14px;
+  gap: var(--space-4);
 }
 .dop-karta {
   padding: 16px;
   border-left: 4px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .dop-karta.dop-tutovka { border-left-color: #22c55e; }
 .dop-karta.dop-hodnota { border-left-color: #f59e0b; }
 .dop-karta.dop-solidni { border-left-color: #64748b; }
 .dop-hlava {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: var(--space-2);
+  font-size: var(--fs-sm); flex-wrap: wrap;
 }
 .dop-pasmo {
-  font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: var(--ls-caps);
+  font-size: var(--fs-xs); padding: 2px 8px; border-radius: var(--radius-pill);
   background: var(--bg-soft); border: 1px solid var(--border); cursor: help;
 }
 .dop-tutovka .dop-pasmo { color: #16a34a; border-color: #16a34a55; }
 .dop-hodnota .dop-pasmo { color: #d97706; border-color: #d9770655; }
 .dop-live { color: #ef4444; font-weight: 700; }
-.dop-zapas { font-size: 16px; font-weight: 700; line-height: 1.3; }
-.dop-liga { font-size: 12px; }
+.dop-zapas { font-size: var(--fs-lg); font-weight: 700; line-height: 1.3; }
+.dop-liga { font-size: var(--fs-sm); }
 .dop-tip {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: 10px; padding: 8px 10px; border-radius: 8px; background: var(--bg-soft);
+  gap: var(--space-3); padding: 8px 10px; border-radius: var(--radius-sm); background: var(--bg-soft);
 }
 .dop-nazev { font-weight: 600; }
 .dop-kurz { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
-.dop-metriky { display: flex; gap: 18px; }
+.dop-metriky { display: flex; gap: var(--space-5); }
 .dop-metriky > div { display: flex; flex-direction: column; }
-.dop-metriky .muted { font-size: 11px; }
-.dop-cislo { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.dop-paticka { font-size: 12px; }
+.dop-metriky .muted { font-size: var(--fs-xs); }
+.dop-cislo { font-size: var(--fs-xl); font-weight: 700; font-variant-numeric: tabular-nums; }
+.dop-paticka { font-size: var(--fs-sm); }
 .dop-ev-plus { color: #16a34a; font-weight: 600; }
 
 /* --- Kalibrace modelu ("Říká model pravdu?") ---------------------------- */
@@ -1076,25 +1163,25 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 .kal-era:last-child { margin-bottom: 0; }
 .kal-era-stara { opacity: .72; padding-top: 14px; border-top: 1px dashed var(--border); }
 .kal-hlava {
-  display: flex; align-items: baseline; gap: 10px;
-  flex-wrap: wrap; margin-bottom: 8px; font-size: 13px;
+  display: flex; align-items: baseline; gap: var(--space-3);
+  flex-wrap: wrap; margin-bottom: 8px; font-size: var(--fs-base);
 }
-.kal-hlava .muted { font-size: 12px; }
+.kal-hlava .muted { font-size: var(--fs-sm); }
 .kal-cekani {
-  font-size: 13px; line-height: 1.6; padding: 12px 14px;
-  border-radius: 8px; background: var(--bg-soft); border: 1px solid var(--border);
+  font-size: var(--fs-base); line-height: 1.6; padding: 12px 14px;
+  border-radius: var(--radius-sm); background: var(--bg-soft); border: 1px solid var(--border);
   margin-bottom: 16px;
 }
-.kal-tabulka { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.kal-tabulka { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .kal-tabulka th {
   text-align: left; font-weight: 600; color: var(--txt3);
-  font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+  font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: var(--ls-caps);
   padding: 4px 8px; border-bottom: 1px solid var(--border);
 }
 .kal-tabulka td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
 .kal-tabulka tr:last-child td { border-bottom: 0; }
 .kal-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.kal-koment { font-size: 11.5px; }
+.kal-koment { font-size: var(--fs-xs); }
 .kal-preceni .kal-koment { color: #dc2626; font-weight: 600; }
 .kal-podceni .kal-koment { color: #2563eb; font-weight: 600; }
 .kal-sedi .kal-koment { color: #16a34a; font-weight: 600; }
@@ -1102,16 +1189,69 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 /* --- Doporučené: trychtýř (kam se poděly zápasy) ------------------------ */
 .dop-trychtyr { padding: 12px 16px; }
 .dop-kroky {
-  display: flex; align-items: center; gap: 6px;
-  flex-wrap: wrap; font-size: 12px;
+  display: flex; align-items: center; gap: var(--space-2);
+  flex-wrap: wrap; font-size: var(--fs-sm);
 }
 .dop-krok {
-  display: flex; align-items: baseline; gap: 6px;
-  padding: 4px 10px; border-radius: 8px;
+  display: flex; align-items: baseline; gap: var(--space-2);
+  padding: 4px 10px; border-radius: var(--radius-sm);
   background: var(--bg-soft); border: 1px solid var(--border);
 }
 .dop-krok[title] { cursor: help; }
-.dop-krok-n { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dop-krok-n { font-size: var(--fs-lg); font-weight: 700; font-variant-numeric: tabular-nums; }
 .dop-krok-jmeno { color: var(--txt2); }
 .dop-ztrata { color: #dc2626; font-weight: 600; font-variant-numeric: tabular-nums; }
 .dop-sipka { color: var(--txt3); }
+
+/* ---------------------------------------------------------------------- */
+/* Sbalitelná karta                                                        */
+/* Dosud se sbalování dělalo ad hoc na pěti místech pěti způsoby a dlouhé  */
+/* karty (Návod, Diagnostika, analytiky arény) se musely zobrazit celé.    */
+/* Jeden vzor postavený na <details>, takže funguje i bez JS a je          */
+/* přístupný z klávesnice zadarmo.                                          */
+/* ---------------------------------------------------------------------- */
+details.card { padding: 0; }
+details.card > summary {
+  list-style: none; cursor: pointer;
+  padding: var(--space-5) var(--space-5);
+  display: flex; align-items: center; gap: var(--space-3);
+  font-size: var(--fs-lg); font-weight: 600;
+  border-radius: var(--radius);
+}
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after {
+  content: "▾"; margin-left: auto; color: var(--txt3);
+  font-size: var(--fs-sm); transition: transform .18s ease;
+}
+details.card[open] > summary::after { transform: rotate(180deg); }
+details.card > summary:hover { color: var(--accent); }
+details.card > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* Souhrn musí nést hodnotu i zavřený – jinak uživatel neví, jestli má
+   kartu otevírat. */
+details.card > summary .card-shrnuti {
+  margin-left: auto; font-size: var(--fs-sm); font-weight: 500; color: var(--txt2);
+}
+details.card > summary .card-shrnuti + ::after { margin-left: var(--space-3); }
+.card-telo { padding: 0 var(--space-5) var(--space-5); }
+details.card[open] > summary { padding-bottom: var(--space-3); }
+
+/* ---------------------------------------------------------------------- */
+/* Zdravotní panel na dashboardu                                           */
+/* ---------------------------------------------------------------------- */
+.zdravi-card { border-left: 3px solid var(--warn); }
+.zdravi-card.je-vazne { border-left-color: var(--bad); }
+.zdravi-radek {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-3) 0; border-bottom: 1px solid var(--border);
+}
+.zdravi-radek:last-child { border-bottom: 0; padding-bottom: 0; }
+.zdravi-radek:first-child { padding-top: 0; }
+.zdravi-ikona { font-size: var(--fs-lg); line-height: 1.3; flex-shrink: 0; }
+.zdravi-text { flex: 1; min-width: 0; }
+.zdravi-nadpis { font-weight: 600; font-size: var(--fs-base); }
+.zdravi-popis { font-size: var(--fs-sm); color: var(--txt2); margin-top: 2px; line-height: 1.6; }
+.zdravi-akce {
+  background: none; border: 0; padding: 0; margin-top: var(--space-1);
+  color: var(--accent); font-size: var(--fs-sm); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 2px;
+}
