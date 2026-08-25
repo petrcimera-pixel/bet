@@ -10,12 +10,26 @@ import uuid
 
 from . import live_log, storage
 
-# ML feedback logging (optional – jen pokud je ML dostupné)
-try:
-    from . import ml_learner
-    ML_AVAILABLE = True
-except ImportError:
-    ML_AVAILABLE = False
+# ML Learning je volitelný a TĚŽKÝ: engine/ml_learner.py táhne scikit-learn,
+# což je při studeném startu (po restartu PC, kdy nic není v cache souborů)
+# ~30 s jen na import – a to celé předtím, než server vůbec začne odpovídat.
+# K obsloužení první stránky ho přitom nikdo nepotřebuje: uplatní se až při
+# vetu tipu, záznamu výsledku a trénování. Proto se načítá až při prvním
+# skutečném použití a výsledek se zapamatuje.
+_ML_MODUL = None      # None = ještě nezkoušeno, False = není k dispozici
+
+
+def _ml():
+    """Modul ml_learner, nebo None když není k dispozici. Import až tady."""
+    global _ML_MODUL
+    if _ML_MODUL is None:
+        try:
+            from . import ml_learner
+            _ML_MODUL = ml_learner
+        except Exception:
+            _ML_MODUL = False
+    return _ML_MODUL or None
+
 
 _DEFAULT = {
     "start_balance": 200.0,
@@ -172,9 +186,10 @@ def place_bet(match_id, label, outcome, odds, prob, stake, home, away,
         kategorie="sázka agenta")
 
     # Record for ML learning (feedback loop)
-    if ML_AVAILABLE and tag == "bet-agent":
+    _l = _ml() if tag == "bet-agent" else None
+    if _l:
         try:
-            ml_learner.record_bet_outcome(
+            _l.record_bet_outcome(
                 bet_id=bet["id"],
                 match_id=match_id,
                 prediction=outcome,
@@ -395,9 +410,10 @@ def settle_bet(bet_id, result, score=None):
                 uroven="info")
 
             # Update ML feedback with actual outcome
-            if ML_AVAILABLE and bet.get("tag") == "bet-agent":
+            _l = _ml() if bet.get("tag") == "bet-agent" else None
+            if _l:
                 try:
-                    ml_learner.record_bet_outcome(
+                    _l.record_bet_outcome(
                         bet_id=bet["id"],
                         match_id=bet["match_id"],
                         prediction=bet["outcome"],

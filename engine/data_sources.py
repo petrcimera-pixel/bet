@@ -263,6 +263,41 @@ _refreshing = set()  # rozsahy, které se právě obnovují – ať neběží dv
 _refresh_lock = threading.Lock()
 
 
+# Keš je klíčovaná ROZSAHEM dat, takže každé jiné okno (dashboard days=1,
+# Doporučené days=3 × 3 sporty, prewarm days=3, Hledat days=14) je vlastní
+# klíč s vlastní obnovou – a každá obnova si otevírala vlastní pool přes
+# všechny ligy. _refreshing hlídá jen duplicitu STEJNÉHO klíče, ne počet
+# různých běžících naráz, takže vláken lineárně přibývalo (naměřeno 31 → 189
+# za pět minut) a appka byla čím dál pomalejší, včetně obyčejného načtení
+# stránky. Semafor drží strop: souběžně se obnovuje nejvýš pár oken, zbytek
+# počká. Data tím nezastarají – jen se dotáhnou o chvíli později.
+_REVALIDACE_STROP = 2
+_revalidace_sem = threading.Semaphore(_REVALIDACE_STROP)
+
+
+# JEDEN sdílený pool na všechno stahování z ESPN. Dřív si _from_espn zakládalo
+# nový ThreadPoolExecutor při každém volání – a protože se volá z dashboardu,
+# Doporučených (3 sporty), prewarmu, vyhodnocování i arény, běželo jich vedle
+# sebe několik, každý po 48 vláknech nad 218 ligami. Vláken tak přibývalo
+# rychleji, než ubývalo. Sdílený pool drží pevný strop a další volání se
+# zařadí do fronty místo toho, aby si vyrobilo dalších 48 vláken.
+#
+# Pool se ZÁMĚRNĚ nikdy nezavírá (žádné `with`) – zavřením by ho první
+# dokončené volání sebralo všem ostatním.
+_fetch_ex = None
+_fetch_ex_lock = threading.Lock()
+
+
+def _fetch_pool():
+    global _fetch_ex
+    with _fetch_ex_lock:
+        if _fetch_ex is None:
+            workers = app_settings.effective_fetch_workers(_MAX_FETCH_WORKERS)
+            _fetch_ex = ThreadPoolExecutor(max_workers=max(1, workers),
+                                           thread_name_prefix="espn")
+        return _fetch_ex
+
+
 def _revalidate_async(start: str, end: str, sport: str) -> None:
     """Obnoví keš na pozadí. Stahování všech lig trvá ~20 s, takže by se na něj
     nemělo čekat v requestu – uživatel dostane trochu starší data hned a
@@ -274,15 +309,22 @@ def _revalidate_async(start: str, end: str, sport: str) -> None:
         _refreshing.add(key)
 
     def work():
+        # Semafor se bere až tady, ne před startem vlákna – jinak by se
+        # čekání přeneslo do requestu, který obnovu vyvolal.
+        ziskan = _revalidace_sem.acquire(timeout=120)
         try:
+            if not ziskan:
+                return       # fronta je plná, tohle okno se obnoví příště
             fetch_range(start, end, use_cache=False, sport=sport)
         except Exception:
             pass
         finally:
+            if ziskan:
+                _revalidace_sem.release()
             with _refresh_lock:
                 _refreshing.discard(key)
 
-    threading.Thread(target=work, daemon=True).start()
+    threading.Thread(target=work, daemon=True, name=f"revalidace-{sport}").start()
 
 
 def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "soccer") -> list:
@@ -417,10 +459,9 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return []
 
     try:
-        workers = app_settings.effective_fetch_workers(_MAX_FETCH_WORKERS)
-        with ThreadPoolExecutor(max_workers=workers) as ex:
-            for res in ex.map(grab, league_slugs(sport)):
-                out.extend(res)
+        ex = _fetch_pool()
+        for res in ex.map(grab, league_slugs(sport)):
+            out.extend(res)
     except Exception:
         return []
     return out

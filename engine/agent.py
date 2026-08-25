@@ -24,11 +24,26 @@ from . import data_sources as _ds
 from .tips_db import SHARP_PROB
 
 # ML gate (volitelné) – naučený model může vetovat tipy, na kterých historicky prodělává
-try:
-    from . import ml_learner
-    _ML = True
-except ImportError:
-    _ML = False
+# ML Learning je volitelný a TĚŽKÝ: engine/ml_learner.py táhne scikit-learn,
+# což je při studeném startu (po restartu PC, kdy nic není v cache souborů)
+# ~30 s jen na import – a to celé předtím, než server vůbec začne odpovídat.
+# K obsloužení první stránky ho přitom nikdo nepotřebuje: uplatní se až při
+# vetu tipu, záznamu výsledku a trénování. Proto se načítá až při prvním
+# skutečném použití a výsledek se zapamatuje.
+_ML_MODUL = None      # None = ještě nezkoušeno, False = není k dispozici
+
+
+def _ml():
+    """Modul ml_learner, nebo None když není k dispozici. Import až tady."""
+    global _ML_MODUL
+    if _ML_MODUL is None:
+        try:
+            from . import ml_learner
+            _ML_MODUL = ml_learner
+        except Exception:
+            _ML_MODUL = False
+    return _ML_MODUL or None
+
 
 TAG = "bet-agent"
 MIN_STAKE = 5.0   # podlaha na tiket – pod tuhle částku se sázka přeskočí
@@ -56,10 +71,11 @@ def _experience_scale() -> float:
 
 def _ml_veto(outcome, odds, prob, league, ml_features=None) -> bool:
     """True = naučený model tip zamítá. Bez natrénovaného modelu nikdy nevetuje."""
-    if not _ML:
+    _l = _ml()
+    if not _l:
         return False
     try:
-        learner = ml_learner.get_learner()
+        learner = _l.get_learner()
         if learner.model is None:
             return False
         pred = learner.predict_with_confidence({

@@ -59,11 +59,26 @@ from engine import backtester
 from engine import tipsport_import
 
 # ML Learning (optional)
-try:
-    from engine import ml_learner
-    ML_AVAILABLE = True
-except ImportError:
-    ML_AVAILABLE = False
+# ML Learning je volitelný a TĚŽKÝ: engine/ml_learner.py táhne scikit-learn,
+# což je při studeném startu (po restartu PC, kdy nic není v cache souborů)
+# ~30 s jen na import – a to celé předtím, než server vůbec začne odpovídat.
+# K obsloužení první stránky ho přitom nikdo nepotřebuje: uplatní se až při
+# vetu tipu, záznamu výsledku a trénování. Proto se načítá až při prvním
+# skutečném použití a výsledek se zapamatuje.
+_ML_MODUL = None      # None = ještě nezkoušeno, False = není k dispozici
+
+
+def _ml():
+    """Modul ml_learner, nebo None když není k dispozici. Import až tady."""
+    global _ML_MODUL
+    if _ML_MODUL is None:
+        try:
+            from engine import ml_learner
+            _ML_MODUL = ml_learner
+        except Exception:
+            _ML_MODUL = False
+    return _ML_MODUL or None
+
 
 try:
     MONITORING_AVAILABLE = True
@@ -951,15 +966,34 @@ _settle_batch_cursor = 0   # rotuje napříč voláními, ať se dávka nezasekn
 _SETTLE_MAX_WORKERS = 4 if _ON_RENDER else 15
 
 
+# JEDEN trvalý pool pro celou settle smyčku. Dřív si _run_bounded zakládalo
+# nový ThreadPoolExecutor při KAŽDÉM volání a nedokončené požadavky pak
+# nechávalo běžet dál (shutdown(wait=False)). Jenže smyčka se opakuje každých
+# ~70 s, takže se opuštěná vlákna vrstvila jedno na druhé a nic je neomezovalo:
+# naměřeno 549 vláken a 610 MB RAM v procesu starém 15 minut. Čím dýl appka
+# běžela, tím pomalejší byla – včetně úplně obyčejného načtení stránky, které
+# se pak pralo o GIL se stovkami mrtvých vláken. S jedním sdíleným poolem je
+# strop počtu vláken pevný a další dávka se prostě zařadí do fronty.
+_SETTLE_POOL = None
+_SETTLE_POOL_LOCK = threading.Lock()
+
+
+def _settle_pool(max_workers):
+    global _SETTLE_POOL
+    with _SETTLE_POOL_LOCK:
+        if _SETTLE_POOL is None:
+            _SETTLE_POOL = ThreadPoolExecutor(max_workers=max_workers,
+                                              thread_name_prefix="settle")
+        return _SETTLE_POOL
+
+
 def _run_bounded(fn, items, max_workers, deadline_s, collect):
-    """Spustí fn(item) pro každý item přes max_workers vláken, ale NIKDY nečeká
-    déle než deadline_s celkem – na rozdíl od ThreadPoolExecutor().map() uvnitř
-    `with` bloku, který při shutdown() vždy počká na VŠECHNA zadaná vlákna,
-    i když jsme se je už vzdali čekat (na Renderu se jednotlivé ESPN requesty
-    i s timeout=8s na požadavek chovaly, jako by visely podstatně déle –
-    shutdown(wait=False) tohle omezení obchází, ať se appka nikdy nezasekne
-    na jednom pomalém/mrtvém síťovém spojení)."""
-    ex = ThreadPoolExecutor(max_workers=max_workers)
+    """Spustí fn(item) pro každý item přes sdílený pool, ale NIKDY nečeká déle
+    než deadline_s celkem. Nedokončené požadavky doběhnou na pozadí (drží je
+    per-request timeout v data_sources.TIMEOUT), request na ně už nečeká.
+
+    Zásadní je, že pool je SDÍLENÝ a nezakládá se znovu – viz komentář výš."""
+    ex = _settle_pool(max_workers)
     futures = [ex.submit(fn, item) for item in items]
     done, not_done = _futures_wait(futures, timeout=deadline_s)
     for fut in done:
@@ -967,8 +1001,10 @@ def _run_bounded(fn, items, max_workers, deadline_s, collect):
             collect(fut.result())
         except Exception:
             pass
-    # Nedokončené necháme běžet na pozadí, ale request na ně dál nečeká.
-    ex.shutdown(wait=False, cancel_futures=True)
+    # Co se ještě nerozběhlo, zahodit – ať fronta nenarůstá o práci, jejíž
+    # výsledek už stejně nikdo nepřevezme. Běžící úlohy doběhnou samy.
+    for fut in not_done:
+        fut.cancel()
     return len(not_done)
 
 
@@ -3074,10 +3110,11 @@ def api_backtest_odds():
 def api_feature_importance():
     """Get global feature importance."""
     try:
-        if not ML_AVAILABLE:
+        _l = _ml()
+        if not _l:
             return jsonify({"success": False, "error": "ML not available"}), 500
 
-        stats = ml_learner.get_learning_stats()
+        stats = _l.get_learning_stats()
         importance = stats.get("feature_importance", {})
 
         return jsonify({
