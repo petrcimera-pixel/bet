@@ -57,6 +57,7 @@ from engine import footballdata
 from engine import netdiag
 from engine import backtester
 from engine import tipsport_import
+from engine import sysmon
 
 # ML Learning (optional)
 # ML Learning je volitelný a TĚŽKÝ: engine/ml_learner.py táhne scikit-learn,
@@ -1529,6 +1530,32 @@ def api_settle_status():
     if out.get("in_progress") and out.get("pass_started_at"):
         out["current_pass_elapsed_s"] = int(_time.time()) - out["pass_started_at"]
     return jsonify(out)
+
+
+@app.route("/api/system/live")
+def api_system_live():
+    """Rychle pollovaný stav pro stavovou lištu: progres stahování zápasů,
+    progres vyhodnocování a systémové metriky (RAM/CPU/síť). Odděleně od
+    /api/settle/status, který nese víc dat a stavová lišta ho pollovala jen
+    jednou za minutu – tohle se má tahat po pár sekundách, ať je vidět
+    postup živě, ne až po dokončení."""
+    with _settle_lock:
+        st = dict(_settle_status)
+    total_pending = st.get("total_pending") or st.get("total_targets") or 0
+    settled_so_far = st.get("settled_so_far")
+    if settled_so_far is None:
+        # Fallback na starší tvar stavu (batch_size), když settled_so_far
+        # ještě neproběhl v tomhle běhu appky ani jednou.
+        settled_so_far = 0
+    return jsonify({
+        "fetch": ds.fetch_progress(),
+        "settle": {
+            "active": bool(st.get("in_progress")),
+            "done": settled_so_far,
+            "total": total_pending,
+        },
+        "sys": sysmon.snapshot(),
+    })
 
 
 # ---------------------------------------------------------------------------

@@ -644,6 +644,7 @@ function renderSettleDetail(s) {
 // Dolní stavová lišta – kdy naposled proběhla kontrola výsledků
 // ---------------------------------------------------------------------------
 const STATUSBAR_POLL_MS = 60 * 1000;
+const SYSBAR_POLL_MS = 4 * 1000;   // progres bary a RAM/CPU/síť – rychlejší, ať je vidět postup živě
 const SETTLE_STALE_MIN = 30;   // od kdy je kontrola "dávno" (oranžová tečka)
 
 function agoText(ts) {
@@ -701,12 +702,85 @@ function setupStatusBar() {
     }
   });
   updateStatusBar();
+  updateSystemBar();
   setInterval(() => {
     if (document.visibilityState === 'visible') updateStatusBar();
   }, STATUSBAR_POLL_MS);
+  setInterval(() => {
+    if (document.visibilityState === 'visible') updateSystemBar();
+  }, SYSBAR_POLL_MS);
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') updateStatusBar();
+    if (document.visibilityState === 'visible') { updateStatusBar(); updateSystemBar(); }
   });
+}
+
+/** Progres bary (načítání zápasů, vyhodnocování) + RAM/CPU/síť ve stavové
+ *  liště. Pollováno mnohem rychleji než zbytek lišty (viz SYSBAR_POLL_MS),
+ *  ale odpověď je malá a levná (žádné počítání otevřených sázek), takže
+ *  to nezatěžuje appku o nic víc, než ukazovat hodinky.*/
+async function updateSystemBar() {
+  let d;
+  try {
+    d = await api('/api/system/live', { timeoutMs: 8000 });
+  } catch (e) {
+    return;   // dočasný výpadek se prostě přeskočí, lišta zůstane na starém stavu
+  }
+
+  const fetchP = d.fetch || {};
+  const fetchRow = el('sbFetchProgress');
+  if (fetchRow) {
+    if (fetchP.active && fetchP.total) {
+      fetchRow.style.display = 'flex';
+      const pct = Math.min(100, Math.round((fetchP.done / fetchP.total) * 100));
+      el('sbFetchFill').style.width = pct + '%';
+      el('sbFetchNum').textContent = `${fetchP.done}/${fetchP.total} lig`;
+    } else {
+      fetchRow.style.display = 'none';
+    }
+  }
+
+  const settleP = d.settle || {};
+  const settleRow = el('sbSettleProgress');
+  if (settleRow) {
+    if (settleP.active && settleP.total) {
+      settleRow.style.display = 'flex';
+      const pct = Math.min(100, Math.round((settleP.done / settleP.total) * 100));
+      el('sbSettleFill').style.width = pct + '%';
+      el('sbSettleNum').textContent = `${settleP.done}/${settleP.total}`;
+    } else if (settleP.active) {
+      // Vyhodnocování běží, ale zatím nevíme kolik toho celkem je (první
+      // okamžiky běhu) – ukázat aspoň neurčitý stav, ne nic.
+      settleRow.style.display = 'flex';
+      el('sbSettleFill').style.width = '100%';
+      el('sbSettleNum').textContent = '…';
+    } else {
+      settleRow.style.display = 'none';
+    }
+  }
+
+  const progRow = el('sbProgressRow');
+  if (progRow) {
+    const anyActive = (fetchP.active && fetchP.total) || settleP.active;
+    progRow.style.display = anyActive ? 'flex' : 'none';
+  }
+
+  const sys = d.sys || {};
+  const sysEl = el('sbSys');
+  if (sysEl) {
+    if (!sys.available) {
+      sysEl.textContent = '';
+    } else {
+      const cpuWarn = (sys.cpu_pct || 0) > 80 ? 'sb-sys-warn' : '';
+      const parts = [
+        `🧠 ${czNum(sys.rss_mb, 0)} MB`,
+        `<span class="${cpuWarn}">⚙️ ${czNum(sys.cpu_pct, 0)} %</span>`,
+      ];
+      if (sys.net_up_kbps != null && sys.net_down_kbps != null) {
+        parts.push(`📶 ↑${czNum(sys.net_up_kbps, 0)} ↓${czNum(sys.net_down_kbps, 0)} kB/s`);
+      }
+      sysEl.innerHTML = parts.join(' · ');
+    }
+  }
 }
 
 async function loadSettleStatus() {

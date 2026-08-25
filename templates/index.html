@@ -646,6 +646,18 @@
       </div>
 
       <div class="card">
+        <h3>📊 Stavová lišta (dole na každé stránce)</h3>
+        <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
+          Vždy vidět, ať jsi na kterékoli kartě. Dva progres bary se objeví, jen když se zrovna něco
+          děje: <strong>📥 Načítání zápasů</strong> (kolik z ~218 lig už appka stáhla z ESPN) a
+          <strong>✅ Vyhodnocování</strong> (postup právě běžící kontroly výsledků). Vpravo běží
+          <strong>🧠 RAM / ⚙️ CPU / 📶 síť</strong> appky – aktualizuje se každé 4 s, CPU nad 80 %
+          se zvýrazní. Bez psutil (chybějící balíček) se tahle trojice prostě neukáže, na zbytku
+          appky to nic nemění.
+        </p>
+      </div>
+
+      <div class="card">
         <h3>🤖 Automatický agent</h3>
         <p style="font-size:13px; color:var(--txt2); line-height:1.7; margin:0;">
           Když je v Nastavení zapnutý "Auto-run", agent automaticky vsadí nejjistější tip každého
@@ -828,11 +840,26 @@
 </div>
 
 <div id="statusBar">
-  <span id="sbSettle" class="sb-item">Kontrola výsledků: —</span>
-  <span id="sbPending" class="sb-item"></span>
-  <span class="sb-spacer"></span>
-  <span id="sbAgent" class="sb-item"></span>
-  <button class="btn small" id="sbCheckBtn">Zkontrolovat teď</button>
+  <div id="sbProgressRow" class="sb-progress-row" style="display:none;">
+    <div id="sbFetchProgress" class="sb-progress" style="display:none;">
+      <span class="sb-progress-label">📥 Načítání zápasů</span>
+      <div class="sb-progress-track"><div class="sb-progress-fill" id="sbFetchFill"></div></div>
+      <span class="sb-progress-num" id="sbFetchNum"></span>
+    </div>
+    <div id="sbSettleProgress" class="sb-progress" style="display:none;">
+      <span class="sb-progress-label">✅ Vyhodnocování</span>
+      <div class="sb-progress-track"><div class="sb-progress-fill" id="sbSettleFill"></div></div>
+      <span class="sb-progress-num" id="sbSettleNum"></span>
+    </div>
+  </div>
+  <div class="sb-main-row">
+    <span id="sbSettle" class="sb-item">Kontrola výsledků: —</span>
+    <span id="sbPending" class="sb-item"></span>
+    <span class="sb-spacer"></span>
+    <span id="sbSys" class="sb-item sb-sys" title="Paměť / vytížení CPU / síťový provoz appky"></span>
+    <span id="sbAgent" class="sb-item"></span>
+    <button class="btn small" id="sbCheckBtn">Zkontrolovat teď</button>
+  </div>
 </div>
 
 <div id="toast"></div>

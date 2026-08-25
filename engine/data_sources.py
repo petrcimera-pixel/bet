@@ -470,6 +470,23 @@ def fetch_day(date_str: str, use_cache: bool = True, sport: str = "soccer") -> l
 # ---------------------------------------------------------------------------
 # ESPN – primární zdroj (paralelně přes všechny ligy, jedním dotazem na rozsah)
 # ---------------------------------------------------------------------------
+# Živý postup stahování pro stavovou lištu ("Načítání zápasů X/Y lig").
+# Víc volání _from_espn může běžet souběžně (request + prewarm + settle) –
+# proto se nesleduje jeden čítač, ale SOUČET přes všechny právě běžící
+# operace, ať lišta ukáže smysluplné číslo bez ohledu na to, kolik jich je.
+_FETCH_PROGRESS_LOCK = threading.Lock()
+_fetch_ops = {}
+_fetch_op_seq = 0
+
+
+def fetch_progress() -> dict:
+    with _FETCH_PROGRESS_LOCK:
+        total = sum(op["total"] for op in _fetch_ops.values())
+        done = sum(op["done"] for op in _fetch_ops.values())
+        sports = sorted({op["sport"] for op in _fetch_ops.values()})
+    return {"active": bool(total), "done": done, "total": total, "sports": sports}
+
+
 def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
     # ESPN řadí zápasy podle DATA V USA, ale my filtrujeme podle UTC data
     # z ev["date"]. Zápas začínající v UTC krátce po půlnoci proto spadne do
@@ -485,6 +502,13 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
     e = add_days(end, 1).replace("-", "")
     drange = f"{s}-{e}"
     out = []
+    slugs = league_slugs(sport)
+
+    global _fetch_op_seq
+    with _FETCH_PROGRESS_LOCK:
+        _fetch_op_seq += 1
+        op_id = _fetch_op_seq
+        _fetch_ops[op_id] = {"sport": sport, "total": len(slugs), "done": 0}
 
     def grab(item):
         slug, country = item
@@ -495,13 +519,20 @@ def _from_espn(start: str, end: str, sport: str = "soccer") -> list:
             return _parse_espn(slug, country, r.json(), start, end, sport)
         except Exception:
             return []
+        finally:
+            with _FETCH_PROGRESS_LOCK:
+                if op_id in _fetch_ops:
+                    _fetch_ops[op_id]["done"] += 1
 
     try:
         ex = _fetch_pool()
-        for res in ex.map(grab, league_slugs(sport)):
+        for res in ex.map(grab, slugs):
             out.extend(res)
     except Exception:
         return []
+    finally:
+        with _FETCH_PROGRESS_LOCK:
+            _fetch_ops.pop(op_id, None)
     return out
 
 
