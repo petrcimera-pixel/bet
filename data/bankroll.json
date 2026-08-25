@@ -58,7 +58,7 @@
       "stake": 8.06,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0027,
+      "clv": -0.0054,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -81,7 +81,7 @@
         "Benfica má výrazně silnější útočný rating.",
         "Kurz 1.476 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.476
+      "closing_odds": 1.488
     },
     {
       "id": "208783f781",
@@ -98,7 +98,7 @@
       "stake": 8.06,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0005,
+      "clv": -0.0683,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -121,7 +121,7 @@
         "Besiktas má výrazně silnější útočný rating.",
         "Kurz 1.909 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.909
+      "closing_odds": 2.05
     },
     {
       "id": "91b2cdd589",
@@ -138,7 +138,7 @@
       "stake": 8.06,
       "status": "open",
       "pnl": 0.0,
-      "clv": 0.0,
+      "clv": 0.0246,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -161,7 +161,7 @@
         "Jagiellonia Bialystok má výrazně silnější útočný rating.",
         "Kurz 2.0 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 2.0
+      "closing_odds": 1.952
     },
     {
       "id": "76cf6b1ad1",
@@ -178,7 +178,7 @@
       "stake": 7.32,
       "status": "open",
       "pnl": 0.0,
-      "clv": -0.0164,
+      "clv": -0.0006,
       "tag": "bet-agent",
       "odds_source": "real",
       "market": "score",
@@ -201,7 +201,7 @@
         "Fenerbahce má výrazně silnější útočný rating.",
         "Kurz 1.741 je reálný kurz sázkovky – ne odhad modelu."
       ],
-      "closing_odds": 1.769
+      "closing_odds": 1.741
     },
     {
       "id": "478535603d",

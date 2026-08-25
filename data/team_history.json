@@ -225081,6 +225081,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Khaleej",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Hazem": [
@@ -228973,6 +228985,42 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Taawoun",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Taawoun",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Taawoun",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Ettifaq": [
@@ -231123,6 +231171,42 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Fayha",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Fayha",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Al Fayha",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Khaleej": [
@@ -231190,6 +231274,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-25",
+      "opponent": "Abha",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "D"

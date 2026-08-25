@@ -28,6 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 
 from . import storage
+from . import match_store
 from . import settings as app_settings
 
 TIMEOUT = 8   # kratší timeout = rychlejší selhání jednotlivého požadavku
@@ -263,14 +264,9 @@ _refreshing = set()  # rozsahy, které se právě obnovují – ať neběží dv
 _refresh_lock = threading.Lock()
 
 
-# Keš je klíčovaná ROZSAHEM dat, takže každé jiné okno (dashboard days=1,
-# Doporučené days=3 × 3 sporty, prewarm days=3, Hledat days=14) je vlastní
-# klíč s vlastní obnovou – a každá obnova si otevírala vlastní pool přes
-# všechny ligy. _refreshing hlídá jen duplicitu STEJNÉHO klíče, ne počet
-# různých běžících naráz, takže vláken lineárně přibývalo (naměřeno 31 → 189
-# za pět minut) a appka byla čím dál pomalejší, včetně obyčejného načtení
-# stránky. Semafor drží strop: souběžně se obnovuje nejvýš pár oken, zbytek
-# počká. Data tím nezastarají – jen se dotáhnou o chvíli později.
+# Souběžných obnov na pozadí smí běžet jen pár najednou – bez stropu by
+# appka (viz historie tohoto souboru) uměla otevřít desítky paralelních
+# ESPN dávek a vlákna se hromadila rychleji, než ubývala.
 _REVALIDACE_STROP = 2
 _revalidace_sem = threading.Semaphore(_REVALIDACE_STROP)
 
@@ -298,24 +294,71 @@ def _fetch_pool():
         return _fetch_ex
 
 
-def _revalidate_async(start: str, end: str, sport: str) -> None:
-    """Obnoví keš na pozadí. Stahování všech lig trvá ~20 s, takže by se na něj
-    nemělo čekat v requestu – uživatel dostane trochu starší data hned a
-    příští načtení už je má čerstvá."""
-    key = (sport, start, end)
+def _days_between(start: str, end: str) -> list:
+    out, d = [], start
+    while d <= end:
+        out.append(d)
+        d = add_days(d, 1)
+    return out
+
+
+def _merge_do_useku(dates: list) -> list:
+    """Seřazené dny sloučí do souvislých úseků [(od, do), ...] – ať se pro
+    5 po sobě jdoucích chybějících dnů pošle JEDEN ESPN dotaz na rozsah,
+    ne pět jednodenních."""
+    if not dates:
+        return []
+    dates = sorted(dates)
+    useky = [[dates[0], dates[0]]]
+    for d in dates[1:]:
+        if d == add_days(useky[-1][1], 1):
+            useky[-1][1] = d
+        else:
+            useky.append([d, d])
+    return [tuple(u) for u in useky]
+
+
+def _fetch_and_store(start: str, end: str, sport: str) -> list:
+    """Stáhne rozsah z ESPN (+ fallbacky) a uloží PO DNECH do match_store.
+    Když se z celého úseku nevrátí nic, dny se NEoznačí jako stažené – to
+    obvykle znamená výpadek zdroje, ne že by ten den skutečně neměl zápasy,
+    a příští dotaz to má zkusit znovu (stejná opatrnost jako předtím u
+    file-based keše: prázdno se nekešuje)."""
+    matches = _from_espn(start, end, sport)
+    from_fallback = False
+    if not matches and sport == "soccer":
+        matches = _from_thesportsdb(start)
+        from_fallback = bool(matches)
+    if sport == "soccer" and matches:
+        try:
+            matches += _extra_from_apifootball(matches, start, end, sport)
+        except Exception:
+            pass
+    if matches and not from_fallback:
+        match_store.save_days(sport, _days_between(start, end), matches)
+    return matches
+
+
+def _revalidate_async(dates: list, sport: str) -> None:
+    """Obnoví dané dny na pozadí. Stahování trvá desítky sekund, takže by se
+    na to nemělo čekat v requestu – uživatel dostane mírně starší data hned
+    a příští načtení už je má čerstvá."""
+    dates = sorted(set(dates))
+    if not dates:
+        return
+    key = (sport, tuple(dates))
     with _refresh_lock:
         if key in _refreshing:
             return
         _refreshing.add(key)
 
     def work():
-        # Semafor se bere až tady, ne před startem vlákna – jinak by se
-        # čekání přeneslo do requestu, který obnovu vyvolal.
         ziskan = _revalidace_sem.acquire(timeout=120)
         try:
             if not ziskan:
-                return       # fronta je plná, tohle okno se obnoví příště
-            fetch_range(start, end, use_cache=False, sport=sport)
+                return       # fronta je plná, tenhle úsek se obnoví příště
+            for rs, re_ in _merge_do_useku(dates):
+                _fetch_and_store(rs, re_, sport)
         except Exception:
             pass
         finally:
@@ -328,43 +371,38 @@ def _revalidate_async(start: str, end: str, sport: str) -> None:
 
 
 def fetch_range(start: str, end: str, use_cache: bool = True, sport: str = "soccer") -> list:
-    """Vrátí zápasy daného sportu pro rozsah dat [start, end], seřazené dle data/času."""
-    cache_name = f"cache_{sport}_{start}_{end}.json"
-    if use_cache:
-        cached = storage.load(cache_name, None)
-        if cached is not None and not storage.is_cache_stale(cache_name, ttl_hours=HARD_TTL_H):
-            # stale-while-revalidate: mírně zastaralou keš vrátíme hned a
-            # čerstvá data si dotáhneme na pozadí
-            if storage.is_cache_stale(cache_name, ttl_hours=SOFT_TTL_H):
-                _revalidate_async(start, end, sport)
-            return cached
+    """Vrátí zápasy daného sportu pro rozsah dat [start, end], seřazené dle
+    data/času. Keš (viz engine/match_store.py) je klíčovaná PO DNECH, ne po
+    celém rozsahu – takže když si dashboard vyžádá dnešek a Doporučené
+    vzápětí dnešek+2 dny, ten společný den se z ESPN stáhne jen jednou."""
+    dates = _days_between(start, end)
 
-    matches = _from_espn(start, end, sport)
-    # Přišlo-li to ze záložního zdroje, výsledek se NEKEŠUJE – jinak by jedno
-    # selhání ESPN zamklo na 12 h neúplný den. Vymyšlená data se nepoužívají
-    # vůbec: appka radši neukáže nic, než aby si zápas vymyslela (dřív tu byl
-    # demo dataset, který takhle do appky dostal neexistující zápasy včetně
-    # celé fiktivní české ligy).
-    from_fallback = False
-    if not matches and sport == "soccer":
-        matches = _from_thesportsdb(start)
-        from_fallback = bool(matches)
-    if not matches:
-        return []      # prázdno se nekešuje, další dotaz zkusí ESPN znovu
+    if not use_cache:
+        # Vynucený refresh (tlačítko "Obnovit", stale-while-revalidate výš):
+        # nejde jen zahodit celý rozsah, protože v něm typicky JE dost dnů
+        # čerstvých – přefetchovat by se mělo jen to, co appka sama chce
+        # obnovit. Volající, který explicitně chce use_cache=False, čeká na
+        # čerstvá data hned, proto se to tady dělá synchronně.
+        for rs, re_ in _merge_do_useku(dates):
+            _fetch_and_store(rs, re_, sport)
+        return [m for m in match_store.get_days(sport, dates)
+                if start <= m.get("date", "") <= end]
 
-    # Doplňkový zdroj pro ligy, které ESPN vůbec nevede (česká, polská,
-    # slovenská…). Přidávají se JEN zápasy, které v ESPN datech nejsou –
-    # ESPN zůstává primární, protože jako jediný nese i kurzy.
-    if sport == "soccer":
-        try:
-            matches += _extra_from_apifootball(matches, start, end, sport)
-        except Exception:
-            pass   # doplněk nesmí nikdy shodit hlavní zdroj
+    chybi_tvrde = match_store.stale_or_missing(sport, dates, HARD_TTL_H)
+    if chybi_tvrde:
+        # Tyhle dny appka buď nikdy neviděla, nebo jsou starší než 12 h –
+        # na tohle se čeká synchronně, jinak by se vrátilo prázdno/neúplno.
+        for rs, re_ in _merge_do_useku(chybi_tvrde):
+            _fetch_and_store(rs, re_, sport)
 
-    matches.sort(key=lambda m: (m.get("date", ""), m.get("time", "")))
-    if not from_fallback:
-        storage.save(cache_name, matches)
-    return matches
+    # stale-while-revalidate: dny starší než půl hodiny (ale ne přes 12 h)
+    # appka vrátí hned tak, jak je má, a čerstvá verze se dotáhne na pozadí.
+    chybi_mekke = [d for d in match_store.stale_or_missing(sport, dates, SOFT_TTL_H)
+                   if d not in chybi_tvrde]
+    if chybi_mekke:
+        _revalidate_async(chybi_mekke, sport)
+
+    return match_store.get_days(sport, dates)
 
 
 _NAME_NOISE = {"fc", "cf", "sc", "afc", "ac", "sk", "fk", "club", "cd", "sv",

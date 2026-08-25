@@ -150,20 +150,27 @@ def is_cache_stale(name: str, ttl_hours: int = 12) -> bool:
 def cache_stats() -> dict:
     """Stav keše pro diagnostický panel: kolik souborů leží na disku (a
     kolik místa zabírají) vs. kolik jich appka aktuálně drží v paměti
-    (LRU, viz _CACHE nahoře)."""
+    (LRU, viz _CACHE nahoře). Zápasy appka od data_sources.py drží v
+    match_store.py (SQLite, po dnech) – ten se počítá zvlášť."""
     disk_files, disk_bytes = 0, 0
-    for pat in ("cache_*.json", "apif_*.json"):
+    for pat in ("apif_*.json",):   # cache_*.json nahradilo match_store.py
         for f in glob.glob(os.path.join(_DIR, pat)):
             disk_files += 1
             try:
                 disk_bytes += os.path.getsize(f)
             except OSError:
                 pass
+    try:
+        from . import match_store
+        zapasy = match_store.stats()
+    except Exception:
+        zapasy = {"days": 0, "matches": 0, "db_bytes": 0}
     return {
         "memory_entries": len(_CACHE),
         "memory_max_entries": _CACHE_MAX_ENTRIES,
         "disk_files": disk_files,
         "disk_bytes": disk_bytes,
+        "match_store": zapasy,
     }
 
 
@@ -171,27 +178,37 @@ def clear_match_caches() -> int:
     """Zahodí keše rozpisů zápasů. Volá se, když se změní zdroj dat – jinak by
     se nově dostupné ligy objevily až po vypršení 12h TTL."""
     n = 0
-    for pat in ("cache_*.json", "apif_*.json"):
+    for pat in ("apif_*.json",):
         for f in glob.glob(os.path.join(_DIR, pat)):
             try:
                 os.remove(f)
                 n += 1
             except OSError:
                 pass
+    try:
+        from . import match_store
+        n += match_store.clear_all()
+    except Exception:
+        pass
     _CACHE.clear()
     return n
 
 
 def cleanup_old_caches(max_age_days: int = 14) -> int:
-    """Smaže cache soubory starší než max_age_days. Volá se při startu."""
+    """Smaže staré cache soubory a staré dny v match_store.py. Volá se při startu."""
     import time
     cutoff = time.time() - max_age_days * 86400
     n = 0
-    for f in glob.glob(os.path.join(_DIR, "cache_*.json")):
+    for f in glob.glob(os.path.join(_DIR, "apif_*.json")):
         try:
             if os.path.getmtime(f) < cutoff:
                 os.remove(f)
                 n += 1
         except OSError:
             pass
+    try:
+        from . import match_store
+        n += match_store.cleanup_old(max_age_days=21)
+    except Exception:
+        pass
     return n

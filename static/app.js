@@ -2264,7 +2264,8 @@ async function loadAdvancedDiagnostics() {
       ${zaloha}
       <strong style="color:var(--txt2);">Keš zápasů:</strong>
       ${cache.memory_entries ?? '—'}/${cache.memory_max_entries ?? '—'} v paměti,
-      ${cache.disk_files ?? '—'} souborů na disku (${fmtBytes(cache.disk_bytes)})<br>
+      databáze ${cache.match_store?.days ?? '—'} dní / ${cache.match_store?.matches ?? '—'} zápasů
+      (${fmtBytes(cache.match_store?.db_bytes)})<br>
       <strong style="color:var(--txt2);">Background smyčky:</strong>
       ${th.canary_stale ? '<span class="bad">⚠️ NEODPOVÍDAJÍ</span>' : '<span class="pos">✓ běží</span>'}
       (tick #${th.canary_ticks ?? '—'}, naposledy před ${th.canary_age_s != null ? Math.round(th.canary_age_s) + ' s' : '—'})<br>

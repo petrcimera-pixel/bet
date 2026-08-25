@@ -115,8 +115,8 @@ def effective_fetch_workers(env_default: int) -> int:
 
 
 def clear_prediction_cache() -> int:
-    """Smaže keš stažených zápasů (cache_*.json) – další načtení natáhne čerstvá data z ESPN."""
-    return storage.remove_matching("cache_*.json")
+    """Smaže keš stažených zápasů (match_store.py) – další načtení natáhne čerstvá data z ESPN."""
+    return storage.clear_match_caches()
 
 
 def reset_tips_db() -> None:
