@@ -318,6 +318,19 @@ def _record_team_history(home: str, away: str, league: str, hs: int, as_: int,
                "result": "W" if as_ > hs else "L" if as_ < hs else "D"}
     for team, entry in ((_norm_team(home), entry_h), (_norm_team(away), entry_a)):
         lst = hist.setdefault(team, [])
+        # Idempotentní zápis: guard proti opakovanému zápasu výš funguje jen
+        # přes match_id, ale tentýž reálný zápas umí appka vidět pod DVĚMA
+        # různými ID (živé ESPN číslo vs. "fd-" archivní ID z football-data),
+        # takže se do historie zapsal dvakrát i s guardem. (date, opponent,
+        # gf, ga) spolehlivě pozná tentýž zápas bez ohledu na zdroj ID –
+        # když existuje, jen se domerguje chybějící cf/ca, nezapisuje se znovu.
+        klic = (entry["date"], entry["opponent"], entry["gf"], entry["ga"])
+        existujici = next((e for e in lst
+                           if (e.get("date"), e.get("opponent"), e.get("gf"), e.get("ga")) == klic), None)
+        if existujici is not None:
+            if existujici.get("cf") is None and entry.get("cf") is not None:
+                existujici["cf"], existujici["ca"] = entry["cf"], entry["ca"]
+            continue
         lst.append(entry)
         lst.sort(key=lambda e: e.get("date", ""))
         del lst[:-_HISTORY_MAX_PER_TEAM]   # jen posledních N, ať soubor neroste bez konce

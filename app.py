@@ -695,11 +695,21 @@ def api_team():
         upcoming = [e for e in evs if not e["completed"]][:6]
     else:
         hist = pred.team_history_for(name)
+        # team_history.json umí mít tentýž zápas víckrát (nejdřív se zapíše
+        # bez rohů, pak znovu s doplněnými rohovými daty) – bez deduplikace
+        # se v poslední formě zápas zdvojil/ztrojil místo dalšího zápasu.
+        videne, dedup = set(), []
+        for e in hist:
+            klic = (e.get("date"), e.get("opponent"), e.get("gf"), e.get("ga"))
+            if klic in videne:
+                continue
+            videne.add(klic)
+            dedup.append(e)
         past = [{"gf": e.get("gf"), "ga": e.get("ga"), "res": e.get("result")}
-                for e in hist if e.get("gf") is not None]
+                for e in dedup if e.get("gf") is not None]
         last = [{"opp": e.get("opponent", "?"), "gf": e.get("gf"), "ga": e.get("ga"),
                  "res": e.get("result"), "date": e.get("date", "")}
-                for e in reversed(hist[-10:])]
+                for e in reversed(dedup[-10:])]
         upcoming = []   # vlastní historie zná jen odehrané zápasy
 
     gf = [e["gf"] for e in past if e["gf"] is not None]
