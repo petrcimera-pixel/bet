@@ -46,7 +46,12 @@ def snapshot() -> dict:
         with _LOCK:
             p = _proces()
             rss_mb = round(p.memory_info().rss / (1024 * 1024), 1)
-            cpu_pct = p.cpu_percent(interval=None)
+            # psutil.Process.cpu_percent() počítá vůči JEDNOMU jádru – na
+            # osmijádrovém stroji tak ukazuje až 800 %, když appka vytíží
+            # všechna jádra najednou (typicky při stahování přes ThreadPool).
+            # Task Manager i běžná očekávání ale berou 100 % jako "všechna
+            # jádra naplno" – dělením počtem jader se na tu konvenci srovná.
+            cpu_pct = p.cpu_percent(interval=None) / (psutil.cpu_count() or 1)
 
             global _posledni_net
             now = time.time()
