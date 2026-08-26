@@ -311,9 +311,19 @@ function bindEvents() {
   el('wizReroll')?.addEventListener('click', () => { el('wizName').value = ''; refreshWizPreview(); });
   el('depositCancel')?.addEventListener('click', () => { el('depositModal').style.display = 'none'; });
   el('depositConfirm')?.addEventListener('click', confirmDeposit);
+  el('teamModalClose')?.addEventListener('click', () => { el('teamModal').style.display = 'none'; });
   // klik mimo okno zavře modal
-  ['bettorWizard', 'depositModal'].forEach(id => {
+  ['bettorWizard', 'depositModal', 'teamModal'].forEach(id => {
     el(id)?.addEventListener('click', (ev) => { if (ev.target.id === id) el(id).style.display = 'none'; });
+  });
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape' && el('teamModal')?.style.display === 'flex') el('teamModal').style.display = 'none';
+  });
+  // Kliknutí na jakékoli jméno týmu (delegováno, ať funguje i pro obsah
+  // vykreslený později přes innerHTML – tabulky sázek, karty zápasů…).
+  document.addEventListener('click', (ev) => {
+    const t = ev.target.closest('[data-team]');
+    if (t) { ev.stopPropagation(); showTeamDetail(t.dataset.team, t.dataset.sport || 'soccer'); }
   });
   document.querySelectorAll('#sportStrip .pill[data-sport]').forEach(p => {
     p.addEventListener('click', () => {
@@ -1298,7 +1308,7 @@ function renderAnalysis(d, box) {
     <div class="card">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
         <div>
-          <h2 style="margin:0 0 4px;">${esc(m.home)} – ${esc(m.away)}</h2>
+          <h2 style="margin:0 0 4px;">${tymOznaceni(m.home, m.sport)} – ${tymOznaceni(m.away, m.sport)}</h2>
           <p class="lead">${m.flag || ''} ${m.league} · ${fmtWhen(m.date, m.time)}</p>
         </div>
         ${tipsportBadge(m.home, m.tipsport)}
@@ -1855,8 +1865,8 @@ function matchCardHtml(m, bet) {
           <span>${startLabel}</span>
         </div>
         <div class="teams">
-          <div class="team-row"><span>${esc(m.home)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.home}</span>` : ''}</div>
-          <div class="team-row"><span>${esc(m.away)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
+          <div class="team-row"><span>${tymOznaceni(m.home, m.sport)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.home}</span>` : ''}</div>
+          <div class="team-row"><span>${tymOznaceni(m.away, m.sport)}</span>${m.result ? `<span class="score ${m.live ? 'live' : ''}">${m.result.away}</span>` : ''}</div>
         </div>
         <div class="pick-col">
           ${finished ? '' : hasPick ? `
@@ -4145,7 +4155,7 @@ function dopKartaHtml(t) {
         ${cas}${skore}
         ${tipsportBadge(t.home, t.tipsport, { short: true })}
       </div>
-      <div class="dop-zapas">${escAttr(t.match)}</div>
+      <div class="dop-zapas">${tymOznaceni(t.home, t.sport)} – ${tymOznaceni(t.away, t.sport)}</div>
       <div class="dop-liga muted">${escAttr(t.league || '')}</div>
       <div class="dop-tip">
         <span class="dop-nazev">${escAttr(t.name)}</span>
@@ -4577,4 +4587,77 @@ async function exportSazekCsv() {
     { nadpis: 'CLV',       hodnota: b => b.clv ?? '' },
     { nadpis: 'Vyhodnoceno', hodnota: b => csvDatum(b.settled_ts) },
   ], bets);
+}
+
+// ---------------------------------------------------------------------------
+// Detail týmu – klikací jméno kdekoli v appce
+// ---------------------------------------------------------------------------
+/* Endpoint /api/team umí Elo rating, formu a útok/obranu, ale bez ESPN
+   slug+team_id (karty v appce znají skoro vždy jen jméno) spadá na
+   vlastní historii modelu – stejný vzor jako u formy v detailu zápasu. */
+function tymOznaceni(jmeno, sport) {
+  if (!jmeno) return '';
+  return `<span class="team-link" data-team="${escAttr(jmeno)}" data-sport="${escAttr(sport || 'soccer')}">${esc(jmeno)}</span>`;
+}
+
+async function showTeamDetail(name, sport) {
+  const modal = el('teamModal');
+  const box = el('teamModalObsah');
+  if (!modal || !box) return;
+  setText('teamModalNazev', name);
+  box.innerHTML = '<div class="loading"><span class="spinner"></span></div>';
+  modal.style.display = 'flex';
+
+  let d;
+  try {
+    d = await api(`/api/team?name=${encodeURIComponent(name)}&sport=${encodeURIComponent(sport || 'soccer')}`, { timeoutMs: 20000 });
+  } catch (e) {
+    box.innerHTML = `<div class="empty-state">Detail týmu se nepodařilo načíst.</div>`;
+    return;
+  }
+  box.innerHTML = teamDetailHtml(d);
+}
+
+function teamDetailHtml(d) {
+  const r = d.rating || {};
+  const n = r.n || 0;
+  // Stejná hranice spolehlivosti jako coldstart odznak jinde v appce (ř. ~1869).
+  const spolehlivost = Math.min(1, n / 20);
+  const nizkaDuvera = spolehlivost < 0.3;
+  const utok = r.a != null ? (r.a >= 1 ? `${czNum(r.a, 2)}× nad průměrem` : `${czNum(r.a, 2)}× pod průměrem`) : '—';
+  const obrana = r.d != null ? (r.d <= 1 ? `${czNum(r.d, 2)}× pod průměrem (dobrá)` : `${czNum(r.d, 2)}× nad průměrem (slabší)`) : '—';
+
+  const forma = (d.form || []).length
+    ? d.form.map(g => {
+        const cls = g.res === 'W' ? 'pos' : g.res === 'L' ? 'bad' : '';
+        const label = g.res === 'W' ? 'V' : g.res === 'L' ? 'P' : 'R';
+        return `<span class="form-dot ${cls}" title="${escAttr(g.opp || '')} ${g.gf ?? '?'}:${g.ga ?? '?'}">${label}</span>`;
+      }).join('')
+    : '<span class="muted">zatím žádná zaznamenaná historie</span>';
+
+  const nadchazejici = (d.upcoming || []).length
+    ? `<div class="perf-rows">${d.upcoming.map(u => `
+        <div class="perf-row"><span>${esc(u.opp || '?')}</span><span class="muted">${esc(u.date || '')}</span></div>
+      `).join('')}</div>`
+    : '';
+
+  return `
+    <div class="grid-stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: var(--space-4);">
+      <div class="stat-tile"><div class="label">Odehráno</div><div class="value">${d.played ?? '—'}</div></div>
+      <div class="stat-tile"><div class="label">Úspěšnost</div><div class="value">${d.win_rate != null ? d.win_rate + '&nbsp;%' : '—'}</div></div>
+      <div class="stat-tile"><div class="label">Góly</div><div class="value" style="font-size:var(--fs-lg);">${d.avg_for ?? '—'} : ${d.avg_against ?? '—'}</div><div class="hint">průměr za zápas</div></div>
+    </div>
+
+    <p class="card-sub" style="margin-top:0;">Síla týmu, jak ji vidí predikční model${nizkaDuvera ? ' – <strong>zatím málo dat</strong>, bere se s rezervou' : ''}.</p>
+    <div class="perf-rows" style="margin-bottom: var(--space-4);">
+      <div class="perf-row"><span>Útok</span><span class="${r.a >= 1 ? 'pos' : 'bad'}">${utok}</span></div>
+      <div class="perf-row"><span>Obrana</span><span class="${r.d <= 1 ? 'pos' : 'bad'}">${obrana}</span></div>
+      <div class="perf-row"><span>Zápasů v ratingu</span><span class="muted">${n}</span></div>
+    </div>
+
+    <div class="card-sub" style="margin-top:0; font-weight:600; color:var(--txt);">Posledních zápasů</div>
+    <div style="margin-bottom: var(--space-4);">${forma}</div>
+
+    ${nadchazejici ? `<div class="card-sub" style="margin-top:0; font-weight:600; color:var(--txt);">Nejbližší zápasy</div>${nadchazejici}` : ''}
+  `;
 }

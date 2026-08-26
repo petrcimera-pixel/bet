@@ -1262,3 +1262,7 @@ details.card[open] > summary { padding-bottom: var(--space-3); }
   color: var(--accent); font-size: var(--fs-sm); font-weight: 600;
   text-decoration: underline; text-underline-offset: 2px;
 }
+
+/* Klikací jméno týmu – otevírá modal s ratingem, formou a nejbližšími zápasy. */
+.team-link { cursor: pointer; border-bottom: 1px dotted var(--txt3); }
+.team-link:hover { color: var(--accent); border-bottom-color: var(--accent); }

@@ -752,6 +752,23 @@
         </div>
       </details>
 
+      <details class="card" id="navod-tym">
+        <summary>Detail týmu</summary>
+        <div class="card-telo">
+          <p class="prose">
+            Na jméno týmu se dá kliknout skoro kdekoli v appce (Zápasy, detail zápasu,
+            Doporučené) – otevře se okno s ratingem, formou (posledních 10 zápasů) a
+            průměrem vstřelených/obdržených gólů. Rating je útok/obrana tak, jak je vidí
+            predikční model – útok nad 1× znamená víc gólů, než je průměr, obrana pod 1×
+            znamená míň obdržených, než je průměr.
+          </p>
+          <p class="prose">
+            Když má tým v ratingu málo zápasů, okno na to upozorní – síla nového týmu
+            je odhadnutá z mála dat a bere se s rezervou, stejně jako jinde v appce.
+          </p>
+        </div>
+      </details>
+
       <details class="card" id="navod-dop-historie">
         <summary>Historie doporučení</summary>
         <div class="card-telo">
@@ -1099,6 +1116,17 @@
       <button class="btn" id="depositCancel">Zrušit</button>
       <button class="btn primary" id="depositConfirm">Vložit</button>
     </div>
+  </div>
+</div>
+
+<!-- Detail týmu – otevírá se kliknutím na jméno kdekoli v appce -->
+<div id="teamModal" class="modal-backdrop" style="display:none;">
+  <div class="modal" style="max-width:480px;">
+    <div class="row-between" style="margin-bottom:14px;">
+      <h3 style="margin:0;" id="teamModalNazev">Tým</h3>
+      <button class="btn small icon-only" id="teamModalClose" title="Zavřít">✕</button>
+    </div>
+    <div id="teamModalObsah"><div class="loading"><span class="spinner"></span></div></div>
   </div>
 </div>
 

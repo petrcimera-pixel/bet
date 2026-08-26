@@ -674,17 +674,34 @@ def api_backtest():
 
 
 @app.route("/api/team")
+@login_required
 def api_team():
-    """Detail týmu: Elo rating, forma, příští zápasy, útok/obrana."""
+    """Detail týmu: Elo rating, forma, příští zápasy, útok/obrana.
+
+    Karty napříč appkou (Zápasy, Doporučené, historie sázek) znají jen JMÉNO
+    týmu, ne ESPN slug/team_id – ESPN cesta (team_events) je tak skoro vždy
+    prázdná, stejný problém jako dřív u /api/form. Když chybí, spadne se na
+    vlastní historii modelu (~3600 týmů), která zná zápas i bez ESPN ID.
+    """
     sport = request.args.get("sport", "soccer")
     slug = request.args.get("slug", "")
     team_id = request.args.get("team_id", "")
     name = request.args.get("name", "")
-    league = request.args.get("league", "")
-    evs = ds.team_events(sport, slug, team_id)
-    past = [e for e in evs if e["res"]]
-    last = list(reversed(past))[:10]
-    upcoming = [e for e in evs if not e["completed"]][:6]
+
+    evs = ds.team_events(sport, slug, team_id) if (slug and team_id) else []
+    if evs:
+        past = [e for e in evs if e["res"]]
+        last = list(reversed(past))[:10]
+        upcoming = [e for e in evs if not e["completed"]][:6]
+    else:
+        hist = pred.team_history_for(name)
+        past = [{"gf": e.get("gf"), "ga": e.get("ga"), "res": e.get("result")}
+                for e in hist if e.get("gf") is not None]
+        last = [{"opp": e.get("opponent", "?"), "gf": e.get("gf"), "ga": e.get("ga"),
+                 "res": e.get("result"), "date": e.get("date", "")}
+                for e in reversed(hist[-10:])]
+        upcoming = []   # vlastní historie zná jen odehrané zápasy
+
     gf = [e["gf"] for e in past if e["gf"] is not None]
     ga = [e["ga"] for e in past if e["ga"] is not None]
     wins = sum(1 for e in past if e["res"] == "W")
