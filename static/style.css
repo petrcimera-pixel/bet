@@ -280,7 +280,11 @@ ul.prose, ol.prose { padding-left: var(--space-5); }
 ul.prose li, ol.prose li { margin-bottom: var(--space-1); }
 
 /* Vodorovná řada prvků – nahrazuje inline display:flex;align-items:center. */
-.row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+/* :not(tr) je pojistka proti přesně tomuhle: .row omylem skončila i na
+   <tr class="row bettor-row"> v tabulce arény (starý, nestylovaný název),
+   display:flex na řádku tabulky rozbilo celé zarovnání sloupců – hlavička
+   a data přestaly odpovídat. Teď na <tr> .row nic neudělá. */
+.row:not(tr) { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
 .row-end { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2); }
 

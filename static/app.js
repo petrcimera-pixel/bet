@@ -3215,7 +3215,7 @@ function arenaRadek(b, veHreCelkem, vseRezim) {
   const nesazi = (b.placed || 0) === 0;
   // Celý řádek je klikatelný – detail se rozbaluje kliknutím kamkoliv v něm.
   return `
-    <tr class="row bettor-row ${nesazi ? 'idle' : ''}" data-id="${b.id}">
+    <tr class="bettor-row ${nesazi ? 'idle' : ''}" data-id="${b.id}">
       <td class="arena-caret"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3l3 4 3-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></td>
       <td class="arena-rank ${medaile ? 'medal' : ''}">${medaile || b.rank}</td>
       <td>
