@@ -953,7 +953,9 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 22px 26px;
-  margin-bottom: 20px;
+  /* margin-bottom zrušen – .page.active dává jednotný gap 16px mezi
+     všemi bloky; ponechaný margin se s ním sčítal na 36px a aréna tak
+     vypadala nesladěná se zbytkem appky. */
 }
 .arena-hero-left h1 {
   margin: 0 0 4px; font-size: var(--fs-xl); font-weight: 700; letter-spacing: -0.01em;
@@ -989,11 +991,12 @@ th:hover .th-tip { background: var(--accent); color: var(--bg); }
 }
 
 /* Grafy vedle sebe */
+/* Uvnitř .arena-charts drží mezeru gap; .card + .card margin (dřívější
+   zdroj svislého rytmu appky) byl zrušen při přechodu na flex-gap stack,
+   takže tahle přebíjecí pravidla jsou teď mrtvá. */
 .arena-charts {
-  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);
 }
-.arena-charts .card { margin-top: 0; }
-.arena-charts .card + .card { margin-top: 0; }
 @media (max-width: 980px) {
   .arena-charts { grid-template-columns: 1fr; }
 }
