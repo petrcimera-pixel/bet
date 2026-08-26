@@ -21,7 +21,7 @@ from . import storage
 from .bankroll import eval_outcome
 
 _STORE_FILE = "recommended_history.json"
-_MAX_ZAZNAMU = 1000   # ať soubor neroste bez konce
+_MAX_ZAZNAMU = 5000   # ať soubor neroste bez konce (~300 KB při plném stavu)
 
 
 def _load() -> dict:

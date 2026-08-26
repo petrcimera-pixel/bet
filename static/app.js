@@ -4213,7 +4213,7 @@ async function loadDoporuceneHistorie() {
     <div class="table-wrap">
       <table>
         <thead><tr>
-          <th>Doporučeno</th><th>Zápas</th><th>Tip</th><th class="num">Kurz</th>
+          <th>Doporučeno</th><th>Zápas</th><th>Výkop</th><th>Tip</th><th class="num">Kurz</th>
           <th class="num">Jistota</th><th>Výsledek</th><th>Stav</th>
         </tr></thead>
         <tbody>${tipy.map(dopHistorieRadekHtml).join('')}</tbody>
@@ -4224,11 +4224,17 @@ async function loadDoporuceneHistorie() {
 function dopHistorieRadekHtml(z) {
   const st = DOP_STAV_POPIS[z.status] || DOP_STAV_POPIS.open;
   const kdy = z.saved_at ? new Date(z.saved_at * 1000).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' }) : '—';
+  // Kdy appka tip doporučila (kdy) vs. kdy se zápas skutečně hraje (výkop) –
+  // dvě různé věci, dřív appka ukazovala jen tu první.
+  const vykop = z.date
+    ? `${new Date(z.date + 'T00:00:00').toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}${z.time ? ' ' + z.time : ''}`
+    : '—';
   const vysledek = z.result ? `${z.result.home}:${z.result.away}` : '—';
   return `
     <tr>
       <td class="muted">${esc(kdy)}</td>
       <td>${esc(z.match || '—')}</td>
+      <td class="muted">${esc(vykop)}</td>
       <td>${esc(z.name || z.label || '—')}</td>
       <td class="num">${z.odds != null ? czNum(z.odds, 2) : '—'}</td>
       <td class="num">${z.prob != null ? pct(z.prob * 100, 0) : '—'}</td>
