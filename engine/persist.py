@@ -13,6 +13,8 @@ Aktivace: nastav env proměnné
 Bez těchto proměnných modul nic nedělá (lokální běh je nepotřebuje).
 """
 
+import base64
+import gzip
 import hashlib
 import json
 import os
@@ -22,6 +24,35 @@ import time
 import requests
 
 from . import storage
+
+# GitHub Gist API odmítne PATCH, jakmile jeden soubor v payloadu přesáhne
+# 1 MB ("Validation Failed" / 422, bez dalšího vysvětlení) – appka na to
+# narazila hned při prvním ostrém pokusu: team_history.json (2,65 MB) a
+# agent_feedback.jsonl (2,79 MB) limit přerostly. Obsah se proto ukládá
+# gzip+base64 – u JSON dat (hodně opakujících se klíčů) to typicky srazí
+# velikost na ~10 %, takže se i největší soubor vejde s velkou rezervou.
+_PREFIX = "gz1:"   # verze formátu – ať jde poznat, že jde o zabalený obsah
+
+
+def _gist_name(name: str) -> str:
+    """Gist soubory nesmí mít v názvu lomítko (žádné podadresáře) – appka na
+    tohle narazila hned při prvním ostrém push: RAW_FILES cesta
+    "data/agent_feedback.jsonl" way GitHubu vrátila 422 "Validation Failed"
+    bez bližšího vysvětlení. FILES položky (jen "xxx.json", bez lomítka)
+    projdou beze změny; RAW_FILES cesty se zploští, ale čtou/zapisují se
+    pořád na původní lokální cestu (viz _raw_path)."""
+    return name.replace("/", "__").replace("\\", "__")
+
+
+def _pack(text: str) -> str:
+    return _PREFIX + base64.b64encode(gzip.compress(text.encode("utf-8"), 6)).decode("ascii")
+
+
+def _unpack(text: str) -> str:
+    if not text.startswith(_PREFIX):
+        return text   # starší/nezabalený obsah (např. persist_meta.json) – vrátit beze změny
+    raw = base64.b64decode(text[len(_PREFIX):])
+    return gzip.decompress(raw).decode("utf-8")
 
 # Soubory, které se zálohují (runtime stav – NE cache, ta se dopočítá)
 FILES = ["bankroll.json", "tips.json", "settings.json", "team_ratings.json",
@@ -101,7 +132,7 @@ def restore() -> int:
         print(f"[persist] Obnova z gistu selhala: {e}")
         return 0
 
-    def _content(fname):
+    def _content(fname, pack=True):
         f = files.get(fname)
         if not f:
             return None
@@ -111,9 +142,15 @@ def restore() -> int:
                 c = requests.get(f["raw_url"], timeout=30).text
             except Exception:
                 return None
+        if c is not None and pack:
+            try:
+                c = _unpack(c)
+            except Exception as e:
+                print(f"[persist] {fname}: rozbalení zálohy selhalo ({e}), přeskakuji")
+                return None
         return c
 
-    meta_raw = _content(META)
+    meta_raw = _content(META, pack=False)
     try:
         gist_ts = json.loads(meta_raw).get("pushed_at", 0) if meta_raw else 0
     except Exception:
@@ -124,7 +161,7 @@ def restore() -> int:
 
     n = 0
     for name in FILES:
-        raw = _content(name)
+        raw = _content(_gist_name(name))
         if raw is None:
             continue
         try:
@@ -133,7 +170,7 @@ def restore() -> int:
         except Exception:
             pass
     for name in RAW_FILES:
-        raw = _content(name)
+        raw = _content(_gist_name(name))
         if raw is None:
             continue
         try:
@@ -164,8 +201,8 @@ def push(force: bool = False, extra_files: dict = None) -> bool:
     if h == _last_hash and not force:
         return False   # beze změny – šetři API kvótu
     now = int(time.time())
-    payload = {"files": {name: {"content": content} for name, content in snap.items()}}
-    payload["files"][META] = {"content": json.dumps({"pushed_at": now})}
+    payload = {"files": {_gist_name(name): {"content": _pack(content)} for name, content in snap.items()}}
+    payload["files"][META] = {"content": json.dumps({"pushed_at": now})}   # META se nebalí – čte se jen timestamp
     for name, content in (extra_files or {}).items():
         payload["files"][name] = {"content": content}
     try:
