@@ -2564,12 +2564,6 @@ def leading_strategy_insight() -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# Kalibrace modelu – říká "75 % jistota" skutečně vyhrává ~75 % případů?
-# ---------------------------------------------------------------------------
-_CAL_BUCKETS = [(0.50, 0.60), (0.60, 0.70), (0.70, 0.80), (0.80, 0.90), (0.90, 1.01)]
-
-
 def group_comparison() -> dict:
     """Vývoj banku po kategoriích – vyplácí se vůbec skládat tikety?
 
@@ -2621,33 +2615,7 @@ def group_comparison() -> dict:
     return {"groups": [out[g] for g in order if g in out]}
 
 
-def calibration_data() -> list:
-    """Napříč VŠEMI settled sázkami všech 10 sázkařů (velký, různorodý vzorek
-    díky 10 různým strategiím) spočítá pro každý interval modelové
-    pravděpodobnosti skutečnou úspěšnost. Ideálně kalibrovaný model má
-    'skutečná úspěšnost' == střed intervalu; systematická odchylka = model
-    je přehnaně/nedostatečně sebevědomý."""
-    st = load_state()
-    buckets = [{"lo": lo, "hi": hi, "n": 0, "wins": 0, "prob_sum": 0.0} for lo, hi in _CAL_BUCKETS]
-    for b in st.values():
-        for bet in b["bets"]:
-            if bet["status"] not in ("won", "lost"):
-                continue
-            p = bet.get("prob", 0)
-            for bucket in buckets:
-                if bucket["lo"] <= p < bucket["hi"]:
-                    bucket["n"] += 1
-                    bucket["prob_sum"] += p
-                    if bet["status"] == "won":
-                        bucket["wins"] += 1
-                    break
-    out = []
-    for bucket in buckets:
-        n = bucket["n"]
-        out.append({
-            "range": f'{int(bucket["lo"]*100)}–{int(min(bucket["hi"],1.0)*100)}%',
-            "n": n,
-            "avg_predicted": round(bucket["prob_sum"] / n * 100, 1) if n else None,
-            "actual_win_rate": round(bucket["wins"] / n * 100, 1) if n else None,
-        })
-    return out
+# calibration_data() smazána (sloučeno do /api/dashboard → kalibrace, viz
+# app.py _kalibrace_prehled) – tahle verze míchala sázky ze STARÉHO i
+# NOVÉHO modelu do jednoho čísla, což u prokazatelně jinak kalibrovaných
+# modelů (viz _MODEL_ZMENA_TS) dávalo zavádějící výsledek.

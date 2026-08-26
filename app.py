@@ -2505,13 +2505,6 @@ def api_bettors_breakdown_time():
     return jsonify(virtual_bettors.arena_time_breakdown())
 
 
-@app.route("/api/bettors/calibration")
-def api_bettors_calibration():
-    """Kalibrace modelu napříč settled sázkami všech 10 sázkařů – dává-li
-    model 'X% jistotu', vyhrává reálně ~X % případů?"""
-    return jsonify({"buckets": virtual_bettors.calibration_data()})
-
-
 @app.route("/api/bettors/insight")
 def api_bettors_insight():
     """Která strategie v aréně aktuálně vede + srovnání s výkonem agenta,

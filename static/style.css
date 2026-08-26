@@ -383,6 +383,12 @@ tr:hover td { background: var(--panel-2); }
 }
 .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent-dim); }
 .pill:hover { border-color: var(--accent-dim); }
+/* Počítadlo uvnitř pilulky (přepínač Doporučené, filtry arény...). */
+.pill .cnt {
+  font-size: var(--fs-xs); font-weight: 700; padding: 1px 6px; border-radius: var(--radius-lg);
+  background: var(--panel-2); color: var(--txt3); margin-left: var(--space-1);
+}
+.pill.active .cnt { background: var(--accent); color: var(--bg); }
 /* Klikatelné pilulky vypadají jako filtry (appka je tak používá u data i
    sportu), takže čistě informativní počty musí být zjevně jiné – jinak na ně
    uživatel kliká a "nefungují". */

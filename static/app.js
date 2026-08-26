@@ -233,13 +233,15 @@ function goToPage(page) {
   if (page !== 'search') stopSearchPolling();
   if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
   if (page === 'log') startLogPolling();
-  if (page === 'doporucene') { loadDoporucene(); loadDoporuceneHistorie(); }
+  // Historie se dotahuje líně (viz prepniDopRezim) – jen když na ni uživatel
+  // skutečně přepne, ne při každém vstupu na Aktuální sázky.
+  if (page === 'doporucene') loadDoporucene();
   if (page === 'dashboard') loadDashboard();
   if (page === 'matches') loadMatches();
   if (page === 'search') loadSearchPage();
   if (page === 'bettors') loadBettors();
   if (page === 'bankroll') { loadBankroll(); loadLigyVykon(); }
-  if (page === 'learning') { loadMlLearning(); loadBacktest(); loadAgentBreakdown(); }
+  if (page === 'learning') { loadMlLearning(); loadBacktest(); loadAgentBreakdown(); loadKalibrace(); }
   if (page === 'settings') loadSettings();
 }
 
@@ -388,7 +390,6 @@ async function loadDashboard() {
   loadAgentSummary();
   loadSettleStatus();
   loadStrategyInsight();
-  loadKalibrace();
   loadZdravi();
 }
 
@@ -2730,9 +2731,8 @@ async function loadBettors() {
   const box = el('bettorsContainer');
   box.innerHTML = '<div class="loading"><span class="spinner"></span> Načítání sázkařů…</div>';
   try {
-    const [data, calib, ag, lastRun] = await Promise.all([
+    const [data, ag, lastRun] = await Promise.all([
       api('/api/bettors', { timeoutMs: 20000 }),
-      api('/api/bettors/calibration', { timeoutMs: 15000 }).catch(() => ({ buckets: [] })),
       api('/api/agent', { timeoutMs: 15000 }).catch(() => ({ settings: {} })),
       api('/api/bettors/status', { timeoutMs: 8000 }).catch(() => ({})),
     ]);
@@ -2742,7 +2742,6 @@ async function loadBettors() {
     renderBettors(data.bettors || []);
     renderArenaHero(data.bettors || []);
     loadGroupCompare();
-    drawCalibrationChart(calib.buckets || []);
     loadArenaTimeBreakdown();
   } catch (e) {
     box.innerHTML = `<div class="empty-state">Chyba: ${e.message}</div>`;
@@ -3307,47 +3306,8 @@ function wireBettorCards(box) {
   });
 }
 
-function drawCalibrationChart(buckets) {
-  const svg = el('calibrationSVG');
-  if (!svg) return;
-  const withData = buckets.filter(b => b.n > 0);
-  if (!withData.length) {
-    svg.innerHTML = `<text x="350" y="130" text-anchor="middle" font-size="13" fill="var(--txt3)">Zatím nedostatek vyhodnocených sázek pro kalibraci</text>`;
-    return;
-  }
-  const width = 700, height = 260, padding = 44;
-  const pw = width - 2 * padding, ph = height - 2 * padding;
-  const n = buckets.length;
-  const barW = pw / n;
-
-  // ideální kalibrace = diagonála (0% dole vlevo .. 100% nahoře vpravo v rámci 50-100% rozsahu zobrazení)
-  const toY = pct => height - padding - (pct / 100) * ph;
-  let idealPath = '';
-  [50, 100].forEach((pct, i) => {
-    const x = padding + (i === 0 ? 0 : pw);
-    idealPath += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + toY(pct).toFixed(1);
-  });
-
-  const bars = buckets.map((b, i) => {
-    const x = padding + i * barW;
-    if (!b.n) {
-      return `<text x="${(x + barW / 2).toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${b.range}</text>`;
-    }
-    const actualY = toY(b.actual_win_rate);
-    const barH = height - padding - actualY;
-    const color = Math.abs(b.actual_win_rate - b.avg_predicted) <= 8 ? 'var(--pos)' : 'var(--warn)';
-    return `
-      <rect x="${(x + barW * 0.2).toFixed(1)}" y="${actualY.toFixed(1)}" width="${(barW * 0.6).toFixed(1)}" height="${barH.toFixed(1)}" fill="${color}" rx="2" opacity="0.85"/>
-      <text x="${(x + barW / 2).toFixed(1)}" y="${(actualY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="var(--txt)">${pct(b.actual_win_rate)}</text>
-      <text x="${(x + barW / 2).toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${b.range} (n=${b.n})</text>`;
-  }).join('');
-
-  svg.innerHTML = `
-    <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="var(--border)"/>
-    <path d="${idealPath}" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="4,4" fill="none"/>
-    <text x="${width - padding}" y="${(toY(100) - 6).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--blue)">ideál</text>
-    ${bars}`;
-}
+// drawCalibrationChart() smazána – kalibrace se přesunula na ML Learning
+// jako kalibraceSvgHtml() (era-aware, viz app.py _kalibrace_prehled).
 
 async function toggleBettorDetail(id, sourceEl) {
   const box = el(`bettorDetail-${id}`);
@@ -4169,11 +4129,31 @@ function dopKartaHtml(t) {
     </div>`;
 }
 
+/* Přepínač Aktuální / Historie – dva rovnocenné pohledy na kartu Doporučené.
+   Historie se stahuje jednou (velký limit) a filtry období/stavu pak jedou
+   čistě nad už staženými daty, ať přepnutí filtru nestojí další request. */
+let _dopRezim = 'aktualni';
+let _dopHistorieData = null;   // poslední odpověď z /api/recommended/history
+
 function setupDoporucene() {
   el('dopReload')?.addEventListener('click', loadDoporucene);
   el('dopPrah')?.addEventListener('change', loadDoporucene);
   el('dopDnu')?.addEventListener('change', loadDoporucene);
   el('dopLive')?.addEventListener('change', loadDoporucene);
+
+  document.querySelectorAll('#dopRezimStrip .pill').forEach(btn => {
+    btn.addEventListener('click', () => prepniDopRezim(btn.dataset.rezim));
+  });
+  el('dopHistorieObdobi')?.addEventListener('change', vykresliDoporuceneHistorii);
+  el('dopHistorieStav')?.addEventListener('change', vykresliDoporuceneHistorii);
+}
+
+function prepniDopRezim(rezim) {
+  _dopRezim = rezim;
+  document.querySelectorAll('#dopRezimStrip .pill').forEach(b => b.classList.toggle('active', b.dataset.rezim === rezim));
+  el('dopAktualniBlok').style.display = rezim === 'aktualni' ? '' : 'none';
+  el('dopHistorieBlok').style.display = rezim === 'historie' ? '' : 'none';
+  if (rezim === 'historie' && !_dopHistorieData) loadDoporuceneHistorie();
 }
 
 // ---------------------------------------------------------------------------
@@ -4189,23 +4169,48 @@ const DOP_STAV_POPIS = {
 async function loadDoporuceneHistorie() {
   const box = el('dopHistorieVypis');
   if (!box) return;
-  let d;
+  box.className = 'loading';
+  box.innerHTML = '<span class="spinner"></span>';
   try {
-    d = await api('/api/recommended/history?limit=60', { timeoutMs: 20000 });
+    // Velký limit natáhne rovnou vše rozumně dostupné (strop appky je 5000
+    // záznamů) – filtry období/stavu pak běží nad tímhle jednou staženým
+    // polem, ne nad novým požadavkem na server.
+    _dopHistorieData = await api('/api/recommended/history?limit=2000', { timeoutMs: 20000 });
   } catch (e) {
+    _dopHistorieData = null;
     chybaKarty('dopHistorieVypis', 'Historii doporučení se nepodařilo načíst.', loadDoporuceneHistorie);
     return;
   }
+  el('dopHistorieCnt').textContent = _dopHistorieData.tipy?.length ? String(_dopHistorieData.tipy.length) : '';
+  vykresliDoporuceneHistorii();
+}
 
-  const s = d.shrnuti || {};
-  setText('dopHistorieSouhrn', s.n
-    ? `${s.presnost}% přesnost z ${s.n} vyhodnocených za 30 dní`
-    : 'zatím bez vyhodnocených');
+function vykresliDoporuceneHistorii() {
+  const box = el('dopHistorieVypis');
+  if (!box || !_dopHistorieData) return;
 
-  const tipy = d.tipy || [];
+  const obdobiDny = parseInt(el('dopHistorieObdobi')?.value || '30', 10);
+  const stavFiltr = el('dopHistorieStav')?.value || 'vse';
+  const hranice = obdobiDny > 0 ? Date.now() / 1000 - obdobiDny * 86400 : 0;
+
+  const vsechny = _dopHistorieData.tipy || [];
+  const tipy = vsechny.filter(z =>
+    (!hranice || (z.saved_at || 0) >= hranice) &&
+    (stavFiltr === 'vse' || z.status === stavFiltr));
+
+  const vyresene = tipy.filter(z => z.status === 'won' || z.status === 'lost');
+  const vyhry = vyresene.filter(z => z.status === 'won').length;
+  setText('dopHistorieSouhrn', vyresene.length
+    ? `${Math.round(vyhry / vyresene.length * 100)}% přesnost z ${vyresene.length} vyhodnocených · zobrazeno ${tipy.length} z ${vsechny.length}`
+    : `zobrazeno ${tipy.length} z ${vsechny.length}, zatím bez vyhodnocených`);
+
   box.className = '';
-  if (!tipy.length) {
+  if (!vsechny.length) {
     box.innerHTML = '<div class="empty-state">Zatím žádná historie – naplní se postupně, jak appka doporučuje a zápasy se odehrávají.</div>';
+    return;
+  }
+  if (!tipy.length) {
+    box.innerHTML = '<div class="empty-state">Žádný tip neodpovídá zvolenému období/stavu.</div>';
     return;
   }
 
@@ -4304,6 +4309,46 @@ function czSazek(n) {
   return 'sázek';
 }
 
+/* Grafické doplnění tabulky pod ní – stejná data (era.pasma), jen na první
+   pohled. Šedý puntík = co model tvrdil, barevný = jak to dopadlo; spojnice
+   ukazuje odchylku. Diagonála je ideál (tvrdil == realne). Nahrazuje starý
+   samostatný graf ze stránky Sázkaři, který navíc míchal sázky ze starého
+   i nového modelu dohromady – tenhle je vždy jen za JEDNU éru. */
+function kalibraceSvgHtml(pasma) {
+  if (!pasma.length) return '';
+  const width = 640, height = 190, padding = 38;
+  const pw = width - 2 * padding, ph = height - 2 * padding;
+  const min = 45, max = 100;   // pásma appky jsou 50-100 %, trocha rezervy po stranách
+  const toX = v => padding + (v - min) / (max - min) * pw;
+  const toY = v => height - padding - (v - min) / (max - min) * ph;
+
+  const body = pasma.map(p => {
+    const stred = p.od * 100 + (p.do - p.od) * 100 / 2;
+    const x = toX(stred);
+    const yTvrdil = toY(p.tvrdil), yRealne = toY(p.realne);
+    const barva = Math.abs(p.tvrdil - p.realne) <= 8 ? 'var(--pos)' : 'var(--warn)';
+    return `
+      <line x1="${x.toFixed(1)}" y1="${yTvrdil.toFixed(1)}" x2="${x.toFixed(1)}" y2="${yRealne.toFixed(1)}" stroke="${barva}" stroke-width="2"/>
+      <circle cx="${x.toFixed(1)}" cy="${yTvrdil.toFixed(1)}" r="3" fill="var(--txt3)"/>
+      <circle cx="${x.toFixed(1)}" cy="${yRealne.toFixed(1)}" r="4.5" fill="${barva}"/>
+      <text x="${x.toFixed(1)}" y="${height - padding + 16}" text-anchor="middle" font-size="10" fill="var(--txt3)">${Math.round(p.od * 100)}–${Math.round(p.do * 100)}%</text>`;
+  }).join('');
+
+  return `
+    <div class="chart-wrap">
+      <svg viewBox="0 0 ${width} ${height}" class="chart">
+        <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="var(--border)"/>
+        <path d="M${toX(min).toFixed(1)},${toY(min).toFixed(1)} L${toX(max).toFixed(1)},${toY(max).toFixed(1)}"
+              stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="4,4" fill="none"/>
+        <text x="${width - padding}" y="${(toY(max) - 8).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--blue)">ideál</text>
+        ${body}
+      </svg>
+    </div>
+    <div class="row" style="gap:var(--space-4); margin: var(--space-1) 0 var(--space-3); font-size:var(--fs-xs); color:var(--txt3);">
+      <span>⚪ model tvrdil</span><span>🟢🟡 realita (zelená = sedí, žlutá = odchylka &gt;8 p.b.)</span>
+    </div>`;
+}
+
 function kalibraceEraHtml(era, nadpis, aktualni) {
   const radky = era.pasma.map(p => {
     // Rozdíl proti realitě: kladný = model si věřil víc, než na co měl.
@@ -4331,6 +4376,7 @@ function kalibraceEraHtml(era, nadpis, aktualni) {
         <span class="muted">${shrnuti}</span>
       </div>
       ${era.pasma.length ? `
+      ${kalibraceSvgHtml(era.pasma)}
       <table class="kal-tabulka">
         <thead><tr>
           <th>pásmo</th><th class="kal-num">model tvrdil</th><th class="kal-num">reálně</th>
