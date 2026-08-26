@@ -233,7 +233,7 @@ function goToPage(page) {
   if (page !== 'search') stopSearchPolling();
   if (page !== 'log') stopLogPolling();        // log se netahá na pozadí
   if (page === 'log') startLogPolling();
-  if (page === 'doporucene') loadDoporucene();
+  if (page === 'doporucene') { loadDoporucene(); loadDoporuceneHistorie(); }
   if (page === 'dashboard') loadDashboard();
   if (page === 'matches') loadMatches();
   if (page === 'search') loadSearchPage();
@@ -4164,6 +4164,67 @@ function setupDoporucene() {
   el('dopPrah')?.addEventListener('change', loadDoporucene);
   el('dopDnu')?.addEventListener('change', loadDoporucene);
   el('dopLive')?.addEventListener('change', loadDoporucene);
+}
+
+// ---------------------------------------------------------------------------
+// Historie karty Doporučené – co appka doporučila a jak to dopadlo
+// ---------------------------------------------------------------------------
+const DOP_STAV_POPIS = {
+  won: { ikona: '✅', text: 'vyhrálo', trida: 'pos' },
+  lost: { ikona: '❌', text: 'prohrálo', trida: 'bad' },
+  void: { ikona: '➖', text: 'zrušeno', trida: 'muted' },
+  open: { ikona: '⏳', text: 'čeká', trida: 'muted' },
+};
+
+async function loadDoporuceneHistorie() {
+  const box = el('dopHistorieVypis');
+  if (!box) return;
+  let d;
+  try {
+    d = await api('/api/recommended/history?limit=60', { timeoutMs: 20000 });
+  } catch (e) {
+    chybaKarty('dopHistorieVypis', 'Historii doporučení se nepodařilo načíst.', loadDoporuceneHistorie);
+    return;
+  }
+
+  const s = d.shrnuti || {};
+  setText('dopHistorieSouhrn', s.n
+    ? `${s.presnost}% přesnost z ${s.n} vyhodnocených za 30 dní`
+    : 'zatím bez vyhodnocených');
+
+  const tipy = d.tipy || [];
+  box.className = '';
+  if (!tipy.length) {
+    box.innerHTML = '<div class="empty-state">Zatím žádná historie – naplní se postupně, jak appka doporučuje a zápasy se odehrávají.</div>';
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Doporučeno</th><th>Zápas</th><th>Tip</th><th class="num">Kurz</th>
+          <th class="num">Jistota</th><th>Výsledek</th><th>Stav</th>
+        </tr></thead>
+        <tbody>${tipy.map(dopHistorieRadekHtml).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function dopHistorieRadekHtml(z) {
+  const st = DOP_STAV_POPIS[z.status] || DOP_STAV_POPIS.open;
+  const kdy = z.saved_at ? new Date(z.saved_at * 1000).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' }) : '—';
+  const vysledek = z.result ? `${z.result.home}:${z.result.away}` : '—';
+  return `
+    <tr>
+      <td class="muted">${esc(kdy)}</td>
+      <td>${esc(z.match || '—')}</td>
+      <td>${esc(z.name || z.label || '—')}</td>
+      <td class="num">${z.odds != null ? czNum(z.odds, 2) : '—'}</td>
+      <td class="num">${z.prob != null ? pct(z.prob * 100, 0) : '—'}</td>
+      <td class="num">${esc(vysledek)}</td>
+      <td class="${st.trida}">${st.ikona} ${st.text}</td>
+    </tr>`;
 }
 
 // ---------------------------------------------------------------------------

@@ -156,6 +156,21 @@
       </div>
 
       <div id="dopVypis"><div class="empty-state">Načítám…</div></div>
+
+      <!-- Historie: co appka doporučila a jak to dopadlo. Vyhodnocuje se
+           pasivně na pozadí (engine/recommended_history.py), tahle karta
+           jen zobrazuje, co se zatím nasbíralo. Zavřená, ať nezabírá
+           místo, dokud o ni uživatel nestojí. -->
+      <details class="card" id="dopHistorieKarta">
+        <summary>Historie doporučení <span class="card-shrnuti" id="dopHistorieSouhrn"></span></summary>
+        <div class="card-telo">
+          <p class="card-sub">
+            Tipy, které se v minulosti zobrazily na téhle kartě, a jak dopadly. Zaznamenává se
+            jen to, co appka doopravdy doporučila – ne všechno, co model spočítal.
+          </p>
+          <div id="dopHistorieVypis" class="loading"><span class="spinner"></span></div>
+        </div>
+      </details>
     </section>
 
     <!-- ZÁPASY -->
@@ -733,6 +748,24 @@
           <p class="prose">
             Žlutý puntík = stojí za pozornost, červený = řeš to. Data si panel bere
             z endpointů, které dashboard stahuje tak jako tak, takže appku nezpomaluje.
+          </p>
+        </div>
+      </details>
+
+      <details class="card" id="navod-dop-historie">
+        <summary>Historie doporučení</summary>
+        <div class="card-telo">
+          <p class="prose">
+            Sbalitelná karta na dně stránky ⭐ Doporučené. Zaznamenává se každý tip, který se
+            na kartě skutečně zobrazil (prošel prahem pravděpodobnosti i kladnou EV) – ne
+            všechno, co model spočítal. Jeden zápas a trh se zapíše jen jednou, i kdyby appka
+            tentýž tip doporučila znovu při dalším načtení.
+          </p>
+          <p class="prose">
+            Vyhodnocení je pasivní: jede na stejném vyhodnocovacím průchodu, který appka
+            beztak dělá pro tipy a sázky, takže historie nepřidává žádný síťový dotaz navíc.
+            Sloupec „Stav" ukáže ✅ vyhrálo, ❌ prohrálo, ➖ zrušeno nebo ⏳ čeká; nadpis karty
+            i zavřený nese přesnost za posledních 30 dní.
           </p>
         </div>
       </details>

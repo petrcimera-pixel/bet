@@ -58,6 +58,7 @@ from engine import netdiag
 from engine import backtester
 from engine import tipsport_import
 from engine import sysmon
+from engine import recommended_history
 
 # ML Learning (optional)
 # ML Learning je volitelný a TĚŽKÝ: engine/ml_learner.py táhne scikit-learn,
@@ -1204,6 +1205,13 @@ def _settle_recent(allow_slugless_fallback=False):
         + (f", {n_stuck} požadavků nestihlo limit" if n_stuck else ""),
         kategorie="vyhodnocení")
 
+    # Historie karty Doporučené se věší na tenhle stejný `results` dict –
+    # žádný vlastní síťový dotaz navíc (viz engine/recommended_history.py).
+    try:
+        recommended_history.vyhodnot(results)
+    except Exception:
+        pass
+
     return results, corner_results, remaining > 0
 
 
@@ -1858,6 +1866,7 @@ def api_recommended():
             "date": p.get("date"), "time": p.get("time"),
             "live": je_live, "score": p.get("score") or p.get("live_score"),
             "minute": p.get("minute") or p.get("clock"),
+            "outcome": c["outcome"],
             "label": c["label"], "name": c["name"], "market": c["market"],
             "odds": round(c["odds"], 2),
             "prob": round(prob, 4), "raw_prob": round(c["prob"], 4),
@@ -1870,6 +1879,10 @@ def api_recommended():
     # na páteční je čas a kurz se ještě pohne.
     tipy.sort(key=lambda t: (t.get("date") != today, t.get("date") or "",
                              -t["prob"], -t["ev"]))
+    try:
+        recommended_history.zaznamenej(tipy[:40])
+    except Exception:
+        pass   # historie doporučení nesmí nikdy shodit samotnou kartu
     return jsonify({
         "tips": tipy[:40],
         "posuzovano": zapasu,
@@ -1886,6 +1899,22 @@ def api_recommended():
             "doporuceno": len(tipy),
         },
         "error": chyba,
+    })
+
+
+@app.route("/api/recommended/history")
+@login_required
+def api_recommended_history():
+    """Historie karty Doporučené – co appka doporučila a jak to dopadlo.
+    Vyhodnocení je pasivní (viz engine/recommended_history.py): jede na
+    stejném `results` dictu, který stejně počítá běžná settle smyčka."""
+    try:
+        limit = int(request.args.get("limit", 60))
+    except (TypeError, ValueError):
+        limit = 60
+    return jsonify({
+        "tipy": recommended_history.historie(limit),
+        "shrnuti": recommended_history.shrnuti(30),
     })
 
 
