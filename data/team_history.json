@@ -2559,6 +2559,18 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lethbridge",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Nesebar": [
@@ -2965,6 +2977,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Blooming",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Larne": [
@@ -3134,6 +3158,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 4,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Jagiellonia Bialystok",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -3305,6 +3341,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lillestrom",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Burkina Faso": [
@@ -5529,6 +5577,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Guabirá",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Aurora": [
@@ -5616,6 +5676,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Always Ready",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -9377,6 +9449,18 @@
       "cf": 9,
       "ca": 4,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "HB Køge",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sporting CP": [
@@ -9577,6 +9661,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Real Madrid",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Brondby": [
@@ -9963,6 +10059,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "VfL Wolfsburg",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Chelsea": [
@@ -10027,6 +10135,18 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Real Sociedad",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
       "ga": 2,
       "cf": null,
       "ca": null,
@@ -10103,6 +10223,18 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "St. Pölten",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -10253,6 +10385,18 @@
       "gf": 4,
       "ga": 2,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "OH Leuven",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Ferencvaros": [
@@ -10348,6 +10492,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Trabzonspor",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -12003,6 +12159,18 @@
       "gf": 11,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Paris Saint-Germain",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Omonia Nicosia": [
@@ -12083,6 +12251,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Sint-Truidense",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "HB Køge": [
@@ -12114,6 +12294,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "PSV Eindhoven",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -12397,6 +12589,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Benfica",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sabah FK": [
@@ -12531,6 +12735,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Czarni Sosnowiec",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "FK TSC": [
@@ -13444,6 +13660,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Eintracht Frankfurt",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -23395,6 +23623,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Ararat-Armenia",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Necaxa": [
@@ -24605,6 +24845,18 @@
       "cf": 8,
       "ca": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Ajax Amsterdam",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Coritiba": [
@@ -25011,6 +25263,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Internazionale",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Manchester United": [
@@ -35399,6 +35663,18 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Sparta Prague",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Myanmar": [
@@ -35753,6 +36029,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "CSU Craiova",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "NK Celje": [
@@ -35809,6 +36097,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Slovan Bratislava",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Slovan Bratislava": [
@@ -35865,6 +36165,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "NK Celje",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "FK Auda": [
@@ -36193,6 +36505,18 @@
       "gf": 3,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Viktoria Plzen",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Levski Sofia": [
@@ -36283,6 +36607,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "AEK Athens",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Kairat Almaty": [
@@ -36362,6 +36698,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 3,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Anderlecht",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -36531,6 +36879,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Viking FK",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Kauno Zalgiris": [
@@ -36611,6 +36971,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Besiktas",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Olympiacos": [
@@ -36699,6 +37071,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Servette",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Lyon": [
@@ -36827,6 +37211,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Fenerbahce",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Union St.-Gilloise": [
@@ -39035,6 +39431,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Comunicaciones",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Arsenal Sarandi": [
@@ -39254,6 +39662,18 @@
       "date": "2026-08-23",
       "opponent": "Antigua GFC",
       "league": "Guatemalan Liga Nacional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Camioneros",
+      "league": "Argentine Primera B",
       "sport": "soccer",
       "loc": "away",
       "gf": 0,
@@ -39615,6 +40035,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Deportivo Merlo",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Talleres de Remedios": [
@@ -40307,6 +40739,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Liniers",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "San Miguel": [
@@ -40865,6 +41309,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Deportivo Armenio",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Real Pilar": [
@@ -41269,6 +41725,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Dock Sud",
+      "league": "Argentine Primera B",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Argentino de Merlo": [
@@ -41991,6 +42459,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Dinamo Zagreb",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Tromso": [
@@ -42175,6 +42655,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Egnatia",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Molde": [
@@ -42388,6 +42880,18 @@
       "league": "Bolivian Liga Profesional",
       "sport": "soccer",
       "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Real Oruro",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "home",
       "gf": 1,
       "ga": 1,
       "cf": null,
@@ -56845,6 +57349,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "OFI Crete",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "FC Noah": [
@@ -56998,6 +57514,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Iberia 1999",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -58219,6 +58747,18 @@
       "gf": 7,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "FC Thun",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "KI Klaksvik": [
@@ -58500,6 +59040,18 @@
       "loc": "away",
       "gf": 3,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Kairat Almaty",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -58875,6 +59427,18 @@
       "gf": 0,
       "ga": 7,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lech Poznan",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Vikingur Reykjavik": [
@@ -62271,6 +62835,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Mjällby AIF",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Pafos": [
@@ -62905,6 +63481,18 @@
       "gf": 3,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "AGF",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Cape Verde": [
@@ -63404,6 +63992,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Aurora",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -77767,6 +78367,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Chelsea",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "SC Freiburg": [
@@ -80849,6 +81461,18 @@
       "cf": 5,
       "ca": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Ferencvaros",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Avispa Fukuoka": [
@@ -95905,6 +96529,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Omonia Nicosia",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Lommel SK": [
@@ -108011,6 +108647,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Bellarmine",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "George Washington": [
@@ -108065,6 +108713,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Pennsylvania",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Temple": [
@@ -108179,6 +108839,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "DePaul",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Oakland",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Western Illinois": [
@@ -108208,6 +108892,18 @@
       "league": "NCAA Women's Soccer",
       "sport": "soccer",
       "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "DePaul",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
       "gf": 1,
       "ga": 3,
       "cf": null,
@@ -108257,6 +108953,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Eastern Illinois",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Alabama A&M": [
@@ -108269,6 +108977,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Chicago State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "SIU Edwardsville": [
@@ -108313,6 +109033,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Michigan State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Boston College": [
@@ -108418,6 +109150,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Binghamton",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -108557,6 +109301,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Chicago State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Marquette": [
@@ -108611,6 +109367,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Milwaukee",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Eastern Michigan": [
@@ -108633,6 +109401,18 @@
       "gf": 0,
       "ga": 1,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Michigan State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Duquesne": [
@@ -108685,6 +109465,30 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Akron",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Mount St. Mary's",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -108755,6 +109559,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Maryland",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Robert Morris": [
@@ -108809,6 +109625,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Mercyhurst",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Waynesburg",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Northern Iowa": [
@@ -108853,6 +109693,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "St. Ambrose",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "South Dakota": [
@@ -109019,6 +109871,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Samford",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "West Georgia": [
@@ -109153,6 +110017,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Virginia Tech",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "George Mason",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Monmouth": [
@@ -109197,6 +110085,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Army",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Manhattan": [
@@ -109343,6 +110243,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Gardner-Webb",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Vermont": [
@@ -109420,6 +110332,30 @@
       "loc": "away",
       "gf": 2,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Maine",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Stonehill",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -109595,6 +110531,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Marshall",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Providence": [
@@ -109661,6 +110609,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Stonehill",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UMass Lowell": [
@@ -109705,6 +110665,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Central Connecticut",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Auburn": [
@@ -109726,6 +110698,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Kennesaw State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -109860,6 +110844,30 @@
       "loc": "home",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Syracuse",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Michigan",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -110005,6 +111013,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "North Florida",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Southern Utah": [
@@ -110141,6 +111161,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida International",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Houston": [
@@ -110377,6 +111409,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Charleston",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida Atlantic",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Chattanooga": [
@@ -110431,6 +111487,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lipscomb",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "UT Martin": [
@@ -110463,6 +111531,18 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Murray State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Jacksonville": [
@@ -110497,6 +111577,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 6,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Miami": [
@@ -110528,6 +111620,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Incarnate Word",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -110615,6 +111719,18 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Morehead State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -110717,6 +111833,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "High Point",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida International",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Colorado College": [
@@ -110795,6 +111935,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Kansas City",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Lipscomb": [
@@ -110839,6 +111991,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Chattanooga",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Louisville",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Arkansas State": [
@@ -110873,6 +112049,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Stephen F. Austin",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Eastern Washington": [
@@ -110950,6 +112138,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 0,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Oklahoma State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -111039,6 +112239,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Howard",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "North Florida",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Florida International": [
@@ -111103,6 +112327,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida Gulf Coast",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "NC State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Notre Dame": [
@@ -111159,6 +112407,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Michigan",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Samford": [
@@ -111183,6 +112443,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Jacksonville State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Illinois State": [
@@ -111205,6 +112477,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Northwestern",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Northern Illinois": [
@@ -111261,6 +112545,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Missouri",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Pittsburgh": [
@@ -111324,6 +112620,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Liberty",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -111529,6 +112837,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Winthrop",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "The Citadel": [
@@ -111541,6 +112861,18 @@
       "gf": 2,
       "ga": 2,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "South Carolina State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 8,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Iowa": [
@@ -111582,6 +112914,18 @@
       "loc": "away",
       "gf": 5,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Iowa State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -111663,6 +113007,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Marquette",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Rhode Island": [
@@ -111717,6 +113073,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "New Hampshire",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Maine": [
@@ -111743,6 +113111,18 @@
     {
       "date": "2026-08-23",
       "opponent": "Sacred Heart",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Merrimack",
       "league": "NCAA Women's Soccer",
       "sport": "soccer",
       "loc": "home",
@@ -111863,6 +113243,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Vanderbilt",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Texas A&M": [
@@ -111985,6 +113377,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Purdue Fort Wayne",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Sacred Heart": [
@@ -112041,6 +113445,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "New Haven",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Central Connecticut": [
@@ -112075,6 +113491,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Bryant",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UMass Lowell",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Memphis": [
@@ -112153,6 +113593,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Auburn",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Saint Joseph's": [
@@ -112347,6 +113799,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Wyoming",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Oregon State": [
@@ -112425,6 +113889,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Mississippi State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sam Houston": [
@@ -112537,6 +114013,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Illinois State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Ole Miss": [
@@ -112593,6 +114081,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UT Martin",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Louisville": [
@@ -112624,6 +114124,30 @@
       "loc": "away",
       "gf": 3,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Dayton",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lipscomb",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -112685,6 +114209,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "North Dakota State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Incarnate Word": [
@@ -112726,6 +114262,18 @@
       "loc": "home",
       "gf": 1,
       "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Miami",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -112782,6 +114330,30 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Eastern Michigan",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "SIU Edwardsville",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -112873,6 +114445,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Illinois",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Alabama": [
@@ -113007,6 +114591,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Louisiana Tech",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "FC Cartagena": [
@@ -113193,6 +114789,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UCF",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Georgia State": [
@@ -113250,6 +114858,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 3,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Rice",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -113485,6 +115105,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Ohio State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Detroit Mercy": [
@@ -113706,6 +115338,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 2,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Iowa",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -114020,6 +115664,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "San Diego",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -114373,6 +116029,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Old Dominion",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Furman",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Atzeneta": [
@@ -117955,6 +119635,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Cal Poly",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Stanford",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Cal State Fullerton": [
@@ -118235,6 +119939,18 @@
       "gf": 6,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Western Michigan",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Colorado State": [
@@ -118539,6 +120255,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "West Florida",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Stephen F. Austin": [
@@ -118551,6 +120279,18 @@
       "gf": 6,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Arkansas State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Sul Ross State": [
@@ -118619,6 +120359,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Colgate",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Le Moyne": [
@@ -118685,6 +120437,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "St Bonaventure",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Iona": [
@@ -118817,6 +120581,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Purdue",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "IU Indianapolis": [
@@ -118917,6 +120693,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Indiana State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Wright State",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Valparaiso": [
@@ -119005,6 +120805,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Providence",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Merrimack",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "New Hampshire": [
@@ -119058,6 +120882,30 @@
       "loc": "away",
       "gf": 3,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Rhode Island",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "St. John's",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -119117,6 +120965,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Robert Morris",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Oakland": [
@@ -119171,6 +121031,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Toledo",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UIC",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "App State": [
@@ -119203,6 +121087,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "East Carolina",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UNC Wilmington": [
@@ -119259,6 +121155,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "VCU",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Boston University": [
@@ -119367,6 +121275,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Yale",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Coastal Carolina": [
@@ -119413,6 +121333,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UNC Greensboro",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Charleston Southern": [
@@ -119447,6 +121379,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Campbell",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Abha": [
@@ -119569,6 +121513,18 @@
       "gf": 1,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Al Kholood",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Al Ahli": [
@@ -120919,6 +122875,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Ball State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Evansville": [
@@ -120975,6 +122943,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lindenwood",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Binghamton": [
@@ -121011,6 +122991,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Siena",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Lehigh": [
@@ -121297,6 +123289,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Al Fateh",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Enosis Neon Paralimni": [
@@ -122551,6 +124555,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "The Citadel",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 8,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "US Avellino": [
@@ -122701,6 +124717,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Al Diriyah",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "CD Minera": [
@@ -122793,6 +124821,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Al-Faisaly",
+      "league": "Saudi Pro League",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Betis Deportivo": [
@@ -122931,6 +124971,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-28",
+      "opponent": "Louisiana",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Salamanca UDS": [
@@ -124881,6 +126933,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Fordham",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Pineto": [
@@ -125287,6 +127351,30 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Towson",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Georgetown",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "DC Power FC": [
@@ -125529,6 +127617,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Southeast Missouri State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Ohio State": [
@@ -125570,6 +127670,18 @@
       "loc": "home",
       "gf": 6,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Kentucky",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -125617,6 +127729,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Navy",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Fordham": [
@@ -125663,6 +127787,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Hofstra",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Penn State": [
@@ -125707,6 +127843,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Bucknell",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Marist": [
@@ -125865,6 +128013,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Central Connecticut",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Dayton": [
@@ -125909,6 +128069,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Louisville",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Toledo": [
@@ -125940,6 +128112,18 @@
       "loc": "home",
       "gf": 6,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Oakland",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -126043,6 +128227,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "NC State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Davidson": [
@@ -126087,6 +128283,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Elon",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Stetson": [
@@ -126235,6 +128443,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Eastern Kentucky",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Brescia": [
@@ -126497,6 +128717,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Northern Illinois",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "NJIT": [
@@ -126611,6 +128843,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Presbyterian",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Green Bay": [
@@ -126701,6 +128945,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Central Michigan",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 6,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "St Bonaventure": [
@@ -126735,6 +128991,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Le Moyne",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Saint Peter's": [
@@ -126871,6 +129139,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Sacred Heart",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Syracuse": [
@@ -126914,6 +129194,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Niagara",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -126963,6 +129255,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "St. John's",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "American University": [
@@ -127072,6 +129376,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UNC Wilmington",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "D"
@@ -128025,6 +130341,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Cornell",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Al Orobah": [
@@ -128117,6 +130445,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Alabama A&M",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "St. Thomas",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Army": [
@@ -128185,6 +130537,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Monmouth",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "North Dakota State": [
@@ -128219,6 +130583,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Prairie View A&M",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "South Dakota State": [
@@ -128425,6 +130801,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-28",
+      "opponent": "Nicholls",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Richmond": [
@@ -128549,6 +130937,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Evansville",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Blackburn",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UL Monroe": [
@@ -128573,6 +130985,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Grambling",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Air Force": [
@@ -128684,6 +131108,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "North Dakota",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -128991,6 +131427,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Duquesne",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Villanova": [
@@ -129021,6 +131469,18 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Columbia",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -129088,6 +131548,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Canisius",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -129315,6 +131787,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Grand View",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Stanford": [
@@ -129371,6 +131855,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "San Diego",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Bucknell": [
@@ -129424,6 +131920,18 @@
       "loc": "away",
       "gf": 1,
       "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Penn State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -129529,6 +132037,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Charleston Southern",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "DePaul": [
@@ -129585,6 +132105,30 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UIC",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Western Illinois",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Radford": [
@@ -129609,6 +132153,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Emory & Henry",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 7,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Liberty": [
@@ -129665,6 +132221,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Pittsburgh",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Winthrop": [
@@ -129696,6 +132264,18 @@
       "loc": "away",
       "gf": 2,
       "ga": 1,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Queens University",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
       "result": "W"
     }
   ],
@@ -129753,6 +132333,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Eastern Illinois",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Butler": [
@@ -129877,6 +132469,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Wofford",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Louisiana Tech": [
@@ -129901,6 +132505,18 @@
       "gf": 1,
       "ga": 5,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Houston Christian",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "SE Louisiana": [
@@ -129937,6 +132553,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Southern Miss",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Timor-Leste": [
@@ -130549,18 +133177,6 @@
   ],
   "Blackburn": [
     {
-      "date": "2024-02-03",
-      "opponent": "QPR",
-      "league": "English League Championship",
-      "sport": "soccer",
-      "loc": "home",
-      "gf": 1,
-      "ga": 2,
-      "result": "L",
-      "cf": 4,
-      "ca": 10
-    },
-    {
       "date": "2024-02-10",
       "opponent": "Stoke",
       "league": "English League Championship",
@@ -130787,6 +133403,18 @@
       "cf": 2,
       "ca": 10,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lindenwood",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Bolton": [
@@ -134795,6 +137423,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Levski Sofia",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Western Michigan": [
@@ -134826,6 +137466,30 @@
       "loc": "away",
       "gf": 1,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Colorado",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Wisconsin",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -134911,6 +137575,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Duke",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 4,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "North Greenville": [
@@ -136519,6 +139195,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Duke",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Hung Yen": [
@@ -136741,6 +139429,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Florida Atlantic",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 7,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Union (TN)": [
@@ -136795,6 +139495,18 @@
       "sport": "soccer",
       "loc": "home",
       "gf": 5,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Western Michigan",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
       "ga": 0,
       "cf": null,
       "ca": null,
@@ -136967,6 +139679,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "CSKA Sofia",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Zamora CF": [
@@ -136991,6 +139715,18 @@
       "gf": 0,
       "ga": 3,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Red Star Belgrade",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 5,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Emory & Henry": [
@@ -137002,6 +139738,18 @@
       "loc": "away",
       "gf": 0,
       "ga": 5,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Radford",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 7,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -137573,6 +140321,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Lafayette",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Virginia Tech": [
@@ -137604,6 +140364,18 @@
       "loc": "home",
       "gf": 7,
       "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "William & Mary",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -137727,6 +140499,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Creighton",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "West Florida": [
@@ -137747,6 +140531,30 @@
       "sport": "soccer",
       "loc": "away",
       "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "McNeese",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "South Carolina Upstate",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
       "ga": 3,
       "cf": null,
       "ca": null,
@@ -137917,6 +140725,18 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Duquesne",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Cal State Bakersfield": [
@@ -137987,6 +140807,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Belmont",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Massachusetts": [
@@ -138055,6 +140887,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UMBC",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "New Hampshire",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Towson": [
@@ -138067,6 +140923,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Delaware",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Fairmont State": [
@@ -138185,6 +141053,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "San Francisco",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "East Tennessee State": [
@@ -138265,6 +141145,30 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Harvard",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UConn",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "George Mason": [
@@ -138287,6 +141191,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "William & Mary",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Pennsylvania": [
@@ -138311,6 +141227,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "George Washington",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Harvard": [
@@ -138323,6 +141251,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Fairfield",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 4,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "South Carolina Upstate": [
@@ -138357,6 +141297,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "West Florida",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Southern Indiana": [
@@ -138439,6 +141391,18 @@
       "gf": 1,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "South Carolina",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Kent State": [
@@ -138475,6 +141439,18 @@
       "gf": 4,
       "ga": 0,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UConn",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "East Carolina": [
@@ -138499,6 +141475,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "App State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 4,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Southeast Missouri State": [
@@ -138511,6 +141499,18 @@
       "gf": 0,
       "ga": 2,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Missouri State",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Illinois": [
@@ -138523,6 +141523,18 @@
       "gf": 2,
       "ga": 1,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Saint Louis",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Saint Mary of the Woods": [
@@ -138665,6 +141677,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Davidson",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 3,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "Georgetown": [
@@ -138708,6 +141732,18 @@
       "loc": "home",
       "gf": 2,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Delaware",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -138803,6 +141839,18 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Longwood",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Yale": [
@@ -138827,6 +141875,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Northeastern",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UConn": [
@@ -138848,6 +141908,30 @@
       "loc": "away",
       "gf": 1,
       "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Brown",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Fairfield",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "L"
@@ -138875,6 +141959,30 @@
       "gf": 0,
       "ga": 0,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Notre Dame",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Niagara",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Longwood": [
@@ -138908,6 +142016,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "VMI",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -138959,6 +142079,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Northern Kentucky",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Bradley": [
@@ -139055,6 +142187,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UAB",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 3,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "UNC Greensboro": [
@@ -139091,6 +142235,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Coastal Carolina",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "San Francisco": [
@@ -139139,6 +142295,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Dartmouth",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Stuttgart": [
@@ -159439,6 +162607,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Independiente Petrolero",
+      "league": "Bolivian Liga Profesional",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Real Esteli": [
@@ -160973,6 +164153,18 @@
       "gf": 1,
       "ga": 1,
       "result": "D"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Juventus",
+      "league": "UEFA Women's Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Fenerbahce": [
@@ -161060,6 +164252,18 @@
       "loc": "home",
       "gf": 4,
       "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-26",
+      "opponent": "Lyon",
+      "league": "UEFA Champions League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 2,
+      "ga": 1,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -163834,6 +167038,18 @@
       "loc": "home",
       "gf": 0,
       "ga": 1,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "RB Salzburg",
+      "league": "UEFA Europa League Qualifying",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 3,
+      "cf": null,
+      "ca": null,
       "result": "L"
     }
   ],
@@ -167140,6 +170356,18 @@
       "date": "2026-08-23",
       "opponent": "Alanyaspor",
       "league": "Turkish Super Lig",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Kauno Zalgiris",
+      "league": "UEFA Europa League Qualifying",
       "sport": "soccer",
       "loc": "away",
       "gf": 0,
@@ -177669,6 +180897,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "UL Monroe",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 0,
+      "cf": null,
+      "ca": null,
+      "result": "W"
     }
   ],
   "Troy": [
@@ -177777,6 +181017,18 @@
       "cf": null,
       "ca": null,
       "result": "D"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Villanova",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ],
   "Idaho State": [
@@ -177828,6 +181080,18 @@
       "loc": "home",
       "gf": 3,
       "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "W"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "Jacksonville",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 6,
+      "ga": 0,
       "cf": null,
       "ca": null,
       "result": "W"
@@ -178283,6 +181547,18 @@
       "cf": null,
       "ca": null,
       "result": "L"
+    },
+    {
+      "date": "2026-08-27",
+      "opponent": "SE Louisiana",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "home",
+      "gf": 2,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "D"
     }
   ],
   "San Sebastian de los Reyes B": [
@@ -180687,6 +183963,62 @@
       "cf": null,
       "ca": null,
       "result": "W"
+    }
+  ],
+  "Grand View": [
+    {
+      "date": "2026-08-27",
+      "opponent": "Drake",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 5,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "St. Ambrose": [
+    {
+      "date": "2026-08-27",
+      "opponent": "Northern Iowa",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 1,
+      "cf": null,
+      "ca": null,
+      "result": "D"
+    }
+  ],
+  "Lethbridge": [
+    {
+      "date": "2026-08-27",
+      "opponent": "Montana",
+      "league": "NCAA Women's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 0,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
+    }
+  ],
+  "Waynesburg": [
+    {
+      "date": "2026-08-27",
+      "opponent": "Robert Morris",
+      "league": "NCAA Men's Soccer",
+      "sport": "soccer",
+      "loc": "away",
+      "gf": 1,
+      "ga": 2,
+      "cf": null,
+      "ca": null,
+      "result": "L"
     }
   ]
 }
